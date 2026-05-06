@@ -2,7 +2,7 @@
   "code": 200,
   "type": "success",
   "status": "success",
-  "message": "Lista de produtos",
+  "message": "Lista de Produtos",
   "data": [
     {
       "id": 1,
