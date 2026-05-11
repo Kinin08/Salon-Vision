@@ -24,11 +24,14 @@ use CoffeeCode\Router\Router;
 $route = new Router(url("api"),":");
 
 $route->namespace("Source\Controller");
-// localhost/acme-3am/api/hello
-$route->get("/hello", "Api:hello");
+
+// Início - Exercícios - Desafios
 $route->get("/products/list", "Products:productsList");
-$route->get("/users/list", "Users:usersList");
 $route->get("/products-categories/list", "ProductsCategories:productsCategoryList");
+// Fim - Exercícios - Desafios
+
+$route->get("/hello", "Api:hello");
+$route->get("/users/list", "Users:usersList");
 
 $route->dispatch();
 
