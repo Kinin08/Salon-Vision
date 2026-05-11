@@ -28,6 +28,7 @@ $route->namespace("Source\Controller");
 $route->get("/hello", "Api:hello");
 $route->get("/products/list", "Products:productsList");
 $route->get("/users/list", "Users:usersList");
+$route->get("/products-categories/list", "ProductsCategories:productsCategoryList");
 
 $route->dispatch();
 
