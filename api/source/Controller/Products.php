@@ -12,4 +12,10 @@ class Products extends Api
         $products = new Product();
         $this->call(200,"success","Lista de Produtos","success")->back($products->listAll());
     }
+    public function produuctById(array $data): void
+    {
+        var_dump($data["idProduct"]);
+        $product = new Product();
+        var_dump($product->findById($data["idProduct"]));
+    }
 }

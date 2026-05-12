@@ -69,4 +69,17 @@ class Product
         return $stmt->fetchAll();
     }
 
+    public function findById( int $id): object | bool
+    {
+        $query = "select * from products where id = :id";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(":id", $id);
+        $stmt->execute();
+        $product = $stmt->fetch();
+        $this->id = $product->id;
+        $this->categoryId = $product->category_id;
+        $this->name = $product->name;
+        $this->price = $product->price;
+        return $product;
+    }
 }
