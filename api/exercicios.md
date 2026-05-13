@@ -117,33 +117,72 @@ Trate os seguintes cenários:
 
 ---
 
-## Exercício 03 — Inserindo um novo produto
+Exercício 03 — Buscando uma categoria de produto pelo ID
 
-### Contextualizando
+Contextualizando
+Com o endpoint de listagem de categorias funcionando, o próximo passo natural é permitir que o frontend busque os detalhes de uma categoria de produto específica — por exemplo, ao clicar em um item da tabela.
 
-O painel administrativo precisa de uma tela para cadastrar novos produtos. O formulário envia `name`, `price` e `category_id` para a API, que valida os dados e insere o registro no banco. O frontend espera receber de volta o produto recém-criado para confirmar o sucesso ao usuário.
+Objetivo
+Criar um endpoint que receba um id via URL, valide o parâmetro, consulte o banco e retorne a categoria de produto encontrada — ou uma mensagem de erro adequada caso o id seja inválido ou a vategoria não exista.
 
-### Objetivo
+Enunciado
+Implemente o endpoint GET /categories-products/list/{categoryId}.
 
-Criar um endpoint que receba os dados de um produto via `POST`, valide os campos obrigatórios, insira o registro no banco e retorne o produto criado.
+Trate os seguintes cenários:
 
-### Enunciado
+✅ Produto encontrado — 200 OK
 
-Implemente o endpoint `POST /products`.
+{
+  "code": 200,
+  "type": "success",
+  "status": "success",
+  "message": "Categoria encontrada",
+  "data": {
+    "id": 1,
+    "name": "Periféricos"
+  }
+}
+⚠️ ID inválido (não é número inteiro) — 400 Bad Request
 
-O corpo da requisição (`body`) será um JSON com:
-```json
+{
+  "code": 400,
+  "type": "error",
+  "status": "bad_request",
+  "message": "ID da categoria do produto é obrigatório e deve ser um número inteiro",
+  "data": null
+}
+❌ Categoria de Produto não existe no banco — 404 Not Found
+
+{
+  "code": 404,
+  "type": "error",
+  "status": "not_found",
+  "message": "Categoria não encontrada",
+  "data": null
+}
+💡 Dica: Valide o parâmetro {categpryId} antes de consultar o banco. Use filter_var($id, FILTER_VALIDATE_INT) para verificar se é um inteiro válido.
+
+Exercício 04 — Inserindo um novo produto
+Contextualizando
+O painel administrativo precisa de uma tela para cadastrar novos produtos. O formulário envia name, price e category_id para a API, que valida os dados e insere o registro no banco. O frontend espera receber de volta o produto recém-criado para confirmar o sucesso ao usuário.
+
+Objetivo
+Criar um endpoint que receba os dados de um produto via POST, valide os campos obrigatórios, insira o registro no banco e retorne o produto criado.
+
+Enunciado
+Implemente o endpoint POST /products.
+
+O corpo da requisição (body) será um JSON com:
+
 {
   "name": "Headset HyperX Cloud II",
   "price": 349.90,
   "category_id": 2
 }
-```
-
 Trate os seguintes cenários:
 
-**✅ Produto criado com sucesso — `201 Created`**
-```json
+✅ Produto criado com sucesso — 201 Created
+
 {
   "code": 201,
   "type": "success",
@@ -156,10 +195,8 @@ Trate os seguintes cenários:
     "category_name": "Periféricos"
   }
 }
-```
+⚠️ Campos obrigatórios ausentes ou inválidos — 400 Bad Request
 
-**⚠️ Campos obrigatórios ausentes ou inválidos — `400 Bad Request`**
-```json
 {
   "code": 400,
   "type": "error",
@@ -167,10 +204,8 @@ Trate os seguintes cenários:
   "message": "Os campos name, price e category_id são obrigatórios",
   "data": null
 }
-```
+❌ Erro inesperado ao salvar — 500 Internal Server Error
 
-**❌ Erro inesperado ao salvar — `500 Internal Server Error`**
-```json
 {
   "code": 500,
   "type": "error",
@@ -178,39 +213,29 @@ Trate os seguintes cenários:
   "message": "Não foi possível cadastrar o produto",
   "data": null
 }
-```
+💡 Dica: Leia o corpo da requisição com file_get_contents("php://input") e decodifique com json_decode(). Verifique se todos os campos obrigatórios estão presentes antes de chamar o model. O 500 deve ser retornado quando o INSERT falhar por motivo interno (ex: FK inválida, banco indisponível).
 
-> 💡 **Dica:** Leia o corpo da requisição com `file_get_contents("php://input")` e decodifique com `json_decode()`. Verifique se todos os campos obrigatórios estão presentes antes de chamar o model. O 500 deve ser retornado quando o `INSERT` falhar por motivo interno (ex: FK inválida, banco indisponível).
+Exercício 05 — Atualizando um produto
+Contextualizando
+Na tela de edição do painel administrativo, o usuário altera os dados de um produto já existente e clica em "Salvar". O frontend envia os novos valores para a API, que valida o id, verifica se o produto existe e aplica as alterações no banco.
 
----
+Objetivo
+Criar um endpoint que receba o id do produto via URL e os novos dados via body, valide tudo e execute o UPDATE — retornando o produto atualizado.
 
-## Exercício 04 — Atualizando um produto
+Enunciado
+Implemente o endpoint PUT /products/{productId}.
 
-### Contextualizando
+O corpo da requisição seguirá o mesmo formato do POST:
 
-Na tela de edição do painel administrativo, o usuário altera os dados de um produto já existente e clica em "Salvar". O frontend envia os novos valores para a API, que valida o `id`, verifica se o produto existe e aplica as alterações no banco.
-
-### Objetivo
-
-Criar um endpoint que receba o `id` do produto via URL e os novos dados via `body`, valide tudo e execute o `UPDATE` — retornando o produto atualizado.
-
-### Enunciado
-
-Implemente o endpoint `PUT /products/{productId}`.
-
-O corpo da requisição seguirá o mesmo formato do `POST`:
-```json
 {
   "name": "Headset HyperX Cloud II Wireless",
   "price": 499.90,
   "category_id": 2
 }
-```
-
 Trate os seguintes cenários:
 
-**✅ Produto atualizado com sucesso — `200 OK`**
-```json
+✅ Produto atualizado com sucesso — 200 OK
+
 {
   "code": 200,
   "type": "success",
@@ -223,10 +248,8 @@ Trate os seguintes cenários:
     "category_name": "Periféricos"
   }
 }
-```
+⚠️ ID inválido ou campos ausentes — 400 Bad Request
 
-**⚠️ ID inválido ou campos ausentes — `400 Bad Request`**
-```json
 {
   "code": 400,
   "type": "error",
@@ -234,10 +257,8 @@ Trate os seguintes cenários:
   "message": "ID inválido ou campos obrigatórios ausentes",
   "data": null
 }
-```
+❌ Produto não encontrado — 404 Not Found
 
-**❌ Produto não encontrado — `404 Not Found`**
-```json
 {
   "code": 404,
   "type": "error",
@@ -245,38 +266,27 @@ Trate os seguintes cenários:
   "message": "Produto não encontrado",
   "data": null
 }
-```
+💡 Dica: Antes de executar o UPDATE, faça um SELECT para confirmar que o produto existe — e use o mesmo retorno 404 do Exercício 02. Você pode reaproveitar o método de busca por ID que já implementou.
 
-> 💡 **Dica:** Antes de executar o `UPDATE`, faça um `SELECT` para confirmar que o produto existe — e use o mesmo retorno 404 do Exercício 02. Você pode reaproveitar o método de busca por ID que já implementou.
+Exercício 06 — Removendo um produto (soft delete)
+Contextualizando
+No mundo real, excluir registros definitivamente do banco é uma má prática: perde-se histórico, pode-se quebrar integridade referencial e não há como recuperar o dado. A solução adotada neste sistema é o soft delete — em vez de deletar o registro, ele é marcado como inativo com um campo active.
 
----
+Objetivo
+Criar um endpoint de exclusão que não apague o registro, mas altere seu campo active para 0, tornando-o invisível nas listagens sem removê-lo do banco.
 
-## Exercício 05 — Removendo um produto (soft delete)
+Enunciado
+Passo 1 — Altere a tabela no banco e atualize o dump.slq:
 
-### Contextualizando
-
-No mundo real, **excluir registros definitivamente do banco é uma má prática**: perde-se histórico, pode-se quebrar integridade referencial e não há como recuperar o dado. A solução adotada neste sistema é o **soft delete** — em vez de deletar o registro, ele é marcado como inativo com um campo `active`.
-
-### Objetivo
-
-Criar um endpoint de exclusão que **não apague o registro**, mas altere seu campo `active` para `0`, tornando-o invisível nas listagens sem removê-lo do banco.
-
-### Enunciado
-
-**Passo 1 — Altere a tabela no banco** e atualize o `dump.slq`:
-```sql
 ALTER TABLE `products` ADD COLUMN `active` tinyint(1) NOT NULL DEFAULT 1;
-```
+Passo 2 — Atualize as queries existentes: Os endpoints GET /products/list e GET /products/list/{id} devem passar a filtrar apenas produtos com active = 1.
 
-**Passo 2 — Atualize as queries existentes:**
-Os endpoints `GET /products/list` e `GET /products/list/{id}` devem passar a filtrar apenas produtos com `active = 1`.
-
-**Passo 3 — Implemente o endpoint `DELETE /products/{productId}`:**
+Passo 3 — Implemente o endpoint DELETE /products/{productId}:
 
 Trate os seguintes cenários:
 
-**✅ Produto desativado com sucesso — `200 OK`**
-```json
+✅ Produto desativado com sucesso — 200 OK
+
 {
   "code": 200,
   "type": "success",
@@ -284,10 +294,8 @@ Trate os seguintes cenários:
   "message": "Produto removido com sucesso",
   "data": null
 }
-```
+⚠️ ID inválido — 400 Bad Request
 
-**⚠️ ID inválido — `400 Bad Request`**
-```json
 {
   "code": 400,
   "type": "error",
@@ -295,10 +303,8 @@ Trate os seguintes cenários:
   "message": "ID do produto é obrigatório e deve ser um número inteiro",
   "data": null
 }
-```
+❌ Produto não encontrado ou já inativo — 404 Not Found
 
-**❌ Produto não encontrado ou já inativo — `404 Not Found`**
-```json
 {
   "code": 404,
   "type": "error",
@@ -306,6 +312,4 @@ Trate os seguintes cenários:
   "message": "Produto não encontrado",
   "data": null
 }
-```
-
-> 💡 **Dica:** A query do soft delete é um simples `UPDATE`: `UPDATE products SET active = 0 WHERE id = :id AND active = 1`. Se `rowCount()` retornar `0`, o produto não existe ou já estava inativo — retorne `404`.
+💡 Dica: A query do soft delete é um simples UPDATE: UPDATE products SET active = 0 WHERE id = :id AND active = 1. Se rowCount() retornar 0, o produto não existe ou já estava inativo — retorne 404.

@@ -36,4 +36,15 @@ class ProductCategory
         $stmt = Connect::getInstance()->query($query);
         return $stmt->fetchAll();
     }
+    public function categoryFindById (int $id): object | bool
+    {
+        $query = "SELECT * FROM products_categories WHERE id = :id";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+        if($stmt->rowCount() > 0){
+            return $stmt->fetch();
+        }
+        return false;
+    }
 }

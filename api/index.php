@@ -27,7 +27,8 @@ $route->namespace("Source\Controller");
 
 // Início - Exercícios - Desafios
 $route->get("/products/list", "Products:productsList");
-$route->get("/products/list/{idProduct}", "Products:produuctById");
+$route->get("/products/list/{productId}", "Products:productById");
+$route->get("/products-categories/list/{categoryId}", "ProductsCategories:categoryFindById");
 $route->get("/products-categories/list", "ProductsCategories:productsCategoryList");
 // Fim - Exercícios - Desafios
 
