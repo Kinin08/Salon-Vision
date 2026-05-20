@@ -25,35 +25,35 @@ Use este documento para orientar o planejamento visual e estrutural do frontend 
 - Não planeje regra de negócio no frontend; a View apenas apresenta dados e interações da interface.
 
 ## Contexto geral da interface
-- Nome do sistema: `[nome do sistema]`
-- Objetivo principal: `[descreva o que o sistema resolve]`
-- Público principal: `[quem usará o sistema]`
-- Dispositivos prioritários: `[mobile, desktop, tablet ou combinação]`
-- Estilo desejado: `[moderno, institucional, minimalista, acadêmico, comercial...]`
+- Nome do sistema: `Salon Vision`
+- Objetivo principal: `Sistema de gestão para salões de beleza, focado em agendamento, controle de estoque e análise de desempenho.`
+- Público principal: `Mulheres de 15 a 45 anos, proprietárias ou gerentes de salões de beleza, que buscam uma solução prática e eficiente para organizar suas operações diárias.`
+- Dispositivos prioritários: `mobile e desktop, com foco em uma experiência fluida e responsiva.`
+- Estilo desejado: `minimalista, moderno e elegante, com uma paleta de cores suaves e tipografia clara para transmitir profissionalismo e acessibilidade.`
 
 ## Área Pública (`public`)
-- Quem acessa: `[visitantes sem login]`
-- Objetivo da área: `[ex.: apresentar o sistema, captar interesse, permitir login/cadastro]`
+- Quem acessa: `[visitantes com login e visitantes sem login terão uma area externa comum, mas com conteúdos e ações diferentes]`
+- Objetivo da área: `apresentar o sistema, seus benefícios e funcionalidades para visitantes sem login; fornecer acesso a informações de contato, suporte e recursos para visitantes com login.`
 - Telas previstas: `[home]`, `[sobre]`, `[contato]`, `[login]`, `[cadastro]`
-- Componentes principais: `[cabeçalho]`, `[menu]`, `[banner]`, `[seção de destaque]`, `[rodapé]`
-- Ação principal esperada do usuário: `[o que o visitante deve fazer nesta área]`
+- Componentes principais: `[cabeçalho]`, `[menu]`, `[banner]`, `[seção de destaque]`, `[rodapé] [call to action]`
+- Ação principal esperada do usuário: `criar conta ou entrar para acessar as funcionalidades do sistema.`
 
 ## Área de Aplicação (`app`)
 - Quem acessa: `[usuário autenticado]`
-- Objetivo da área: `[ex.: acompanhar dados, realizar operações, consultar informações]`
+- Objetivo da área: `fornecer acesso às funcionalidades principais do sistema, como agendamento, controle de estoque e análise de desempenho, permitindo que os usuários gerenciem suas operações diárias de forma eficiente.`
 - Telas previstas: `[dashboard]`, `[perfil]`, `[listagem]`, `[detalhes]`, `[configurações]`
-- Componentes principais: `[menu lateral]`, `[barra superior]`, `[cards]`, `[formulários]`, `[listas]`
-- Ação principal esperada do usuário: `[o que o usuário logado faz com mais frequência]`
+- Componentes principais: `[menu lateral]`, `[barra superior]`, `[cards]`, `[formulários]`, `[listas] [sidebar] [topbar] [forms] [services selection]`
+- Ação principal esperada do usuário: `navegar pelas funcionalidades do sistema para gerenciar suas operações diárias, como criar agendamentos, atualizar estoque e analisar relatórios de desempenho.`
 
 ## Área Administrativa (`admin`)
-- Quem acessa: `[administrador, secretaria, gestor, professor...]`
-- Objetivo da área: `[ex.: gerenciar usuários, cadastros, permissões, relatórios]`
+- Quem acessa: `[usuário autenticado com perfil administrativo]`
+- Objetivo da área: `fornecer acesso a funcionalidades avançadas de gestão, como controle de usuários, configurações do sistema, gerenciamento de preços e estoque e geração de relatórios, permitindo que os administradores mantenham o sistema organizado e eficiente.`
 - Telas previstas: `[painel]`, `[gestão de usuários]`, `[cadastros]`, `[relatórios]`
 - Componentes principais: `[tabelas semânticas apenas se forem dados tabulares reais]`, `[filtros]`, `[formulários]`, `[indicadores]`
-- Ação principal esperada do usuário: `[principal tarefa administrativa]`
+- Ação principal esperada do usuário: `gerenciar o sistema de forma eficiente, como adicionar ou remover usuários, configurar parâmetros do sistema, atualizar preços e estoque, e gerar relatórios para análise de desempenho.`
 
 ## Navegação e organização visual
-- Estrutura de navegação principal: `[menu superior, lateral, abas, breadcrumbs...]`
+- Estrutura de navegação principal: `header + nav (publico), sidebar (app e admin) e breadcrumbs (app e admin)`
 - Fluxo entre telas: `[descreva o caminho mais comum do usuário]`
 - Hierarquia visual: `[o que deve chamar mais atenção em cada área]`
 - Estados importantes da interface: `[vazio]`, `[carregando]`, `[erro visual]`, `[sucesso]`
@@ -61,13 +61,14 @@ Use este documento para orientar o planejamento visual e estrutural do frontend 
 ## Responsividade e acessibilidade
 - Breakpoints desejados: `[mobile]`, `[tablet]`, `[desktop]`
 - Ajustes esperados por tela: `[como menu, listas e formulários se adaptam]`
+- fluxos entre telas: `Home → Login → Dashboard Dashboard → Novo Agendamento → Confirmação Admin → Agenda Geral → Gerenciar Horários`
 - Cuidados de acessibilidade: `[contraste]`, `[legibilidade]`, `[ordem lógica]`, `[textos claros]`
 - Elementos semânticos esperados: `[header]`, `[nav]`, `[main]`, `[section]`, `[article]`, `[aside]`, `[footer]`
 
 ## Identidade visual
-- Paleta principal: `[cores principais]`
+- Paleta principal: `Rosa e roxo suave, branco e cinza claro, com detalhes em dourado para transmitir elegância e profissionalismo.`
 - Tipografia: `[família tipográfica ou estilo desejado]`
-- Referências visuais: `[sites, sistemas ou estilos de inspiração]`
+- Referências visuais: ``
 - Sensação que a interface deve transmitir: `[seriedade, confiança, rapidez, simplicidade...]`
 
 ## Organização de arquivos esperada
