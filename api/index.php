@@ -29,6 +29,9 @@ $route->namespace("Source\Controller");
 $route->get("/products/list", "Products:productsList");
 $route->get("/products/list/{productId}", "Products:productById");
 $route->post("/products", "Products:create");
+$route->put("/products/{productId}", "Products:update");
+$route->put("/products/{productId}", "Products:delete");
+
 $route->get("/products-categories/list/{categoryId}", "ProductsCategories:categoryFindById");
 $route->get("/products-categories/list", "ProductsCategories:productsCategoryList");
 // Fim - Exercícios - Desafios

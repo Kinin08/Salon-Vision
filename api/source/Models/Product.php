@@ -87,11 +87,31 @@ class Product
         $stmt->bindParam(":categoryId", $this->categoryId);
         $stmt->bindParam(":name", $this->name);
         $stmt->bindParam(":price", $this->price);
+
         $stmt->execute();
+
         if($stmt->rowCount() == 1){
             $this->id = Connect::getInstance()->lastInsertId();
             return true;
         }
         return false;
     }
+    
+public function update(int $id): bool
+{
+    $query = "UPDATE products
+        SET category_id = :category_id,
+            name = :name,
+            price = :price
+        WHERE id = :id";
+
+    $stmt = Connect::getInstance()->prepare($query);
+
+    $stmt->bindValue(":category_id", $this->categoryId);
+    $stmt->bindValue(":name", $this->name);
+    $stmt->bindValue(":price", $this->price);
+    $stmt->bindValue(":id", $id);
+
+    return $stmt->execute();
+}
 }

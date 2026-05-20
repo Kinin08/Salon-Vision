@@ -45,7 +45,8 @@ class Products extends Api
 
     public function create(array $data): void{
         if(!isset($data["name"]) || empty($data["name"]) ||
-        !isset($data["price"]) || empty($data["price"])){
+        !isset($data["price"]) || empty($data["price"]) ||
+        !isset($data["categoryId"]) || empty($data["categoryId"])){
             $this->call(
                 400,
                 "bad_request",
@@ -72,4 +73,25 @@ class Products extends Api
         ];
         $this->call(201, "created", "Produto cadastrado", "success")->back($response);
     }
+
+   public function update(array $data): void
+{
+    $product = new Product();
+    
+    $product = $product->update($data["productId"]);
+
+    $response = [
+        "id" => $product->getId(),
+        "category_Id" => $product->getCategoryId(),
+        "name" => $product->getName(),
+        "price" => $product->getPrice()
+    ];
+
+    $this->call(
+        200,
+        "ok",
+        "Produto atualizado com sucesso",
+        "success"
+    )->back($response);
+}
 }
