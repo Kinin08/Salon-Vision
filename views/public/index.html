@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Salon Vision - Sistema de gestão completo para salões de beleza. Agendamento, controle de estoque e análise de desempenho.">
+  <meta name="theme-color" content="#d4a5a5">
+  <title>Salon Vision - Gestão Inteligente para Salões de Beleza</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="/views/assets/_common/css/variables.css">
+  <link rel="stylesheet" href="/views/assets/_common/css/reset.css">
+  <link rel="stylesheet" href="/views/assets/_common/css/utilities.css">
+  <link rel="stylesheet" href="/views/assets/_common/css/components.css">
+  <link rel="stylesheet" href="/views/assets/public/css/styles.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <nav class="site-header__inner" aria-label="Navegação principal">
+      <a href="/views/public/index.html" class="site-header__logo">
+        <span class="site-header__logo-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+            <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+          </svg>
+        </span>
+        Salon Vision
+      </a>
+
+      <nav class="main-nav" aria-label="Menu principal">
+        <ul class="main-nav__list">
+          <li><a href="#features" class="main-nav__link">Recursos</a></li>
+          <li><a href="#testimonials" class="main-nav__link">Depoimentos</a></li>
+          <li><a href="#pricing" class="main-nav__link">Planos</a></li>
+          <li><a href="/views/public/contact.html" class="main-nav__link">Contato</a></li>
+        </ul>
+      </nav>
+
+      <section class="header-actions">
+        <a href="/views/public/login.html" class="btn btn--ghost">Entrar</a>
+        <a href="/views/public/register.html" class="btn btn--primary">Começar Grátis</a>
+        
+        <button type="button" class="mobile-menu-btn" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-nav">
+          <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="4" x2="20" y1="12" y2="12"/>
+            <line x1="4" x2="20" y1="6" y2="6"/>
+            <line x1="4" x2="20" y1="18" y2="18"/>
+          </svg>
+          <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+            <path d="M18 6 6 18"/>
+            <path d="m6 6 12 12"/>
+          </svg>
+        </button>
+      </section>
+    </nav>
+  </header>
+
+  <!-- Mobile Navigation -->
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Menu mobile">
+    <ul class="mobile-nav__list">
+      <li><a href="#features" class="mobile-nav__link">Recursos</a></li>
+      <li><a href="#testimonials" class="mobile-nav__link">Depoimentos</a></li>
+      <li><a href="#pricing" class="mobile-nav__link">Planos</a></li>
+      <li><a href="/views/public/contact.html" class="mobile-nav__link">Contato</a></li>
+      <li><a href="/views/public/login.html" class="mobile-nav__link">Entrar</a></li>
+      <li><a href="/views/public/register.html" class="mobile-nav__link">Começar Grátis</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="hero" aria-labelledby="hero-title">
+      <article class="hero__inner">
+        <article class="hero__content">
+          <span class="hero__badge">
+            <span class="hero__badge-dot" aria-hidden="true"></span>
+            Novo: Integração com WhatsApp
+          </span>
+          
+          <h1 id="hero-title" class="hero__title">
+            Transforme a gestão do seu 
+            <span class="hero__title-accent">salão de beleza</span>
+          </h1>
+          
+          <p class="hero__description">
+            Simplifique agendamentos, controle seu estoque e acompanhe o desempenho 
+            do seu negócio em uma única plataforma intuitiva e elegante.
+          </p>
+          
+          <nav class="hero__actions">
+            <a href="/views/public/register.html" class="btn btn--primary btn--lg">
+              Começar Gratuitamente
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M5 12h14"/>
+                <path d="m12 5 7 7-7 7"/>
+              </svg>
+            </a>
+            <a href="#features" class="btn btn--secondary btn--lg">
+              Conhecer Recursos
+            </a>
+          </nav>
+          
+          <section class="hero__stats" aria-label="Estatísticas">
+            <article class="hero__stat">
+              <p class="hero__stat-value">2.500+</p>
+              <p class="hero__stat-label">Salões ativos</p>
+            </article>
+            <article class="hero__stat">
+              <p class="hero__stat-value">50k+</p>
+              <p class="hero__stat-label">Agendamentos/mês</p>
+            </article>
+            <article class="hero__stat">
+              <p class="hero__stat-value">98%</p>
+              <p class="hero__stat-label">Satisfação</p>
+            </article>
+          </section>
+        </article>
+      </article>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features" aria-labelledby="features-title">
+      <article class="features__inner">
+        <header class="features__header">
+          <span class="features__subtitle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+            Recursos
+          </span>
+          <h2 id="features-title" class="features__title">
+            Tudo que você precisa para gerenciar seu salão
+          </h2>
+          <p class="features__description">
+            Ferramentas poderosas e intuitivas projetadas especialmente para 
+            profissionais da beleza.
+          </p>
+        </header>
+
+        <section class="features__grid">
+          <article class="feature-card">
+            <span class="feature-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                <line x1="16" x2="16" y1="2" y2="6"/>
+                <line x1="8" x2="8" y1="2" y2="6"/>
+                <line x1="3" x2="21" y1="10" y2="10"/>
+              </svg>
+            </span>
+            <h3 class="feature-card__title">Agenda Inteligente</h3>
+            <p class="feature-card__description">
+              Gerencie horários, profissionais e serviços com uma agenda visual 
+              e intuitiva. Evite conflitos e otimize seu tempo.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </span>
+            <h3 class="feature-card__title">Gestão de Clientes</h3>
+            <p class="feature-card__description">
+              Mantenha um histórico completo de cada cliente, suas preferências, 
+              serviços realizados e produtos favoritos.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m7.5 4.27 9 5.15"/>
+                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+                <path d="m3.3 7 8.7 5 8.7-5"/>
+                <path d="M12 22V12"/>
+              </svg>
+            </span>
+            <h3 class="feature-card__title">Controle de Estoque</h3>
+            <p class="feature-card__description">
+              Monitore produtos em tempo real, receba alertas de estoque baixo 
+              e nunca perca uma venda por falta de produto.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 3v18h18"/>
+                <path d="m19 9-5 5-4-4-3 3"/>
+              </svg>
+            </span>
+            <h3 class="feature-card__title">Relatórios Detalhados</h3>
+            <p class="feature-card__description">
+              Visualize métricas de desempenho, faturamento, serviços mais 
+              populares e tendências do seu negócio.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </span>
+            <h3 class="feature-card__title">Lembretes Automáticos</h3>
+            <p class="feature-card__description">
+              Envie lembretes por WhatsApp ou SMS para reduzir faltas e 
+              manter seus clientes engajados.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-card__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="20" height="14" x="2" y="5" rx="2"/>
+                <line x1="2" x2="22" y1="10" y2="10"/>
+              </svg>
+            </span>
+            <h3 class="feature-card__title">Controle Financeiro</h3>
+            <p class="feature-card__description">
+              Acompanhe receitas, despesas, comissões e tenha uma visão 
+              clara da saúde financeira do seu salão.
+            </p>
+          </article>
+        </section>
+      </article>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials" aria-labelledby="testimonials-title">
+      <article class="testimonials__inner">
+        <header class="testimonials__header">
+          <span class="testimonials__subtitle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            </svg>
+            Depoimentos
+          </span>
+          <h2 id="testimonials-title" class="testimonials__title">
+            O que nossos clientes dizem
+          </h2>
+        </header>
+
+        <section class="testimonials__grid">
+          <article class="testimonial-card">
+            <span class="testimonial-card__stars" aria-label="5 estrelas">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </span>
+            <p class="testimonial-card__content">
+              "O Salon Vision transformou completamente a gestão do meu salão. 
+              Agora tenho controle total da agenda e nunca mais tive problemas 
+              com horários duplicados."
+            </p>
+            <footer class="testimonial-card__author">
+              <span class="testimonial-card__avatar">MR</span>
+              <article class="testimonial-card__info">
+                <p class="testimonial-card__name">Maria Rodrigues</p>
+                <p class="testimonial-card__role">Studio Maria Hair</p>
+              </article>
+            </footer>
+          </article>
+
+          <article class="testimonial-card">
+            <span class="testimonial-card__stars" aria-label="5 estrelas">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </span>
+            <p class="testimonial-card__content">
+              "Os relatórios financeiros me ajudaram a identificar quais serviços 
+              eram mais rentáveis. Consegui aumentar meu faturamento em 40% no 
+              primeiro semestre!"
+            </p>
+            <footer class="testimonial-card__author">
+              <span class="testimonial-card__avatar">AS</span>
+              <article class="testimonial-card__info">
+                <p class="testimonial-card__name">Ana Santos</p>
+                <p class="testimonial-card__role">Beleza Natural Spa</p>
+              </article>
+            </footer>
+          </article>
+
+          <article class="testimonial-card">
+            <span class="testimonial-card__stars" aria-label="5 estrelas">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </span>
+            <p class="testimonial-card__content">
+              "A integração com WhatsApp é incrível! Minhas clientes recebem 
+              lembretes automáticos e as faltas diminuíram drasticamente. 
+              Super recomendo!"
+            </p>
+            <footer class="testimonial-card__author">
+              <span class="testimonial-card__avatar">CF</span>
+              <article class="testimonial-card__info">
+                <p class="testimonial-card__name">Carla Ferreira</p>
+                <p class="testimonial-card__role">Esmalteria Chic</p>
+              </article>
+            </footer>
+          </article>
+        </section>
+      </article>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing" aria-labelledby="pricing-title">
+      <article class="pricing__inner">
+        <header class="pricing__header">
+          <span class="pricing__subtitle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+            Planos
+          </span>
+          <h2 id="pricing-title" class="pricing__title">
+            Escolha o plano ideal para seu salão
+          </h2>
+          <p class="pricing__description">
+            Comece gratuitamente e evolua conforme seu negócio cresce.
+          </p>
+        </header>
+
+        <section class="pricing__grid">
+          <article class="pricing-card">
+            <h3 class="pricing-card__name">Starter</h3>
+            <p class="pricing-card__description">Para salões que estão começando</p>
+            <p class="pricing-card__price">
+              <span class="pricing-card__currency">R$</span>
+              <span class="pricing-card__amount">0</span>
+              <span class="pricing-card__period">/mês</span>
+            </p>
+            <ul class="pricing-card__features">
+              <li class="pricing-card__feature">
+                <svg class="pricing-card__feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Até 50 agendamentos/mês
+              </li>
+              <li class="pricing-card__feature">
+                <svg class="pricing-card__feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                1 profissional
+              </li>
+              <li class="pricing-card__feature">
+                <svg class="pricing-card__feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Gestão básica de clientes
+              </li>
+              <li class="pricing-card__feature">
+                <svg class="pricing-card__feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Suporte por email
+              </li>
+            </ul>
+            <a href="/views/public/register.html" class="btn btn--secondary w-full">
+              Começar Grátis
+            </a>
+          </article>
+
+          <article class="pricing-card pricing-card--featured">
+            <span class="pricing-card__badge">Mais Popular</span>
+            <h3 class="pricing-card__name">Professional</h3>
+            <p class="pricing-card__description">Para salões em crescimento</p>
+            <p class="pricing-card__price">
+              <span class="pricing-card__currency">R$</span>
+              <span class="pricing-card__amount">89</span>
+              <span class="pricing-card__period">/mês</span>
+            </p>
+            <ul class="pricing-card__features">
+              <li class="pricing-card__feature">
+                <svg class="pricing-card__feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Agendamentos ilimitados
+              </li>
+              <li class="pricing-card__feature">
+                <svg class="pricing-card__feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Até 5 profissionais
+              </li>
+              <li class="pricing-card__feature">
+                <svg class="pricing-card__feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Controle de estoque
+              </li>
+              <li class="pricing-card__feature">
+                <svg class="pricing-card__feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Lembretes por WhatsApp
+              </li>
+              <li class="pricing-card__feature">
+                <svg class="pricing-card__feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Relatórios avançados
+              </li>
+            </ul>
+            <a href="/views/public/register.html" class="btn btn--primary w-full">
+              Assinar Agora
+            </a>
+          </article>
+
+          <article class="pricing-card">
+            <h3 class="pricing-card__name">Enterprise</h3>
+            <p class="pricing-card__description">Para redes de salões</p>
+            <p class="pricing-card__price">
+              <span class="pricing-card__currency">R$</span>
+              <span class="pricing-card__amount">249</span>
+              <span class="pricing-card__period">/mês</span>
+            </p>
+            <ul class="pricing-card__features">
+              <li class="pricing-card__feature">
+                <svg class="pricing-card__feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Tudo do Professional
+              </li>
+              <li class="pricing-card__feature">
+                <svg class="pricing-card__feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Profissionais ilimitados
+              </li>
+              <li class="pricing-card__feature">
+                <svg class="pricing-card__feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Múltiplas unidades
+              </li>
+              <li class="pricing-card__feature">
+                <svg class="pricing-card__feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                API personalizada
+              </li>
+              <li class="pricing-card__feature">
+                <svg class="pricing-card__feature-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Suporte prioritário 24/7
+              </li>
+            </ul>
+            <a href="/views/public/contact.html" class="btn btn--secondary w-full">
+              Falar com Vendas
+            </a>
+          </article>
+        </section>
+      </article>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" aria-labelledby="cta-title">
+      <article class="cta__inner">
+        <h2 id="cta-title" class="cta__title">
+          Pronto para transformar seu salão?
+        </h2>
+        <p class="cta__description">
+          Junte-se a milhares de profissionais que já simplificaram 
+          a gestão de seus negócios.
+        </p>
+        <nav class="cta__actions">
+          <a href="/views/public/register.html" class="btn btn--primary btn--lg">
+            Começar Gratuitamente
+          </a>
+          <a href="/views/public/contact.html" class="btn btn--secondary btn--lg">
+            Agendar Demonstração
+          </a>
+        </nav>
+      </article>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <article class="site-footer__inner">
+      <section class="site-footer__top">
+        <article class="site-footer__brand">
+          <a href="/views/public/index.html" class="site-footer__logo">
+            <span class="site-footer__logo-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+                <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+              </svg>
+            </span>
+            Salon Vision
+          </a>
+          <p class="site-footer__tagline">
+            Simplifique a gestão do seu salão de beleza com uma plataforma 
+            intuitiva e poderosa.
+          </p>
+        </article>
+
+        <nav class="site-footer__nav" aria-label="Navegação do rodapé">
+          <section class="site-footer__nav-group">
+            <h3 class="site-footer__nav-title">Produto</h3>
+            <ul class="site-footer__nav-list">
+              <li><a href="#features" class="site-footer__nav-link">Recursos</a></li>
+              <li><a href="#pricing" class="site-footer__nav-link">Planos</a></li>
+              <li><a href="#" class="site-footer__nav-link">Integrações</a></li>
+              <li><a href="#" class="site-footer__nav-link">Atualizações</a></li>
+            </ul>
+          </section>
+
+          <section class="site-footer__nav-group">
+            <h3 class="site-footer__nav-title">Empresa</h3>
+            <ul class="site-footer__nav-list">
+              <li><a href="#" class="site-footer__nav-link">Sobre nós</a></li>
+              <li><a href="#" class="site-footer__nav-link">Blog</a></li>
+              <li><a href="#" class="site-footer__nav-link">Carreiras</a></li>
+              <li><a href="/views/public/contact.html" class="site-footer__nav-link">Contato</a></li>
+            </ul>
+          </section>
+
+          <section class="site-footer__nav-group">
+            <h3 class="site-footer__nav-title">Suporte</h3>
+            <ul class="site-footer__nav-list">
+              <li><a href="#" class="site-footer__nav-link">Central de Ajuda</a></li>
+              <li><a href="#" class="site-footer__nav-link">Documentação</a></li>
+              <li><a href="#" class="site-footer__nav-link">Status</a></li>
+              <li><a href="#" class="site-footer__nav-link">API</a></li>
+            </ul>
+          </section>
+
+          <section class="site-footer__nav-group">
+            <h3 class="site-footer__nav-title">Legal</h3>
+            <ul class="site-footer__nav-list">
+              <li><a href="#" class="site-footer__nav-link">Termos de Uso</a></li>
+              <li><a href="#" class="site-footer__nav-link">Privacidade</a></li>
+              <li><a href="#" class="site-footer__nav-link">Cookies</a></li>
+              <li><a href="#" class="site-footer__nav-link">Licenças</a></li>
+            </ul>
+          </section>
+        </nav>
+      </section>
+
+      <section class="site-footer__bottom">
+        <p class="site-footer__copyright">
+          &copy; 2024 Salon Vision. Todos os direitos reservados.
+        </p>
+        <nav class="site-footer__social" aria-label="Redes sociais">
+          <a href="#" class="site-footer__social-link" aria-label="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+            </svg>
+          </a>
+          <a href="#" class="site-footer__social-link" aria-label="Facebook">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
+          </a>
+          <a href="#" class="site-footer__social-link" aria-label="LinkedIn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+              <rect width="4" height="12" x="2" y="9"/>
+              <circle cx="4" cy="4" r="2"/>
+            </svg>
+          </a>
+        </nav>
+      </section>
+    </article>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/views/assets/_common/js/utils.js"></script>
+  <script src="/views/assets/_common/js/HttpClientBase.js"></script>
+  <script src="/views/assets/public/js/main.js"></script>
+</body>
+</html>
