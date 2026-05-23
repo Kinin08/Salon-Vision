@@ -97,21 +97,41 @@ class Product
         return false;
     }
     
-public function update(int $id): bool
+public function update(array $data): void
 {
-    $query = "UPDATE products
-        SET category_id = :category_id,
-            name = :name,
-            price = :price
-        WHERE id = :id";
+    if (
+        empty($data["productId"]) ||
+        empty($data["name"]) ||
+        empty($data["price"]) ||
+        empty($data["categoryId"])
+    ) {
+        $this->call(400, "bad_request", "Campos obrigatórios faltando", "error")->back();
+        return;
+    }
 
-    $stmt = Connect::getInstance()->prepare($query);
+    $product = new Product();
 
-    $stmt->bindValue(":category_id", $this->categoryId);
-    $stmt->bindValue(":name", $this->name);
-    $stmt->bindValue(":price", $this->price);
-    $stmt->bindValue(":id", $id);
+    // carregar dados novos no objeto
+    $product->setCategoryId($data["categoryId"]);
+    $product->setName($data["name"]);
+    $product->setPrice($data["price"]);
 
-    return $stmt->execute();
+    // atualizar
+    $updated = $product->update($data["productId"]);
+
+    if (!$updated) {
+        $this->call(500, "server_error", "Erro ao atualizar produto", "error")->back();
+        return;
+    }
+
+    // montar resposta
+    $response = [
+        "id" => $data["productId"],
+        "categoryId" => $product->getCategoryId(),
+        "name" => $product->getName(),
+        "price" => $product->getPrice()
+    ];
+
+    $this->call(200, "ok", "Produto atualizado com sucesso", "success")->back($response);
 }
 }

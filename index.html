@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8" />
@@ -18,8 +18,7 @@
     <div>
         <img src="views/assets/_common/img/ChatGPT Image 22 de mai. de 2026, 21_14_43.png"
             class="pointer-events-none select-none w-full h-screen object-cover" alt="background de fundo">
-        <header class="w-full fixed top-0 left-0 z-20 bg-black/20 backdrop-blur-sm border-b border-white/20 h-24">
-
+        <header class="w-full fixed top-0 left-0 z-40 bg-black/20 backdrop-blur-sm border-b h-24">
 
             <div class="absolute top-7 right-12 flex gap-x-9">
                 <button
@@ -34,10 +33,11 @@
             </div>
             <div
                 class="absolute top-6 left-1/2 -translate-x-1/2 flex items-center gap-8 text-white bg-white/10 backdrop-blur-md border border-white/20 rounded-full py-2 px-6 shadow-lg font-poppins">
-                <button id="home" class="hover:scale-110 transition cursor-none">Home</button>
-                <button id="contato" class="hover:scale-110 transition cursor-none">Agendar</button>
-                <button id="sobre" class="hover:scale-110 transition cursor-none">Sobre</button>
-                <button id="agendar" class="hover:scale-110 transition cursor-none">Contato </button>
+                <a href="#home" class="hover:scale-110 transition cursor-none">Home</a>
+                <a href="#contato" class="hover:scale-110 transition cursor-none">Agendar</a>
+                <a href="#servicos" class="hover:scale-110 transition cursor-none">Serviços</a>
+                <a href="#sobre" class="hover:scale-110 transition cursor-none">Sobre</a>
+                <a href="#agendar" class="hover:scale-110 transition cursor-none">Contato </a>
             </div>
             <div
                 class="absolute top-0 left-0 flex items-center text-3xl text-white py-2 px-6 text-white [text-shadow:0_0_10px_rgba(255,204,127,0.8)]">
@@ -73,7 +73,7 @@
 
             <div class="left-36 relative top-24">
                 <button
-                    class="rounded-2xl  text-[#3B3B42] hover:scale-110 cursor-none bg-[#F4C0AD] transition duration-300 font-bold py-3 px-5 border-2  font-poppins flex items-center gap-2">
+                    class="rounded-2xl text-[#3B3B42] hover:scale-110 cursor-none bg-[#F4C0AD] transition duration-300 font-bold py-3 px-5 border-2  font-poppins flex items-center gap-2">
                     Agendar agora
                     <i class="ph ph-arrow-right font-bold"></i>
                 </button>
@@ -84,8 +84,30 @@
                 <h2 class="text-white text-xl max-w-lg">clientes</h2>
             </div>
         </nav>
-        <main class="h-96">
-            <h2 class="text-white">hello</h2>
+        <main class="h-screen top-0 bg-black" id="home">
+            <h1 class="text-4xl font-bold text-center text-white mt-10">
+                Tudo que você precisa em um só lugar
+            </h1>
+            <p class="text-lg font-bold text-center text-[#FFF8C3] mt-14">
+                Salon Vision conecta você aos melhores profissionais,
+            </p>
+            <p class="text-lg font-bold text-center text-[#FFF8C3]">
+                com praticidade segurança e uma uma experiencia impecavel
+            </p>
+            <div class="z-20 relative grid grid-cols-4 place-items-center mt-24">
+                <div class="w-16 h-16 bg-red-500 rounded-lg">
+                    <img src="views/assets/_common/img/agenda.png" alt="agenda">
+                </div>
+                <div class="w-16 h-16 bg-green-500 rounded-lg">
+                    <img src="views/assets/_common/img/product.png" alt="product">
+                </div>
+                <div class="w-16 h-16 bg-yellow-300 rounded-lg flex items-center justify-center">
+                    <img class="w-full h-full " src="views/assets/_common/img/star.png" alt="star">
+                </div>
+                <div class="w-16 h-16 bg-blue-500 rounded-lg">
+                    <img src="views/assets/_common/img/service.png" alt="service">
+                </div>
+            </div>
         </main>
         <script type="module" src="views/assets/_common/script/mouse.js"></script>
 </body>

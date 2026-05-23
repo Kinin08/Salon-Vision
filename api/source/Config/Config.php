@@ -8,4 +8,4 @@ const CONF_DB_HOST = "localhost";
 const CONF_DB_NAME = "salon-vision";
 const CONF_DB_USER= "root";
 const CONF_DB_PORT = 3306;
-const CONF_DB_PASS= "";
+const CONF_DB_PASS= "12345678";

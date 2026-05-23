@@ -34,6 +34,13 @@ $route->put("/products/{productId}", "Products:delete");
 
 $route->get("/products-categories/list/{categoryId}", "ProductsCategories:categoryFindById");
 $route->get("/products-categories/list", "ProductsCategories:productsCategoryList");
+
+$route->get("/faqs_categories/list", "FaqsCategories:listAll");
+$route->get("/faqs_categories/list/{faq_categorieId}", "FaqsCategories:listById");
+
+$route->get("/faqs/list", "Faqs:listAll");
+$route->get("/faqs/list/{faq_id}", "Faqs:listById");
+$route->post("/faqs_categories/create", "FaqsCategories:create");
 // Fim - Exercícios - Desafios
 
 $route->get("/hello", "Api:hello");
