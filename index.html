@@ -5,111 +5,662 @@
     <meta charset="UTF-8" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="views/assets/_common/dist/output.css">
-    <link rel="stylesheet" href="views/assets/_common/style/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap');
+
+        .font-yuji {
+            font-family: 'Yuji Syuku', serif;
+        }
+
+        /* Cursor */
+        #cursor {
+            transition: width .2s, height .2s, border-radius .15s, background .2s, opacity .3s;
+        }
+
+        #cursor.big {
+            width: 36px !important;
+            height: 36px !important;
+            background: rgba(255, 204, 127, 0.28) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            box-shadow: none !important;
+        }
+
+        #cursor.text-cursor {
+            width: 4px !important;
+            height: 22px !important;
+            border-radius: 2px !important;
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity .7s ease, transform .7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-32px);
+            transition: opacity .7s ease, transform .7s ease;
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(32px);
+            transition: opacity .7s ease, transform .7s ease;
+        }
+
+        .reveal-left.visible,
+        .reveal-right.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        .delay-1 {
+            transition-delay: .1s !important;
+        }
+
+        .delay-2 {
+            transition-delay: .2s !important;
+        }
+
+        .delay-3 {
+            transition-delay: .3s !important;
+        }
+
+        .delay-4 {
+            transition-delay: .4s !important;
+        }
+    </style>
 </head>
 
-<body class="cursor-none bg-black">
+<body class="cursor-none bg-black font-['Poppins']">
 
-    <div id="cursor" class=" opacity-0 transition-opacity duration-300 fixed w-[14px] h-[14px] rounded-full pointer-events-none z-[9999]
-        -translate-x-1/2 -translate-y-1/2
-        shadow-[0_0_15px_rgba(232,178,95,0.6)]">
+    <!-- CURSOR -->
+    <div id="cursor" class="opacity-0 fixed w-[14px] h-[14px] rounded-full pointer-events-none z-[9999]
+               -translate-x-1/2 -translate-y-1/2
+               bg-[#FFCC7F] shadow-[0_0_15px_rgba(232,178,95,0.6)]">
     </div>
-    <div>
-        <img src="views/assets/_common/img/ChatGPT Image 22 de mai. de 2026, 21_14_43.png"
-            class="pointer-events-none select-none w-full h-screen object-cover" alt="background de fundo">
-        <header class="w-full fixed top-0 left-0 z-40 bg-black/20 backdrop-blur-sm border-b h-24">
 
-            <div class="absolute top-7 right-12 flex gap-x-9">
-                <button
-                    class="rounded-full  text-[#3B3B42] hover:scale-110 cursor-none transition duration-300 font-bold py-2 px-4 border-2 border-[#FFCC7F] font-poppins">
+    <!-- HERO BG -->
+    <div class="relative">
+        <img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=1400&q=80"
+            class="pointer-events-none select-none w-full h-screen object-cover object-top" alt="background de fundo">
+
+        <!-- overlay gradiente -->
+        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
+
+        <!-- HEADER -->
+        <header class="w-full fixed top-0 left-0 z-40 bg-black/20 backdrop-blur-sm border-b border-white/10 h-24">
+
+            <!-- Logo imagem -->
+            <div class="absolute top-0 left-0 flex items-center py-2 px-6">
+                <div class="w-24 h-24 flex items-center justify-center">
+                    <svg class="w-10 h-10 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
+                    </svg>
+                </div>
+            </div>
+            <!-- Nome do salão -->
+            <div class="absolute top-7 left-24 flex items-center text-3xl text-white py-2 px-6
+                        [text-shadow:0_0_10px_rgba(255,204,127,0.8)] font-yuji">
+                <h2 class="text-[#CA9440]">S</h2>
+                <h2 class="mr-1">alon</h2>
+                <h2 class="text-[#CA9440]">V</h2>
+                <h2>ision</h2>
+            </div>
+
+            <!-- Nav links -->
+            <div class="absolute top-6 left-1/2 -translate-x-1/2 flex items-center gap-8 text-white
+                        bg-white/10 backdrop-blur-md border border-white/20 rounded-full py-2 px-6 shadow-lg">
+                <a href="#home" class="hover:scale-110 transition cursor-none text-sm hover:text-[#FFCC7F]">Home</a>
+                <a href="#servicos"
+                    class="hover:scale-110 transition cursor-none text-sm hover:text-[#FFCC7F]">Serviços</a>
+                <a href="#agendar"
+                    class="hover:scale-110 transition cursor-none text-sm hover:text-[#FFCC7F]">Agendar</a>
+                <a href="#sobre" class="hover:scale-110 transition cursor-none text-sm hover:text-[#FFCC7F]">Sobre</a>
+                <a href="#contato"
+                    class="hover:scale-110 transition cursor-none text-sm hover:text-[#FFCC7F]">Contato</a>
+            </div>
+
+            <!-- Botões -->
+            <div class="absolute top-7 right-12 flex gap-x-4">
+                <button class="rounded-full text-white hover:scale-110 cursor-none transition duration-300
+                               font-bold py-2 px-5 border-2 border-[#FFCC7F] text-sm hover:bg-[#FFCC7F]/10">
                     Entrar
                 </button>
-
-                <button
-                    class="bg-[#FFCC7F] rounded-full text-[#3B3B42] hover:bg-[#f2bd6d] hover:scale-110 cursor-none transition duration-300 font-bold py-2 px-4 font-poppins">
+                <button class="bg-[#FFCC7F] rounded-full text-[#3B3B42] hover:bg-[#f2bd6d] hover:scale-110
+                               cursor-none transition duration-300 font-bold py-2 px-5 text-sm">
                     Cadastro
                 </button>
             </div>
-            <div
-                class="absolute top-6 left-1/2 -translate-x-1/2 flex items-center gap-8 text-white bg-white/10 backdrop-blur-md border border-white/20 rounded-full py-2 px-6 shadow-lg font-poppins">
-                <a href="#home" class="hover:scale-110 transition cursor-none">Home</a>
-                <a href="#contato" class="hover:scale-110 transition cursor-none">Agendar</a>
-                <a href="#servicos" class="hover:scale-110 transition cursor-none">Serviços</a>
-                <a href="#sobre" class="hover:scale-110 transition cursor-none">Sobre</a>
-                <a href="#agendar" class="hover:scale-110 transition cursor-none">Contato </a>
-            </div>
-            <div
-                class="absolute top-0 left-0 flex items-center text-3xl text-white py-2 px-6 text-white [text-shadow:0_0_10px_rgba(255,204,127,0.8)]">
-                <img src="views/assets/_common/img/S__3_-removebg-preview 1.png" alt="Logo"
-                    class="w-24 left-0 pointer-events-none select-none">
-            </div>
-            <div
-                class="absolute top-7 left-24 flex items-center text-3xl text-white py-2 px-6 text-white [text-shadow:0_0_10px_rgba(255,204,127,0.8)] font-yuji-syukufont">
-                <h2 class="text-[#CA9440] [text-shadow:0_0_10px_rgba(202, 148, 64, 0.8)]">S</h2>
-                <h2 class="mr-1">alon</h2>
-                <h2 class="text-[#CA9440] [text-shadow:0_0_10px_rgba(202, 148, 64, 0.8)]">V</h2>
-                <h2>ision</h2>
-            </div>
         </header>
-        <nav class="absolute top-44 left-20 z-20 flex flex-col gap-6 p-4">
 
-            <div class="flex items-end gap-2">
-                <h1 class="text-7xl text-white">Sua</h1>
-                <h1 class="text-7xl text-[#F4C0AD] ">beleza</h1>
+        <!-- HERO CONTENT -->
+        <nav class="absolute top-44 left-20 z-20 flex flex-col gap-6 p-4" id="home">
+
+            <div class="font-['Cormorant_Garamond'] flex items-end gap-3 reveal">
+                <h1 class="text-7xl text-white font-light">Sua</h1>
+                <h1 class="text-7xl text-[#F4C0AD] font-light">beleza.</h1>
             </div>
 
-            <div class="relative flex items-end gap-2">
-                <h1 class="text-7xl text-white">Seu</h1>
-                <h1 class="text-7xl text-white">tempo</h1>
+            <div class="font-['Cormorant_Garamond'] flex items-end gap-3 reveal delay-1">
+                <h1 class="text-7xl text-white font-light">Seu</h1>
+                <h1 class="text-7xl text-white font-light">tempo.</h1>
             </div>
 
-            <div class="relative top-14 left-4">
-                <h2 class="text-white text-2xl max-w-lg">
-                    Agende serviços de beleza com praticidade
-                    e descubra uma experiência feita pra você
-                </h2>
+            <div class="font-['Cormorant_Garamond'] flex items-end gap-3 reveal delay-2">
+                <h1 class="text-7xl text-[#F4C0AD] italic font-light">Perfeito.</h1>
             </div>
 
-            <div class="left-36 relative top-24">
-                <button
-                    class="rounded-2xl text-[#3B3B42] hover:scale-110 cursor-none bg-[#F4C0AD] transition duration-300 font-bold py-3 px-5 border-2  font-poppins flex items-center gap-2">
+            <div class="relative top-6 left-1 reveal delay-3">
+                <p class="text-white/70 text-lg max-w-md leading-relaxed">
+                    Agende serviços de beleza com praticidade<br>
+                    e descubra uma experiência feita pra você.
+                </p>
+            </div>
+
+            <div class="flex gap-3 relative top-10 reveal delay-4">
+                <button class="rounded-2xl text-[#3B3B42] hover:scale-105 cursor-none bg-[#F4C0AD]
+                               hover:bg-[#f0b09a] transition duration-300 font-bold py-3 px-6
+                               flex items-center gap-2 text-sm shadow-lg">
                     Agendar agora
-                    <i class="ph ph-arrow-right font-bold"></i>
+                    <i class="ph ph-arrow-right"></i>
+                </button>
+                <button class="rounded-2xl text-white hover:scale-105 cursor-none
+                               bg-white/10 backdrop-blur-sm border border-white/20
+                               transition duration-300 font-semibold py-3 px-6
+                               flex items-center gap-2 text-sm">
+                    Como funciona
+                    <i class="ph ph-play-circle"></i>
                 </button>
             </div>
-            <div class="relative top-24 left-56 flex gap-2">
-                <h2 class="text-white text-xl max-w-lg">Site com </h2>
-                <h2 class="text-white text-xl max-w-lg" id="numberClientes"></h2>
-                <h2 class="text-white text-xl max-w-lg">clientes</h2>
+
+            <!-- Social proof -->
+            <div class="flex items-center gap-4 relative top-12 reveal delay-4">
+                <div class="flex">
+                    <img src="https://i.pravatar.cc/36?img=1"
+                        class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover" alt="">
+                    <img src="https://i.pravatar.cc/36?img=5"
+                        class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover -ml-2" alt="">
+                    <img src="https://i.pravatar.cc/36?img=9"
+                        class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover -ml-2" alt="">
+                    <img src="https://i.pravatar.cc/36?img=20"
+                        class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover -ml-2" alt="">
+                </div>
+                <div>
+                    <p class="text-white font-semibold text-sm">Mais de 50.000 clientes</p>
+                    <p class="text-white/50 text-xs">já agendam com Salon Vision</p>
+                </div>
             </div>
         </nav>
-        <main class="h-screen top-0 bg-black" id="home">
-            <h1 class="text-4xl font-bold text-center text-white mt-10">
+    </div>
+
+    <!-- BRANDS -->
+    <div class="bg-white py-8 px-20 border-b border-gray-100">
+        <p class="text-center text-[10px] tracking-[3px] uppercase text-gray-400">
+            Confiança de quem transforma beleza em experiência
+        </p>
+    </div>
+
+    <!-- MAIN -->
+    <main class="bg-black" id="servicos">
+
+        <!-- FEATURES -->
+        <section class="bg-white py-20 px-20">
+            <h1 class="font-['Cormorant_Garamond'] text-4xl font-light text-center text-gray-900 reveal">
                 Tudo que você precisa em um só lugar
             </h1>
-            <p class="text-lg font-bold text-center text-[#FFF8C3] mt-14">
+            <p class="text-base text-center text-[#AFAFB8] mt-4 reveal delay-1">
                 Salon Vision conecta você aos melhores profissionais,
             </p>
-            <p class="text-lg font-bold text-center text-[#FFF8C3]">
-                com praticidade segurança e uma uma experiencia impecavel
+            <p class="text-base text-center text-[#AFAFB8] reveal delay-2">
+                com praticidade, segurança e uma experiência impecável.
             </p>
-            <div class="z-20 relative grid grid-cols-4 place-items-center mt-24">
-                <div class="w-16 h-16 bg-red-500 rounded-lg">
-                    <img src="views/assets/_common/img/agenda.png" alt="agenda">
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-14
+                        [&:has(.card-item:hover)_.card-item:not(:hover)]:opacity-40">
+                <div class="card-item transition-all duration-300 bg-white border border-gray-100 rounded-2xl p-6
+                            flex flex-col items-center text-center gap-3 shadow-sm
+                            hover:scale-110 hover:shadow-xl reveal delay-1">
+                    <div class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center">
+                        <img class="pointer-events-none select-none w-9 h-9" src="https://cdn-icons-png.flaticon.com/512/747/747310.png" alt="agenda">
+                    </div>
+                    <h2 class="text-[#C18057] font-semibold text-sm">Agendamento fácil</h2>
+                    <p class="text-[#565656] text-sm leading-relaxed">
+                        Escolha o serviço, profissional e horário que melhor se encaixe na sua rotina.
+                    </p>
                 </div>
-                <div class="w-16 h-16 bg-green-500 rounded-lg">
-                    <img src="views/assets/_common/img/product.png" alt="product">
+
+                <div class="card-item transition-all duration-300 bg-white border border-gray-100 rounded-2xl p-6
+                            flex flex-col items-center text-center gap-3 shadow-sm
+                            hover:scale-110 hover:shadow-xl reveal delay-2">
+                    <div class="w-14 h-14 bg-green-50 rounded-xl flex items-center justify-center">
+                        <img class="pointer-events-none select-none w-9 h-9" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                            alt="profissionais">
+                    </div>
+                    <h2 class="text-[#C18057] font-semibold text-sm">Profissionais especializados</h2>
+                    <p class="text-[#565656] text-sm leading-relaxed">
+                        Especialistas qualificados em cada área da beleza, garantindo alta performance.
+                    </p>
                 </div>
-                <div class="w-16 h-16 bg-yellow-300 rounded-lg flex items-center justify-center">
-                    <img class="w-full h-full " src="views/assets/_common/img/star.png" alt="star">
+
+                <div class="card-item transition-all duration-300 bg-white border border-gray-100 rounded-2xl p-6
+                            flex flex-col items-center text-center gap-3 shadow-sm
+                            hover:scale-110 hover:shadow-xl reveal delay-3">
+                    <div class="w-14 h-14 bg-yellow-50 rounded-xl flex items-center justify-center">
+                        <img class="pointer-events-none select-none w-9 h-9" src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png"
+                            alt="experiência">
+                    </div>
+                    <h2 class="text-[#C18057] font-semibold text-sm">Experiências personalizadas</h2>
+                    <p class="text-[#565656] text-sm leading-relaxed">
+                        Histórico de serviços, preferências e recomendações feitas exclusivamente para você.
+                    </p>
                 </div>
-                <div class="w-16 h-16 bg-blue-500 rounded-lg">
-                    <img src="views/assets/_common/img/service.png" alt="service">
+
+                <div class="card-item transition-all duration-300 bg-white border border-gray-100 rounded-2xl p-6
+                            flex flex-col items-center text-center gap-3 shadow-sm
+                            hover:scale-110 hover:shadow-xl reveal delay-4">
+                    <div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center">
+                        <img class="pointer-events-none select-none w-9 h-9" src="https://cdn-icons-png.flaticon.com/512/2583/2583344.png"
+                            alt="produtos">
+                    </div>
+                    <h2 class="text-[#C18057] font-semibold text-sm">Produtos de qualidade</h2>
+                    <p class="text-[#565656] text-sm leading-relaxed">
+                        Os melhores produtos profissionais que oferecem resultados superiores.
+                    </p>
                 </div>
             </div>
-        </main>
-        <script type="module" src="views/assets/_common/script/mouse.js"></script>
+        </section>
+
+        <!-- APP SECTION -->
+        <section class="bg-white px-20 pb-20" id="agendar">
+            <div class="bg-[#faf5f0] rounded-3xl p-16 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div class="flex justify-center reveal-left">
+                    <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&q=80"
+                        class="pointer-events-none select-none w-56 rounded-3xl shadow-2xl" alt="App">
+                </div>
+                <div class="reveal-right">
+                    <p class="text-[10px] tracking-[3px] uppercase text-[#C18057] mb-4">Na palma da sua mão</p>
+                    <h2 class="font-['Cormorant_Garamond'] text-4xl font-light text-gray-900 leading-tight mb-4">
+                        Seu salão favorito,<br>sempre com você.
+                    </h2>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-8">
+                        Agende, altere ou cancele compromissos de onde estiver.<br>
+                        É beleza na sua rotina, do seu jeito.
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="#"
+                            class="flex items-center gap-3 bg-black text-white px-4 py-3 rounded-xl cursor-none hover:bg-gray-800 transition">
+                            <i class="ph ph-google-play-logo text-2xl"></i>
+                            <div>
+                                <p class="text-[9px] opacity-60 leading-none">Disponível no</p>
+                                <p class="text-sm font-semibold">Google Play</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PARA SALÕES / DASHBOARD -->
+        <section class="bg-[#111] px-20 py-20" id="sobre">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <p class="text-[10px] tracking-[3px] uppercase text-[#FFCC7F] mb-4 reveal">Para Salões</p>
+                    <h2
+                        class="font-['Cormorant_Garamond'] text-5xl font-light text-white leading-tight mb-6 reveal delay-1">
+                        Mais eficiência.<br>Mais clientes.<br>Mais resultados.
+                    </h2>
+                    <p class="text-white/50 text-sm leading-relaxed mb-8 reveal delay-2">
+                        Salon Vision é o sistema completo para gestão de salões de beleza
+                        que desejam crescer com organização e inteligência.
+                    </p>
+                    <button class="rounded-2xl bg-[#F4C0AD] text-[#3B3B42] hover:scale-105 cursor-none
+                                   transition duration-300 font-bold py-3 px-6
+                                   flex items-center gap-2 text-sm reveal delay-3">
+                        Falar com um especialista
+                        <i class="ph ph-arrow-right"></i>
+                    </button>
+
+                    <div class="grid grid-cols-2 gap-5 mt-10 reveal delay-4">
+                        <div class="flex gap-3">
+                            <div
+                                class="w-9 h-9 rounded-xl bg-[#FFCC7F]/10 flex items-center justify-center text-[#FFCC7F] flex-shrink-0">
+                                <i class="ph ph-check-circle text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-white text-xs font-semibold mb-1">Menos erros manuais</p>
+                                <p class="text-white/40 text-xs leading-relaxed">Reduza falhas em agendamentos, cálculos
+                                    e registros.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <div
+                                class="w-9 h-9 rounded-xl bg-[#FFCC7F]/10 flex items-center justify-center text-[#FFCC7F] flex-shrink-0">
+                                <i class="ph ph-lightning text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-white text-xs font-semibold mb-1">Mais eficiência operacional</p>
+                                <p class="text-white/40 text-xs leading-relaxed">Automatize processos e ganhe tempo para
+                                    o que importa.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <div
+                                class="w-9 h-9 rounded-xl bg-[#FFCC7F]/10 flex items-center justify-center text-[#FFCC7F] flex-shrink-0">
+                                <i class="ph ph-sparkle text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-white text-xs font-semibold mb-1">Melhor experiência</p>
+                                <p class="text-white/40 text-xs leading-relaxed">Atendimento ágil, histórico completo e
+                                    comunicação automatizada.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <div
+                                class="w-9 h-9 rounded-xl bg-[#FFCC7F]/10 flex items-center justify-center text-[#FFCC7F] flex-shrink-0">
+                                <i class="ph ph-chart-line text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="text-white text-xs font-semibold mb-1">Decisões baseadas em dados</p>
+                                <p class="text-white/40 text-xs leading-relaxed">Relatórios inteligentes para
+                                    impulsionar seu crescimento.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Mockup -->
+                <div class="rounded-2xl overflow-hidden border border-white/8 bg-[#0d0d0d] reveal-right">
+                    <!-- topbar -->
+                    <div class="bg-[#0a0a0a] px-5 py-3 flex items-center gap-2 border-b border-white/5">
+                        <div class="w-3 h-3 rounded-full bg-[#ff5f57]"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#febc2e]"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#28c840]"></div>
+                        <span
+                            class="ml-3 font-['Cormorant_Garamond'] text-sm tracking-widest text-white/40 uppercase">Salon
+                            Vision</span>
+                    </div>
+                    <div class="flex min-h-[340px]">
+                        <!-- sidebar -->
+                        <div class="w-40 bg-[#0a0a0a] border-r border-white/5 py-4 flex-shrink-0">
+                            <div class="px-4 pb-4 mb-2 border-b border-white/5">
+                                <p class="text-white/30 text-[10px]">Olá, Ana! 👋</p>
+                                <p class="text-white text-xs font-semibold mt-1">Resumo de hoje</p>
+                            </div>
+                            <div
+                                class="px-4 py-2 text-xs text-white border-l-2 border-[#FFCC7F] bg-[#FFCC7F]/5 text-white">
+                                📊 Dashboard</div>
+                            <div class="px-4 py-2 text-xs text-white/35 hover:text-white/60 transition cursor-none">📅
+                                Agenda</div>
+                            <div class="px-4 py-2 text-xs text-white/35 hover:text-white/60 transition cursor-none">👥
+                                Clientes</div>
+                            <div class="px-4 py-2 text-xs text-white/35 hover:text-white/60 transition cursor-none">✂️
+                                Serviços</div>
+                            <div class="px-4 py-2 text-xs text-white/35 hover:text-white/60 transition cursor-none">👩
+                                Profissionais</div>
+                            <div class="px-4 py-2 text-xs text-white/35 hover:text-white/60 transition cursor-none">💰
+                                Financeiro</div>
+                            <div class="px-4 py-2 text-xs text-white/35 hover:text-white/60 transition cursor-none">📈
+                                Relatórios</div>
+                            <div class="px-4 py-2 text-xs text-white/35 hover:text-white/60 transition cursor-none">⚙️
+                                Config.</div>
+                        </div>
+                        <!-- main -->
+                        <div class="flex-1 p-4">
+                            <div class="grid grid-cols-4 gap-2 mb-4">
+                                <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                                    <p class="text-white/35 text-[9px] mb-1">Agendamentos</p>
+                                    <p class="text-white text-xl font-bold">32</p>
+                                    <p class="text-green-400 text-[9px] mt-1">+12% hoje</p>
+                                </div>
+                                <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                                    <p class="text-white/35 text-[9px] mb-1">Faturamento</p>
+                                    <p class="text-white text-sm font-bold">R$4.680</p>
+                                    <p class="text-green-400 text-[9px] mt-1">+8% hoje</p>
+                                </div>
+                                <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                                    <p class="text-white/35 text-[9px] mb-1">Novos clientes</p>
+                                    <p class="text-white text-xl font-bold">7</p>
+                                    <p class="text-green-400 text-[9px] mt-1">+3 hoje</p>
+                                </div>
+                                <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                                    <p class="text-white/35 text-[9px] mb-1">Ocupação</p>
+                                    <p class="text-white text-xl font-bold">85%</p>
+                                    <p class="text-[#FFCC7F] text-[9px] mt-1">Alta</p>
+                                </div>
+                            </div>
+                            <div class="bg-white/3 rounded-xl p-3 border border-white/5">
+                                <p class="text-white/40 text-[10px] mb-3">Agendamentos — últimos 7 dias</p>
+                                <div class="flex items-end gap-2 h-20" id="dashBars"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DEPOIMENTOS -->
+        <section class="bg-white py-20 px-20">
+            <p class="text-center text-[10px] tracking-[3px] uppercase text-[#C18057] mb-3 reveal">Depoimentos</p>
+            <h2 class="font-['Cormorant_Garamond'] text-4xl font-light text-center text-gray-900 mb-4 reveal delay-1">
+                O que nossos clientes dizem
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12
+                        [&:has(.testi-card:hover)_.testi-card:not(:hover)]:opacity-50">
+                <div
+                    class="testi-card relative bg-white border border-gray-100 rounded-2xl p-7 shadow-sm
+                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-none reveal delay-1">
+                    <span
+                        class="absolute top-2 right-5 font-['Cormorant_Garamond'] text-9xl text-gray-100 leading-none select-none">"</span>
+                    <div class="flex gap-1 mb-4 text-[#FFCC7F]">★★★★★</div>
+                    <p class="text-gray-500 text-sm leading-relaxed italic mb-6">
+                        "Agendar ficou muito mais fácil e rápido. Amo os lembretes e o atendimento dos salões
+                        parceiros!"
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <img src="https://i.pravatar.cc/40?img=47" class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">Juliana M.</p>
+                            <p class="text-xs text-gray-400">Cliente</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="testi-card relative bg-white border border-gray-100 rounded-2xl p-7 shadow-sm
+                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-none reveal delay-2">
+                    <span
+                        class="absolute top-2 right-5 font-['Cormorant_Garamond'] text-9xl text-gray-100 leading-none select-none">"</span>
+                    <div class="flex gap-1 mb-4 text-[#FFCC7F]">★★★★★</div>
+                    <p class="text-gray-500 text-sm leading-relaxed italic mb-6">
+                        "Salon Vision otimizou totalmente nossa rotina. Mais organização, menos retrabalho e mais
+                        clientes!"
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <img src="https://i.pravatar.cc/40?img=68" class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">Marcos A.</p>
+                            <p class="text-xs text-gray-400">Proprietário de salão</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="testi-card relative bg-white border border-gray-100 rounded-2xl p-7 shadow-sm
+                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-none reveal delay-3">
+                    <span
+                        class="absolute top-2 right-5 font-['Cormorant_Garamond'] text-9xl text-gray-100 leading-none select-none">"</span>
+                    <div class="flex gap-1 mb-4 text-[#FFCC7F]">★★★★★</div>
+                    <p class="text-gray-500 text-sm leading-relaxed italic mb-6">
+                        "Meus clientes adoram a experiência e nós ganhamos eficiência todos os dias."
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <img src="https://i.pravatar.cc/40?img=32" class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">Carla R.</p>
+                            <p class="text-xs text-gray-400">Gestora de salão</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- dots -->
+            <div class="flex justify-center gap-2 mt-8">
+                <div class="w-6 h-2 rounded-full bg-[#FFCC7F]"></div>
+                <div class="w-2 h-2 rounded-full bg-gray-200"></div>
+                <div class="w-2 h-2 rounded-full bg-gray-200"></div>
+                <div class="w-2 h-2 rounded-full bg-gray-200"></div>
+            </div>
+        </section>
+
+        <!-- CTA FINAL -->
+        <section class="bg-black py-24 px-20 text-center relative overflow-hidden">
+            <div
+                class="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(201,150,74,0.07)_0%,transparent_70%)] pointer-events-none">
+            </div>
+            <h2 class="font-['Cormorant_Garamond'] text-5xl font-light text-white mb-4 reveal">
+                Pronto para transformar<br>sua experiência?
+            </h2>
+            <p class="text-white/50 text-sm max-w-md mx-auto mb-10 leading-relaxed reveal delay-1">
+                Seja como cliente ou salão, o Salon Vision é o seu parceiro
+                para mais beleza, organização e resultados.
+            </p>
+            <div class="flex justify-center gap-4 reveal delay-2">
+                <button class="rounded-2xl bg-[#F4C0AD] text-[#3B3B42] hover:scale-105 cursor-none
+                               transition duration-300 font-bold py-3 px-7
+                               flex items-center gap-2 text-sm">
+                    Agendar agora <i class="ph ph-arrow-right"></i>
+                </button>
+                <button class="rounded-2xl text-white border border-white/15 bg-white/5 hover:bg-white/10
+                               cursor-none transition duration-300 font-semibold py-3 px-7
+                               flex items-center gap-2 text-sm">
+                    Falar com um especialista <i class="ph ph-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="bg-[#080808] border-t border-white/5 px-20 pt-14 pb-8" id="contato">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
+                <div>
+                    <div
+                        class="flex items-center gap-2 font-['Cormorant_Garamond'] text-xl tracking-widest uppercase text-white mb-3">
+                        <svg class="w-5 h-5 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
+                        </svg>
+                        Salon Vision
+                    </div>
+                    <p class="text-white/35 text-xs leading-relaxed max-w-48">
+                        Conectando você aos melhores profissionais de beleza com praticidade e segurança.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white/30 text-[10px] tracking-[2px] uppercase mb-4">Navegação</h4>
+                    <a href="#"
+                        class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Início</a>
+                    <a href="#" class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Para
+                        Clientes</a>
+                    <a href="#" class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Para
+                        Salões</a>
+                    <a href="#"
+                        class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Recursos</a>
+                    <a href="#"
+                        class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Planos</a>
+                </div>
+                <div>
+                    <h4 class="text-white/30 text-[10px] tracking-[2px] uppercase mb-4">Suporte</h4>
+                    <a href="#" class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Central
+                        de ajuda</a>
+                    <a href="#" class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Fale
+                        conosco</a>
+                    <a href="#"
+                        class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Privacidade</a>
+                    <a href="#" class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Termos
+                        de uso</a>
+                </div>
+                <div>
+                    <h4 class="text-white/30 text-[10px] tracking-[2px] uppercase mb-4">Contato</h4>
+                    <p class="text-white/50 text-xs mb-2">contato@salonvision.com.br</p>
+                    <p class="text-white/50 text-xs mb-6">(11) 91234-5678</p>
+                    <div class="flex gap-3">
+                        <a href="#"
+                            class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-[#FFCC7F] hover:text-[#FFCC7F] transition cursor-none">
+                            <i class="ph ph-instagram-logo text-sm"></i>
+                        </a>
+                        <a href="#"
+                            class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-[#FFCC7F] hover:text-[#FFCC7F] transition cursor-none">
+                            <i class="ph ph-facebook-logo text-sm"></i>
+                        </a>
+                        <a href="#"
+                            class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-[#FFCC7F] hover:text-[#FFCC7F] transition cursor-none">
+                            <i class="ph ph-whatsapp-logo text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/5 pt-6 flex justify-between items-center">
+                <p class="text-white/20 text-xs">© 2025 Salon Vision. Todos os direitos reservados.</p>
+                <p class="text-white/20 text-xs">Feito com ♥ para transformar beleza</p>
+            </div>
+        </footer>
+
+    </main>
+    <script>
+        const cursor = document.getElementById('cursor');
+        let mx = 0, my = 0, cx = 0, cy = 0;
+
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX; my = e.clientY;
+            cursor.style.opacity = '1';
+        });
+
+        document.querySelectorAll('button, a, .card-item, .testi-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+        });
+
+        document.querySelectorAll('h1, h2, h3, p, span').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('text-cursor'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('text-cursor'));
+        });
+
+        (function tick() {
+            cx += (mx - cx) * 0.14;
+            cy += (my - cy) * 0.14;
+            cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+            requestAnimationFrame(tick);
+        })();
+
+        const dashBars = document.getElementById('dashBars');
+        [55, 72, 48, 90, 65, 80, 95].forEach((v, i) => {
+            const b = document.createElement('div');
+            b.style.cssText = `flex:1; height:${v}%; background:${i === 6 ? '#FFCC7F' : 'rgba(255,204,127,0.2)'}; border-radius:4px 4px 0 0; transition:background .2s`;
+            b.addEventListener('mouseenter', () => b.style.background = 'rgba(255,204,127,0.5)');
+            b.addEventListener('mouseleave', () => b.style.background = i === 6 ? '#FFCC7F' : 'rgba(255,204,127,0.2)');
+            dashBars.appendChild(b);
+        });
+
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => io.observe(el));
+    </script>
 </body>
 
 </html>
