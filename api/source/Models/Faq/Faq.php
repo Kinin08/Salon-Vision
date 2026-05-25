@@ -1,6 +1,6 @@
 <?php
 
-namespace source\Models;
+namespace source\Models\Faq;
 
 use PDO;
 use Source\Core\Connect;
@@ -73,7 +73,7 @@ class Faq
         }
         return [];
     }
-    public function listById(int $id): object | bool
+    public function listById(int $id): object|bool
     {
         $query = "SELECT * FROM faqs WHERE id = :id";
         $stmt = Connect::getInstance()->prepare($query);
@@ -84,6 +84,29 @@ class Faq
         }
         return false;
     }
+    public function create(string $question, string $answer, int $faqs_category_id): bool|array
+{
+    $query = "INSERT INTO faqs (question, answer, faqs_category_id) 
+              VALUES (:question, :answer, :cat)";
+    
+    $stmt = Connect::getInstance()->prepare($query);
+    $stmt->bindParam(":question", $question);
+    $stmt->bindParam(":answer", $answer);
+    $stmt->bindParam(":cat", $faqs_category_id);
+
+    if (!$stmt->execute()) {
+        return false;
+    }
+
+    $id = Connect::getInstance()->lastInsertId();
+
+    return [
+        "id" => (int) $id,
+        "question" => $question,
+        "answer" => $answer,
+        "faqs_category_id" => $faqs_category_id
+    ];
+}
     public function update(): bool
     {
         $query = "

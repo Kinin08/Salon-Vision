@@ -1,9 +1,9 @@
 <?php
 
-namespace source\Controller;
+namespace source\Controller\Faqs;
 
 use Source\Controller\Api;
-use Source\Models\Faq;
+use Source\Models\Faq\Faq;
 
 class Faqs extends Api
 {
@@ -48,6 +48,46 @@ class Faqs extends Api
             "success"
         )->back($question);
     }
+public function create(array $data): void
+{
+    if (
+        !isset($data["question"]) || empty($data["question"]) ||
+        !isset($data["answer"]) || empty($data["answer"]) ||
+        !isset($data["faqs_category_id"]) || empty($data["faqs_category_id"])
+    ) {
+        $this->call(
+            400,
+            "bad_request",
+            "Todos os campos são obrigatórios",
+            "error"
+        )->back();
+        return;
+    }
+
+    $faq = new Faq();
+    $create = $faq->create(
+        $data["question"],
+        $data["answer"],
+        (int)$data["faqs_category_id"]
+    );
+
+    if (!$create) {
+        $this->call(
+            500,
+            "error",
+            "Não foi possível cadastrar o FAQ",
+            "internal_server_error"
+        )->back(null);
+        return;
+    }
+
+    $this->call(
+        201,
+        "success",
+        "FAQ criada com sucesso",
+        "created"
+    )->back($create);
+}
     public function update(array $data): void
     {
         $faqId = $data["faq_id"] ?? null;

@@ -1,6 +1,6 @@
 <?php
 
-namespace source\Models;
+namespace source\Models\Faq;
 
 use PDO;
 use Source\Core\Connect;

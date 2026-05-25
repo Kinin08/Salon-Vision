@@ -1,6 +1,6 @@
 <?php
 
-namespace source\Models;
+namespace source\Models\Product;
 
 use Source\Core\Connect;
 
@@ -59,7 +59,7 @@ class Product
         $this->price = $price;
     }
 
-    public function listAll (): array
+    public function listAll(): array
     {
         $query = "SELECT products.id, products.name, products.price, 
 	                     products_categories.name as 'category_name' 
@@ -69,69 +69,54 @@ class Product
         return $stmt->fetchAll();
     }
 
-    public function productById (int $id): object | bool
+    public function productById(int $id): object|bool
     {
         $query = "SELECT * FROM products WHERE id = :id";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindParam(":id", $id);
         $stmt->execute();
-        if($stmt->rowCount() > 0){
+        if ($stmt->rowCount() > 0) {
             return $stmt->fetch();
         }
         return false;
     }
-    public function insert(): bool
+    public function create(): bool
     {
         $query = "INSERT INTO products VALUES(NULL, :categoryId, :name, :price)";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindParam(":categoryId", $this->categoryId);
         $stmt->bindParam(":name", $this->name);
         $stmt->bindParam(":price", $this->price);
-
         $stmt->execute();
 
-        if($stmt->rowCount() == 1){
+        if ($stmt->rowCount() === 1) {
             $this->id = Connect::getInstance()->lastInsertId();
             return true;
         }
+
         return false;
     }
-    
-public function update(array $data): void
-{
-    if (
-        empty($data["productId"]) ||
-        empty($data["name"]) ||
-        empty($data["price"]) ||
-        empty($data["categoryId"])
-    ) {
-        $this->call(400, "bad_request", "Campos obrigatórios faltando", "error")->back();
-        return;
+    public function softDelete(int $id): bool
+    {
+        $query = "UPDATE products SET active = 0 WHERE id = :id";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0;
     }
+    public function update(): bool
+    {
+        $query = "UPDATE products 
+              SET category_id = :categoryId, name = :name, price = :price 
+              WHERE id = :id";
 
-    $product = new Product();
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindParam(":categoryId", $this->categoryId);
+        $stmt->bindParam(":name", $this->name);
+        $stmt->bindParam(":price", $this->price);
+        $stmt->bindParam(":id", $this->id);
 
-    // carregar dados novos no objeto
-    $product->setCategoryId($data["categoryId"]);
-    $product->setName($data["name"]);
-    $product->setPrice($data["price"]);
-
-    // atualizar
-    $updated = $product->update($data["productId"]);
-
-    if (!$updated) {
-        $this->call(500, "server_error", "Erro ao atualizar produto", "error")->back();
-        return;
+        return $stmt->execute();
     }
-
-    // montar resposta
-    $response = [
-        "id" => $data["productId"],
-        "categoryId" => $product->getCategoryId(),
-        "name" => $product->getName(),
-        "price" => $product->getPrice()
-    ];
-
-    $this->call(200, "ok", "Produto atualizado com sucesso", "success")->back($response);
-}
 }
