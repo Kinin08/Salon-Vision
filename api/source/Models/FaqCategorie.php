@@ -2,6 +2,7 @@
 
 namespace source\Models;
 
+use PDO;
 use Source\Core\Connect;
 
 class FaqCategorie
@@ -52,12 +53,12 @@ class FaqCategorie
         }
         return false;
     }
-    public function create(string $name): bool | array
+    public function create(string $name): bool|array
     {
         $query = "INSERT INTO faqs_categories (name) VALUES (:name)";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindParam(":name",$name);
-        if(!$stmt->execute()){
+        $stmt->bindParam(":name", $name);
+        if (!$stmt->execute()) {
             return false;
         }
         $id = Connect::getInstance()->lastInsertId();
@@ -65,5 +66,29 @@ class FaqCategorie
             "id" => (int) $id,
             "name" => $name
         ];
+    }
+    public function update(): bool
+    {
+        $query = "
+            UPDATE faqs_categories
+            SET name = :name
+            WHERE id = :id
+        ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindParam(":name", $this->name);
+        $stmt->bindParam(":id", $this->id);
+
+        return $stmt->execute();
+    }
+    public function softDelete(int $id): bool
+    {
+        $query = "UPDATE faqs_categories SET active = 0 WHERE id = :id AND active = 1";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0;
     }
 }

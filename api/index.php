@@ -30,22 +30,25 @@ $route->get("/products/list", "Products:productsList");
 $route->get("/products/list/{productId}", "Products:productById");
 $route->post("/products", "Products:create");
 $route->put("/products/{productId}", "Products:update");
-$route->put("/products/{productId}", "Products:delete");
+$route->delete("/products/{productId}", "Products:delete");
 
 $route->get("/products-categories/list/{categoryId}", "ProductsCategories:categoryFindById");
 $route->get("/products-categories/list", "ProductsCategories:productsCategoryList");
 
 $route->get("/faqs_categories/list", "FaqsCategories:listAll");
 $route->get("/faqs_categories/list/{faq_categorieId}", "FaqsCategories:listById");
+$route->post("/faqs_categories/create", "FaqsCategories:create");
+$route->put("/faqs_categories/{faq_category_id}", "FaqsCategories:update");
+$route->delete("/faqs_categories/{faq_category_id}", "FaqsCategories:softDelete");
 
 $route->get("/faqs/list", "Faqs:listAll");
 $route->get("/faqs/list/{faq_id}", "Faqs:listById");
-$route->post("/faqs_categories/create", "FaqsCategories:create");
+$route->put("/faqs/{faq_id}", "Faqs:update");
+$route->delete("/faqs/{faq_id}", "Faqs:softDelete");
 // Fim - Exercícios - Desafios
 
 $route->get("/hello", "Api:hello");
 $route->get("/users/list", "Users:usersList");
-
 $route->dispatch();
 
 /** ERROR REDIRECT */

@@ -2,6 +2,7 @@
 
 namespace source\Models;
 
+use PDO;
 use Source\Core\Connect;
 class Faq
 {
@@ -82,5 +83,33 @@ class Faq
             return $stmt->fetch();
         }
         return false;
+    }
+    public function update(): bool
+    {
+        $query = "
+            UPDATE faqs
+            SET question = :question,
+                answer = :answer,
+                faqs_category_id = :cat
+            WHERE id = :id
+        ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindParam(":question", $this->question);
+        $stmt->bindParam(":answer", $this->answer);
+        $stmt->bindParam(":cat", $this->faqs_category_id);
+        $stmt->bindParam(":id", $this->id);
+
+        return $stmt->execute();
+    }
+    public function softDelete(int $id): bool
+    {
+        $query = "UPDATE faqs SET active = 0 WHERE id = :id AND active = 1";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0;
     }
 }

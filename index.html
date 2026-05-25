@@ -81,6 +81,59 @@
         .delay-4 {
             transition-delay: .4s !important;
         }
+
+        .dashboard-tab.active {
+            color: #fff;
+            background: rgba(255, 204, 127, 0.08);
+            border-left-color: #FFCC7F;
+        }
+
+        .dashboard-tab {
+            border-left: 2px solid transparent;
+        }
+
+        .auth-modal {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s ease;
+        }
+
+        .auth-modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .auth-panel {
+            transform: translateY(18px) scale(.98);
+            transition: transform .2s ease;
+        }
+
+        .auth-modal.open .auth-panel {
+            transform: translateY(0) scale(1);
+        }
+
+        .mobile-menu {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-10px);
+            transition: opacity .2s ease, transform .2s ease;
+        }
+
+        .mobile-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 1023px) {
+            body {
+                cursor: auto;
+            }
+
+            #cursor {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -92,6 +145,87 @@
                bg-[#FFCC7F] shadow-[0_0_15px_rgba(232,178,95,0.6)]">
     </div>
 
+    <!-- LOGIN / CADASTRO -->
+    <div id="authModal"
+        class="auth-modal fixed inset-0 z-[80] bg-black/75 backdrop-blur-sm flex items-center justify-center px-5">
+        <div
+            class="auth-panel w-full max-w-md rounded-2xl border border-white/10 bg-[#101010] shadow-2xl overflow-hidden ">
+            <div class="flex items-center justify-between px-6 py-5 border-b border-white/10 ">
+                <div>
+                    <p class="text-[10px] tracking-[3px] uppercase text-[#FFCC7F]">Salon Vision</p>
+                    <h2 id="authTitle" class="font-['Cormorant_Garamond'] text-3xl text-white font-light">Entrar</h2>
+                </div>
+                <button type="button" data-auth-close
+                    class="w-9 h-9 rounded-full border border-white/10 text-white/60 hover:text-white hover:border-[#FFCC7F] transition cursor-none">
+                    <i class="ph ph-x"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 p-2 bg-black/25">
+                <button type="button" data-auth-tab="login"
+                    class="auth-switch rounded-xl py-2 text-xs font-semibold bg-[#FFCC7F] text-white/60 hover:text-white transition cursor-none">
+                    Login
+                </button>
+                <button type="button" data-auth-tab="signup"
+                    class="auth-switch rounded-xl py-2 text-xs font-semibold text-white/60 hover:text-white transition cursor-none">
+                    Cadastro
+                </button>
+            </div>
+
+            <form id="loginForm" class="auth-form p-6 space-y-4">
+                <label class="block cursor-none">
+                    <span class="text-white/45 text-xs">E-mail</span>
+                    <input type="email" required placeholder="voce@email.com"
+                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F] cursor-none">
+                </label>
+                <label class="block cursor-none">
+                    <span class="text-white/45 text-xs">Senha</span>
+                    <input type="password" required placeholder="Sua senha"
+                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F] cursor-none">
+                </label>
+                <div class="flex items-center justify-between text-xs">
+                    <button type="button" class="text-[#FFCC7F] hover:text-[#f2bd6d] cursor-none">Esqueci a
+                        senha</button>
+                </div>
+                <button type="submit"
+                    class="w-full rounded-xl bg-[#FFCC7F] text-[#3B3B42] font-bold py-3 hover:bg-[#f2bd6d] transition cursor-none">
+                    Entrar
+                </button>
+            </form>
+
+            <form id="signupForm" class="auth-form hidden p-6 space-y-4">
+                <label class="block cursor-none">
+                    <span class="text-white/45 text-xs">Nome</span>
+                    <input type="text" required placeholder="Seu nome"
+                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F] cursor-none">
+                </label>
+                <label class="block cursor-none">
+                    <span class="text-white/45 text-xs">E-mail</span>
+                    <input id="signupEmail" type="email" required placeholder="voce@email.com"
+                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F] cursor-none">
+                </label>
+                <div class="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+                    <p class="text-white/35 text-[10px] uppercase tracking-[2px] mb-1">Função identificada</p>
+                    <p id="signupRolePreview" class="text-[#FFCC7F] text-sm font-semibold">Cliente</p>
+                    <p class="text-white/35 text-[10px] mt-1">A função é definida automaticamente pelo e-mail.</p>
+                </div>
+                <label class="block cursor-none">
+                    <span class="text-white/45 text-xs">Senha</span>
+                    <input type="password" required minlength="6" placeholder="Mínimo 6 caracteres"
+                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F] cursor-none">
+                </label>
+                <button type="submit"
+                    class="w-full rounded-xl bg-[#FFCC7F] text-[#3B3B42] font-bold py-3 hover:bg-[#f2bd6d] transition cursor-none">
+                    Criar conta
+                </button>
+            </form>
+
+            <p id="authFeedback"
+                class="hidden mx-6 mb-6 rounded-xl border border-green-400/20 bg-green-400/10 px-4 py-3 text-xs text-green-300">
+            </p>
+        </div>
+    </div>
+
     <!-- HERO BG -->
     <div class="relative">
         <img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=1400&q=80"
@@ -101,11 +235,12 @@
         <div class="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
 
         <!-- HEADER -->
-        <header class="w-full fixed top-0 left-0 z-40 bg-black/20 backdrop-blur-sm border-b border-white/10 h-24">
+        <header
+            class="w-full fixed top-0 left-0 z-40 bg-black/20 backdrop-blur-sm border-b border-white/10 h-20 lg:h-24">
 
             <!-- Logo imagem -->
-            <div class="absolute top-0 left-0 flex items-center py-2 px-6">
-                <div class="w-24 h-24 flex items-center justify-center">
+            <div class="absolute top-0 left-0 flex items-center py-2 px-4 sm:px-6">
+                <div class="w-16 h-16 lg:w-24 lg:h-24 flex items-center justify-center">
                     <svg class="w-10 h-10 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="1.5">
                         <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
@@ -113,7 +248,7 @@
                 </div>
             </div>
             <!-- Nome do salão -->
-            <div class="absolute top-7 left-24 flex items-center text-3xl text-white py-2 px-6
+            <div class="absolute top-4 lg:top-7 left-16 sm:left-20 lg:left-24 flex items-center text-2xl lg:text-3xl text-white py-2 px-4 lg:px-6
                         [text-shadow:0_0_10px_rgba(255,204,127,0.8)] font-yuji">
                 <h2 class="text-[#CA9440]">S</h2>
                 <h2 class="mr-1">alon</h2>
@@ -122,7 +257,7 @@
             </div>
 
             <!-- Nav links -->
-            <div class="absolute top-6 left-1/2 -translate-x-1/2 flex items-center gap-8 text-white
+            <div class="hidden xl:flex absolute top-6 left-1/2 -translate-x-1/2 items-center gap-8 text-white
                         bg-white/10 backdrop-blur-md border border-white/20 rounded-full py-2 px-6 shadow-lg">
                 <a href="#home" class="hover:scale-110 transition cursor-none text-sm hover:text-[#FFCC7F]">Home</a>
                 <a href="#servicos"
@@ -135,15 +270,46 @@
             </div>
 
             <!-- Botões -->
-            <div class="absolute top-7 right-12 flex gap-x-4">
-                <button class="rounded-full text-white hover:scale-110 cursor-none transition duration-300
+            <div class="hidden lg:flex absolute top-7 right-8 xl:right-12 gap-x-4">
+                <button data-action="login" class="rounded-full text-white hover:scale-110 cursor-none transition duration-300
                                font-bold py-2 px-5 border-2 border-[#FFCC7F] text-sm hover:bg-[#FFCC7F]/10">
                     Entrar
                 </button>
-                <button class="bg-[#FFCC7F] rounded-full text-[#3B3B42] hover:bg-[#f2bd6d] hover:scale-110
+                <button data-action="signup" class="bg-[#FFCC7F] rounded-full text-[#3B3B42] hover:bg-[#f2bd6d] hover:scale-110
                                cursor-none transition duration-300 font-bold py-2 px-5 text-sm">
                     Cadastro
                 </button>
+            </div>
+
+            <button type="button" id="mobileMenuButton"
+                class="lg:hidden absolute top-5 right-5 w-10 h-10 rounded-full border border-white/15 bg-white/10 text-white flex items-center justify-center cursor-none">
+                <i class="ph ph-list text-xl"></i>
+            </button>
+
+            <div id="mobileMenu"
+                class="mobile-menu lg:hidden absolute top-[calc(100%+8px)] left-4 right-4 rounded-2xl border border-white/10 bg-[#101010]/95 backdrop-blur-md p-4 shadow-2xl">
+                <div class="grid gap-2 text-white">
+                    <a href="#home"
+                        class="mobile-menu-link rounded-xl px-4 py-3 text-sm hover:bg-white/10 transition cursor-none">Home</a>
+                    <a href="#servicos"
+                        class="mobile-menu-link rounded-xl px-4 py-3 text-sm hover:bg-white/10 transition cursor-none">Serviços</a>
+                    <a href="#agendar"
+                        class="mobile-menu-link rounded-xl px-4 py-3 text-sm hover:bg-white/10 transition cursor-none">Agendar</a>
+                    <a href="#sobre"
+                        class="mobile-menu-link rounded-xl px-4 py-3 text-sm hover:bg-white/10 transition cursor-none">Sobre</a>
+                    <a href="#contato"
+                        class="mobile-menu-link rounded-xl px-4 py-3 text-sm hover:bg-white/10 transition cursor-none">Contato</a>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-white/10">
+                    <button data-action="login" class="rounded-xl text-white cursor-none transition duration-300
+                                   font-bold py-3 px-4 border border-[#FFCC7F] text-sm hover:bg-[#FFCC7F]/10">
+                        Entrar
+                    </button>
+                    <button data-action="signup" class="bg-[#FFCC7F] rounded-xl text-[#3B3B42] hover:bg-[#f2bd6d]
+                                   cursor-none transition duration-300 font-bold py-3 px-4 text-sm">
+                        Cadastro
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -172,13 +338,13 @@
             </div>
 
             <div class="flex gap-3 relative top-10 reveal delay-4">
-                <button class="rounded-2xl text-[#3B3B42] hover:scale-105 cursor-none bg-[#F4C0AD]
+                <button data-scroll-target="#agendar" class="rounded-2xl text-[#3B3B42] hover:scale-105 cursor-none bg-[#F4C0AD]
                                hover:bg-[#f0b09a] transition duration-300 font-bold py-3 px-6
                                flex items-center gap-2 text-sm shadow-lg">
                     Agendar agora
                     <i class="ph ph-arrow-right"></i>
                 </button>
-                <button class="rounded-2xl text-white hover:scale-105 cursor-none
+                <button data-scroll-target="#servicos" class="rounded-2xl text-white hover:scale-105 cursor-none
                                bg-white/10 backdrop-blur-sm border border-white/20
                                transition duration-300 font-semibold py-3 px-6
                                flex items-center gap-2 text-sm">
@@ -191,13 +357,17 @@
             <div class="flex items-center gap-4 relative top-12 reveal delay-4">
                 <div class="flex">
                     <img src="https://i.pravatar.cc/36?img=1"
-                        class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover" alt="">
+                        class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover"
+                        alt="">
                     <img src="https://i.pravatar.cc/36?img=5"
-                        class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover -ml-2" alt="">
+                        class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover -ml-2"
+                        alt="">
                     <img src="https://i.pravatar.cc/36?img=9"
-                        class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover -ml-2" alt="">
+                        class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover -ml-2"
+                        alt="">
                     <img src="https://i.pravatar.cc/36?img=20"
-                        class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover -ml-2" alt="">
+                        class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover -ml-2"
+                        alt="">
                 </div>
                 <div>
                     <p class="text-white font-semibold text-sm">Mais de 50.000 clientes</p>
@@ -235,7 +405,8 @@
                             flex flex-col items-center text-center gap-3 shadow-sm
                             hover:scale-110 hover:shadow-xl reveal delay-1">
                     <div class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center">
-                        <img class="pointer-events-none select-none w-9 h-9" src="https://cdn-icons-png.flaticon.com/512/747/747310.png" alt="agenda">
+                        <img class="pointer-events-none select-none w-9 h-9"
+                            src="https://cdn-icons-png.flaticon.com/512/747/747310.png" alt="agenda">
                     </div>
                     <h2 class="text-[#C18057] font-semibold text-sm">Agendamento fácil</h2>
                     <p class="text-[#565656] text-sm leading-relaxed">
@@ -247,8 +418,8 @@
                             flex flex-col items-center text-center gap-3 shadow-sm
                             hover:scale-110 hover:shadow-xl reveal delay-2">
                     <div class="w-14 h-14 bg-green-50 rounded-xl flex items-center justify-center">
-                        <img class="pointer-events-none select-none w-9 h-9" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                            alt="profissionais">
+                        <img class="pointer-events-none select-none w-9 h-9"
+                            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="profissionais">
                     </div>
                     <h2 class="text-[#C18057] font-semibold text-sm">Profissionais especializados</h2>
                     <p class="text-[#565656] text-sm leading-relaxed">
@@ -260,8 +431,8 @@
                             flex flex-col items-center text-center gap-3 shadow-sm
                             hover:scale-110 hover:shadow-xl reveal delay-3">
                     <div class="w-14 h-14 bg-yellow-50 rounded-xl flex items-center justify-center">
-                        <img class="pointer-events-none select-none w-9 h-9" src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png"
-                            alt="experiência">
+                        <img class="pointer-events-none select-none w-9 h-9"
+                            src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" alt="experiência">
                     </div>
                     <h2 class="text-[#C18057] font-semibold text-sm">Experiências personalizadas</h2>
                     <p class="text-[#565656] text-sm leading-relaxed">
@@ -273,8 +444,8 @@
                             flex flex-col items-center text-center gap-3 shadow-sm
                             hover:scale-110 hover:shadow-xl reveal delay-4">
                     <div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center">
-                        <img class="pointer-events-none select-none w-9 h-9" src="https://cdn-icons-png.flaticon.com/512/2583/2583344.png"
-                            alt="produtos">
+                        <img class="pointer-events-none select-none w-9 h-9"
+                            src="https://cdn-icons-png.flaticon.com/512/2583/2583344.png" alt="produtos">
                     </div>
                     <h2 class="text-[#C18057] font-semibold text-sm">Produtos de qualidade</h2>
                     <p class="text-[#565656] text-sm leading-relaxed">
@@ -327,7 +498,7 @@
                         Salon Vision é o sistema completo para gestão de salões de beleza
                         que desejam crescer com organização e inteligência.
                     </p>
-                    <button class="rounded-2xl bg-[#F4C0AD] text-[#3B3B42] hover:scale-105 cursor-none
+                    <button data-scroll-target="#contato" class="rounded-2xl bg-[#F4C0AD] text-[#3B3B42] hover:scale-105 cursor-none
                                    transition duration-300 font-bold py-3 px-6
                                    flex items-center gap-2 text-sm reveal delay-3">
                         Falar com um especialista
@@ -400,51 +571,60 @@
                                 <p class="text-white/30 text-[10px]">Olá, Ana! 👋</p>
                                 <p class="text-white text-xs font-semibold mt-1">Resumo de hoje</p>
                             </div>
-                            <div
-                                class="px-4 py-2 text-xs text-white border-l-2 border-[#FFCC7F] bg-[#FFCC7F]/5 text-white">
-                                📊 Dashboard</div>
-                            <div class="px-4 py-2 text-xs text-white/35 hover:text-white/60 transition cursor-none">📅
-                                Agenda</div>
-                            <div class="px-4 py-2 text-xs text-white/35 hover:text-white/60 transition cursor-none">👥
-                                Clientes</div>
-                            <div class="px-4 py-2 text-xs text-white/35 hover:text-white/60 transition cursor-none">✂️
-                                Serviços</div>
-                            <div class="px-4 py-2 text-xs text-white/35 hover:text-white/60 transition cursor-none">👩
-                                Profissionais</div>
-                            <div class="px-4 py-2 text-xs text-white/35 hover:text-white/60 transition cursor-none">💰
-                                Financeiro</div>
-                            <div class="px-4 py-2 text-xs text-white/35 hover:text-white/60 transition cursor-none">📈
-                                Relatórios</div>
-                            <div class="px-4 py-2 text-xs text-white/35 hover:text-white/60 transition cursor-none">⚙️
-                                Config.</div>
+                            <button type="button" data-dashboard-tab="dashboard"
+                                class="dashboard-tab active w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">
+                                📊 Dashboard</button>
+                            <button type="button" data-dashboard-tab="agenda"
+                                class="dashboard-tab w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">📅
+                                Agenda</button>
+                            <button type="button" data-dashboard-tab="clientes"
+                                class="dashboard-tab w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">👥
+                                Clientes</button>
+                            <button type="button" data-dashboard-tab="servicos"
+                                class="dashboard-tab w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">✂️
+                                Serviços</button>
+                            <button type="button" data-dashboard-tab="profissionais"
+                                class="dashboard-tab w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">👩
+                                Profissionais</button>
+                            <button type="button" data-dashboard-tab="financeiro"
+                                class="dashboard-tab w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">💰
+                                Financeiro</button>
+                            <button type="button" data-dashboard-tab="relatorios"
+                                class="dashboard-tab w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">📈
+                                Relatórios</button>
+                            <button type="button" data-dashboard-tab="config"
+                                class="dashboard-tab w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">⚙️
+                                Config.</button>
                         </div>
                         <!-- main -->
-                        <div class="flex-1 p-4">
-                            <div class="grid grid-cols-4 gap-2 mb-4">
-                                <div class="bg-white/4 rounded-xl p-3 border border-white/5">
-                                    <p class="text-white/35 text-[9px] mb-1">Agendamentos</p>
-                                    <p class="text-white text-xl font-bold">32</p>
-                                    <p class="text-green-400 text-[9px] mt-1">+12% hoje</p>
+                        <div class="flex-1 p-4" id="dashboardPanel">
+                            <div id="dashboardContent">
+                                <div class="grid grid-cols-4 gap-2 mb-4">
+                                    <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                                        <p class="text-white/35 text-[9px] mb-1">Agendamentos</p>
+                                        <p class="text-white text-xl font-bold">32</p>
+                                        <p class="text-green-400 text-[9px] mt-1">+12% hoje</p>
+                                    </div>
+                                    <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                                        <p class="text-white/35 text-[9px] mb-1">Faturamento</p>
+                                        <p class="text-white text-sm font-bold">R$4.680</p>
+                                        <p class="text-green-400 text-[9px] mt-1">+8% hoje</p>
+                                    </div>
+                                    <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                                        <p class="text-white/35 text-[9px] mb-1">Novos clientes</p>
+                                        <p class="text-white text-xl font-bold">7</p>
+                                        <p class="text-green-400 text-[9px] mt-1">+3 hoje</p>
+                                    </div>
+                                    <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                                        <p class="text-white/35 text-[9px] mb-1">Ocupação</p>
+                                        <p class="text-white text-xl font-bold">85%</p>
+                                        <p class="text-[#FFCC7F] text-[9px] mt-1">Alta</p>
+                                    </div>
                                 </div>
-                                <div class="bg-white/4 rounded-xl p-3 border border-white/5">
-                                    <p class="text-white/35 text-[9px] mb-1">Faturamento</p>
-                                    <p class="text-white text-sm font-bold">R$4.680</p>
-                                    <p class="text-green-400 text-[9px] mt-1">+8% hoje</p>
+                                <div class="bg-white/3 rounded-xl p-3 border border-white/5">
+                                    <p class="text-white/40 text-[10px] mb-3">Agendamentos — últimos 7 dias</p>
+                                    <div class="flex items-end gap-2 h-20" id="dashBars"></div>
                                 </div>
-                                <div class="bg-white/4 rounded-xl p-3 border border-white/5">
-                                    <p class="text-white/35 text-[9px] mb-1">Novos clientes</p>
-                                    <p class="text-white text-xl font-bold">7</p>
-                                    <p class="text-green-400 text-[9px] mt-1">+3 hoje</p>
-                                </div>
-                                <div class="bg-white/4 rounded-xl p-3 border border-white/5">
-                                    <p class="text-white/35 text-[9px] mb-1">Ocupação</p>
-                                    <p class="text-white text-xl font-bold">85%</p>
-                                    <p class="text-[#FFCC7F] text-[9px] mt-1">Alta</p>
-                                </div>
-                            </div>
-                            <div class="bg-white/3 rounded-xl p-3 border border-white/5">
-                                <p class="text-white/40 text-[10px] mb-3">Agendamentos — últimos 7 dias</p>
-                                <div class="flex items-end gap-2 h-20" id="dashBars"></div>
                             </div>
                         </div>
                     </div>
@@ -472,7 +652,8 @@
                         parceiros!"
                     </p>
                     <div class="flex items-center gap-3">
-                        <img src="https://i.pravatar.cc/40?img=47" class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
+                        <img src="https://i.pravatar.cc/40?img=47"
+                            class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
                         <div>
                             <p class="text-sm font-semibold text-gray-800">Juliana M.</p>
                             <p class="text-xs text-gray-400">Cliente</p>
@@ -491,7 +672,8 @@
                         clientes!"
                     </p>
                     <div class="flex items-center gap-3">
-                        <img src="https://i.pravatar.cc/40?img=68" class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
+                        <img src="https://i.pravatar.cc/40?img=68"
+                            class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
                         <div>
                             <p class="text-sm font-semibold text-gray-800">Marcos A.</p>
                             <p class="text-xs text-gray-400">Proprietário de salão</p>
@@ -509,7 +691,8 @@
                         "Meus clientes adoram a experiência e nós ganhamos eficiência todos os dias."
                     </p>
                     <div class="flex items-center gap-3">
-                        <img src="https://i.pravatar.cc/40?img=32" class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
+                        <img src="https://i.pravatar.cc/40?img=32"
+                            class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
                         <div>
                             <p class="text-sm font-semibold text-gray-800">Carla R.</p>
                             <p class="text-xs text-gray-400">Gestora de salão</p>
@@ -540,12 +723,12 @@
                 para mais beleza, organização e resultados.
             </p>
             <div class="flex justify-center gap-4 reveal delay-2">
-                <button class="rounded-2xl bg-[#F4C0AD] text-[#3B3B42] hover:scale-105 cursor-none
+                <button data-scroll-target="#agendar" class="rounded-2xl bg-[#F4C0AD] text-[#3B3B42] hover:scale-105 cursor-none
                                transition duration-300 font-bold py-3 px-7
                                flex items-center gap-2 text-sm">
                     Agendar agora <i class="ph ph-arrow-right"></i>
                 </button>
-                <button class="rounded-2xl text-white border border-white/15 bg-white/5 hover:bg-white/10
+                <button data-scroll-target="#contato" class="rounded-2xl text-white border border-white/15 bg-white/5 hover:bg-white/10
                                cursor-none transition duration-300 font-semibold py-3 px-7
                                flex items-center gap-2 text-sm">
                     Falar com um especialista <i class="ph ph-arrow-right"></i>
@@ -571,26 +754,31 @@
                 </div>
                 <div>
                     <h4 class="text-white/30 text-[10px] tracking-[2px] uppercase mb-4">Navegação</h4>
-                    <a href="#"
+                    <a href="#home"
                         class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Início</a>
-                    <a href="#" class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Para
+                    <a href="#agendar"
+                        class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Para
                         Clientes</a>
-                    <a href="#" class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Para
+                    <a href="#sobre"
+                        class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Para
                         Salões</a>
-                    <a href="#"
+                    <a href="#servicos"
                         class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Recursos</a>
-                    <a href="#"
+                    <a href="#contato"
                         class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Planos</a>
                 </div>
                 <div>
                     <h4 class="text-white/30 text-[10px] tracking-[2px] uppercase mb-4">Suporte</h4>
-                    <a href="#" class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Central
+                    <a href="#contato"
+                        class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Central
                         de ajuda</a>
-                    <a href="#" class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Fale
+                    <a href="#contato"
+                        class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Fale
                         conosco</a>
-                    <a href="#"
+                    <a href="#contato"
                         class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Privacidade</a>
-                    <a href="#" class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Termos
+                    <a href="#contato"
+                        class="block text-white/50 text-xs mb-2 hover:text-white transition cursor-none">Termos
                         de uso</a>
                 </div>
                 <div>
@@ -629,10 +817,14 @@
             cursor.style.opacity = '1';
         });
 
-        document.querySelectorAll('button, a, .card-item, .testi-card').forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('big'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
-        });
+        function bindCursorTargets(scope = document) {
+            scope.querySelectorAll('button, a, input, select, .card-item, .testi-card').forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+            });
+        }
+
+        bindCursorTargets();
 
         document.querySelectorAll('h1, h2, h3, p, span').forEach(el => {
             el.addEventListener('mouseenter', () => cursor.classList.add('text-cursor'));
@@ -646,14 +838,305 @@
             requestAnimationFrame(tick);
         })();
 
-        const dashBars = document.getElementById('dashBars');
-        [55, 72, 48, 90, 65, 80, 95].forEach((v, i) => {
-            const b = document.createElement('div');
-            b.style.cssText = `flex:1; height:${v}%; background:${i === 6 ? '#FFCC7F' : 'rgba(255,204,127,0.2)'}; border-radius:4px 4px 0 0; transition:background .2s`;
-            b.addEventListener('mouseenter', () => b.style.background = 'rgba(255,204,127,0.5)');
-            b.addEventListener('mouseleave', () => b.style.background = i === 6 ? '#FFCC7F' : 'rgba(255,204,127,0.2)');
-            dashBars.appendChild(b);
+        function renderDashBars(values = [55, 72, 48, 90, 65, 80, 95]) {
+            const dashBars = document.getElementById('dashBars');
+            if (!dashBars) return;
+
+            dashBars.innerHTML = '';
+            values.forEach((v, i) => {
+                const b = document.createElement('div');
+                b.style.cssText = `flex:1; height:${v}%; background:${i === values.length - 1 ? '#FFCC7F' : 'rgba(255,204,127,0.2)'}; border-radius:4px 4px 0 0; transition:background .2s`;
+                b.addEventListener('mouseenter', () => b.style.background = 'rgba(255,204,127,0.5)');
+                b.addEventListener('mouseleave', () => b.style.background = i === values.length - 1 ? '#FFCC7F' : 'rgba(255,204,127,0.2)');
+                dashBars.appendChild(b);
+            });
+        }
+
+        const dashboardViews = {
+            dashboard: `
+                <div class="grid grid-cols-4 gap-2 mb-4">
+                    <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                        <p class="text-white/35 text-[9px] mb-1">Agendamentos</p>
+                        <p class="text-white text-xl font-bold">32</p>
+                        <p class="text-green-400 text-[9px] mt-1">+12% hoje</p>
+                    </div>
+                    <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                        <p class="text-white/35 text-[9px] mb-1">Faturamento</p>
+                        <p class="text-white text-sm font-bold">R$4.680</p>
+                        <p class="text-green-400 text-[9px] mt-1">+8% hoje</p>
+                    </div>
+                    <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                        <p class="text-white/35 text-[9px] mb-1">Novos clientes</p>
+                        <p class="text-white text-xl font-bold">7</p>
+                        <p class="text-green-400 text-[9px] mt-1">+3 hoje</p>
+                    </div>
+                    <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                        <p class="text-white/35 text-[9px] mb-1">Ocupação</p>
+                        <p class="text-white text-xl font-bold">85%</p>
+                        <p class="text-[#FFCC7F] text-[9px] mt-1">Alta</p>
+                    </div>
+                </div>
+                <div class="bg-white/3 rounded-xl p-3 border border-white/5">
+                    <p class="text-white/40 text-[10px] mb-3">Agendamentos — últimos 7 dias</p>
+                    <div class="flex items-end gap-2 h-20" id="dashBars"></div>
+                </div>
+            `,
+            agenda: `
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-white text-sm font-semibold">Agenda de hoje</p>
+                        <p class="text-white/35 text-[10px]">Próximos horários confirmados</p>
+                    </div>
+                    <button class="rounded-lg bg-[#FFCC7F] text-[#3B3B42] px-3 py-2 text-[10px] font-bold cursor-none">Novo horário</button>
+                </div>
+                <div class="space-y-2">
+                    ${[
+                    ['09:00', 'Corte feminino', 'Juliana M.', 'Confirmado'],
+                    ['11:30', 'Coloração', 'Marina S.', 'Em preparo'],
+                    ['14:00', 'Manicure', 'Bianca T.', 'Confirmado'],
+                    ['16:30', 'Escova', 'Paula R.', 'Pendente']
+                ].map(item => `
+                        <div class="grid grid-cols-[52px_1fr_76px] gap-3 items-center bg-white/4 border border-white/5 rounded-xl p-3">
+                            <p class="text-[#FFCC7F] text-xs font-bold">${item[0]}</p>
+                            <div>
+                                <p class="text-white text-xs font-semibold">${item[1]}</p>
+                                <p class="text-white/35 text-[10px]">${item[2]}</p>
+                            </div>
+                            <span class="text-[9px] text-white/55 text-right">${item[3]}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `,
+            clientes: `
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-white text-sm font-semibold">Clientes recentes</p>
+                    <button class="rounded-lg border border-white/10 text-white/70 px-3 py-2 text-[10px] cursor-none">Adicionar</button>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    ${[
+                    ['Ana Souza', '12 visitas', 'R$ 1.240'],
+                    ['Carla Lima', '8 visitas', 'R$ 860'],
+                    ['Nina Alves', '5 visitas', 'R$ 540'],
+                    ['Joana Reis', '3 visitas', 'R$ 310']
+                ].map(item => `
+                        <div class="bg-white/4 border border-white/5 rounded-xl p-3">
+                            <p class="text-white text-xs font-semibold">${item[0]}</p>
+                            <p class="text-white/35 text-[10px] mt-1">${item[1]}</p>
+                            <p class="text-[#FFCC7F] text-[10px] mt-2">${item[2]}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `,
+            servicos: `
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-white text-sm font-semibold">Serviços cadastrados</p>
+                    <button class="rounded-lg bg-[#FFCC7F] text-[#3B3B42] px-3 py-2 text-[10px] font-bold cursor-none">Novo serviço</button>
+                </div>
+                <div class="space-y-2">
+                    ${[
+                    ['Corte feminino', '60 min', 'R$ 120'],
+                    ['Coloração', '120 min', 'R$ 260'],
+                    ['Manicure completa', '45 min', 'R$ 55'],
+                    ['Escova modelada', '50 min', 'R$ 90']
+                ].map(item => `
+                        <div class="flex items-center justify-between bg-white/4 border border-white/5 rounded-xl p-3">
+                            <div>
+                                <p class="text-white text-xs font-semibold">${item[0]}</p>
+                                <p class="text-white/35 text-[10px]">${item[1]}</p>
+                            </div>
+                            <p class="text-[#FFCC7F] text-xs font-bold">${item[2]}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `,
+            profissionais: `
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-white text-sm font-semibold">Equipe disponível</p>
+                    <button class="rounded-lg border border-white/10 text-white/70 px-3 py-2 text-[10px] cursor-none">Gerenciar</button>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    ${[
+                    ['Ana', 'Cabelo', '92%'],
+                    ['Lia', 'Unhas', '86%'],
+                    ['Rafa', 'Make', '78%']
+                ].map(item => `
+                        <div class="bg-white/4 border border-white/5 rounded-xl p-3 text-center">
+                            <div class="w-9 h-9 rounded-full bg-[#FFCC7F]/20 text-[#FFCC7F] mx-auto mb-2 flex items-center justify-center font-bold">${item[0][0]}</div>
+                            <p class="text-white text-xs font-semibold">${item[0]}</p>
+                            <p class="text-white/35 text-[10px]">${item[1]}</p>
+                            <p class="text-green-400 text-[10px] mt-2">${item[2]} ocupado</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `,
+            financeiro: `
+                <div class="grid grid-cols-3 gap-2 mb-4">
+                    <div class="bg-white/4 border border-white/5 rounded-xl p-3">
+                        <p class="text-white/35 text-[9px]">Receita</p>
+                        <p class="text-white text-lg font-bold">R$ 18,4k</p>
+                    </div>
+                    <div class="bg-white/4 border border-white/5 rounded-xl p-3">
+                        <p class="text-white/35 text-[9px]">A receber</p>
+                        <p class="text-white text-lg font-bold">R$ 2,1k</p>
+                    </div>
+                    <div class="bg-white/4 border border-white/5 rounded-xl p-3">
+                        <p class="text-white/35 text-[9px]">Ticket médio</p>
+                        <p class="text-white text-lg font-bold">R$ 146</p>
+                    </div>
+                </div>
+                <div class="bg-white/3 rounded-xl p-3 border border-white/5">
+                    <p class="text-white/40 text-[10px] mb-3">Receita semanal</p>
+                    <div class="flex items-end gap-2 h-20" id="dashBars"></div>
+                </div>
+            `,
+            relatorios: `
+                <div class="mb-4">
+                    <p class="text-white text-sm font-semibold">Relatórios inteligentes</p>
+                    <p class="text-white/35 text-[10px]">Indicadores para acompanhar o crescimento do salão</p>
+                </div>
+                <div class="space-y-2">
+                    ${[
+                    ['Serviços mais vendidos', 'Coloração lidera com 28%'],
+                    ['Horários de pico', 'Terça e sábado à tarde'],
+                    ['Retenção de clientes', '64% retornaram este mês']
+                ].map(item => `
+                        <div class="bg-white/4 border border-white/5 rounded-xl p-3">
+                            <p class="text-white text-xs font-semibold">${item[0]}</p>
+                            <p class="text-white/35 text-[10px] mt-1">${item[1]}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `,
+            config: `
+                <div class="mb-4">
+                    <p class="text-white text-sm font-semibold">Configurações</p>
+                    <p class="text-white/35 text-[10px]">Preferências do salão e notificações</p>
+                </div>
+                <div class="space-y-2">
+                    ${[
+                    ['Lembretes automáticos', 'Ativado'],
+                    ['Confirmação por WhatsApp', 'Ativado'],
+                    ['Horário de funcionamento', '09:00 às 19:00']
+                ].map(item => `
+                        <div class="flex items-center justify-between bg-white/4 border border-white/5 rounded-xl p-3">
+                            <p class="text-white text-xs font-semibold">${item[0]}</p>
+                            <p class="text-[#FFCC7F] text-[10px]">${item[1]}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `
+        };
+
+        function openDashboardTab(tabName) {
+            const content = document.getElementById('dashboardContent');
+            if (!content || !dashboardViews[tabName]) return;
+
+            document.querySelectorAll('[data-dashboard-tab]').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.dashboardTab === tabName);
+            });
+
+            content.innerHTML = dashboardViews[tabName];
+            bindCursorTargets(content);
+
+            if (tabName === 'dashboard') renderDashBars();
+            if (tabName === 'financeiro') renderDashBars([36, 58, 44, 76, 62, 88, 70]);
+        }
+
+        document.querySelectorAll('[data-dashboard-tab]').forEach(tab => {
+            tab.addEventListener('click', () => openDashboardTab(tab.dataset.dashboardTab));
         });
+
+        document.querySelectorAll('[data-scroll-target]').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelector(button.dataset.scrollTarget)?.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        const authModal = document.getElementById('authModal');
+        const authTitle = document.getElementById('authTitle');
+        const authFeedback = document.getElementById('authFeedback');
+        const authTabs = document.querySelectorAll('[data-auth-tab]');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const signupEmail = document.getElementById('signupEmail');
+        const signupRolePreview = document.getElementById('signupRolePreview');
+
+        function getRoleByEmail(email) {
+            const normalizedEmail = email.trim().toLowerCase();
+
+            if (normalizedEmail.includes('@adm')) return 'Administrador';
+            if (normalizedEmail.includes('@prof')) return 'Profissional';
+            if (normalizedEmail.includes('@salao')) return 'Salão';
+
+            return 'Cliente';
+        }
+
+        function setAuthMode(mode) {
+            const isLogin = mode === 'login';
+
+            authTitle.textContent = isLogin ? 'Entrar' : 'Criar conta';
+            loginForm.classList.toggle('hidden', !isLogin);
+            signupForm.classList.toggle('hidden', isLogin);
+            authFeedback.classList.add('hidden');
+            authFeedback.textContent = '';
+
+            authTabs.forEach(tab => {
+                const active = tab.dataset.authTab === mode;
+                tab.classList.toggle('bg-[#FFCC7F]', active);
+                tab.classList.toggle('text-[#3B3B42]', active);
+                tab.classList.toggle('text-white/60', !active);
+            });
+        }
+
+        function openAuth(mode) {
+            setAuthMode(mode);
+            authModal.classList.add('open');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeAuth() {
+            authModal.classList.remove('open');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        document.querySelector('[data-action="login"]')?.addEventListener('click', () => openAuth('login'));
+        document.querySelector('[data-action="signup"]')?.addEventListener('click', () => openAuth('signup'));
+
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', () => setAuthMode(tab.dataset.authTab));
+        });
+
+        document.querySelectorAll('[data-auth-close]').forEach(button => {
+            button.addEventListener('click', closeAuth);
+        });
+
+        authModal?.addEventListener('click', event => {
+            if (event.target === authModal) closeAuth();
+        });
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && authModal.classList.contains('open')) closeAuth();
+        });
+
+        loginForm?.addEventListener('submit', event => {
+            event.preventDefault();
+            authFeedback.textContent = 'Login validado no front. Agora é só conectar com o backend.';
+            authFeedback.classList.remove('hidden');
+        });
+
+        signupForm?.addEventListener('submit', event => {
+            event.preventDefault();
+            const role = getRoleByEmail(signupEmail.value);
+
+            authFeedback.textContent = `Cadastro criado no front como ${role}. Os dados ainda não são enviados ao backend.`;
+            authFeedback.classList.remove('hidden');
+        });
+
+        signupEmail?.addEventListener('input', () => {
+            signupRolePreview.textContent = getRoleByEmail(signupEmail.value);
+        });
+
+        renderDashBars();
 
         const io = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
