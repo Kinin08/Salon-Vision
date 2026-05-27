@@ -10,7 +10,7 @@ class Products extends Api
     public function productsList(): void
     {
         $products = new Product();
-        $this->call(200, "success", "Lista de Produtos", "success")->back($products->listAll());
+        $this->call(200, "success", "Lista de Produtos", "success")->back($products->selectAll(["id = 3"]));
     }
 
     public function productById(array $data): void

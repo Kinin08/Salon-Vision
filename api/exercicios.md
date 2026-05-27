@@ -372,7 +372,7 @@ Trate os seguintes cenários:
 ### Contextualizando
 
 No mundo real, **excluir registros definitivamente do banco é uma má prática**: perde-se histórico, pode-se quebrar integridade referencial e não há como recuperar o dado. A solução adotada neste sistema é o **soft delete** — em vez de deletar o registro, ele é marcado como inativo com um campo `active`.
-
+post
 ### Objetivo
 
 Criar um endpoint de exclusão que **não apague o registro**, mas altere seu campo `active` para `0`, tornando-o invisível nas listagens sem removê-lo do banco.

@@ -4,19 +4,26 @@ namespace source\Models\Faq;
 
 use PDO;
 use Source\Core\Connect;
-class Faq
+use Source\Core\Model;
+class Faq extends Model
 {
     private ?int $id;
-    private ?int $faqs_category_id;
+    private ?int $faqsCategoryId;
     private ?string $question;
     private ?string $answer;
+    private ?int $active;
 
-    public function __construct(?int $id = null, ?int $faqs_category_id = null, ?string $question = null, ?float $answer = null)
+    public function __construct(?int $id = null, ?int $faqsCategoryId = null, ?string $question = null, ?string $answer = null, ?int $active = 1)
     {
         $this->id = $id;
-        $this->faqs_category_id = $faqs_category_id;
+        $this->faqsCategoryId = $faqsCategoryId;
         $this->question = $question;
         $this->answer = $answer;
+        $this->active = $active;
+
+        $this->table = 'faqs'; // nome da tabela do banco
+        $this->primaryKey = 'id'; // nome da chave primária da tabela
+        $this->fillable = ['faqsCategoryId', 'question', 'answer', 'active']; // camelCase
     }
 
     public function getId(): ?int
@@ -29,17 +36,17 @@ class Faq
         $this->id = $id;
     }
 
-    public function getFaqs_category_id(): int
+    public function getFaqsCategoryId(): ?int
     {
-        return $this->faqs_category_id;
+        return $this->faqsCategoryId;
     }
 
-    public function setFaqs_category_id(int $faqs_category_id): void
+    public function setFaqsCategoryId(int $faqsCategoryId): void
     {
-        $this->faqs_category_id = $faqs_category_id;
+        $this->faqsCategoryId = $faqsCategoryId;
     }
 
-    public function getQuestion(): string
+    public function getQuestion(): ?string
     {
         return $this->question;
     }
@@ -49,7 +56,7 @@ class Faq
         $this->question = $question;
     }
 
-    public function getAnswer(): string
+    public function getAnswer(): ?string
     {
         return $this->answer;
     }
@@ -58,81 +65,89 @@ class Faq
     {
         $this->answer = $answer;
     }
-
-    public function listAll(): array
+    public function getActive(): ?string
     {
-        $query = "SELECT f.id, f.question, f.answer,
-        c.name AS category_name
-        FROM faqs AS f
-        JOIN faqs_categories AS c
-        ON c.id = f.faqs_category_id
-        ORDER BY c.name, f.id";
-        $stmt = Connect::getInstance()->query($query);
-        if ($stmt->rowCount() > 0) {
-            return $stmt->fetchAll();
+        return $this->active;
+    }
+    public function setActive(int $active): void
+    {
+        $this->active = $active;
+    }
+    /*
+        public function listAll(): array
+        {
+            $query = "SELECT f.id, f.question, f.answer,
+            c.name AS category_name
+            FROM faqs AS f
+            JOIN faqs_categories AS c
+            ON c.id = f.faqs_category_id
+            ORDER BY c.name, f.id";
+            $stmt = Connect::getInstance()->query($query);
+            if ($stmt->rowCount() > 0) {
+                return $stmt->fetchAll();
+            }
+            return [];
         }
-        return [];
-    }
-    public function listById(int $id): object|bool
-    {
-        $query = "SELECT * FROM faqs WHERE id = :id";
-        $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindParam(":id", $id);
-        $stmt->execute();
-        if ($stmt->rowCount() > 0) {
-            return $stmt->fetch();
+        public function listById(int $id): object|bool
+        {
+            $query = "SELECT * FROM faqs WHERE id = :id";
+            $stmt = Connect::getInstance()->prepare($query);
+            $stmt->bindParam(":id", $id);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                return $stmt->fetch();
+            }
+            return false;
         }
-        return false;
-    }
-    public function create(string $question, string $answer, int $faqs_category_id): bool|array
-{
-    $query = "INSERT INTO faqs (question, answer, faqs_category_id) 
-              VALUES (:question, :answer, :cat)";
-    
-    $stmt = Connect::getInstance()->prepare($query);
-    $stmt->bindParam(":question", $question);
-    $stmt->bindParam(":answer", $answer);
-    $stmt->bindParam(":cat", $faqs_category_id);
+        public function create(string $question, string $answer, int $faqs_category_id): bool|array
+        {
+            $query = "INSERT INTO faqs (question, answer, faqs_category_id) 
+                  VALUES (:question, :answer, :cat)";
 
-    if (!$stmt->execute()) {
-        return false;
-    }
+            $stmt = Connect::getInstance()->prepare($query);
+            $stmt->bindParam(":question", $question);
+            $stmt->bindParam(":answer", $answer);
+            $stmt->bindParam(":cat", $faqs_category_id);
 
-    $id = Connect::getInstance()->lastInsertId();
+            if (!$stmt->execute()) {
+                return false;
+            }
 
-    return [
-        "id" => (int) $id,
-        "question" => $question,
-        "answer" => $answer,
-        "faqs_category_id" => $faqs_category_id
-    ];
-}
-    public function update(): bool
-    {
-        $query = "
-            UPDATE faqs
-            SET question = :question,
-                answer = :answer,
-                faqs_category_id = :cat
-            WHERE id = :id
-        ";
+            $id = Connect::getInstance()->lastInsertId();
 
-        $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindParam(":question", $this->question);
-        $stmt->bindParam(":answer", $this->answer);
-        $stmt->bindParam(":cat", $this->faqs_category_id);
-        $stmt->bindParam(":id", $this->id);
+            return [
+                "id" => (int) $id,
+                "question" => $question,
+                "answer" => $answer,
+                "faqs_category_id" => $faqs_category_id
+            ];
+        }
+        public function update(): bool
+        {
+            $query = "
+                UPDATE faqs
+                SET question = :question,
+                    answer = :answer,
+                    faqs_category_id = :cat
+                WHERE id = :id
+            ";
 
-        return $stmt->execute();
-    }
-    public function softDelete(int $id): bool
-    {
-        $query = "UPDATE faqs SET active = 0 WHERE id = :id AND active = 1";
+            $stmt = Connect::getInstance()->prepare($query);
+            $stmt->bindParam(":question", $this->question);
+            $stmt->bindParam(":answer", $this->answer);
+            $stmt->bindParam(":cat", $this->faqs_category_id);
+            $stmt->bindParam(":id", $this->id);
 
-        $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
-        $stmt->execute();
+            return $stmt->execute();
+        }
+        public function softDelete(int $id): bool
+        {
+            $query = "UPDATE faqs SET active = 0 WHERE id = :id AND active = 1";
 
-        return $stmt->rowCount() > 0;
-    }
+            $stmt = Connect::getInstance()->prepare($query);
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $stmt->rowCount() > 0;
+        }*/
 }

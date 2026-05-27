@@ -1,19 +1,19 @@
 <?php
 
-namespace source\Controller;
+namespace Source\Controller;
 
 class Api
 {
-
+    protected array $response = [];
     public function hello()
     {
         echo "Olá, mundo! Estamos com a API funcionando, graças a Deus!";
     }
 
-    protected function call (int $code, ?string $status = null, ?string $message = null, ?string $type = null): Api
+    protected function call(int $code, ?string $status = null, ?string $message = null, ?string $type = null): Api
     {
         http_response_code($code);
-        if(!empty($status)){
+        if (!empty($status)) {
             $this->response = [
                 "code" => $code,
                 "type" => $type,
@@ -24,7 +24,7 @@ class Api
         return $this;
     }
 
-    protected function back(object | array $data = null): Api
+    protected function back(object|array|null $data = null): Api
     {
         header('Content-Type: application/json');
         if ($data) {

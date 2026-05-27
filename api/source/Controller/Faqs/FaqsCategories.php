@@ -97,7 +97,6 @@ class FaqsCategories extends Api
         $body = json_decode(file_get_contents("php://input"), true);
 
         if (
-            !$body ||
             empty($body["name"])
         ) {
             $this->call(
@@ -109,10 +108,10 @@ class FaqsCategories extends Api
             return;
         }
 
-        $faq = new FaqCategorie();
-
-        $exists = $faq->listById($faqId);
-        if (!$exists) {
+        $faqCategory = new FaqCategorie();
+        
+        $updatedFaq = $faqCategory->listById($faqId);
+        if (!$updatedFaq) {
             $this->call(
                 404,
                 "error",
@@ -122,10 +121,10 @@ class FaqsCategories extends Api
             return;
         }
 
-        $faq->setId($faqId);
-        $faq->setName($body["name"]);
+        $faqCategory->setId($faqId);
+        $faqCategory->setName($body["name"]);
 
-        $success = $faq->update();
+        $success = $faqCategory->update();
 
         if (!$success) {
             $this->call(
@@ -137,7 +136,6 @@ class FaqsCategories extends Api
             return;
         }
 
-        $updatedFaq = $faq->listById($faqId);
 
         $this->call(
             200,

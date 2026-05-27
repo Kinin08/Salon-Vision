@@ -26,27 +26,35 @@ $route = new Router(url("api"),":");
 $route->namespace("Source\Controller");
 
 // Início - Exercícios - Desafios
-$route->get("/products/list", "Products\\Products:productsList");
-$route->get("/products/list/{productId}", "Products\\Products:productById");
-$route->post("/products", "Products\\Products:create");
-$route->put("/products/{product_id}", "Products\\Products:update");
-$route->delete("/products/{product_id}", "Products\\Products:softDelete");
+$route->group("/products");
+$route->get("/list", "Products\\Products:productsList");
+$route->get("/list/{productId}", "Products\\Products:productById");
+$route->post("/", "Products\\Products:create");
+$route->put("/{product_id}", "Products\\Products:update");
+$route->delete("/{product_id}", "Products\\Products:softDelete");
+$route->group(null);
 
-$route->get("/products-categories/list/{categoryId}", "Products\\ProductsCategories:categoryFindById");
-$route->get("/products-categories/list", "Products\\ProductsCategories:productsCategoryList");
-$route->post("/products_categories", "Products\\ProductsCategories:create");
+$route->group("/products_categories");
+$route->get("/list/{categoryId}", "Products\\ProductsCategories:categoryFindById");
+$route->get("/list", "Products\\ProductsCategories:productsCategoryList");
+$route->post("/", "Products\\ProductsCategories:create");
+$route->group(null);
 
-$route->get("/faqs_categories/list", "Faqs\\FaqsCategories:listAll");
-$route->get("/faqs_categories/list/{faq_categorieId}", "Faqs\\FaqsCategories:listById");
-$route->post("/faqs_categories", "Faqs\\FaqsCategories:create");
-$route->put("/faqs_categories/{faq_category_id}", "Faqs\\FaqsCategories:update");
-$route->delete("/faqs_categories/{faq_category_id}", "Faqs\\FaqsCategories:softDelete");
+$route->group("/faqs_categories");
+$route->get("/list", "Faqs\\FaqsCategories:listAll");
+$route->get("/list/{faqCategorieId}", "Faqs\\FaqsCategories:listById");
+$route->post("/", "Faqs\\FaqsCategories:create");
+$route->put("/{faqCategorieId}", "Faqs\\FaqsCategories:update");
+$route->delete("/{faqCategorieId}", "Faqs\\FaqsCategories:softDelete");
+$route->group(null);
 
-$route->get("/faqs/list", "Faqs\\Faqs:listAll");
-$route->get("/faqs/list/{faq_id}", "Faqs\\Faqs:listById");
-$route->post("/faqs", "Faqs\\Faqs:create");
-$route->put("/faqs/{faq_id}", "Faqs\\Faqs:update");
-$route->delete("/faqs/{faq_id}", "Faqs\\Faqs:softDelete");
+$route->group("/faqs");
+$route->get("/list", "Faqs\\Faqs:listAll");
+$route->get("/list/{faq_id}", "Faqs\\Faqs:listById");
+$route->post("/", "Faqs\\Faqs:create");
+$route->put("/{faq_id}", "Faqs\\Faqs:update");
+$route->delete("/{faq_id}", "Faqs\\Faqs:softDelete");
+$route->group(null);
 // Fim - Exercícios - Desafios
 
 $route->get("/hello", "Api:hello");

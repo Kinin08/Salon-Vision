@@ -3,20 +3,27 @@
 namespace source\Models\Product;
 
 use Source\Core\Connect;
+use Source\COre\Model;
 
-class Product
+class Product extends Model
 {
     private ?int $id;
     private ?int $categoryId;
     private ?string $name;
     private ?float $price;
+    private ?int $active;
 
-    public function __construct(?int $id = null, ?int $categoryId = null, ?string $name = null, ?float $price = null)
+    public function __construct(?int $id = null, ?int $categoryId = null, ?string $name = null, ?float $price = null, ?int $active = 1)
     {
         $this->id = $id;
         $this->categoryId = $categoryId;
         $this->name = $name;
         $this->price = $price;
+        $this->active = $active;
+
+        $this->table = 'products';
+        $this->primaryKey = 'id';
+        $this->fillable = ['categoryId', 'name', 'price', 'active'];
     }
 
     public function getId(): ?int
@@ -58,6 +65,15 @@ class Product
     {
         $this->price = $price;
     }
+    public function getActive(): ?int
+    {
+        return $this->active;
+    }
+
+    public function setActive(int $active): void
+    {
+        $this->active = $active;
+    }
 
     public function listAll(): array
     {
@@ -82,9 +98,9 @@ class Product
     }
     public function create(): bool
     {
-        $query = "INSERT INTO products VALUES(NULL, :categoryId, :name, :price)";
+        $query = "INSERT INTO products VALUES(NULL, :category_id, :name, :price)";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindParam(":categoryId", $this->categoryId);
+        $stmt->bindParam(":category_id", $this->category_id);
         $stmt->bindParam(":name", $this->name);
         $stmt->bindParam(":price", $this->price);
         $stmt->execute();
@@ -108,11 +124,11 @@ class Product
     public function update(): bool
     {
         $query = "UPDATE products 
-              SET category_id = :categoryId, name = :name, price = :price 
+              SET category_id = :category_id, name = :name, price = :price 
               WHERE id = :id";
 
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindParam(":categoryId", $this->categoryId);
+        $stmt->bindParam(":category_id", $this->category_id);
         $stmt->bindParam(":name", $this->name);
         $stmt->bindParam(":price", $this->price);
         $stmt->bindParam(":id", $this->id);
