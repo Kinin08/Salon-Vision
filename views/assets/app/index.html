@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./../app/styles/button.css">
+    <script type="module" src="./../app/script/button.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body class="cursor-none">
+    <style>
+        #cursor {
+            transition: width .2s, height .2s, border-radius .15s, background .2s, opacity .3s;
+        }
+
+        #cursor.big {
+            width: 36px !important;
+            height: 36px !important;
+            background: rgba(255, 204, 127, 0.28) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            box-shadow: none !important;
+        }
+
+        #cursor.text-cursor {
+            width: 4px !important;
+            height: 22px !important;
+            border-radius: 2px !important;
+        }
+    </style>
+    <div id="cursor" class="opacity-0 fixed w-[14px] h-[14px] rounded-full pointer-events-none z-[9999]
+               -translate-x-1/2 -translate-y-1/2
+               bg-[#FFCC7F] shadow-[0_0_15px_rgba(232,178,95,0.6)]">
+    </div>
+    <div class="rounded-2xl overflow-hidden border border-white/8 bg-[#0d0d0d] reveal-right">
+        <!-- topbar -->
+        <div class="bg-[#0a0a0a] px-5 py-3 flex items-center gap-2 border-b border-white/5">
+            <div class="w-3 h-3 rounded-full bg-[#ff5f57]"></div>
+            <div class="w-3 h-3 rounded-full bg-[#febc2e]"></div>
+            <div class="w-3 h-3 rounded-full bg-[#28c840]"></div>
+            <span class="ml-3 font-['Cormorant_Garamond'] text-sm tracking-widest text-white/40 uppercase">Salon
+                Vision</span>
+        </div>
+        <div class="flex min-h-[340px]">
+            <!-- sidebar -->
+            <div class="w-40 bg-[#0a0a0a] border-r border-white/5 py-4 flex-shrink-0">
+                <div class="px-4 pb-4 mb-2 border-b border-white/5">
+                    <p class="text-white/30 text-[10px]">Olá, Ana! 👋</p>
+                    <p class="text-white text-xs font-semibold mt-1">Resumo de hoje</p>
+                </div>
+                <button type="button" data-dashboard-tab="dashboard"
+                    class="dashboard-tab active w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">
+                    📊 Dashboard</button>
+                <button type="button" data-dashboard-tab="agenda"
+                    class="dashboard-tab w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">📅
+                    Agenda</button>
+                <button type="button" data-dashboard-tab="clientes"
+                    class="dashboard-tab w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">👥
+                    Clientes</button>
+                <button type="button" data-dashboard-tab="servicos"
+                    class="dashboard-tab w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">✂️
+                    Serviços</button>
+                <button type="button" data-dashboard-tab="profissionais"
+                    class="dashboard-tab w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">👩
+                    Profissionais</button>
+                <button type="button" data-dashboard-tab="financeiro"
+                    class="dashboard-tab w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">💰
+                    Financeiro</button>
+                <button type="button" data-dashboard-tab="relatorios"
+                    class="dashboard-tab w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">📈
+                    Relatórios</button>
+                <button type="button" data-dashboard-tab="config"
+                    class="dashboard-tab w-full text-left px-4 py-2 text-xs text-white/35 hover:text-white/70 transition cursor-none">⚙️
+                    Config.</button>
+            </div>
+            <!-- main -->
+            <div class="flex-1 p-4" id="dashboardPanel">
+                <div id="dashboardContent">
+                    <div class="grid grid-cols-4 gap-2 mb-4">
+                        <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                            <p class="text-white/35 text-[9px] mb-1">Agendamentos</p>
+                            <p class="text-white text-xl font-bold">32</p>
+                            <p class="text-green-400 text-[9px] mt-1">+12% hoje</p>
+                        </div>
+                        <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                            <p class="text-white/35 text-[9px] mb-1">Faturamento</p>
+                            <p class="text-white text-sm font-bold">R$4.680</p>
+                            <p class="text-green-400 text-[9px] mt-1">+8% hoje</p>
+                        </div>
+                        <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                            <p class="text-white/35 text-[9px] mb-1">Novos clientes</p>
+                            <p class="text-white text-xl font-bold">7</p>
+                            <p class="text-green-400 text-[9px] mt-1">+3 hoje</p>
+                        </div>
+                        <div class="bg-white/4 rounded-xl p-3 border border-white/5">
+                            <p class="text-white/35 text-[9px] mb-1">Ocupação</p>
+                            <p class="text-white text-xl font-bold">85%</p>
+                            <p class="text-[#FFCC7F] text-[9px] mt-1">Alta</p>
+                        </div>
+                    </div>
+                    <div class="bg-white/3 rounded-xl p-3 border border-white/5">
+                        <p class="text-white/40 text-[10px] mb-3">Agendamentos — últimos 7 dias</p>
+                        <div class="flex items-end gap-2 h-20" id="dashBars"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <p class="hint" id="hint">Menu</p>
+        <div class="nav-backdrop" id="backdrop"></div>
+
+        <button class="nav-trigger" id="trigger" aria-label="Open menu" aria-expanded="false">
+            <div class="burger"><span></span><span></span><span></span></div>
+        </button>
+
+        <a href="views/assets/admin/adm.html" class="nav-item"
+            style="--accent:rgba(99,102,241,.6);--accent-rgb:99,102,241">
+            <span class="label">Home</span>
+            <ion-icon name="home-outline"></ion-icon>
+        </a>
+        <a href="#" class="nav-item" style="--accent:rgba(236,72,153,.6);--accent-rgb:236,72,153">
+            <span class="label">Profile</span>
+            <ion-icon name="person-outline"></ion-icon>
+        </a>
+        <a href="#" class="nav-item" style="--accent:rgba(245,158,11,.6);--accent-rgb:245,158,11">
+            <span class="label">Settings</span>
+            <ion-icon name="settings-outline"></ion-icon>
+        </a>
+        <a href="#" class="nav-item" style="--accent:rgba(34,197,94,.6);--accent-rgb:34,197,94">
+            <span class="label">Messages</span>
+            <ion-icon name="chatbubble-outline"></ion-icon>
+        </a>
+        <a href="#" class="nav-item" style="--accent:rgba(14,165,233,.6);--accent-rgb:14,165,233">
+            <span class="label">Camera</span>
+            <ion-icon name="camera-outline"></ion-icon>
+        </a>
+        <a href="#" class="nav-item" style="--accent:rgba(239,68,68,.6);--accent-rgb:239,68,68">
+            <span class="label">Likes</span>
+            <ion-icon name="heart-outline"></ion-icon>
+        </a>
+        <a href="#" class="nav-item" style="--accent:rgba(168,85,247,.6);--accent-rgb:168,85,247">
+            <span class="label">History</span>
+            <ion-icon name="time-outline"></ion-icon>
+        </a>
+        <a href="#" class="nav-item" style="--accent:rgba(251,146,60,.6);--accent-rgb:251,146,60">
+            <span class="label">Favorites</span>
+            <ion-icon name="star-outline"></ion-icon>
+        </a>
+    </div>
+    <script type="module" src="./../_common/script/cursor.js"></script>
+</body>
+
+</html>
