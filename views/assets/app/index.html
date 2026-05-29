@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="./../app/styles/button.css">
+    <link rel="stylesheet" href="./../app/styles/btn.css">
     <script type="module" src="./../app/script/button.js"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@400;600;700&display=swap"
@@ -13,32 +13,11 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="style.css">
 </head>
 
 
 <body class="cursor-none">
-    <style>
-        #cursor {
-            transition: width .2s, height .2s, border-radius .15s, background .2s, opacity .3s;
-        }
-
-        #cursor.big {
-            width: 36px !important;
-            height: 36px !important;
-            background: rgba(255, 204, 127, 0.28) !important;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.12) !important;
-            box-shadow: none !important;
-        }
-
-        #cursor.text-cursor {
-            width: 4px !important;
-            height: 22px !important;
-            border-radius: 2px !important;
-        }
-    </style>
+    
     <div id="cursor" class="opacity-0 fixed w-[14px] h-[14px] rounded-full pointer-events-none z-[9999]
                -translate-x-1/2 -translate-y-1/2
                bg-[#FFCC7F] shadow-[0_0_15px_rgba(232,178,95,0.6)]">

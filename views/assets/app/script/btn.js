@@ -7,12 +7,13 @@ const total = items.length;
 const radius = 110;
 
 function calcTranslate(index) {
-    const startAngle = 160;
-    const endAngle = 280;
+    const spacing = 200;
+    const startAngle = -40;
+    const endAngle = 40;
     const angle = startAngle + (endAngle - startAngle) * (index / (total - 1));
     const rad = angle * Math.PI / 180;
-    const dx = radius * Math.cos(rad);
-    const dy = radius * Math.sin(rad);
+    const dx = Math.sin(rad) * spacing;
+    const dy = Math.abs(Math.cos(rad)) * spacing * 0.4;
     return { dx, dy };
 }
 

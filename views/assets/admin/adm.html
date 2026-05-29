@@ -1,11 +1,322 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br" class="scroll-smooth">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Salon Vision | Experiência de Beleza</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <link rel="stylesheet" href="./../_common/style/cursor.css">
+    <link rel="stylesheet" href="./../_common/style/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./../app/styles/btn.css">
+    <script type="module" src="./../app/script/btn.js"></script>
+    <style>
+        @keyframes softPulse {
+            0% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0.7;
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes auroraMove {
+            0% {
+                transform: translate(0%, 0%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-5%, -5%) rotate(2deg);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .aurora-light {
+            animation: auroraMove 22s infinite alternate ease-in-out;
+        }
+
+        .aurora-light-2 {
+            animation: auroraMove 28s infinite alternate-reverse ease-in-out;
+        }
+
+        .noise-texture {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.045'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .glow-edge {
+            box-shadow: 0 0 20px rgba(255, 204, 127, 0.2);
+        }
+
+        @keyframes gradientFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .animated-gradient-bg {
+            background: radial-gradient(circle at 20% 40%, rgba(255, 204, 127, 0.08), rgba(0, 0, 0, 0.4) 70%);
+        }
+
+        /*---------------------cursor-------------------*/
+        #cursor {
+            transition: width .2s, height .2s, border-radius .15s, background .2s, opacity .3s;
+        }
+
+        #cursor.big {
+            width: 36px !important;
+            height: 36px !important;
+            background: rgba(255, 204, 127, 0.28) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            box-shadow: none !important;
+        }
+
+        #cursor.text-cursor {
+            width: 4px !important;
+            height: 22px !important;
+            border-radius: 2px !important;
+        }
+
+        .font-yuji {
+            font-family: 'Yuji Syuku', serif;
+        }
+    </style>
 </head>
-<body>
-    
+
+<body class="cursor-none text-white overflow-x-hidden font-['Poppins']">
+
+    <div id="cursor" class="opacity-0 fixed w-[18px] h-[18px] rounded-full pointer-events-none z-[9999]
+               -translate-x-1/2 -translate-y-1/2
+               bg-[#FFCC7F] shadow-[0_0_20px_rgba(232,178,95,0.8)] mix-blend-difference">
+    </div>
+
+    <section class="relative min-h-screen overflow-hidden">
+
+        <div class="fixed inset-0 -z-30 bg-gradient-to-br from-[#0a0806] via-[#110e0b] to-[#050403]"></div>
+
+        <div class="fixed inset-0 -z-20 opacity-60">
+            <div
+                class="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_40%,rgba(255,204,127,0.12),transparent_60%)]">
+            </div>
+            <div
+                class="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_70%,rgba(244,192,173,0.08),transparent_55%)]">
+            </div>
+        </div>
+
+        <div
+            class="absolute top-[-15%] left-[-10%] w-[80%] h-[80%] rounded-full bg-[#FFCC7F]/10 blur-[120px] aurora-light">
+        </div>
+        <div
+            class="absolute bottom-[-20%] right-[-5%] w-[70%] h-[70%] rounded-full bg-[#F4C0AD]/15 blur-[140px] aurora-light-2">
+        </div>
+        <div
+            class="absolute top-[40%] left-[30%] w-[50%] h-[50%] rounded-full bg-[#D4AF6A]/8 blur-[100px] aurora-light">
+        </div>
+
+        <!-- Textura de ruído sutil (elegância) -->
+        <div class="fixed inset-0 -z-10 noise-texture opacity-30 mix-blend-overlay"></div>
+
+        <!-- Grid mais refinado: pontos luminosos ao invés de linhas pesadas -->
+        <div class="absolute inset-0 -z-10 opacity-20"
+            style="background-image: radial-gradient(circle at 1px 1px, rgba(255,215,150,0.25) 1px, transparent 1px); background-size: 48px 48px;">
+        </div>
+
+        <!-- Gradiente de sobreposição com movimento suave -->
+        <div class="absolute inset-0 -z-10 bg-gradient-to-tr from-black/60 via-black/30 to-transparent"></div>
+
+        <!-- Efeito de brilho nas bordas da tela -->
+        <div
+            class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#FFCC7F]/5 to-transparent pointer-events-none">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/40 to-transparent pointer-events-none">
+        </div>
+        <div class="nav-backdrop" id="backdrop"></div>
+        <!-- HEADER -->
+        <header
+            class="w-full fixed top-0 left-0 z-[95] backdrop-blur-md border-b border-white/10 h-20 lg:h-24 transition-all duration-300">
+            <!-- Nome do salão com glow -->
+
+            <div>
+                <div class="nav-backdrop" id="backdrop"></div>
+                <p class="hint" id="hint">Menu</p>
+                <button class="nav-trigger" id="trigger" aria-label="Open menu" aria-expanded="false">
+                    <div class="burger"><span></span><span></span><span></span></div>
+                </button>
+
+                <a href="#home" class="nav-item" style="--accent:rgba(255,204,127,.8);--accent-rgb:255,204,127">
+                    <span class="label">Home</span>
+                    <ion-icon name="home-outline"></ion-icon>
+                </a>
+                <a href="#servicos" class="nav-item" style="--accent:rgba(244,192,173,.7);--accent-rgb:244,192,173">
+                    <span class="label">Serviços</span>
+                    <ion-icon name="cut-outline"></ion-icon>
+                </a>
+                <a href="#agendar" class="nav-item" style="--accent:rgba(255,204,127,.6);--accent-rgb:255,204,127">
+                    <span class="label">Agendar</span>
+                    <ion-icon name="calendar-outline"></ion-icon>
+                </a>
+                <a href="#sobre" class="nav-item" style="--accent:rgba(244,192,173,.8);--accent-rgb:244,192,173">
+                    <span class="label">Sobre</span>
+                    <ion-icon name="business-outline"></ion-icon>
+                </a>
+                <a href="#contato" class="nav-item" style="--accent:rgba(255,204,127,.7);--accent-rgb:255,204,127">
+                    <span class="label">Contato</span>
+                    <ion-icon name="call-outline"></ion-icon>
+                </a>
+
+                <!-- Botão mobile (mantido da estrutura original) -->
+                <button type="button" id="mobileMenuButton"
+                    class="lg:hidden absolute top-5 right-5 w-10 h-10 rounded-full border border-white/20 bg-black/30 text-white flex items-center justify-center cursor-none backdrop-blur z-50">
+                    <i class="ph ph-list text-xl"></i>
+                </button>
+            </div>
+        </header>
+        <div id="mobileMenu"
+            class="mobile-menu lg:hidden absolute top-[calc(100%+8px)] left-4 right-4 rounded-2xl border border-white/15 bg-black/80 backdrop-blur-xl p-4 shadow-2xl">
+            <div class="grid gap-2 text-white">
+
+                <a href="#home"
+                    class="mobile-menu-link rounded-xl px-4 py-3 text-sm hover:bg-white/10 transition cursor-none">Home</a>
+                <a href="#servicos"
+                    class="mobile-menu-link rounded-xl px-4 py-3 text-sm hover:bg-white/10 transition cursor-none">Serviços</a>
+                <a href="#agendar"
+                    class="mobile-menu-link rounded-xl px-4 py-3 text-sm hover:bg-white/10 transition cursor-none">Agendar</a>
+                <a href="#sobre"
+                    class="mobile-menu-link rounded-xl px-4 py-3 text-sm hover:bg-white/10 transition cursor-none">Sobre</a>
+                <a href="#contato"
+                    class="mobile-menu-link rounded-xl px-4 py-3 text-sm hover:bg-white/10 transition cursor-none">Contato</a>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-white/15">
+                <button data-action="login" class="rounded-xl text-white cursor-none transition duration-300
+                               font-semibold py-3 px-4 border border-[#FFCC7F] text-sm hover:bg-[#FFCC7F]/10">
+                    Entrar
+                </button>
+                <button data-action="signup" class="bg-gradient-to-r from-[#FFCC7F] to-[#E6B87E] rounded-xl text-[#1E1B16]
+                               cursor-none transition duration-300 font-bold py-3 px-4 text-sm">
+                    Cadastro
+                </button>
+            </div>
+        </div>
+        </header>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <nav id="home"
+            class="absolute min-h-screen flex flex-col justify-center gap-6 px-6 sm:px-12 lg:px-24 w-full z-10">
+            <div class="font-['Cormorant_Garamond'] flex items-end gap-3 reveal">
+                <h1 class="text-7xl md:text-8xl text-white font-light tracking-tight">Sua</h1>
+                <h1 class="text-7xl md:text-8xl text-[#F4C0AD] font-light tracking-tight">beleza.</h1>
+            </div>
+
+            <div class="font-['Cormorant_Garamond'] flex items-end gap-3 reveal delay-1">
+                <h1 class="text-7xl md:text-8xl text-white font-light tracking-tight">Seu</h1>
+                <h1 class="text-7xl md:text-8xl text-white font-light tracking-tight">tempo.</h1>
+            </div>
+
+            <div class="font-['Cormorant_Garamond'] flex items-end gap-3 reveal delay-2">
+                <h1 class="text-7xl md:text-8xl text-[#F4C0AD] italic font-light tracking-tight">Perfeito.</h1>
+            </div>
+
+            <div class="relative top-6 left-1 reveal delay-3">
+                <p class="text-white/80 text-lg max-w-md leading-relaxed backdrop-blur-sm bg-black/20 p-2 rounded-2xl">
+                    Agende serviços de beleza com praticidade<br>
+                    e descubra uma experiência feita pra você.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-4 relative top-10 reveal delay-4">
+                <button data-scroll-target="#agendar"
+                    class="rounded-2xl text-[#1E1B16] hover:scale-105 cursor-none bg-gradient-to-r from-[#F4C0AD] to-[#e8ae92]
+                           hover:shadow-xl transition duration-300 font-bold py-3 px-8 flex items-center gap-2 text-sm shadow-lg">
+                    Agendar agora
+                    <i class="ph ph-arrow-right text-lg"></i>
+                </button>
+                <button data-scroll-target="#servicos" class="rounded-2xl text-white hover:scale-105 cursor-none
+                           bg-white/5 backdrop-blur-md border border-white/20 hover:bg-white/15
+                           transition duration-300 font-semibold py-3 px-7 flex items-center gap-2 text-sm">
+                    Como funciona
+                    <i class="ph ph-play-circle text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Social proof -->
+            <div class="flex items-center gap-4 relative top-12 reveal delay-4">
+                <div class="flex -space-x-2">
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg"
+                        class="pointer-events-none select-none w-10 h-10 rounded-full border-2 border-black/40 object-cover shadow-md"
+                        alt="">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg"
+                        class="pointer-events-none select-none w-10 h-10 rounded-full border-2 border-black/40 object-cover shadow-md"
+                        alt="">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg"
+                        class="pointer-events-none select-none w-10 h-10 rounded-full border-2 border-black/40 object-cover shadow-md"
+                        alt="">
+                    <img src="https://randomuser.me/api/portraits/men/86.jpg"
+                        class="pointer-events-none select-none w-10 h-10 rounded-full border-2 border-black/40 object-cover shadow-md"
+                        alt="">
+                </div>
+                <div class="bg-black/30 backdrop-blur-sm px-4 py-1 rounded-full">
+                    <p class="text-white font-semibold text-sm">Mais de 50.000 clientes</p>
+                    <p class="text-white/60 text-xs">já agendam com Salon Vision</p>
+                </div>
+            </div>
+        </nav>
+    </section>
+
+    <!-- Efeito adicional de partículas flutuantes (estático mas elegante) -->
+    <div class="fixed inset-0 pointer-events-none z-0 opacity-30">
+        <div class="absolute top-[15%] left-[10%] w-1 h-1 rounded-full bg-[#FFCC7F] blur-[1px] animate-pulse"></div>
+        <div class="absolute top-[45%] left-[85%] w-2 h-2 rounded-full bg-[#F4C0AD] blur-[2px] animate-pulse"
+            style="animation-delay: 1s;"></div>
+        <div class="absolute top-[70%] left-[20%] w-1.5 h-1.5 rounded-full bg-[#FFCC7F] blur-[1px] animate-pulse"
+            style="animation-delay: 2s;"></div>
+        <div class="absolute top-[25%] left-[60%] w-1 h-1 rounded-full bg-white/40 blur-[1px] animate-pulse"
+            style="animation-delay: 0.5s;"></div>
+        <div class="absolute top-[80%] left-[75%] w-1 h-1 rounded-full bg-[#F4C0AD]/60 blur-[1px] animate-pulse"
+            style="animation-delay: 1.5s;"></div>
+    </div>
+
+    <script type="module" src="./../_common/script/cursor.js"></script>
+    <script type="module" src="./../app/script/agenda.js"></script>
+    <script src="./../public/script/login.js"></script>
+    <script type="module" src="./../_common/script/navigation.js"></script>
+    <script>
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => io.observe(el));
+    </script>
 </body>
+
 </html>

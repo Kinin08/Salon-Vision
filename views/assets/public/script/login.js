@@ -73,10 +73,10 @@ loginForm?.addEventListener('submit', event => {
     authFeedback.classList.remove('hidden');
 
     if (role === 'Administrador') {
-        window.location.href = './admin';
+        window.location.href = './../../admin/adm.html';
     }
     else if(role === 'Funcionario'){
-        window.location.href = './funcionario'
+        window.location.href = './../../funcionario'
     }
     else {
         window.location.href = './cliente';
@@ -95,7 +95,10 @@ signupForm?.addEventListener('submit', event => {
     // opcional: redirecionar depois de cadastrar
     setTimeout(() => {
         if (role === 'Administrador') {
-            window.location.href = './admin';
+            window.location.href = './../../admin/adm.html';
+        }
+        else if(role === 'Funcionario'){
+            window.location.href = './funcionario'
         }
         else {
             window.location.href = './cliente';
