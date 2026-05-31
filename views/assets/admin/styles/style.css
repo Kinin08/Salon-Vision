@@ -31,23 +31,7 @@ body {
     font-family: 'Poppins', sans-serif;
     background: var(--bg-deep);
     color: var(--text);
-    overflow-x: hidden;
 }
-
-/* SCROLLBAR */
-::-webkit-scrollbar {
-    width: 4px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--border-strong);
-    border-radius: 4px;
-}
-
 /* LAYOUT */
 .layout {
     display: flex;
