@@ -44,7 +44,7 @@ class Faqs extends Api
 
         $response = [
             "id" => $faq->getId(),
-            "faqCategoryId" => $faq->getFaqCategoryId(),
+            "faqCategoryId" => $faq->getFaqsCategoryId(),
             "question" => $faq->getQuestion(),
             "answer" => $faq->getAnswer()
         ];

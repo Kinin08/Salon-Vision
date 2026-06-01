@@ -12,8 +12,8 @@
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-    <link rel="stylesheet" href="styles/style.css">
-    <link rel="stylesheet" href="./../_common/style/cursor.css">
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./../_common/style/mouse.css">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@400;600;700&display=swap"
@@ -57,49 +57,33 @@
 
             <nav class="nav-section">
                 <h2 class="nav-label">Principal</h2>
-                <a class="nav-item active" href="#">
+                <a id="dashboard" class="nav-item active" href="#">
                     <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
                     <h1> Dashboard </h1>
                 </a>
-                <a class="nav-item" href="#">
+                <a id="agendamentos" class="nav-item" href="#">
                     <i class="ti ti-calendar" aria-hidden="true"></i>
                     <h1> Agendamentos </h1>
                 </a>
-                <a class="nav-item" href="#">
-                    <i class="ti ti-users" aria-hidden="true"></i>
-                    <h1> Clientes </h1>
-                </a>
-                <a class="nav-item" href="#">
+                <a id="servicos" class="nav-item" href="#">
                     <i class="ti ti-cut" aria-hidden="true"></i>
                     <h1> Serviços </h1>
                 </a>
-
-                <div class="nav-label" style="margin-top: 8px;">
-                    <h1> Gestão </h1>
-                </div>
-                <a class="nav-item" href="#">
-                    <i class="ti ti-user-check" aria-hidden="true"></i>
-                    <h1> Profissionais </h1>
-                </a>
-                <a class="nav-item" href="#">
-                    <i class="ti ti-chart-bar" aria-hidden="true"></i>
-                    <h1> Relatórios </h1>
-                </a>
-                <a class="nav-item" href="#">
-                    <i class="ti ti-cash" aria-hidden="true"></i>
-                    <h1> Financeiro </h1>
-                </a>
-                <a class="nav-item" href="#">
+                <a id="avaliacoes" class="nav-item" href="#">
                     <i class="ti ti-star" aria-hidden="true"></i>
                     <h1> Avaliações </h1>
                 </a>
-
                 <div class="nav-label" style="margin-top: 8px;">
-                    <h1>Sistema </h1>
+                    <h1> Pessoas </h1>
                 </div>
-                <a class="nav-item" href="#">
-                    <i class="ti ti-settings" aria-hidden="true"></i>
-                    <h1> Configurações </h1>
+                <a id="professionais" class="nav-item" href="#">
+                    <i class="ti ti-user-check" aria-hidden="true"></i>
+                    <h1> Profissionais </h1>
+                </a>
+
+                <a id="clientes" class="nav-item" href="#">
+                    <i class="ti ti-users" aria-hidden="true"></i>
+                    <h1> Clientes </h1>
                 </a>
             </nav>
 
@@ -126,12 +110,6 @@
                     <h2 class="tb-date" id="topbar-date"></h2>
                 </div>
                 <div class="topbar-right">
-                    <div class="tb-btn" title="Buscar"><i class="ti ti-search"></i></div>
-                    <div class="tb-btn" title="Notificações">
-                        <i class="ti ti-bell"></i>
-                        <span class="notif-dot"></span>
-                    </div>
-                    <div class="tb-btn" title="Ajuda"><i class="ti ti-help"></i></div>
                     <img src="https://i.pravatar.cc/80?img=47"
                         style="width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid var(--border-strong);cursor:none;"
                         alt="Admin" />
@@ -418,10 +396,10 @@
 
             // Seleciona os itens do menu
             const menuDashboard = document.querySelector('.nav-item.active');
-            const menuAgendamentos = document.querySelectorAll('.nav-item')[1]; // Segundo item do menu
-            const menuClientes = document.querySelectorAll('.nav-item')[2];
-            const menuServicos = document.querySelectorAll('.nav-item')[3];
-            const menuProfissionais = document.querySelectorAll('.nav-item')[4];
+            const menuAgendamentos = document.querySelector('#agendamentos');
+            const menuClientes = document.querySelector('#clientes');
+            const menuServicos = document.querySelector('#servicos');
+            const menuProfissionais = document.querySelector('#professionais');
 
             // Função para mostrar o Dashboard
             function mostrarDashboard() {
@@ -677,8 +655,6 @@
             });
         });
     </script>
-
-    <script type="module" src="./../_common/script/cursor.js"></script>
 
     <script type="module" src="./../_common/script/cursor.js"></script>
 </body>

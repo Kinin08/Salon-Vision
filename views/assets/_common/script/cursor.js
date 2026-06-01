@@ -24,6 +24,7 @@ document.querySelectorAll('h1, h2, h3, p, span, th').forEach(el => {
 (function tick() {
     cx += (mx - cx) * 0.20;
     cy += (my - cy) * 0.20;
-    cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+    cursor.style.transform =
+        `translate(${cx - 8}px, ${cy - 8}px)`;
     requestAnimationFrame(tick);
 })();

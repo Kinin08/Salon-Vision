@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salon Vision | Clientes</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@300;400;500;600;700&family=Yuji+Syuku&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="./../_common/style/mouse.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="aurora-wrap">
+        <div class="aurora-1"></div>
+        <div class="aurora-2"></div>
+    </div>
+
+    <div id="cursor" class="opacity-0 fixed w-[14px] h-[14px] rounded-full pointer-events-none z-[9999]
+        -translate-x-1/2 -translate-y-1/2 bg-[#FFCC7F] shadow-[0_0_15px_rgba(232,178,95,0.6)]"></div>
+
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="sidebar-logo flex items-center gap-3 px-5 py-4 border-b border-[#ffffff10]">
+
+                <div class="flex items-center justify-center w-10 h-10">
+                    <svg class="w-6 h-6 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
+                    </svg>
+                </div>
+
+                <div class="font-yuji text-xl text-white [text-shadow:0_0_10px_rgba(255,204,127,0.8)]">
+                    <span class="text-[#CA9440]">S</span><span>alon</span>
+                    <span class="text-[#CA9440]">V</span><span>ision</span>
+                </div>
+
+            </div>
+
+            <nav class="nav-section">
+                <h2 class="nav-label">Cliente</h2>
+                <a id="historico" class="nav-item" href="#">
+                    <i class="ti ti-calendar-heart" aria-hidden="true"></i>
+                    <h1>Histórico</h1>
+                </a>
+                <a id="servicos" class="nav-item" href="#">
+                    <i class="ti ti-message-heart" aria-hidden="true"></i>
+                    <h1>Serviços</h1>
+                </a>
+                <a id="depoimentos" class="nav-item" href="#">
+                    <i class="ti ti-message-heart" aria-hidden="true"></i>
+                    <h1>Depoimentos</h1>
+                </a>
+                <div class="nav-label" style="margin-top: 8px;">Atendimento</div>
+                <a id="agendamento" class="nav-item" href="#">
+                    <i class="ti ti-calendar-plus" aria-hidden="true"></i>
+                    <h1>Agendar</h1>
+                </a>
+                <a id="profissionais" class="nav-item" href="#">
+                    <i class="ti ti-settings" aria-hidden="true"></i>
+                    <h1>Profissionais</h1>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="user-card">
+                    <img src="https://i.pravatar.cc/80?img=47" class="user-avatar" alt="Ana Costa" />
+                    <div class="user-info">
+                        <p>Ana Costa</p>
+                        <span>Relacionamento</span>
+                    </div>
+                    <i class="ti ti-dots-vertical ml-auto text-[14px] text-white/35"></i>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main">
+            <header class="topbar">
+                <div>
+                    <h1 class="topbar-title" id="topbar">Clientes <em>do salão</em></h1>
+                    <h2 class="tb-date" id="topbar-date"></h2>
+                </div>
+                <div class="topbar-right">
+                    <img src="https://i.pravatar.cc/80?img=47"
+                        class="h-[34px] w-[34px] rounded-[9px] border border-[#ffffff18] object-cover"
+                        alt="Ana Costa" />
+                </div>
+            </header>
+
+            <main class="content">
+                <section class="hero-row fade-in">
+                    <div class="client-hero">
+                        <div>
+                            <p class="hero-kicker">Carteira de clientes</p>
+                            <h2 class="hero-title">Relacionamento, histórico e preferências em uma tela.</h2>
+                            <p class="hero-copy">
+                                Controle dados de contato, acompanhe frequência, identifique clientes VIP e prepare
+                                atendimentos mais personalizados.
+                            </p>
+                            <div class="hero-actions">
+                                <button class="primary-btn" id="btnAddClient">
+                                    <i class="ti ti-user-plus"></i>
+                                    Cadastrar cliente
+                                </button>
+                                <button class="quick-btn">
+                                    <i class="ti ti-message-2"></i>
+                                    Enviar lembrete
+                                </button>
+                                <button class="quick-btn">
+                                    <i class="ti ti-download"></i>
+                                    Exportar lista
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel mini-panel">
+                        <div class="mini-action">
+                            <i class="ti ti-calendar-check"></i>
+                            <div>
+                                <p>23 retornos previstos</p>
+                                <span>Clientes com manutenção vencendo</span>
+                            </div>
+                        </div>
+                        <div class="mini-action">
+                            <i class="ti ti-cake"></i>
+                            <div>
+                                <p>6 aniversários na semana</p>
+                                <span>Boa chance para campanha afetuosa</span>
+                            </div>
+                        </div>
+                        <div class="mini-action">
+                            <i class="ti ti-star"></i>
+                            <div>
+                                <p>18 clientes VIP</p>
+                                <span>Maior recorrência e ticket médio</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="metrics-grid fade-in delay-1">
+                    <div class="metric-card">
+                        <div class="metric-top">
+                            <div class="metric-icon gold"><i class="ti ti-users"></i></div>
+                            <span class="metric-badge"><i class="ti ti-arrow-up"></i>12%</span>
+                        </div>
+                        <h3 class="metric-value">1.284</h3>
+                        <p class="metric-label">Clientes cadastrados</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-top">
+                            <div class="metric-icon rose"><i class="ti ti-heart-handshake"></i></div>
+                            <span class="metric-badge"><i class="ti ti-arrow-up"></i>8%</span>
+                        </div>
+                        <h3 class="metric-value">74%</h3>
+                        <p class="metric-label">Taxa de retorno</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-top">
+                            <div class="metric-icon green"><i class="ti ti-cash"></i></div>
+                            <span class="metric-badge"><i class="ti ti-arrow-up"></i>5%</span>
+                        </div>
+                        <h3 class="metric-value">R$ 186</h3>
+                        <p class="metric-label">Ticket médio por cliente</p>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-top">
+                            <div class="metric-icon blue"><i class="ti ti-user-star"></i></div>
+                            <span class="metric-badge"><i class="ti ti-arrow-up"></i>4</span>
+                        </div>
+                        <h3 class="metric-value">42</h3>
+                        <p class="metric-label">Novos clientes no mês</p>
+                    </div>
+                </section>
+
+                <section class="clients-grid fade-in delay-2">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h2 class="panel-title">Lista de <em>clientes</em></h2>
+                            <button class="panel-action">
+                                Ver campanhas
+                                <i class="ti ti-arrow-right"></i>
+                            </button>
+                        </div>
+
+                        <div class="filters">
+                            <label class="field">
+                                <i class="ti ti-search"></i>
+                                <input id="searchClient" type="search" placeholder="Buscar por nome, telefone ou email">
+                            </label>
+                            <label class="field">
+                                <i class="ti ti-filter"></i>
+                                <select id="statusFilter" aria-label="Filtrar por status">
+                                    <option value="todos">Todos os perfis</option>
+                                    <option value="vip">VIP</option>
+                                    <option value="active">Ativos</option>
+                                    <option value="new">Novos</option>
+                                    <option value="inactive">Inativos</option>
+                                </select>
+                            </label>
+                            <label class="field">
+                                <i class="ti ti-scissors"></i>
+                                <select id="serviceFilter" aria-label="Filtrar por serviço">
+                                    <option value="todos">Todos serviços</option>
+                                    <option value="coloracao">Coloração</option>
+                                    <option value="corte">Corte</option>
+                                    <option value="manicure">Manicure</option>
+                                    <option value="estetica">Estética</option>
+                                </select>
+                            </label>
+                            <button class="quick-btn" id="clearFilters">
+                                <i class="ti ti-x"></i>
+                                Limpar
+                            </button>
+                        </div>
+
+                        <div class="table-wrap">
+                            <table class="clients-table">
+                                <thead>
+                                    <tr>
+                                        <th>Cliente</th>
+                                        <th>Telefone</th>
+                                        <th>Preferência</th>
+                                        <th>Última visita</th>
+                                        <th>Perfil</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="clientsBody"></tbody>
+                            </table>
+                        </div>
+                        <div class="empty-state" id="emptyState">Nenhum cliente encontrado com esses filtros.</div>
+                    </div>
+
+                    <aside class="panel profile-panel">
+                        <div class="profile-cover"></div>
+                        <div class="profile-body">
+                            <img id="profileImg" class="profile-avatar"
+                                src="https://randomuser.me/api/portraits/women/68.jpg" alt="Mariana Silva">
+                            <h2 class="profile-name" id="profileName">Mariana Silva</h2>
+                            <p class="profile-note" id="profileNote">
+                                Prefere coloração em tons quentes, atendimento pela manhã e lembrete por WhatsApp.
+                            </p>
+
+                            <div class="profile-actions">
+                                <button class="primary-btn"><i class="ti ti-calendar-plus"></i>Agendar</button>
+                                <button class="quick-btn"><i class="ti ti-message"></i>Mensagem</button>
+                            </div>
+
+                            <div class="info-list">
+                                <div class="info-item">
+                                    <span>Telefone</span>
+                                    <strong id="profilePhone">(51) 99922-1188</strong>
+                                </div>
+                                <div class="info-item">
+                                    <span>Perfil</span>
+                                    <strong id="profileStatus">VIP</strong>
+                                </div>
+                                <div class="info-item">
+                                    <span>Ticket médio</span>
+                                    <strong id="profileTicket">R$ 280</strong>
+                                </div>
+                                <div class="info-item">
+                                    <span>Próximo retorno</span>
+                                    <strong id="profileReturn">18/06/2026</strong>
+                                </div>
+                            </div>
+
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-date">28</div>
+                                    <div class="timeline-text">
+                                        <p>Coloração + tratamento</p>
+                                        <span>Finalizado com Camila R.</span>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-date">12</div>
+                                    <div class="timeline-text">
+                                        <p>Corte e escova</p>
+                                        <span>Avaliação 5 estrelas</span>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-date">03</div>
+                                    <div class="timeline-text">
+                                        <p>Lembrete enviado</p>
+                                        <span>WhatsApp confirmado</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const today = new Date();
+        document.getElementById("topbar-date").textContent = today.toLocaleDateString("pt-BR", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        });
+
+        const clients = [
+            {
+                name: "Mariana Silva",
+                email: "mariana.silva@email.com",
+                phone: "(51) 99922-1188",
+                preference: "Coloração",
+                service: "coloracao",
+                lastVisit: "28/05/2026",
+                status: "vip",
+                statusText: "VIP",
+                ticket: "R$ 280",
+                nextReturn: "18/06/2026",
+                img: "https://randomuser.me/api/portraits/women/68.jpg",
+                note: "Prefere coloração em tons quentes, atendimento pela manhã e lembrete por WhatsApp."
+            },
+            {
+                name: "Bruna Lima",
+                email: "bruna.lima@email.com",
+                phone: "(51) 98841-2201",
+                preference: "Corte + escova",
+                service: "corte",
+                lastVisit: "24/05/2026",
+                status: "active",
+                statusText: "Ativa",
+                ticket: "R$ 145",
+                nextReturn: "21/06/2026",
+                img: "https://randomuser.me/api/portraits/women/44.jpg",
+                note: "Gosta de escova modelada e costuma reagendar no fim do atendimento."
+            },
+            {
+                name: "Carlos Mendes",
+                email: "carlos.mendes@email.com",
+                phone: "(51) 98112-4430",
+                preference: "Corte masculino",
+                service: "corte",
+                lastVisit: "18/05/2026",
+                status: "active",
+                statusText: "Ativo",
+                ticket: "R$ 92",
+                nextReturn: "15/06/2026",
+                img: "https://randomuser.me/api/portraits/men/32.jpg",
+                note: "Prefere atendimento com Lucas T. e horários após as 17h."
+            },
+            {
+                name: "Jéssica Oliveira",
+                email: "jessica.oliveira@email.com",
+                phone: "(51) 99732-1010",
+                preference: "Manicure",
+                service: "manicure",
+                lastVisit: "31/05/2026",
+                status: "new",
+                statusText: "Nova",
+                ticket: "R$ 78",
+                nextReturn: "14/06/2026",
+                img: "https://randomuser.me/api/portraits/women/12.jpg",
+                note: "Primeiro mês no salão. Pediu sugestões de esmaltes neutros."
+            },
+            {
+                name: "Fernanda Rocha",
+                email: "fernanda.rocha@email.com",
+                phone: "(51) 98455-7612",
+                preference: "Hidratação",
+                service: "estetica",
+                lastVisit: "06/04/2026",
+                status: "inactive",
+                statusText: "Inativa",
+                ticket: "R$ 160",
+                nextReturn: "Sem retorno",
+                img: "https://randomuser.me/api/portraits/women/65.jpg",
+                note: "Sem visita recente. Boa candidata para campanha de retorno."
+            },
+            {
+                name: "Tatiane Vargas",
+                email: "tatiane.vargas@email.com",
+                phone: "(51) 99109-7721",
+                preference: "Sobrancelha",
+                service: "estetica",
+                lastVisit: "29/05/2026",
+                status: "vip",
+                statusText: "VIP",
+                ticket: "R$ 210",
+                nextReturn: "12/06/2026",
+                img: "https://randomuser.me/api/portraits/women/30.jpg",
+                note: "Cliente recorrente de estética. Prefere confirmação no dia anterior."
+            }
+        ];
+
+        const statusClass = {
+            vip: "vip",
+            active: "active",
+            new: "new",
+            inactive: "inactive"
+        };
+
+        const clientsBody = document.getElementById("clientsBody");
+        const emptyState = document.getElementById("emptyState");
+        const searchClient = document.getElementById("searchClient");
+        const statusFilter = document.getElementById("statusFilter");
+        const serviceFilter = document.getElementById("serviceFilter");
+
+        function renderClients() {
+            const term = searchClient.value.trim().toLowerCase();
+            const selectedStatus = statusFilter.value;
+            const selectedService = serviceFilter.value;
+
+            const filtered = clients.filter(client => {
+                const matchesTerm = [client.name, client.email, client.phone, client.preference]
+                    .some(value => value.toLowerCase().includes(term));
+                const matchesStatus = selectedStatus === "todos" || client.status === selectedStatus;
+                const matchesService = selectedService === "todos" || client.service === selectedService;
+
+                return matchesTerm && matchesStatus && matchesService;
+            });
+
+            clientsBody.innerHTML = "";
+            emptyState.style.display = filtered.length ? "none" : "block";
+
+            filtered.forEach((client, index) => {
+                const row = document.createElement("tr");
+                row.className = index === 0 ? "selected" : "";
+                row.innerHTML = `
+                    <td>
+                        <div class="client-cell">
+                            <img class="client-avatar" src="${client.img}" alt="${client.name}">
+                            <div>
+                                <span class="client-name">${client.name}</span>
+                                <span class="client-email">${client.email}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${client.phone}</td>
+                    <td>${client.preference}</td>
+                    <td>${client.lastVisit}</td>
+                    <td>
+                        <span class="status-pill ${statusClass[client.status]}">
+                            <span class="status-dot"></span>${client.statusText}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="icon-btn" title="Ver ficha" type="button">
+                            <i class="ti ti-eye"></i>
+                        </button>
+                        <button class="icon-btn" title="Editar cliente" type="button">
+                            <i class="ti ti-edit"></i>
+                        </button>
+                    </td>
+                `;
+                row.addEventListener("click", () => selectClient(client, row));
+                clientsBody.appendChild(row);
+            });
+
+            if (filtered[0]) selectClient(filtered[0]);
+            bindCursorTargets(document);
+        }
+
+        function selectClient(client, selectedRow) {
+            document.querySelectorAll(".clients-table tbody tr").forEach(row => row.classList.remove("selected"));
+            if (selectedRow) selectedRow.classList.add("selected");
+
+            document.getElementById("profileImg").src = client.img;
+            document.getElementById("profileImg").alt = client.name;
+            document.getElementById("profileName").textContent = client.name;
+            document.getElementById("profileNote").textContent = client.note;
+            document.getElementById("profilePhone").textContent = client.phone;
+            document.getElementById("profileStatus").textContent = client.statusText;
+            document.getElementById("profileTicket").textContent = client.ticket;
+            document.getElementById("profileReturn").textContent = client.nextReturn;
+        }
+
+        document.getElementById("clearFilters").addEventListener("click", () => {
+            searchClient.value = "";
+            statusFilter.value = "todos";
+            serviceFilter.value = "todos";
+            renderClients();
+        });
+
+        document.getElementById("btnAddClient").addEventListener("click", () => {
+            searchClient.focus();
+            searchClient.placeholder = "Digite o nome do novo cliente...";
+        });
+
+        searchClient.addEventListener("input", renderClients);
+        statusFilter.addEventListener("change", renderClients);
+        serviceFilter.addEventListener("change", renderClients);
+
+        const cursor = document.getElementById("cursor");
+        let mx = 0, my = 0, cx = 0, cy = 0;
+
+        document.addEventListener("mousemove", event => {
+            mx = event.clientX;
+            my = event.clientY;
+            cursor.style.opacity = "1";
+        });
+
+        function bindCursorTargets(scope = document) {
+            scope.querySelectorAll("button, a, input, select, .client-avatar, .mini-action").forEach(element => {
+                element.addEventListener("mouseenter", () => cursor.classList.add("big"));
+                element.addEventListener("mouseleave", () => cursor.classList.remove("big"));
+            });
+        }
+
+        document.querySelectorAll("h1, h2, h3, p, input").forEach(element => {
+            element.addEventListener("mouseenter", () => cursor.classList.add("text-cursor"));
+            element.addEventListener("mouseleave", () => cursor.classList.remove("text-cursor"));
+        });
+
+        (function tick() {
+            cx += (mx - cx) * 0.14;
+            cy += (my - cy) * 0.14;
+            cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+            requestAnimationFrame(tick);
+        })();
+
+        bindCursorTargets();
+        renderClients();
+    </script>
+    <script type="module" src="script/script.js"></script>
+</body>
+
+</html>

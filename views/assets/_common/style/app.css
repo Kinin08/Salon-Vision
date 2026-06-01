@@ -651,6 +651,36 @@ body {
     color: var(--text);
 }
 
+/* AURORA BG DECORATION */
+.aurora-wrap {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.aurora-1 {
+    position: absolute;
+    top: -20%;
+    left: 10%;
+    width: 50vw;
+    height: 50vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 204, 127, 0.04), transparent 70%);
+    animation: auShift 26s infinite alternate ease-in-out;
+}
+
+.aurora-2 {
+    position: absolute;
+    bottom: -10%;
+    right: 5%;
+    width: 40vw;
+    height: 40vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(244, 192, 173, 0.05), transparent 70%);
+    animation: auShift2 32s infinite alternate ease-in-out;
+}
 
 @keyframes auShift {
     0% {

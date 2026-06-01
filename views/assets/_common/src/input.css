@@ -8,27 +8,6 @@
 }
 
 /* Cursor */
-#cursor {
-  top: 0;
-  left: 0;
-  transition: width .2s, height .2s, border-radius .15s, background .2s, opacity .3s;
-}
-
-#cursor.big {
-  width: 36px !important;
-  height: 36px !important;
-  background: rgba(255, 204, 127, 0.28) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  box-shadow: none !important;
-}
-
-#cursor.text-cursor {
-  width: 4px !important;
-  height: 22px !important;
-  border-radius: 2px !important;
-}
 
 /* Scroll reveal */
 .reveal {
@@ -294,14 +273,4 @@
 
 .btn-primary {
   @apply bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600;
-}
-
-@media (max-width: 1023px) {
-  body {
-    cursor: auto;
-  }
-
-  #cursor {
-    display: none;
-  }
 }

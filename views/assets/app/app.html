@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salon Vision | Portal do Cliente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@300;400;500;600;700&family=Yuji+Syuku&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link href="./../_common/style/mouse.css"/>
+    <style>
+        :root {
+            --gold: #FFCC7F;
+            --gold-deep: #CA9440;
+            --rose: #F4C0AD;
+            --bg: #080808;
+            --surface: rgba(255, 255, 255, 0.03);
+            --surface-hover: rgba(255, 204, 127, 0.06);
+            --border: rgba(255, 204, 127, 0.08);
+            --border-strong: rgba(255, 204, 127, 0.18);
+            --text: #F5EFE6;
+            --text-muted: rgba(245, 239, 230, 0.55);
+            --text-dim: rgba(245, 239, 230, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* AURORA */
+        .aurora-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .aurora-1,
+        .aurora-2 {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.07;
+        }
+
+        .aurora-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #FFCC7F 0%, transparent 70%);
+            top: -200px;
+            right: -100px;
+            animation: drift1 12s ease-in-out infinite alternate;
+        }
+
+        .aurora-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #F4C0AD 0%, transparent 70%);
+            bottom: -150px;
+            left: -80px;
+            animation: drift2 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes drift1 {
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+
+            to {
+                transform: translate(60px, 40px) scale(1.1);
+            }
+        }
+
+        @keyframes drift2 {
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+
+            to {
+                transform: translate(-40px, -60px) scale(1.08);
+            }
+        }
+
+        /* LAYOUT */
+        .layout {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            flex-shrink: 0;
+            background: rgba(8, 8, 8, 0.85);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(20px);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .font-yuji {
+            font-family: 'Yuji Syuku', serif;
+        }
+
+        .nav-section {
+            padding: 16px 12px;
+            flex: 1;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            padding: 8px 10px 6px;
+            margin-bottom: 2px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 400;
+            transition: all 0.2s;
+            cursor: pointer;
+            margin-bottom: 2px;
+        }
+
+        .nav-item:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 204, 127, 0.1);
+            color: var(--gold);
+            border: 1px solid rgba(255, 204, 127, 0.15);
+        }
+
+        .nav-item i {
+            font-size: 16px;
+        }
+
+        .sidebar-bottom {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border-strong);
+        }
+
+        .user-info p {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .user-info span {
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        /* MAIN */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            padding: 18px 28px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(8, 8, 8, 0.6);
+            backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .topbar-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-weight: 300;
+        }
+
+        .topbar-title em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .tb-date {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        /* CONTENT */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 28px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 204, 127, 0.15) transparent;
+        }
+
+        /* PANEL */
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            backdrop-filter: blur(12px);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .panel-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            font-weight: 400;
+        }
+
+        .panel-title em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .panel-action {
+            font-size: 12px;
+            color: var(--text-dim);
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s;
+        }
+
+        .panel-action:hover {
+            color: var(--gold);
+        }
+
+        /* GRIDS */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .grid-3-1 {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        /* METRIC CARDS */
+        .metric-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            backdrop-filter: blur(12px);
+            transition: border-color 0.3s, transform 0.2s;
+        }
+
+        .metric-card:hover {
+            border-color: var(--border-strong);
+            transform: translateY(-1px);
+        }
+
+        .metric-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            margin-bottom: 14px;
+        }
+
+        .metric-icon.gold {
+            background: rgba(255, 204, 127, 0.12);
+            color: var(--gold);
+        }
+
+        .metric-icon.rose {
+            background: rgba(244, 192, 173, 0.12);
+            color: var(--rose);
+        }
+
+        .metric-icon.green {
+            background: rgba(130, 200, 160, 0.12);
+            color: #82C8A0;
+        }
+
+        .metric-icon.blue {
+            background: rgba(130, 170, 220, 0.12);
+            color: #82AAE0;
+        }
+
+        .metric-value {
+            font-size: 26px;
+            font-weight: 600;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        /* QUICK BTNS */
+        .quick-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 9px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 12px;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .quick-btn:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+            border-color: var(--border-strong);
+        }
+
+        /* TABLE */
+        .apt-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .apt-table th {
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            padding: 0 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .apt-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .apt-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .apt-table tr:hover td {
+            background: rgba(255, 204, 127, 0.02);
+        }
+
+        .client-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .client-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .client-name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* STATUS PILLS */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+        }
+
+        .status-pill.confirmed {
+            background: rgba(130, 200, 160, 0.12);
+            color: #82C8A0;
+        }
+
+        .status-pill.confirmed .status-dot {
+            background: #82C8A0;
+        }
+
+        .status-pill.pending {
+            background: rgba(255, 204, 127, 0.12);
+            color: var(--gold);
+        }
+
+        .status-pill.pending .status-dot {
+            background: var(--gold);
+        }
+
+        .status-pill.cancelled {
+            background: rgba(255, 100, 100, 0.1);
+            color: #FF7070;
+        }
+
+        .status-pill.cancelled .status-dot {
+            background: #FF7070;
+        }
+
+        .status-pill.done {
+            background: rgba(130, 170, 220, 0.12);
+            color: #82AAE0;
+        }
+
+        .status-pill.done .status-dot {
+            background: #82AAE0;
+        }
+
+        /* PROFILE CARD */
+        .profile-hero {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255, 204, 127, 0.08) 0%, rgba(244, 192, 173, 0.05) 100%);
+            border: 1px solid var(--border-strong);
+            padding: 28px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 16px;
+        }
+
+        .profile-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 20px rgba(255, 204, 127, 0.2);
+            flex-shrink: 0;
+        }
+
+        .profile-info h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 26px;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+
+        .profile-info h1 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .profile-info p {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-bottom: 12px;
+        }
+
+        .profile-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .profile-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            background: rgba(255, 204, 127, 0.1);
+            color: var(--gold);
+            border: 1px solid rgba(255, 204, 127, 0.15);
+        }
+
+        .profile-badge.rose {
+            background: rgba(244, 192, 173, 0.1);
+            color: var(--rose);
+            border-color: rgba(244, 192, 173, 0.15);
+        }
+
+        .profile-stats {
+            margin-left: auto;
+            display: flex;
+            gap: 24px;
+            flex-shrink: 0;
+        }
+
+        .pstat {
+            text-align: center;
+        }
+
+        .pstat-val {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .pstat-lbl {
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        /* NAV TABS */
+        .tab-nav {
+            display: flex;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 9px;
+            background: none;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-weight: 400;
+        }
+
+        .tab-btn:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 204, 127, 0.1);
+            color: var(--gold);
+            border: 1px solid rgba(255, 204, 127, 0.15);
+            font-weight: 500;
+        }
+
+        .tab-btn i {
+            font-size: 15px;
+        }
+
+        /* TAB PANELS */
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* HISTORY TIMELINE */
+        .history-item {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-date {
+            flex-shrink: 0;
+            width: 48px;
+            text-align: center;
+            background: rgba(255, 204, 127, 0.06);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 4px;
+        }
+
+        .hdate-day {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .hdate-mon {
+            font-size: 9px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .history-body {
+            flex: 1;
+        }
+
+        .history-body h3 {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .history-body p {
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        .history-body .hprof {
+            margin-top: 4px;
+            font-size: 11px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .history-right {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .history-val {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .history-star {
+            font-size: 11px;
+            color: var(--gold);
+            margin-top: 4px;
+        }
+
+        /* SERVICE CARDS */
+        .service-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: transparent;
+            transition: background 0.25s;
+        }
+
+        .service-card:hover {
+            border-color: var(--border-strong);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .service-card:hover::before {
+            background: linear-gradient(90deg, var(--gold), var(--rose));
+        }
+
+        .service-card.selected {
+            border-color: rgba(255, 204, 127, 0.4);
+            background: rgba(255, 204, 127, 0.05);
+        }
+
+        .service-card.selected::before {
+            background: linear-gradient(90deg, var(--gold), var(--rose));
+        }
+
+        .sc-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .sc-name {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .sc-desc {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-bottom: 10px;
+        }
+
+        .sc-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sc-price {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .sc-time {
+            font-size: 11px;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        /* SCHEDULE UI */
+        .schedule-steps {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        .step-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            transition: all 0.2s;
+        }
+
+        .step-item.active .step-num {
+            background: var(--gold);
+            color: #000;
+            border-color: var(--gold);
+        }
+
+        .step-item.done .step-num {
+            background: rgba(130, 200, 160, 0.2);
+            color: #82C8A0;
+            border-color: #82C8A0;
+        }
+
+        .step-item.active {
+            color: var(--text);
+        }
+
+        .step-sep {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+            margin: 0 4px;
+        }
+
+        .prof-select-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .prof-opt {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 14px 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .prof-opt:hover {
+            border-color: var(--border-strong);
+            background: var(--surface-hover);
+        }
+
+        .prof-opt.selected {
+            border-color: rgba(255, 204, 127, 0.4);
+            background: rgba(255, 204, 127, 0.06);
+        }
+
+        .prof-opt img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+
+        .prof-opt .po-name {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .prof-opt .po-role {
+            font-size: 10px;
+            color: var(--text-dim);
+        }
+
+        .prof-opt.selected img {
+            border-color: var(--gold);
+        }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .time-slot {
+            padding: 9px 4px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-muted);
+        }
+
+        .time-slot:hover {
+            border-color: var(--border-strong);
+            color: var(--text);
+        }
+
+        .time-slot.selected {
+            background: rgba(255, 204, 127, 0.1);
+            border-color: rgba(255, 204, 127, 0.35);
+            color: var(--gold);
+        }
+
+        .time-slot.unavailable {
+            opacity: 0.3;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+
+        .date-strip {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .date-chip {
+            flex-shrink: 0;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 52px;
+        }
+
+        .date-chip:hover {
+            border-color: var(--border-strong);
+        }
+
+        .date-chip.selected {
+            background: rgba(255, 204, 127, 0.1);
+            border-color: rgba(255, 204, 127, 0.35);
+        }
+
+        .dc-day {
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        .dc-num {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .date-chip.selected .dc-num {
+            color: var(--gold);
+        }
+
+        .date-chip.today .dc-num {
+            color: var(--gold);
+        }
+
+        /* PROFESSIONALS PAGE */
+        .prof-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.25s;
+            cursor: pointer;
+        }
+
+        .prof-card:hover {
+            border-color: var(--border-strong);
+            transform: translateY(-2px);
+        }
+
+        .prof-card img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border);
+            margin: 0 auto 12px;
+            display: block;
+            transition: border-color 0.2s;
+        }
+
+        .prof-card:hover img {
+            border-color: var(--gold);
+        }
+
+        .prof-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .prof-role {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-bottom: 10px;
+        }
+
+        .prof-stars {
+            color: var(--gold);
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .prof-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .prof-tag {
+            font-size: 10px;
+            padding: 3px 7px;
+            border-radius: 20px;
+            background: rgba(255, 204, 127, 0.08);
+            color: var(--text-dim);
+            border: 1px solid var(--border);
+        }
+
+        .prof-avail {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: 11px;
+            color: #82C8A0;
+            background: rgba(130, 200, 160, 0.08);
+            border: 1px solid rgba(130, 200, 160, 0.15);
+            border-radius: 20px;
+            padding: 4px 10px;
+            margin-bottom: 12px;
+        }
+
+        .prof-avail-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #82C8A0;
+        }
+
+        /* BOOKING CONFIRM */
+        .confirm-box {
+            background: rgba(255, 204, 127, 0.04);
+            border: 1px solid rgba(255, 204, 127, 0.2);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .confirm-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .confirm-row:last-child {
+            border-bottom: none;
+        }
+
+        .cr-label {
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        .cr-val {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* FADE ANIMATIONS */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease forwards;
+            opacity: 0;
+        }
+
+        .delay-1 {
+            animation-delay: 0.08s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.16s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.24s;
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 204, 127, 0.12);
+            border-radius: 3px;
+        }
+
+        /* MISC */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 16px 0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-dim);
+        }
+
+        .empty-state i {
+            font-size: 36px;
+            margin-bottom: 12px;
+            display: block;
+            opacity: 0.3;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, rgba(255, 204, 127, 0.9), rgba(202, 148, 64, 0.9));
+            color: #1a1000;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 9px;
+            padding: 11px 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 204, 127, 0.25);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 400;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 11px 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--border-strong);
+            color: var(--text);
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 16px;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid rgba(130, 200, 160, 0.3);
+            border-radius: 12px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text);
+            backdrop-filter: blur(20px);
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast i {
+            color: #82C8A0;
+            font-size: 18px;
+        }
+
+        /* MODAL OVERLAY */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            background: #111;
+            border: 1px solid var(--border-strong);
+            border-radius: 18px;
+            padding: 28px;
+            width: 460px;
+            max-width: 95vw;
+            transform: scale(0.95);
+            transition: transform 0.2s;
+        }
+
+        .modal-overlay.open .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
+
+        .modal-title em {
+            color: var(--gold);
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="aurora-wrap">
+        <div class="aurora-1"></div>
+        <div class="aurora-2"></div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+        <i class="ti ti-circle-check"></i>
+        <span id="toast-msg">Operação concluída!</span>
+    </div>
+
+    <!-- MODAL PROF -->
+    <div class="modal-overlay" id="profModal">
+        <div class="modal-box">
+            <h2 class="modal-title">Profissional <em id="modal-prof-name"></em></h2>
+            <div id="modal-prof-body"></div>
+            <div class="btn-row">
+                <button class="btn-secondary" onclick="closeModal()"><i class="ti ti-x"></i> Fechar</button>
+                <button class="btn-primary" onclick="agendarComProf()"><i class="ti ti-calendar-plus"></i>
+                    Agendar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFCC7F" stroke-width="1.5">
+                        <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
+                    </svg>
+                </div>
+                <div class="font-yuji" style="font-size:18px;color:#fff;text-shadow:0 0 10px rgba(255,204,127,0.6);">
+                    <span style="color:#CA9440;">S</span>alon <span style="color:#CA9440;">V</span>ision
+                </div>
+            </div>
+
+            <nav class="nav-section">
+                <div class="nav-label">Minha Conta</div>
+                <a class="nav-item active" id="nav-historico" onclick="showTab('historico')">
+                    <i class="ti ti-clock-history"></i> Histórico
+                </a>
+                <a class="nav-item" id="nav-servicos" onclick="showTab('servicos')">
+                    <i class="ti ti-cut"></i> Serviços
+                </a>
+                <a class="nav-item" id="nav-agendar" onclick="showTab('agendar')">
+                    <i class="ti ti-calendar-plus"></i> Agendar
+                </a>
+                <a class="nav-item" id="nav-profissionais" onclick="showTab('profissionais')">
+                    <i class="ti ti-user-star"></i> Profissionais
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="user-card">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" class="user-avatar" alt="Cliente" />
+                    <div class="user-info">
+                        <p>Mariana Silva</p>
+                        <span>Cliente Premium</span>
+                    </div>
+                    <i class="ti ti-dots-vertical" style="margin-left:auto;color:var(--text-dim);font-size:14px;"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <div class="main">
+
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <div>
+                    <h1 class="topbar-title" id="topbar-title">Meu <em>histórico</em></h1>
+                    <h2 class="tb-date" id="topbar-date"></h2>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <div style="text-align:right;">
+                        <p style="font-size:12px;font-weight:500;">Mariana Silva</p>
+                        <p style="font-size:10px;color:var(--text-dim);">Cliente desde 2022</p>
+                    </div>
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg"
+                        style="width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid var(--border-strong);"
+                        alt="Avatar" />
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="content" id="main-content">
+
+                <!-- ===== TAB: HISTORICO ===== -->
+                <div class="tab-panel active" id="tab-historico">
+
+                    <!-- PROFILE HERO -->
+                    <div class="profile-hero fade-in">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="profile-photo"
+                            alt="Mariana" />
+                        <div class="profile-info">
+                            <h1>Mariana <em>Silva</em></h1>
+                            <p>mariana.silva@email.com · (51) 99876-5432</p>
+                            <div class="profile-badges">
+                                <span class="profile-badge">⭐ Premium</span>
+                                <span class="profile-badge rose">💜 Fiel há 3 anos</span>
+                                <span class="profile-badge">22 serviços</span>
+                            </div>
+                        </div>
+                        <div class="profile-stats">
+                            <div class="pstat">
+                                <div class="pstat-val">22</div>
+                                <div class="pstat-lbl">Visitas</div>
+                            </div>
+                            <div class="pstat">
+                                <div class="pstat-val">4.9</div>
+                                <div class="pstat-lbl">Avaliação</div>
+                            </div>
+                            <div class="pstat">
+                                <div class="pstat-val">R$2.4k</div>
+                                <div class="pstat-lbl">Total gasto</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- METRICS ROW -->
+                    <div class="grid-4 fade-in delay-1">
+                        <div class="metric-card">
+                            <div class="metric-icon gold"><i class="ti ti-calendar-check"></i></div>
+                            <h1 class="metric-value">3</h1>
+                            <h2 class="metric-label">Próx. agendamentos</h2>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon rose"><i class="ti ti-currency-dollar"></i></div>
+                            <h1 class="metric-value">R$ 380</h1>
+                            <h2 class="metric-label">Gasto este mês</h2>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon green"><i class="ti ti-cut"></i></div>
+                            <h1 class="metric-value">Coloração</h1>
+                            <h2 class="metric-label">Serviço favorito</h2>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon blue"><i class="ti ti-star"></i></div>
+                            <h1 class="metric-value">Camila R.</h1>
+                            <h2 class="metric-label">Profissional favorita</h2>
+                        </div>
+                    </div>
+
+                    <!-- HISTORICO + PROXIMOS -->
+                    <div class="grid-3-1 fade-in delay-2">
+
+                        <div class="panel">
+                            <div class="panel-header">
+                                <h1 class="panel-title">Histórico de <em>serviços</em></h1>
+                                <span style="font-size:11px;color:var(--text-dim);">22 registros</span>
+                            </div>
+                            <div id="history-list"></div>
+                        </div>
+
+                        <div style="display:flex;flex-direction:column;gap:16px;">
+                            <div class="panel">
+                                <div class="panel-header">
+                                    <h1 class="panel-title">Próximos <em>agendamentos</em></h1>
+                                </div>
+                                <div id="proximos-list"></div>
+                            </div>
+                            <div class="panel">
+                                <div class="panel-header" style="margin-bottom:14px;">
+                                    <h1 class="panel-title">Ações <em>rápidas</em></h1>
+                                </div>
+                                <div style="display:flex;flex-direction:column;gap:8px;">
+                                    <button class="quick-btn" onclick="showTab('agendar')"><i
+                                            class="ti ti-calendar-plus"></i> Novo agendamento</button>
+                                    <button class="quick-btn" onclick="showTab('servicos')"><i class="ti ti-cut"></i>
+                                        Ver serviços</button>
+                                    <button class="quick-btn" onclick="showTab('profissionais')"><i
+                                            class="ti ti-user-star"></i> Ver profissionais</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ===== TAB: SERVIÇOS ===== -->
+                <div class="tab-panel" id="tab-servicos">
+
+                    <div class="fade-in" style="margin-bottom:16px;">
+                        <p style="font-size:12px;color:var(--text-dim);">Explore todos os nossos serviços. Clique em um
+                            serviço para agendar.</p>
+                    </div>
+
+                    <!-- FILTRO POR CATEGORIA -->
+                    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;" class="fade-in delay-1">
+                        <button class="quick-btn cat-filter active-filter" data-cat="all"
+                            onclick="filterServices(this,'all')"><i class="ti ti-grid-3x3"></i> Todos</button>
+                        <button class="quick-btn cat-filter" data-cat="cabelo"
+                            onclick="filterServices(this,'cabelo')"><i class="ti ti-cut"></i> Cabelo</button>
+                        <button class="quick-btn cat-filter" data-cat="unhas" onclick="filterServices(this,'unhas')">💅
+                            Unhas</button>
+                        <button class="quick-btn cat-filter" data-cat="estetica"
+                            onclick="filterServices(this,'estetica')">✨ Estética</button>
+                        <button class="quick-btn cat-filter" data-cat="barba" onclick="filterServices(this,'barba')">🪒
+                            Barba</button>
+                    </div>
+
+                    <div class="grid-3 fade-in delay-2" id="services-grid"></div>
+
+                </div>
+
+                <!-- ===== TAB: AGENDAR ===== -->
+                <div class="tab-panel" id="tab-agendar">
+
+                    <div class="fade-in">
+                        <!-- STEPS -->
+                        <div class="schedule-steps" id="steps-indicator">
+                            <div class="step-item active" data-step="1">
+                                <div class="step-num">1</div><span>Serviço</span>
+                            </div>
+                            <div class="step-sep"></div>
+                            <div class="step-item" data-step="2">
+                                <div class="step-num">2</div><span>Profissional</span>
+                            </div>
+                            <div class="step-sep"></div>
+                            <div class="step-item" data-step="3">
+                                <div class="step-num">3</div><span>Data & Hora</span>
+                            </div>
+                            <div class="step-sep"></div>
+                            <div class="step-item" data-step="4">
+                                <div class="step-num">4</div><span>Confirmar</span>
+                            </div>
+                        </div>
+
+                        <!-- STEP PANELS -->
+                        <div id="step-panel-1" class="step-panel">
+                            <div class="panel">
+                                <div class="panel-header">
+                                    <h1 class="panel-title">Escolha o <em>serviço</em></h1>
+                                </div>
+                                <div class="grid-3" id="sched-services-grid"></div>
+                            </div>
+                        </div>
+
+                        <div id="step-panel-2" class="step-panel" style="display:none;">
+                            <div class="panel">
+                                <div class="panel-header">
+                                    <h1 class="panel-title">Escolha o <em>profissional</em></h1>
+                                    <button class="btn-secondary" onclick="goStep(1)"
+                                        style="padding:6px 12px;font-size:12px;"><i class="ti ti-arrow-left"></i>
+                                        Voltar</button>
+                                </div>
+                                <div class="prof-select-grid" id="prof-select-grid"></div>
+                                <div class="btn-row">
+                                    <button class="btn-primary" id="btnStep2Next" onclick="goStep(3)" disabled><i
+                                            class="ti ti-arrow-right"></i> Próximo</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="step-panel-3" class="step-panel" style="display:none;">
+                            <div class="panel">
+                                <div class="panel-header">
+                                    <h1 class="panel-title">Escolha a <em>data e hora</em></h1>
+                                    <button class="btn-secondary" onclick="goStep(2)"
+                                        style="padding:6px 12px;font-size:12px;"><i class="ti ti-arrow-left"></i>
+                                        Voltar</button>
+                                </div>
+                                <p style="font-size:11px;color:var(--text-dim);margin-bottom:12px;">Próximos 7 dias
+                                    disponíveis</p>
+                                <div class="date-strip" id="date-strip"></div>
+                                <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px;margin-top:4px;">
+                                    Horários disponíveis</p>
+                                <div class="time-grid" id="time-grid"></div>
+                                <div class="btn-row">
+                                    <button class="btn-primary" id="btnStep3Next" onclick="goStep(4)" disabled><i
+                                            class="ti ti-arrow-right"></i> Próximo</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="step-panel-4" class="step-panel" style="display:none;">
+                            <div class="panel">
+                                <div class="panel-header">
+                                    <h1 class="panel-title">Confirmar <em>agendamento</em></h1>
+                                    <button class="btn-secondary" onclick="goStep(3)"
+                                        style="padding:6px 12px;font-size:12px;"><i class="ti ti-arrow-left"></i>
+                                        Voltar</button>
+                                </div>
+                                <div class="confirm-box" id="confirm-summary"></div>
+                                <div class="btn-row">
+                                    <button class="btn-primary" onclick="confirmarAgendamento()"><i
+                                            class="ti ti-check"></i> Confirmar agendamento</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ===== TAB: PROFISSIONAIS ===== -->
+                <div class="tab-panel" id="tab-profissionais">
+                    <div class="fade-in" style="margin-bottom:16px;">
+                        <p style="font-size:12px;color:var(--text-dim);">Conheça nossa equipe. Clique em um profissional
+                            para ver o perfil completo.</p>
+                    </div>
+                    <div class="grid-3 fade-in delay-1" id="prof-cards-grid"></div>
+                </div>
+
+            </main>
+        </div>
+
+    </div>
+
+    <script>
+        /* ===================== DATA ===================== */
+
+        const statusLabel = { confirmed: 'Confirmado', pending: 'Pendente', cancelled: 'Cancelado', done: 'Concluído' };
+
+        const HISTORICO = [
+            { dia: 28, mes: 'Mai', servico: 'Coloração completa', prof: 'Camila R.', valor: 'R$ 220', stars: 5, status: 'done' },
+            { dia: 15, mes: 'Mai', servico: 'Corte + Escova', prof: 'Priya A.', valor: 'R$ 90', stars: 5, status: 'done' },
+            { dia: 2, mes: 'Mai', servico: 'Manicure & Pedicure', prof: 'Aline F.', valor: 'R$ 75', stars: 4, status: 'done' },
+            { dia: 18, mes: 'Abr', servico: 'Hidratação profunda', prof: 'Priya A.', valor: 'R$ 130', stars: 5, status: 'done' },
+            { dia: 5, mes: 'Abr', servico: 'Coloração', prof: 'Camila R.', valor: 'R$ 200', stars: 5, status: 'done' },
+            { dia: 22, mes: 'Mar', servico: 'Sobrancelha design', prof: 'Renata M.', valor: 'R$ 60', stars: 4, status: 'done' },
+        ];
+
+        const PROXIMOS = [
+            { dia: '15', mes: 'Jun', hora: '09:00', servico: 'Coloração', prof: 'Camila R.', status: 'confirmed' },
+            { dia: '20', mes: 'Jun', hora: '14:30', servico: 'Manicure', prof: 'Aline F.', status: 'confirmed' },
+            { dia: '28', mes: 'Jun', hora: '11:00', servico: 'Corte + Escova', prof: 'Priya A.', status: 'pending' },
+        ];
+
+        const SERVICOS = [
+            { id: 1, cat: 'cabelo', icon: '✂️', nome: 'Corte Feminino', desc: 'Corte personalizado com consultoria de imagem', preco: 'R$ 80', tempo: '60 min' },
+            { id: 2, cat: 'cabelo', icon: '🎨', nome: 'Coloração', desc: 'Coloração completa com produtos premium', preco: 'R$ 180', tempo: '120 min' },
+            { id: 3, cat: 'cabelo', icon: '💆', nome: 'Escova & Tratamento', desc: 'Escova modeladora com máscara de hidratação', preco: 'R$ 90', tempo: '75 min' },
+            { id: 4, cat: 'cabelo', icon: '✨', nome: 'Hidratação profunda', desc: 'Tratamento profundo com proteínas e vitaminas', preco: 'R$ 130', tempo: '90 min' },
+            { id: 5, cat: 'unhas', icon: '💅', nome: 'Manicure', desc: 'Manicure completa com esmaltação permanente', preco: 'R$ 55', tempo: '45 min' },
+            { id: 6, cat: 'unhas', icon: '🦶', nome: 'Pedicure', desc: 'Pedicure completo com hidratação', preco: 'R$ 55', tempo: '45 min' },
+            { id: 7, cat: 'unhas', icon: '💎', nome: 'Manicure & Pedicure', desc: 'Combo completo com esmaltação permanente', preco: 'R$ 95', tempo: '90 min' },
+            { id: 8, cat: 'estetica', icon: '🌸', nome: 'Design de sobrancelha', desc: 'Design personalizado com henna ou cera', preco: 'R$ 60', tempo: '40 min' },
+            { id: 9, cat: 'estetica', icon: '🌿', nome: 'Limpeza de pele', desc: 'Limpeza profunda com extração e máscara', preco: 'R$ 110', tempo: '60 min' },
+            { id: 10, cat: 'barba', icon: '🪒', nome: 'Barba completa', desc: 'Modelagem, hidratação e acabamento perfeito', preco: 'R$ 50', tempo: '30 min' },
+            { id: 11, cat: 'barba', icon: '💈', nome: 'Corte + Barba', desc: 'Corte masculino e barba completa', preco: 'R$ 90', tempo: '60 min' },
+            { id: 12, cat: 'cabelo', icon: '🔥', nome: 'Progressiva', desc: 'Alisamento progressivo com fórmula exclusiva', preco: 'R$ 250', tempo: '180 min' },
+        ];
+
+        const PROFISSIONAIS = [
+            { id: 1, nome: 'Camila R.', cargo: 'Colorista Sênior', img: 'https://randomuser.me/api/portraits/women/21.jpg', stars: 4.9, tags: ['Coloração', 'Mechas', 'Balayage'], disponivelHoje: true, bio: 'Especialista em coloração com 8 anos de experiência. Formada pela L\'Oréal Profissional.' },
+            { id: 2, nome: 'Priya A.', cargo: 'Cabeleireira', img: 'https://randomuser.me/api/portraits/women/33.jpg', stars: 4.8, tags: ['Corte', 'Escova', 'Hidratação'], disponivelHoje: true, bio: 'Cabeleireira premiada com técnicas europeias e mais de 1.000 clientes satisfeitas.' },
+            { id: 3, nome: 'Lucas T.', cargo: 'Barbeiro', img: 'https://randomuser.me/api/portraits/men/45.jpg', stars: 4.7, tags: ['Barba', 'Corte Masc.', 'Pigmentação'], disponivelHoje: true, bio: 'Barbeiro artístico especializado em cortes clássicos e contemporâneos masculinos.' },
+            { id: 4, nome: 'Aline F.', cargo: 'Nail Designer', img: 'https://randomuser.me/api/portraits/women/57.jpg', stars: 4.9, tags: ['Manicure', 'Pedicure', 'Nail Art'], disponivelHoje: false, bio: 'Nail designer com certificação internacional em nail art e técnicas 3D.' },
+            { id: 5, nome: 'Renata M.', cargo: 'Esteticista', img: 'https://randomuser.me/api/portraits/women/10.jpg', stars: 4.8, tags: ['Sobrancelha', 'Pele', 'Depilação'], disponivelHoje: true, bio: 'Esteticista formada em biomedicina com especialização em tratamentos faciais.' },
+            { id: 6, nome: 'Diego P.', cargo: 'Cabeleireiro', img: 'https://randomuser.me/api/portraits/men/22.jpg', stars: 4.6, tags: ['Corte', 'Coloração Masc.', 'Química'], disponivelHoje: false, bio: 'Cabeleireiro com vasta experiência em química capilar e técnicas avançadas de coloração.' },
+        ];
+
+        /* ===================== DATE ===================== */
+        const d = new Date();
+        document.getElementById('topbar-date').textContent = d.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+        /* ===================== NAV ===================== */
+        const titles = { historico: 'Meu histórico', servicos: 'Nossos serviços', agendar: 'Agendar serviço', profissionais: 'Nossa equipe' };
+        const titlesEm = { historico: 'histórico', servicos: 'serviços', agendar: 'serviço', profissionais: 'equipe' };
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('nav-' + tab).classList.add('active');
+
+            const base = titles[tab].replace(titlesEm[tab], '').trim();
+            document.getElementById('topbar-title').innerHTML = base + ' <em>' + titlesEm[tab] + '</em>';
+        }
+
+        /* ===================== HISTORICO ===================== */
+        (function buildHistorico() {
+            const list = document.getElementById('history-list');
+            HISTORICO.forEach(h => {
+                const stars = '★'.repeat(h.stars) + '☆'.repeat(5 - h.stars);
+                list.innerHTML += `
+        <div class="history-item">
+            <div class="history-date"><div class="hdate-day">${h.dia}</div><div class="hdate-mon">${h.mes}</div></div>
+            <div class="history-body">
+                <h3>${h.servico}</h3>
+                <div class="hprof"><i class="ti ti-user" style="font-size:10px;"></i> ${h.prof}</div>
+            </div>
+            <div class="history-right">
+                <div class="history-val">${h.valor}</div>
+                <div class="history-star">${stars}</div>
+            </div>
+        </div>`;
+            });
+
+            const prox = document.getElementById('proximos-list');
+            PROXIMOS.forEach(p => {
+                prox.innerHTML += `
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);">
+            <div style="flex-shrink:0;text-align:center;min-width:40px;">
+                <div style="font-size:16px;font-weight:600;color:var(--gold);line-height:1;">${p.dia}</div>
+                <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;">${p.mes}</div>
+            </div>
+            <div style="flex:1;">
+                <div style="font-size:12px;font-weight:500;">${p.servico}</div>
+                <div style="font-size:10px;color:var(--text-dim);">${p.prof} · ${p.hora}</div>
+            </div>
+            <span class="status-pill ${p.status}"><span class="status-dot"></span>${statusLabel[p.status]}</span>
+        </div>`;
+            });
+            // last border
+            const items = prox.querySelectorAll('div');
+            if (items.length) items[items.length - 1].style.borderBottom = 'none';
+        })();
+
+        /* ===================== SERVIÇOS ===================== */
+        function buildServicesGrid(containerId, selectable) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            const filtered = currentCat === 'all' || !selectable
+                ? SERVICOS
+                : SERVICOS.filter(s => s.cat === currentCat);
+
+            const list = selectable ? SERVICOS : filtered;
+
+            list.forEach(s => {
+                const div = document.createElement('div');
+                div.className = 'service-card' + (selectedService && selectedService.id === s.id ? ' selected' : '');
+                div.dataset.cat = s.cat;
+                div.innerHTML = `
+            <div class="sc-icon">${s.icon}</div>
+            <div class="sc-name">${s.nome}</div>
+            <div class="sc-desc">${s.desc}</div>
+            <div class="sc-footer">
+                <span class="sc-price">${s.preco}</span>
+                <span class="sc-time"><i class="ti ti-clock" style="font-size:11px;"></i> ${s.tempo}</span>
+            </div>`;
+
+                if (selectable) {
+                    div.addEventListener('click', () => {
+                        selectedService = s;
+                        document.querySelectorAll('#sched-services-grid .service-card').forEach(c => c.classList.remove('selected'));
+                        div.classList.add('selected');
+                        setTimeout(() => goStep(2), 300);
+                    });
+                } else {
+                    div.addEventListener('click', () => {
+                        selectedService = s;
+                        showTab('agendar');
+                        setTimeout(() => goStep(2), 100);
+                    });
+                }
+
+                container.appendChild(div);
+            });
+        }
+
+        let currentCat = 'all';
+        function filterServices(btn, cat) {
+            currentCat = cat;
+            document.querySelectorAll('.cat-filter').forEach(b => b.classList.remove('active-filter'));
+            btn.classList.add('active-filter');
+            document.querySelectorAll('#services-grid .service-card').forEach(c => {
+                c.style.display = (cat === 'all' || c.dataset.cat === cat) ? '' : 'none';
+            });
+        }
+
+        buildServicesGrid('services-grid', false);
+        buildServicesGrid('sched-services-grid', true);
+
+        /* ===================== AGENDAMENTO WIZARD ===================== */
+        let currentStep = 1;
+        let selectedService = null;
+        let selectedProf = null;
+        let selectedDate = null;
+        let selectedTime = null;
+
+        function goStep(n) {
+            document.querySelectorAll('.step-panel').forEach(p => p.style.display = 'none');
+            document.getElementById('step-panel-' + n).style.display = 'block';
+            currentStep = n;
+
+            document.querySelectorAll('.step-item').forEach(item => {
+                const s = parseInt(item.dataset.step);
+                item.classList.remove('active', 'done');
+                if (s < n) item.classList.add('done');
+                else if (s === n) item.classList.add('active');
+            });
+
+            if (n === 2) buildProfSelect();
+            if (n === 3) buildDateTimeSelect();
+            if (n === 4) buildConfirmSummary();
+        }
+
+        function buildProfSelect() {
+            const grid = document.getElementById('prof-select-grid');
+            grid.innerHTML = '';
+            PROFISSIONAIS.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'prof-opt' + (selectedProf && selectedProf.id === p.id ? ' selected' : '');
+                div.innerHTML = `
+            <img src="${p.img}" alt="${p.nome}"/>
+            <span class="po-name">${p.nome}</span>
+            <span class="po-role">${p.cargo}</span>
+            <span style="font-size:11px;color:var(--gold);">${'★'.repeat(Math.floor(p.stars))}</span>`;
+                div.addEventListener('click', () => {
+                    selectedProf = p;
+                    document.querySelectorAll('.prof-opt').forEach(o => o.classList.remove('selected'));
+                    div.classList.add('selected');
+                    document.getElementById('btnStep2Next').disabled = false;
+                });
+                grid.appendChild(div);
+            });
+        }
+
+        function buildDateTimeSelect() {
+            // Dates
+            const strip = document.getElementById('date-strip');
+            strip.innerHTML = '';
+            const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            const today = new Date();
+            for (let i = 0; i < 7; i++) {
+                const dt = new Date(today);
+                dt.setDate(today.getDate() + i);
+                const chip = document.createElement('div');
+                chip.className = 'date-chip' + (i === 0 ? ' today' : '') + (selectedDate === dt.getDate() ? ' selected' : '');
+                chip.innerHTML = `<div class="dc-day">${days[dt.getDay()]}</div><div class="dc-num">${dt.getDate()}</div>`;
+                chip.addEventListener('click', () => {
+                    selectedDate = dt.getDate();
+                    document.querySelectorAll('.date-chip').forEach(c => c.classList.remove('selected'));
+                    chip.classList.add('selected');
+                    checkStep3();
+                });
+                strip.appendChild(chip);
+            }
+
+            // Times
+            const timeGrid = document.getElementById('time-grid');
+            timeGrid.innerHTML = '';
+            const unavail = ['10:30', '13:00', '14:00'];
+            const times = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30'];
+            times.forEach(t => {
+                const slot = document.createElement('div');
+                const isUnavail = unavail.includes(t);
+                slot.className = 'time-slot' + (isUnavail ? ' unavailable' : '') + (selectedTime === t ? ' selected' : '');
+                slot.textContent = t;
+                if (!isUnavail) {
+                    slot.addEventListener('click', () => {
+                        selectedTime = t;
+                        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                        slot.classList.add('selected');
+                        checkStep3();
+                    });
+                }
+                timeGrid.appendChild(slot);
+            });
+        }
+
+        function checkStep3() {
+            document.getElementById('btnStep3Next').disabled = !(selectedDate && selectedTime);
+        }
+
+        function buildConfirmSummary() {
+            const box = document.getElementById('confirm-summary');
+            box.innerHTML = `
+        <div class="confirm-row"><span class="cr-label">Serviço</span><span class="cr-val">${selectedService ? selectedService.nome : '-'}</span></div>
+        <div class="confirm-row"><span class="cr-label">Profissional</span><span class="cr-val">${selectedProf ? selectedProf.nome : '-'}</span></div>
+        <div class="confirm-row"><span class="cr-label">Data</span><span class="cr-val">Junho ${selectedDate}, 2025</span></div>
+        <div class="confirm-row"><span class="cr-label">Horário</span><span class="cr-val" style="color:var(--gold)">${selectedTime || '-'}</span></div>
+        <div class="confirm-row"><span class="cr-label">Duração estimada</span><span class="cr-val">${selectedService ? selectedService.tempo : '-'}</span></div>
+        <div class="confirm-row"><span class="cr-label">Valor</span><span class="cr-val" style="font-size:16px;font-weight:600;">${selectedService ? selectedService.preco : '-'}</span></div>
+    `;
+        }
+
+        function confirmarAgendamento() {
+            showToast('Agendamento confirmado com sucesso! 🎉');
+            selectedService = null; selectedProf = null; selectedDate = null; selectedTime = null;
+            currentStep = 1;
+            setTimeout(() => {
+                showTab('historico');
+            }, 1500);
+        }
+
+        /* ===================== PROFISSIONAIS ===================== */
+        (function buildProfCards() {
+            const grid = document.getElementById('prof-cards-grid');
+            PROFISSIONAIS.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'prof-card';
+                card.innerHTML = `
+            <img src="${p.img}" alt="${p.nome}"/>
+            <div class="prof-name">${p.nome}</div>
+            <div class="prof-role">${p.cargo}</div>
+            <div class="prof-stars">${'★'.repeat(Math.floor(p.stars))} <span style="font-size:11px;color:var(--text-dim);">${p.stars}</span></div>
+            <div class="prof-tags">${p.tags.map(t => `<span class="prof-tag">${t}</span>`).join('')}</div>
+            <div class="prof-avail">
+                <span class="prof-avail-dot" style="background:${p.disponivelHoje ? '#82C8A0' : '#FF7070'};"></span>
+                <span style="color:${p.disponivelHoje ? '#82C8A0' : '#FF7070'};">${p.disponivelHoje ? 'Disponível hoje' : 'Indisponível hoje'}</span>
+            </div>
+            <button class="btn-primary" style="width:100%;justify-content:center;font-size:12px;padding:9px 14px;" onclick="openProfModal(${p.id})">
+                <i class="ti ti-user-search"></i> Ver perfil
+            </button>`;
+                grid.appendChild(card);
+            });
+        })();
+
+        function openProfModal(id) {
+            const p = PROFISSIONAIS.find(x => x.id === id);
+            if (!p) return;
+            document.getElementById('modal-prof-name').textContent = p.nome;
+            document.getElementById('modal-prof-body').innerHTML = `
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+            <img src="${p.img}" style="width:60px;height:60px;border-radius:50%;border:2px solid var(--gold);" alt="${p.nome}"/>
+            <div>
+                <div style="font-size:13px;color:var(--text-dim);">${p.cargo}</div>
+                <div style="color:var(--gold);font-size:13px;margin:4px 0;">${'★'.repeat(Math.floor(p.stars))} ${p.stars}</div>
+                <div style="display:flex;gap:4px;flex-wrap:wrap;">${p.tags.map(t => `<span class="prof-tag">${t}</span>`).join('')}</div>
+            </div>
+        </div>
+        <p style="font-size:12px;color:var(--text-muted);line-height:1.6;">${p.bio}</p>
+        <div class="divider"></div>
+        <div style="font-size:11px;color:var(--text-dim);">
+            ${p.disponivelHoje ? '<span style="color:#82C8A0;">● Disponível hoje</span>' : '<span style="color:#FF7070;">● Indisponível hoje</span>'}
+        </div>`;
+            window._modalProfId = id;
+            document.getElementById('profModal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('profModal').classList.remove('open');
+        }
+
+        function agendarComProf() {
+            const p = PROFISSIONAIS.find(x => x.id === window._modalProfId);
+            selectedProf = p;
+            closeModal();
+            showTab('agendar');
+            setTimeout(() => goStep(1), 100);
+        }
+
+        /* ===================== TOAST ===================== */
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3500);
+        }
+
+        // close modal on backdrop click
+        document.getElementById('profModal').addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+    <script type="module" src="./../_common/script/cursor.js"></script>
+</body>
+
+</html>

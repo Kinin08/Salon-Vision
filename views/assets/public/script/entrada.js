@@ -11,7 +11,6 @@ function getRoleByEmail(email) {
     const normalizedEmail = email.trim().toLowerCase();
 
     if (normalizedEmail.includes('@adm')) return 'Administrador';
-    if (normalizedEmail.includes('@func')) return 'Funcionario';
 
     return 'Cliente';
 }
@@ -36,12 +35,10 @@ function setAuthMode(mode) {
 function openAuth(mode) {
     setAuthMode(mode);
     authModal.classList.add('open');
-    document.body.classList.add('overflow-hidden');
 }
 
 function closeAuth() {
     authModal.classList.remove('open');
-    document.body.classList.remove('overflow-hidden');
 }
 
 document.querySelector('[data-action="login"]')?.addEventListener('click', () => openAuth('login'));
@@ -66,21 +63,20 @@ document.addEventListener('keydown', event => {
 loginForm?.addEventListener('submit', event => {
     event.preventDefault();
 
-    const email = document.getElementById('loginEmail').value;
+    const email = document.getElementById('email').value;
     const role = getRoleByEmail(email);
 
     authFeedback.textContent = `Login ok como ${role}`;
     authFeedback.classList.remove('hidden');
 
-    if (role === 'Administrador') {
-        window.location.href = './../../admin/adm.html';
-    }
-    else if(role === 'Funcionario'){
-        window.location.href = './../../funcionario'
-    }
-    else {
-        window.location.href = './cliente';
-    }
+    setTimeout(() => {
+        if (role === 'Administrador') {
+            window.location.href = 'views/assets/admin/index.html';
+        }
+        else {
+            window.location.href = 'views/assets/app/index.html';
+        }
+    }, 1000);
 });
 
 signupForm?.addEventListener('submit', event => {
@@ -97,11 +93,8 @@ signupForm?.addEventListener('submit', event => {
         if (role === 'Administrador') {
             window.location.href = 'views/assets/admin/index.html';
         }
-        else if(role === 'Funcionario'){
-            window.location.href = './funcionario'
-        }
         else {
-            window.location.href = './cliente';
+            window.location.href = 'views/assets/app/index.html';
         }
     }, 1000);
 });
