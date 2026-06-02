@@ -9,11 +9,13 @@ class FaqCategorie
 {
     private ?int $id;
     private ?string $name;
+    private ?int $active;
 
-    public function __construct(?int $id = null, ?string $name = null)
+    public function __construct(?int $id = null, ?string $name = null, ?int $active = null)
     {
         $this->id = $id;
         $this->name = $name;
+        $this->active = $active;
     }
 
     public function getId(): ?int
@@ -35,9 +37,17 @@ class FaqCategorie
     {
         $this->name = $name;
     }
+    public function getActive(): ?int
+    {
+        return $this->active;
+    }
+    public function setActive(int $active): void
+    {
+        $this->active = $active;
+    }
     public function listAll(): array
     {
-        $query = "SELECT faqs_categories.id, faqs_categories.name
+        $query = "SELECT faqs_categories.id, faqs_categories.name, faqs_categories.active
                   FROM faqs_categories";
         $stmt = Connect::getInstance()->query($query);
         return $stmt->fetchAll();

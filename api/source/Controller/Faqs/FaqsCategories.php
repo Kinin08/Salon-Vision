@@ -22,7 +22,7 @@ class FaqsCategories extends Api
     }
     public function listById(array $data): void
     {
-        if (!filter_var($data["faq_categorieId"], FILTER_VALIDATE_INT)) {
+        if (!filter_var($data["faqCategorieId"], FILTER_VALIDATE_INT)) {
             $this->call(
                 400,
                 "bad_request",
@@ -32,7 +32,7 @@ class FaqsCategories extends Api
             return;
         }
         $faq = new FaqCategorie();
-        $categories = $faq->listById($data["faq_categorieId"]);
+        $categories = $faq->listById($data["faqCategorieId"]);
         if (!$categories) {
             $this->call(
                 404,
@@ -80,73 +80,68 @@ class FaqsCategories extends Api
             "created"
         )->back($create);
     }
-    public function update(array $data): void
-    {
-        $faqId = $data["faq_category_id"] ?? null;
+public function update(array $data): void
+{
+    $faqId = $data["faqCategorieId"] ?? null;
 
-        if (!filter_var($faqId, FILTER_VALIDATE_INT)) {
-            $this->call(
-                400,
-                "error",
-                "ID inválido",
-                "bad_request"
-            )->back();
-            return;
-        }
-
-        $body = json_decode(file_get_contents("php://input"), true);
-
-        if (
-            empty($body["name"])
-        ) {
-            $this->call(
-                400,
-                "error",
-                "Campos obrigatórios ausentes",
-                "bad_request"
-            )->back();
-            return;
-        }
-
-        $faqCategory = new FaqCategorie();
-        
-        $updatedFaq = $faqCategory->listById($faqId);
-        if (!$updatedFaq) {
-            $this->call(
-                404,
-                "error",
-                "FAQ category não encontrado",
-                "not_found"
-            )->back();
-            return;
-        }
-
-        $faqCategory->setId($faqId);
-        $faqCategory->setName($body["name"]);
-
-        $success = $faqCategory->update();
-
-        if (!$success) {
-            $this->call(
-                500,
-                "error",
-                "Erro ao atualizar o FAQ category",
-                "internal_error"
-            )->back();
-            return;
-        }
-
-
+    if (!filter_var($faqId, FILTER_VALIDATE_INT)) {
         $this->call(
-            200,
-            "success",
-            "Categoria de FAQ atualizado com sucesso",
-            "success"
-        )->back($updatedFaq);
+            400,
+            "error",
+            "ID inválido",
+            "bad_request"
+        )->back();
+        return;
     }
+
+    if (empty($data["name"])) {
+        $this->call(
+            400,
+            "error",
+            "O campo name é obrigatório",
+            "bad_request"
+        )->back();
+        return;
+    }
+
+    $faqCategory = new FaqCategorie();
+
+    if (!$faqCategory->listById($faqId)) {
+        $this->call(
+            404,
+            "error",
+            "FAQ category não encontrado",
+            "not_found"
+        )->back();
+        return;
+    }
+
+    $faqCategory->setId($faqId);
+    $faqCategory->setName($data["name"]);
+
+    if (!$faqCategory->update()) {
+        $this->call(
+            500,
+            "error",
+            "Erro ao atualizar o FAQ category",
+            "internal_error"
+        )->back();
+        return;
+    }
+
+    // Busca novamente os dados atualizados
+    $updatedFaq = $faqCategory->listById($faqId);
+
+    $this->call(
+        200,
+        "success",
+        "Categoria de FAQ atualizada com sucesso",
+        "success"
+    )->back($updatedFaq);
+}
     public function softDelete(array $data): void
     {
-        $id = $data["faq_category_id"] ?? null;
+        $id = $data["faqCategorieId"] ?? null;
 
         if (!filter_var($id, FILTER_VALIDATE_INT)) {
             $this->call(400, "error", "ID do FAQ category é obrigatório e deve ser um número inteiro", "bad_request")->back();

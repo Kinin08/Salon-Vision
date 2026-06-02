@@ -103,27 +103,15 @@ class Faqs extends Api
             return;
         }
 
-        $body = json_decode(file_get_contents("php://input"), true);
-
-        if (!$body) {
-            $this->call(
-                400,
-                "bad_request",
-                "JSON inválido ou ausente",
-                "error"
-            )->back();
-            return;
-        }
-
         if (
-            empty($body["faqs_category_id"]) ||
-            empty($body["question"]) ||
-            empty($body["answer"])
+            empty($data["faqsCategoryId"]) ||
+            empty($data["question"]) ||
+            empty($data["answer"])
         ) {
             $this->call(
                 400,
                 "bad_request",
-                "Os campos faqs_category_id, question e answer são obrigatórios",
+                "Os campos faqsCategoryId, question e answer são obrigatórios",
                 "error"
             )->back();
             return;
@@ -131,9 +119,9 @@ class Faqs extends Api
 
         $faq = new Faq(
             null,
-            $body["faqs_category_id"],
-            $body["question"],
-            $body["answer"]
+            $data["faqsCategoryId"],
+            $data["question"],
+            $data["answer"]
         );
 
         if (!$faq->updateById($data["faq_id"])) {
@@ -146,15 +134,33 @@ class Faqs extends Api
             return;
         }
 
+        // Busca os dados atualizados
+        $faqAtualizado = new Faq();
+
+        if (!$faqAtualizado->selectById($data["faq_id"])) {
+            $this->call(
+                500,
+                "internal_server_error",
+                "Erro ao recuperar FAQ atualizado",
+                "error"
+            )->back();
+            return;
+        }
+
         $response = [
-            "id" => $faq->getId(),
-            "faqs_category_id" => $faq->getFaqsCategoryId(),
-            "question" => $faq->getQuestion(),
-            "answer" => $faq->getAnswer(),
-            "active" => $faq->getActive()
+            "id" => $faqAtualizado->getId(),
+            "faqsCategoryId" => $faqAtualizado->getFaqsCategoryId(),
+            "question" => $faqAtualizado->getQuestion(),
+            "answer" => $faqAtualizado->getAnswer(),
+            "active" => $faqAtualizado->getActive()
         ];
 
-        $this->call(200, "success", "FAQ atualizado com sucesso", "success")->back($response);
+        $this->call(
+            200,
+            "success",
+            "FAQ atualizado com sucesso",
+            "success"
+        )->back($response);
     }
 
     public function softDelete(array $data): void

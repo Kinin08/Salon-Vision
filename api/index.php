@@ -8,7 +8,7 @@ ob_start();
 
 require  __DIR__ . "/vendor/autoload.php";
 
-// os headers abaixo são necessários para permitir o acesso a API por clientes externos ao domínio
+// os headers abaixo são necessários para permitir o acesso à API por clientes externos ao domínio
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
@@ -20,13 +20,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 use CoffeeCode\Router\Router;
-// localhost/acme-3am/api
+
 $route = new Router(url("api"),":");
 
 $route->namespace("Source\Controller");
 
-// Início - Exercícios - Desafios
-$route->group("/products");
+$route->group("/users");
+$route->post("/register","Users:register"); // Registrar usuário comum
+$route->post("/login","Users:auth"); // login de usuário comum
+$route->put("/update","Users:update"); // update de usuário comum
+$route->post("/register-admin","Users:registerAdmin"); // Registrar usuário admin NÃO IMPLEMENTADO
+$route->post("/login-admin","Users:authAdmin"); // login de usuário admin
+$route->put("/update-admin","Users:updateAdmin"); // update de usuário admin
+$route->group(null);
+
+// Produtos$route->group("/products");
 $route->get("/list", "Products\\Products:productsList");
 $route->get("/list/{productId}", "Products\\Products:productById");
 $route->post("/", "Products\\Products:create");
@@ -57,21 +65,19 @@ $route->delete("/{faq_id}", "Faqs\\Faqs:softDelete");
 $route->group(null);
 // Fim - Exercícios - Desafios
 
-$route->get("/hello", "Api:hello");
-$route->get("/users/list", "Users:usersList");
 $route->dispatch();
 
 /** ERROR REDIRECT */
 if ($route->error()) {
     header('Content-Type: application/json; charset=UTF-8');
-    //http_response_code(404);
+    http_response_code(404);
 
     echo json_encode([
         "code" => 404,
+        "type" => "error",
         "status" => "not_found",
-        "message" => "URL não encontrada"
-    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-
+        "message" => "O recurso solicitado não existe."
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
 
 ob_end_flush();
