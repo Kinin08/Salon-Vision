@@ -108,7 +108,7 @@
 
     <!-- HERO BG -->
     <div class="relative">
-        <img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=1400&q=80"
+        <img src="views/assets/_common/img/bg.png"
             class="pointer-events-none select-none w-full h-screen object-cover object-top" alt="background de fundo">
 
         <!-- overlay gradiente -->
@@ -240,16 +240,16 @@
             <!-- Social proof -->
             <div class="flex items-center gap-4 relative top-12 reveal delay-4">
                 <div class="flex">
-                    <img src="https://i.pravatar.cc/36?img=1"
+                    <img src="views/assets/_common/img/foto-icon-1.jpg"
                         class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover"
                         alt="">
-                    <img src="https://i.pravatar.cc/36?img=5"
+                    <img src="views/assets/_common/img/foto-icon-2.jpg"
                         class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover -ml-2"
                         alt="">
-                    <img src="https://i.pravatar.cc/36?img=9"
+                    <img src="views/assets/_common/img/foto-icon-3.jpg"
                         class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover -ml-2"
                         alt="">
-                    <img src="https://i.pravatar.cc/36?img=20"
+                    <img src="views/assets/_common/img/foto-icon-4.jpg"
                         class="pointer-events-none select-none w-9 h-9 rounded-full border-1 border-black object-cover -ml-2"
                         alt="">
                 </div>
@@ -262,8 +262,8 @@
     </div>
 
     <!-- BRANDS -->
-    <div class="bg-white py-8 px-20 border-b border-gray-100">
-        <p class="text-center text-[10px] tracking-[3px] uppercase text-gray-400">
+    <div class="bg-[#121212] py-8 px-20 border-b border-[#B07A56]/30 border-t">
+        <p class="text-center text-[10px] tracking-[3px] uppercase text-white reveal opacity-0 [animation-delay:200ms]">
             Confiança de quem transforma beleza em experiência
         </p>
     </div>
@@ -272,8 +272,8 @@
     <main class="bg-black" id="servicos">
 
         <!-- FEATURES -->
-        <section class="bg-white py-20 px-20">
-            <h1 class="font-['Cormorant_Garamond'] text-4xl font-light text-center text-gray-900 reveal">
+        <section class="bg-[#121212] py-20 px-20">
+            <h1 class="font-['Cormorant_Garamond'] text-4xl font-light text-center text-white reveal">
                 Tudo que você precisa em um só lugar
             </h1>
             <p class="text-base text-center text-[#AFAFB8] mt-4 reveal delay-1">
@@ -285,77 +285,83 @@
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-14
                         [&:has(.card-item:hover)_.card-item:not(:hover)]:opacity-40">
-                <div class="card-item transition-all duration-300 bg-white border border-gray-100 rounded-2xl p-6
+                <div class="reveal delay-1">
+                    <div class="h-full card-item duration-300 bg-[#FEF2F2] border border-black rounded-2xl p-6
                             flex flex-col items-center text-center gap-3 shadow-sm
-                            hover:scale-110 hover:shadow-xl reveal delay-1">
-                    <div class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center">
-                        <img class="pointer-events-none select-none w-9 h-9"
-                            src="https://cdn-icons-png.flaticon.com/512/747/747310.png" alt="agenda">
+                            hover:scale-110 hover:shadow-xl">
+                        <div class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center">
+                            <img class="pointer-events-none select-none w-9 h-9"
+                                src="https://cdn-icons-png.flaticon.com/512/747/747310.png" alt="agenda">
+                        </div>
+                        <h2 class="text-[#C18057] font-semibold text-sm">Agendamento fácil</h2>
+                        <p class="text-[#565656] text-sm leading-relaxed">
+                            Escolha o serviço, profissional e horário que melhor se encaixe na sua rotina.
+                        </p>
                     </div>
-                    <h2 class="text-[#C18057] font-semibold text-sm">Agendamento fácil</h2>
-                    <p class="text-[#565656] text-sm leading-relaxed">
-                        Escolha o serviço, profissional e horário que melhor se encaixe na sua rotina.
-                    </p>
                 </div>
-
-                <div class="card-item transition-all duration-300 bg-white border border-gray-100 rounded-2xl p-6
+                <div class="reveal delay-2">
+                    <div class="h-full card-item transition-all duration-300 bg-[#F0FDF4] border border-black rounded-2xl p-6
                             flex flex-col items-center text-center gap-3 shadow-sm
-                            hover:scale-110 hover:shadow-xl reveal delay-2">
-                    <div class="w-14 h-14 bg-green-50 rounded-xl flex items-center justify-center">
-                        <img class="pointer-events-none select-none w-9 h-9"
-                            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="profissionais">
+                            hover:scale-110 hover:shadow-xl">
+                        <div class="w-14 h-14 bg-green-50 rounded-xl flex items-center justify-center">
+                            <img class="pointer-events-none select-none w-9 h-9"
+                                src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="profissionais">
+                        </div>
+                        <h2 class="text-[#C18057] font-semibold text-sm">Profissionais especializados</h2>
+                        <p class="text-[#565656] text-sm leading-relaxed">
+                            Especialistas qualificados em cada área da beleza, garantindo alta performance.
+                        </p>
                     </div>
-                    <h2 class="text-[#C18057] font-semibold text-sm">Profissionais especializados</h2>
-                    <p class="text-[#565656] text-sm leading-relaxed">
-                        Especialistas qualificados em cada área da beleza, garantindo alta performance.
-                    </p>
                 </div>
-
-                <div class="card-item transition-all duration-300 bg-white border border-gray-100 rounded-2xl p-6
+                <div class="reveal delay-3">
+                    <div class="h-full card-item transition-all duration-300 bg-[#FEFCE8] border border-black rounded-2xl p-6
                             flex flex-col items-center text-center gap-3 shadow-sm
-                            hover:scale-110 hover:shadow-xl reveal delay-3">
-                    <div class="w-14 h-14 bg-yellow-50 rounded-xl flex items-center justify-center">
-                        <img class="pointer-events-none select-none w-9 h-9"
-                            src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" alt="experiência">
+                            hover:scale-110 hover:shadow-xl">
+                        <div class="w-14 h-14 bg-yellow-50 rounded-xl flex items-center justify-center">
+                            <img class="pointer-events-none select-none w-9 h-9"
+                                src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" alt="experiência">
+                        </div>
+                        <h2 class="text-[#C18057] font-semibold text-sm">Experiências personalizadas</h2>
+                        <p class="text-[#565656] text-sm leading-relaxed">
+                            Histórico de serviços, preferências e recomendações feitas exclusivamente para você.
+                        </p>
                     </div>
-                    <h2 class="text-[#C18057] font-semibold text-sm">Experiências personalizadas</h2>
-                    <p class="text-[#565656] text-sm leading-relaxed">
-                        Histórico de serviços, preferências e recomendações feitas exclusivamente para você.
-                    </p>
                 </div>
-
-                <div class="card-item transition-all duration-300 bg-white border border-gray-100 rounded-2xl p-6
+                <div class="reveal delay-4">
+                    <div class="h-full card-item transition-all duration-300 bg-[#EFF6FF] border border-black rounded-2xl p-6
                             flex flex-col items-center text-center gap-3 shadow-sm
-                            hover:scale-110 hover:shadow-xl reveal delay-4">
-                    <div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center">
-                        <img class="pointer-events-none select-none w-9 h-9"
-                            src="https://cdn-icons-png.flaticon.com/512/2583/2583344.png" alt="produtos">
+                            hover:scale-110 hover:shadow-xl">
+                        <div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center">
+                            <img class="pointer-events-none select-none w-9 h-9"
+                                src="https://cdn-icons-png.flaticon.com/512/2583/2583344.png" alt="produtos">
+                        </div>
+                        <h2 class="text-[#C18057] font-semibold text-sm">Produtos de qualidade</h2>
+                        <p class="text-[#565656] text-sm leading-relaxed">
+                            Os melhores produtos profissionais que oferecem resultados superiores.
+                        </p>
                     </div>
-                    <h2 class="text-[#C18057] font-semibold text-sm">Produtos de qualidade</h2>
-                    <p class="text-[#565656] text-sm leading-relaxed">
-                        Os melhores produtos profissionais que oferecem resultados superiores.
-                    </p>
                 </div>
             </div>
         </section>
-
-        <section class="bg-white px-6 sm:px-10 md:px-20 py-16 md:py-20" id="agendar">
+        <div class="border-b border-[#B07A56]/30 border-t">
+        </div>
+        <section class="bg-[#1b1d1d] px-6 sm:px-10 md:px-20 py-16 md:py-20" id="agendar">
             <div class="max-w-7xl mx-auto">
                 <!-- Título central -->
                 <div class="text-center mb-12 reveal delay-1">
                     <span
-                        class="text-[11px] tracking-[4px] uppercase text-[#C18057] font-semibold bg-[#C18057]/10 px-4 py-2 rounded-full inline-block mb-4 reveal delay-1">Agendamento
+                        class="text-[11px] tracking-[4px] uppercase text-[#ffd173] font-semibold bg-[#C18057]/10 px-4 py-2 rounded-full inline-block mb-4 reveal delay-1">Agendamento
                         Online</span>
-                    <h2 class="font-cormorant text-4xl sm:text-5xl font-light text-gray-900 reveal delay-2">Reserve seu
+                    <h2 class="font-cormorant text-4xl sm:text-5xl font-light text-[#F0F8FF] reveal delay-2">Reserve seu
                         momento de
                         beleza</h2>
-                    <p class="text-gray-500 text-sm mt-3 max-w-md mx-auto reveal delay-1">Escolha o serviço ideal e
+                    <p class="text-[#bcaca4] text-sm mt-3 max-w-md mx-auto reveal delay-1">Escolha o serviço ideal e
                         agende no horário
                         que preferir</p>
                 </div>
 
                 <div
-                    class="bg-gradient-to-br from-[#faf5f0] via-[#fdf9f5] to-[#faf5f0] rounded-3xl shadow-xl p-6 sm:p-10 md:p-12">
+                    class="bg-gradient-to-br from-[#FAF7F4] via-[#F5EFEA] to-[#ECE3DB] rounded-3xl shadow-xl p-6 sm:p-10 md:p-12">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
 
                         <!-- Lado Esquerdo - Serviços -->
@@ -391,10 +397,10 @@
                                 <div
                                     class="service-card bg-white rounded-xl p-4 border border-gray-100 hover:shadow-md transition-all duration-300 cursor-none reveal delay-[200ms]">
                                     <div class="flex justify-between items-start">
-                                        <div>
+                                        <button>
                                             <p class="font-semibold text-gray-800">✂️ Corte Masculino</p>
                                             <p class="text-xs text-gray-400 mt-1">⏱️ 30min</p>
-                                        </div>
+                                        </button>
                                         <p class="font-bold text-[#C18057]">R$ 65,00</p>
                                     </div>
                                 </div>
@@ -794,9 +800,12 @@
         </section>
 
         <!-- DEPOIMENTOS -->
-        <section class="bg-white py-20 px-20">
-            <p class="text-center text-[10px] tracking-[3px] uppercase text-[#C18057] mb-3 reveal">Depoimentos</p>
-            <h2 class="font-['Cormorant_Garamond'] text-4xl font-light text-center text-gray-900 mb-4 reveal delay-1">
+        <section class="bg-[#1D1D1D] py-20 px-20">
+            <div class="text-center reveal delay-1">
+                    <span
+                        class="text-[11px] tracking-[4px] uppercase text-[#ffd173] font-semibold bg-[#C18057]/10 px-4 py-2 rounded-full inline-block mb-4 reveal delay-1">Depoimentos</span>
+                </div>
+            <h2 class="font-['Cormorant_Garamond'] text-4xl font-light text-center text-white mb-4 reveal delay-1">
                 O que nossos clientes dizem
             </h2>
 
@@ -813,7 +822,7 @@
                         parceiros!"
                     </p>
                     <div class="flex items-center gap-3">
-                        <img src="https://i.pravatar.cc/40?img=47"
+                        <img src="views/assets/_common/img/foto-icon-5.jpg"
                             class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
                         <div>
                             <p class="text-sm font-semibold text-gray-800">Juliana M.</p>
@@ -833,7 +842,7 @@
                         clientes!"
                     </p>
                     <div class="flex items-center gap-3">
-                        <img src="https://i.pravatar.cc/40?img=68"
+                        <img src="views/assets/_common/img/foto-icon-6.jpg"
                             class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
                         <div>
                             <p class="text-sm font-semibold text-gray-800">Marcos A.</p>
@@ -852,7 +861,7 @@
                         "Meus clientes adoram a experiência e nós ganhamos eficiência todos os dias."
                     </p>
                     <div class="flex items-center gap-3">
-                        <img src="https://i.pravatar.cc/40?img=32"
+                        <img src="views/assets/_common/img/foto-icon-7.jpg"
                             class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
                         <div>
                             <p class="text-sm font-semibold text-gray-800">Carla R.</p>
@@ -969,7 +978,7 @@
         </footer>
 
     </main>
-    <script type="module" src="views/assets/_common/script/cursor.js"></script>
+    <script type="module" src="views/assets/_common/script/mouse.js"></script>
     <script type="module" src="views/assets/public/script/entrada.js"></script>
     <script type="module" src="views/assets/_common/script/navigation.js"></script>
     <script>

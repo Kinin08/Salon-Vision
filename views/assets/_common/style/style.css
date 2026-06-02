@@ -6,7 +6,7 @@
 
 .reveal.visible {
   opacity: 1;
-  transform: none;
+  transform: translateX(0);
 }
 
 .reveal-left {
@@ -24,7 +24,7 @@
 .reveal-left.visible,
 .reveal-right.visible {
   opacity: 1;
-  transform: none;
+  transform: translateX(0);
 }
 
 .delay-1 {
@@ -97,7 +97,13 @@
     transform: translateX(0);
   }
 }
+.revela {
+    opacity: 0;
+}
 
+.revela.active {
+    animation: slideUp 0.8s ease forwards;
+}
 @keyframes slideUp {
   from {
     opacity: 0;
@@ -107,6 +113,18 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 .hero-row {
