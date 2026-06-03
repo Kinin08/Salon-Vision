@@ -108,7 +108,7 @@ body {
     gap: 10px;
     padding: 9px 12px;
     border-radius: 10px;
-    cursor: none;
+    cursor: pointer;
     color: var(--text-muted);
     font-size: 13px;
     font-weight: 400;
@@ -209,7 +209,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: none;
+    cursor: pointer;
     color: var(--text-muted);
     font-size: 16px;
     transition: all 0.15s;
@@ -250,7 +250,7 @@ body {
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 18px 20px;
-    cursor: none;
+    cursor: pointer;
     transition: all 0.2s;
 }
 
@@ -380,7 +380,7 @@ body {
 .panel-action {
     font-size: 11px;
     color: var(--gold-dim);
-    cursor: none;
+    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 4px;
@@ -526,7 +526,7 @@ body {
     border-radius: 12px;
     padding: 14px 10px;
     text-align: center;
-    cursor: none;
+    cursor: pointer;
     transition: all 0.18s;
 }
 
@@ -633,7 +633,7 @@ body {
     display: flex;
     align-items: center;
     gap: 9px;
-    cursor: none;
+    cursor: pointer;
     transition: all 0.18s;
     color: var(--text-muted);
     font-size: 12px;
@@ -698,7 +698,7 @@ body {
     color: var(--text-muted);
     padding: 5px 2px;
     border-radius: 6px;
-    cursor: none;
+    cursor: pointer;
     transition: background 0.15s;
 }
 

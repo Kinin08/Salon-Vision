@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
     <link rel="stylesheet" href="./styles/style.css">
-    <link rel="stylesheet" href="./../_common/style/mouse.css">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@400;600;700&display=swap"
@@ -24,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet">
 </head>
 
-<body class="cursor-none bg-black font-['Poppins']">
+<body class="bg-black font-['Poppins']">
 
     <div class="aurora-wrap">
         <div class="aurora-1"></div>
@@ -33,17 +32,13 @@
 
     <div class="layout">
 
-        <div id="cursor" class="opacity-0 fixed w-[14px] h-[14px] rounded-full pointer-events-none z-[9999]
-               -translate-x-1/2 -translate-y-1/2
-               bg-[#FFCC7F] shadow-[0_0_15px_rgba(232,178,95,0.6)]">
-        </div>
         <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="sidebar-logo flex items-center gap-3 px-5 py-4 border-b border-[#ffffff10]">
 
                 <div class="flex items-center justify-center w-10 h-10">
-                    <svg class="w-6 h-6 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="1.5">
+                    <svg class="w-6 h-6 text-[#FFCC7F] cursor-pointer" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5">
                         <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
                     </svg>
                 </div>
@@ -57,31 +52,31 @@
 
             <nav class="nav-section">
                 <h2 class="nav-label">Principal</h2>
-                <a id="dashboard" class="nav-item active" href="#">
+                <a id="dashboard" class="nav-item active cursor-pointer" href="#">
                     <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
                     <h1> Dashboard </h1>
                 </a>
-                <a id="agendamentos" class="nav-item" href="#">
+                <a id="agendamentos" class="nav-item cursor-pointer" href="#">
                     <i class="ti ti-calendar" aria-hidden="true"></i>
                     <h1> Agendamentos </h1>
                 </a>
-                <a id="servicos" class="nav-item" href="#">
+                <a id="servicos" class="nav-item cursor-pointer" href="#">
                     <i class="ti ti-cut" aria-hidden="true"></i>
                     <h1> Serviços </h1>
                 </a>
-                <a id="avaliacoes" class="nav-item" href="#">
+                <a id="avaliacoes" class="nav-item cursor-pointer" href="#">
                     <i class="ti ti-star" aria-hidden="true"></i>
                     <h1> Avaliações </h1>
                 </a>
                 <div class="nav-label" style="margin-top: 8px;">
                     <h1> Pessoas </h1>
                 </div>
-                <a id="professionais" class="nav-item" href="#">
+                <a id="professionais" class="nav-item cursor-pointer" href="#">
                     <i class="ti ti-user-check" aria-hidden="true"></i>
                     <h1> Profissionais </h1>
                 </a>
 
-                <a id="clientes" class="nav-item" href="#">
+                <a id="clientes" class="nav-item cursor-pointer" href="#">
                     <i class="ti ti-users" aria-hidden="true"></i>
                     <h1> Clientes </h1>
                 </a>
@@ -111,7 +106,7 @@
                 </div>
                 <div class="topbar-right">
                     <img src="https://i.pravatar.cc/80?img=47"
-                        style="width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid var(--border-strong);cursor:none;"
+                        style="width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid var(--border-strong);cursor:pointer;"
                         alt="Admin" />
                 </div>
             </header>
@@ -121,28 +116,28 @@
 
                 <!-- METRICS -->
                 <div class="metrics-grid">
-                    <div class="metric-card fade-in">
+                    <div class="metric-card fade-in cursor-pointer">
                         <div class="metric-top">
                             <div class="metric-icon gold"><i class="ti ti-calendar-check" aria-hidden="true"></i></div>
                         </div>
                         <h1 class="metric-value">47</h1>
                         <h2 class="metric-label">Agendamentos hoje</h2>
                     </div>
-                    <div class="metric-card fade-in delay-1">
+                    <div class="metric-card fade-in delay-1 cursor-pointer">
                         <div class="metric-top">
                             <div class="metric-icon rose"><i class="ti ti-currency-dollar" aria-hidden="true"></i></div>
                         </div>
                         <h1 class="metric-value">R$ 3.840</h1>
                         <h2 class="metric-label">Faturamento hoje</h2>
                     </div>
-                    <div class="metric-card fade-in delay-2">
+                    <div class="metric-card fade-in delay-2 cursor-pointer">
                         <div class="metric-top">
                             <div class="metric-icon green"><i class="ti ti-users" aria-hidden="true"></i></div>
                         </div>
                         <h1 class="metric-value">1.284</h1>
                         <h2 class="metric-label">Cadastro de clientes</h2>
                     </div>
-                    <div class="metric-card fade-in delay-3">
+                    <div class="metric-card fade-in delay-3 cursor-pointer">
                         <div class="metric-top">
                             <div class="metric-icon blue"><i class="ti ti-star" aria-hidden="true"></i></div>
                         </div>
@@ -199,7 +194,7 @@
                     <div class="panel">
                         <div class="panel-header">
                             <h1 class="panel-title">Agendamentos <em>de hoje</em></h1>
-                            <button class="panel-action">Ver todos <i class="ti ti-arrow-right"
+                            <button class="panel-action cursor-pointer">Ver todos <i class="ti ti-arrow-right"
                                     style="font-size:13px;"></i></button>
                         </div>
                         <table class="apt-table">
@@ -304,10 +299,17 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+
+                onHover: (event, activeElements) => {
+                    event.native.target.style.cursor =
+                        activeElements.length ? 'pointer' : 'default';
+                },
+
                 plugins: { legend: { display: false } },
+
                 scales: {
                     x: { grid: { color: 'rgba(255,204,127,0.05)' }, ticks: { color: 'rgba(245,239,230,0.45)' } },
-                    y: { grid: { color: 'rgba(255,204,127,0.05)' }, ticks: { color: 'rgba(245,239,230,0.45)', callback: v => 'R$' + (v / 1000).toFixed(0) + 'k' } }
+                    y: { grid: { color: 'rgba(255,204,127,0.05)' }, ticks: { color: 'rgba(245,239,230,0.45)' } }
                 }
             }
         });
@@ -343,7 +345,7 @@
         // CALENDÁRIO
         const calGrid = document.getElementById('cal-grid');
         ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].forEach(d => {
-            calGrid.innerHTML += `<div class="cal-day-label">${d}</div>`;
+            calGrid.innerHTML += `<div class="cal-day-label cursor-pointer">${d}</div>`;
         });
         const startDay = 0;
         const daysInMonth = 30;
@@ -655,8 +657,6 @@
             });
         });
     </script>
-
-    <script type="module" src="./../_common/script/mouse.js"></script>
 </body>
 
 </html>
