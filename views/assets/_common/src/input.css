@@ -142,7 +142,7 @@
   background: rgba(255, 255, 255, .05);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  cursor: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -210,7 +210,7 @@
 }
 
 .nav-item {
-  cursor: none;
+  cursor: pointer;
   position: fixed;
   bottom: 40px;
   left: 50%;

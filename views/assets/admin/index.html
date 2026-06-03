@@ -5,25 +5,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Salon Vision | Painel Admin</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@300;400;500;600;700&family=Yuji+Syuku&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-    <link rel="stylesheet" href="./styles/style.css">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@400;600;700&display=swap"
-        rel="stylesheet">
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles/styles.css" />
+    <link rel="stylesheet" href="./styles/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+
+    </style>
 </head>
 
-<body class="bg-black font-['Poppins']">
+<body>
 
     <div class="aurora-wrap">
         <div class="aurora-1"></div>
@@ -31,631 +26,1125 @@
     </div>
 
     <div class="layout">
-
         <!-- SIDEBAR -->
         <aside class="sidebar">
-            <div class="sidebar-logo flex items-center gap-3 px-5 py-4 border-b border-[#ffffff10]">
-
-                <div class="flex items-center justify-center w-10 h-10">
-                    <svg class="w-6 h-6 text-[#FFCC7F] cursor-pointer" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="1.5">
-                        <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
-                    </svg>
+            <div class="sidebar-logo">
+                <svg class="w-8 h-8 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5">
+                    <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
+                </svg>
+                <div>
+                    <div class="font-yuji text-xl text-white [text-shadow:0_0_10px_rgba(255,204,127,0.8)]">
+                        <span class="text-[#CA9440]">S</span><span>alon</span>
+                        <span class="text-[#CA9440]">V</span><span>ision</span>
+                    </div>
+                    <span class="logo-badge-admin">ADMIN</span>
                 </div>
-
-                <div class="font-yuji text-xl text-white [text-shadow:0_0_10px_rgba(255,204,127,0.8)]">
-                    <span class="text-[#CA9440]">S</span><span>alon</span>
-                    <span class="text-[#CA9440]">V</span><span>ision</span>
-                </div>
-
             </div>
 
-            <nav class="nav-section">
-                <h2 class="nav-label">Principal</h2>
-                <a id="dashboard" class="nav-item active cursor-pointer" href="#">
-                    <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
-                    <h1> Dashboard </h1>
+            <nav>
+                <div class="nav-section-label">Menu</div>
+                <a id="nav-dashboard" class="nav-item active">
+                    <i class="ti ti-home"></i> Inicio
                 </a>
-                <a id="agendamentos" class="nav-item cursor-pointer" href="#">
-                    <i class="ti ti-calendar" aria-hidden="true"></i>
-                    <h1> Agendamentos </h1>
+                <a id="nav-agendamentos" class="nav-item">
+                    <i class="ti ti-calendar"></i> Agendamentos
                 </a>
-                <a id="servicos" class="nav-item cursor-pointer" href="#">
-                    <i class="ti ti-cut" aria-hidden="true"></i>
-                    <h1> Serviços </h1>
-                </a>
-                <a id="avaliacoes" class="nav-item cursor-pointer" href="#">
-                    <i class="ti ti-star" aria-hidden="true"></i>
-                    <h1> Avaliações </h1>
-                </a>
-                <div class="nav-label" style="margin-top: 8px;">
-                    <h1> Pessoas </h1>
-                </div>
-                <a id="professionais" class="nav-item cursor-pointer" href="#">
-                    <i class="ti ti-user-check" aria-hidden="true"></i>
-                    <h1> Profissionais </h1>
+                <a id="nav-avaliacoes" class="nav-item">
+                    <i class="ti ti-star"></i> Avaliações
                 </a>
 
-                <a id="clientes" class="nav-item cursor-pointer" href="#">
-                    <i class="ti ti-users" aria-hidden="true"></i>
-                    <h1> Clientes </h1>
+                <div class="nav-section-label">Gestão</div>
+                <a id="nav-clientes" class="nav-item">
+                    <i class="ti ti-users"></i> Clientes
+                </a>
+                <a id="nav-profissionais" class="nav-item">
+                    <i class="ti ti-user-star"></i> Profissionais
+                </a>
+                <a id="nav-servicos" class="nav-item">
+                    <i class="ti ti-cut"></i> Serviços
+                </a>
+                <h2 class="nav-label" style="margin-top:10px;">Conta</h2>
+
+                <a id="nav-perfil" class="nav-item cursor-pointer" href="#">
+                    <i class="ti ti-user-circle"></i>
+                    <h1>Meu Perfil</h1>
                 </a>
             </nav>
 
             <div class="sidebar-bottom">
-                <div class="user-card">
-                    <img src="https://i.pravatar.cc/80?img=47" class="user-avatar" alt="Admin" />
-                    <div class="user-info">
-                        <p>Ana Costa</p>
-                        <span>Gerente geral</span>
+                <div class="admin-card">
+                    <img src="https://i.pravatar.cc/80?img=12" class="admin-avatar" />
+                    <div class="admin-info">
+                        <p>Marcos Silva</p>
+                        <span>Administrador</span>
                     </div>
-                    <i class="ti ti-dots-vertical"
-                        style="margin-left: auto; color: var(--text-dim); font-size: 14px;"></i>
+                    <i class="ti ti-dots-vertical" style="margin-left:auto;color:var(--text-dim);font-size:13px;"></i>
                 </div>
             </div>
         </aside>
 
         <!-- MAIN -->
         <div class="main">
-
-            <!-- TOPBAR -->
             <header class="topbar">
                 <div>
-                    <h1 class="topbar-title">Visão <em>geral</em></h1>
-                    <h2 class="tb-date" id="topbar-date"></h2>
+                    <h1 class="topbar-title" id="topbar-title">Dashboard <em>Geral</em></h1>
+                    <p class="topbar-date" id="topbar-date"></p>
                 </div>
                 <div class="topbar-right">
-                    <img src="https://i.pravatar.cc/80?img=47"
-                        style="width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid var(--border-strong);cursor:pointer;"
-                        alt="Admin" />
+                    <div class="topbar-icon-btn" onclick="toast('Sem novas notificações.')">
+                        <i class="ti ti-bell"></i>
+                        <span class="notif-dot"></span>
+                    </div>
+                    <div class="topbar-icon-btn" onclick="toast('Busca global em breve!')">
+                        <i class="ti ti-search"></i>
+                    </div>
+                    <img src="https://i.pravatar.cc/80?img=12"
+                        style="width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid var(--border-strong);" />
                 </div>
             </header>
 
-            <!-- CONTENT -->
-            <main class="content">
+            <main class="content" id="page-content"></main>
+        </div>
+    </div>
 
-                <!-- METRICS -->
-                <div class="metrics-grid">
-                    <div class="metric-card fade-in cursor-pointer">
-                        <div class="metric-top">
-                            <div class="metric-icon gold"><i class="ti ti-calendar-check" aria-hidden="true"></i></div>
-                        </div>
-                        <h1 class="metric-value">47</h1>
-                        <h2 class="metric-label">Agendamentos hoje</h2>
-                    </div>
-                    <div class="metric-card fade-in delay-1 cursor-pointer">
-                        <div class="metric-top">
-                            <div class="metric-icon rose"><i class="ti ti-currency-dollar" aria-hidden="true"></i></div>
-                        </div>
-                        <h1 class="metric-value">R$ 3.840</h1>
-                        <h2 class="metric-label">Faturamento hoje</h2>
-                    </div>
-                    <div class="metric-card fade-in delay-2 cursor-pointer">
-                        <div class="metric-top">
-                            <div class="metric-icon green"><i class="ti ti-users" aria-hidden="true"></i></div>
-                        </div>
-                        <h1 class="metric-value">1.284</h1>
-                        <h2 class="metric-label">Cadastro de clientes</h2>
-                    </div>
-                    <div class="metric-card fade-in delay-3 cursor-pointer">
-                        <div class="metric-top">
-                            <div class="metric-icon blue"><i class="ti ti-star" aria-hidden="true"></i></div>
-                        </div>
-                        <h1 class="metric-value">4.87</h1>
-                        <h2 class="metric-label">Avaliação média</h2>
+    <!-- MODAL: NOVO AGENDAMENTO -->
+    <div class="modal-overlay" id="modalAgendar">
+        <div class="modal-box">
+            <h2 class="modal-title">Novo <em>Agendamento</em></h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Cliente</label>
+                    <input type="text" class="form-input" id="m-cliente" placeholder="Nome do cliente" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Serviço</label>
+                    <select class="form-input" id="m-servico">
+                        <option>Coloração</option>
+                        <option>Corte Feminino</option>
+                        <option>Escova & Tratamento</option>
+                        <option>Manicure</option>
+                        <option>Hidratação Profunda</option>
+                        <option>Sobrancelha</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Profissional</label>
+                <select class="form-input" id="m-prof">
+                    <option>Camila R.</option>
+                    <option>Priya A.</option>
+                    <option>Lucas T.</option>
+                    <option>Aline F.</option>
+                    <option>Renata M.</option>
+                </select>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Data</label>
+                    <input type="date" class="form-input" id="m-data" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Horário</label>
+                    <select class="form-input" id="m-hora">
+                        <option>09:00</option>
+                        <option>09:30</option>
+                        <option>10:00</option>
+                        <option>10:30</option>
+                        <option>11:00</option>
+                        <option>14:00</option>
+                        <option>14:30</option>
+                        <option>15:00</option>
+                        <option>15:30</option>
+                        <option>16:00</option>
+                    </select>
+                </div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:4px;">
+                <button class="btn btn-gold" style="flex:1" id="m-confirmar"><i class="ti ti-check"></i>
+                    Confirmar</button>
+                <button class="btn btn-ghost" id="m-cancelar"><i class="ti ti-x"></i> Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVO SERVIÇO -->
+    <div class="modal-overlay" id="modalServico">
+        <div class="modal-box">
+            <h2 class="modal-title">Novo <em>Serviço</em></h2>
+            <div class="form-group">
+                <label class="form-label">Nome do serviço</label>
+                <input type="text" class="form-input" id="ms-nome" placeholder="Ex: Progressiva" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Descrição</label>
+                <textarea class="form-input" id="ms-desc" rows="3" placeholder="Descreva o serviço..."></textarea>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Duração</label>
+                    <input type="text" class="form-input" id="ms-dur" placeholder="Ex: 1h30" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Valor</label>
+                    <input type="text" class="form-input" id="ms-valor" placeholder="Ex: R$ 150" />
+                </div>
+            </div>
+            <div style="display:flex;gap:10px;">
+                <button class="btn btn-gold" style="flex:1" id="ms-confirmar"><i class="ti ti-check"></i>
+                    Salvar</button>
+                <button class="btn btn-ghost" id="ms-cancelar"><i class="ti ti-x"></i> Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVO PROFISSIONAL -->
+    <div class="modal-overlay" id="modalProf">
+        <div class="modal-box">
+            <h2 class="modal-title">Novo <em>Profissional</em></h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Nome</label>
+                    <input type="text" class="form-input" id="mp-nome" placeholder="Nome completo" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Especialidade</label>
+                    <input type="text" class="form-input" id="mp-role" placeholder="Ex: Colorista" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Telefone</label>
+                <input type="text" class="form-input" id="mp-tel" placeholder="(51) 99000-0000" />
+            </div>
+            <div style="display:flex;gap:10px;">
+                <button class="btn btn-gold" style="flex:1" id="mp-confirmar"><i class="ti ti-check"></i>
+                    Cadastrar</button>
+                <button class="btn btn-ghost" id="mp-cancelar"><i class="ti ti-x"></i> Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast"><i class="ti ti-check"></i> <span id="toast-msg">Ação realizada!</span></div>
+
+    <script>
+        /* ============================================================
+           SALON VISION — PAINEL ADMIN
+        ============================================================ */
+        const CLIENTE = {
+            nome: "Marcos Silva",
+            email: "marcos@email.com",
+            telefone: "(51) 99999-9999",
+            foto: "https://i.pravatar.cc/150?img=12",
+            totalAgendamentos: 34,
+            avaliacoesFeitas: 12,
+            favoritos: [
+                "Coloração",
+                "Hidratação",
+                "Escova"
+            ]
+        };
+
+        const meusAgendamentos = [
+            {
+                id: 1,
+                status: "confirmed"
+            },
+            {
+                id: 2,
+                status: "pending"
+            }
+        ];
+        /* ---- DATA ---- */
+        let agendamentos = [
+            { id: 1, cliente: 'Ana Costa', servico: 'Coloração', prof: 'Camila R.', data: '20/06/2025', hora: '10:00', status: 'confirmed' },
+            { id: 2, cliente: 'Julia Moraes', servico: 'Sobrancelha', prof: 'Renata M.', data: '22/06/2025', hora: '14:30', status: 'pending' },
+            { id: 3, cliente: 'Fernanda Lima', servico: 'Escova', prof: 'Priya A.', data: '25/06/2025', hora: '09:30', status: 'confirmed' },
+            { id: 4, cliente: 'Clara Vieira', servico: 'Manicure', prof: 'Aline F.', data: '28/06/2025', hora: '16:00', status: 'pending' },
+            { id: 5, cliente: 'Beatriz Nunes', servico: 'Hidratação', prof: 'Priya A.', data: '30/06/2025', hora: '11:00', status: 'confirmed' },
+            { id: 6, cliente: 'Sofia Andrade', servico: 'Corte Feminino', prof: 'Camila R.', data: '01/07/2025', hora: '14:00', status: 'done' },
+            { id: 7, cliente: 'Paula Ribeiro', servico: 'Coloração', prof: 'Camila R.', data: '02/07/2025', hora: '10:30', status: 'cancelled' },
+        ];
+
+        let clientes = [
+            { id: 1, nome: 'Ana Costa', email: 'ana@email.com', tel: '(51) 99234-5678', agendamentos: 34, foto: 'https://i.pravatar.cc/80?img=47' },
+            { id: 2, nome: 'Julia Moraes', email: 'julia@email.com', tel: '(51) 98765-4321', agendamentos: 12, foto: 'https://i.pravatar.cc/80?img=44' },
+            { id: 3, nome: 'Fernanda Lima', email: 'fernanda@email.com', tel: '(51) 91234-5678', agendamentos: 8, foto: 'https://i.pravatar.cc/80?img=39' },
+            { id: 4, nome: 'Clara Vieira', email: 'clara@email.com', tel: '(51) 92345-6789', agendamentos: 21, foto: 'https://i.pravatar.cc/80?img=31' },
+            { id: 5, nome: 'Beatriz Nunes', email: 'bea@email.com', tel: '(51) 94567-8901', agendamentos: 5, foto: 'https://i.pravatar.cc/80?img=26' },
+            { id: 6, nome: 'Sofia Andrade', email: 'sofia@email.com', tel: '(51) 93456-7890', agendamentos: 17, foto: 'https://i.pravatar.cc/80?img=22' },
+        ];
+
+        let profissionais = [
+            { id: 1, nome: 'Camila R.', role: 'Colorista & Cabeleireira', foto: 'https://randomuser.me/api/portraits/women/21.jpg', nota: 4.9, ativo: true },
+            { id: 2, nome: 'Priya A.', role: 'Cabeleireira', foto: 'https://randomuser.me/api/portraits/women/33.jpg', nota: 4.8, ativo: true },
+            { id: 3, nome: 'Lucas T.', role: 'Barbeiro', foto: 'https://randomuser.me/api/portraits/men/45.jpg', nota: 4.7, ativo: true },
+            { id: 4, nome: 'Aline F.', role: 'Manicure & Pedicure', foto: 'https://randomuser.me/api/portraits/women/57.jpg', nota: 4.9, ativo: true },
+            { id: 5, nome: 'Renata M.', role: 'Design & Estética', foto: 'https://randomuser.me/api/portraits/women/10.jpg', nota: 4.8, ativo: false },
+            { id: 6, nome: 'Diego P.', role: 'Cabeleireiro', foto: 'https://randomuser.me/api/portraits/men/22.jpg', nota: 4.6, ativo: true },
+        ];
+
+        let catalogo = [
+            { id: 1, icon: 'ti-palette', nome: 'Coloração', desc: 'Coloração completa com produtos profissionais.', duracao: '2h30', valor: 'R$ 280' },
+            { id: 2, icon: 'ti-cut', nome: 'Corte Feminino', desc: 'Corte personalizado para valorizar seu estilo.', duracao: '1h', valor: 'R$ 90' },
+            { id: 3, icon: 'ti-wind', nome: 'Escova & Tratamento', desc: 'Escova modeladora com tratamento hidratante.', duracao: '1h30', valor: 'R$ 120' },
+            { id: 4, icon: 'ti-sparkles', nome: 'Manicure', desc: 'Cuidado completo para unhas das mãos.', duracao: '50min', valor: 'R$ 60' },
+            { id: 5, icon: 'ti-droplet', nome: 'Hidratação Profunda', desc: 'Máscara nutritiva para recuperar o brilho dos cabelos.', duracao: '1h', valor: 'R$ 95' },
+            { id: 6, icon: 'ti-eye', nome: 'Sobrancelha', desc: 'Design de sobrancelha com henna e brow lamination.', duracao: '45min', valor: 'R$ 45' },
+        ];
+
+        const avaliacoesPendentes = [
+            { cliente: 'Ana Costa', servico: 'Coloração', prof: 'Camila R.', nota: 5, comentario: 'Adorei o resultado! Ficou perfeito.', data: '05/06/2025' },
+            { cliente: 'Julia Moraes', servico: 'Sobrancelha', prof: 'Renata M.', nota: 4, comentario: 'Muito bom, mas demorou um pouco.', data: '04/06/2025' },
+            { cliente: 'Clara Vieira', servico: 'Manicure', prof: 'Aline F.', nota: 5, comentario: 'Excelente profissional!', data: '03/06/2025' },
+        ];
+
+        const LABEL = { confirmed: 'Confirmado', pending: 'Pendente', done: 'Concluído', cancelled: 'Cancelado' };
+
+        /* ---- HELPERS ---- */
+        function setActive(id) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(id)?.classList.add('active');
+        }
+        function nav(renderFn, title) {
+            const c = document.getElementById('page-content');
+            c.style.transition = 'opacity .22s';
+            c.style.opacity = '0';
+            setTimeout(() => {
+                c.innerHTML = '';
+                renderFn(c);
+                c.style.opacity = '1';
+                document.getElementById('topbar-title').innerHTML = title;
+            }, 220);
+        }
+        function toast(msg, icon = 'ti-check') {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            t.querySelector('i').className = `ti ${icon}`;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+        function stars(n) {
+            let s = '';
+            for (let i = 1; i <= 5; i++) s += `<i class="ti ti-star${i <= n ? '-filled star-filled' : ''}"></i>`;
+            return s;
+        }
+        function openModal(id) { document.getElementById(id).classList.add('open'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+        /* ---- DASHBOARD ---- */
+        function renderDashboard(c) {
+
+            const total = agendamentos.length;
+            const pendentes = agendamentos.filter(a => a.status === 'pending').length;
+            const confirmados = agendamentos.filter(a => a.status === 'confirmed').length;
+
+            c.innerHTML = `
+    <!-- Stats -->
+    <div class="stats-grid fade-in">
+        <div class="stat-card gold">
+            <div class="stat-icon gold"><i class="ti ti-calendar-check"></i></div>
+            <div class="stat-value">${total}</div>
+            <div class="stat-label">Agendamentos totais</div>
+            <div class="stat-delta up"><i class="ti ti-trending-up"></i> +12% este mês</div>
+        </div>
+        <div class="stat-card rose">
+            <div class="stat-icon rose"><i class="ti ti-users"></i></div>
+            <div class="stat-value">${clientes.length}</div>
+            <div class="stat-label">Clientes ativos</div>
+            <div class="stat-delta up"><i class="ti ti-trending-up"></i> +3 novos esta semana</div>
+        </div>
+        <div class="stat-card green">
+            <div class="stat-icon green"><i class="ti ti-currency-dollar"></i></div>
+            <div class="stat-value">R$ 4.280</div>
+            <div class="stat-label">Receita do mês</div>
+            <div class="stat-delta up"><i class="ti ti-trending-up"></i> +8% vs mês anterior</div>
+        </div>
+        <div class="stat-card blue">
+            <div class="stat-icon blue"><i class="ti ti-clock"></i></div>
+            <div class="stat-value">${pendentes}</div>
+            <div class="stat-label">Pendentes hoje</div>
+            <div class="stat-delta down"><i class="ti ti-alert-circle"></i> Requer atenção</div>
+        </div>
+    </div>
+
+    <div class="two-col fade-in">
+        <!-- Agendamentos recentes -->
+        <div class="panel">
+            <div class="panel-header">
+                <h1 class="panel-title">Próximos <em>Agendamentos</em></h1>
+                <button class="btn btn-ghost btn-sm" id="btn-ver-todos">Ver todos</button>
+            </div>
+            <table>
+                <thead><tr>
+                    <th>Cliente</th><th>Serviço</th><th>Data</th><th>Status</th>
+                </tr></thead>
+                <tbody>
+                    ${agendamentos.slice(0, 5).map(a => `
+                    <tr>
+                        <td style="font-size:12px;font-weight:500;">${a.cliente}</td>
+                        <td style="font-size:11px;color:var(--text-muted);">${a.servico}</td>
+                        <td style="font-size:11px;color:var(--text-dim);">${a.data} · ${a.hora}</td>
+                        <td><span class="pill ${a.status}"><span class="pill-dot"></span>${LABEL[a.status]}</span></td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Atividade recente -->
+        <div class="panel">
+            <div class="panel-header">
+                <h1 class="panel-title">Atividade <em>Recente</em></h1>
+            </div>
+            <div>
+                <div class="activity-item">
+                    <div class="activity-dot" style="background:var(--green)"></div>
+                    <div>
+                        <p class="activity-text"><strong>Ana Costa</strong> confirmou agendamento de Coloração</p>
+                        <p class="activity-time">Há 12 minutos</p>
                     </div>
                 </div>
+                <div class="activity-item">
+                    <div class="activity-dot" style="background:var(--gold)"></div>
+                    <div>
+                        <p class="activity-text"><strong>Julia Moraes</strong> solicitou agendamento de Sobrancelha</p>
+                        <p class="activity-time">Há 45 minutos</p>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-dot" style="background:var(--blue)"></div>
+                    <div>
+                        <p class="activity-text"><strong>Camila R.</strong> concluiu atendimento de Escova</p>
+                        <p class="activity-time">Há 1h 20min</p>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-dot" style="background:var(--rose)"></div>
+                    <div>
+                        <p class="activity-text"><strong>Sofia Andrade</strong> deixou uma avaliação 5 estrelas</p>
+                        <p class="activity-time">Há 2 horas</p>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-dot" style="background:var(--red)"></div>
+                    <div>
+                        <p class="activity-text"><strong>Paula Ribeiro</strong> cancelou agendamento de Coloração</p>
+                        <p class="activity-time">Há 3 horas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <!-- ROW: CHART + SERVICES -->
-                <div class="grid-3-1 fade-in delay-2">
-
-                    <!-- REVENUE CHART -->
-                    <div class="panel">
-                        <div class="panel-header">
-                            <h1 class="panel-title">Faturamento <em>mensal</em></h1>
-                            <span class="panel-action"><i class="ti ti-dots-horizontal"></i></span>
-                        </div>
-                        <div style="display: flex; gap: 16px; margin-bottom: 14px;">
-                            <div>
-                                <h3 style="font-size: 11px; color: var(--text-dim); margin-bottom: 2px;">Este mês</h3>
-                                <h2 style="font-size: 20px; font-weight: 600; color: var(--text);">R$ 48.620</h2>
-                            </div>
-                            <div style="width: 1px; background: var(--border);"></div>
-                            <div>
-                                <h3 style="font-size: 11px; color: var(--text-dim); margin-bottom: 2px;">Mês anterior
-                                </h3>
-                                <h2 style="font-size: 20px; font-weight: 600; color: var(--text-muted);">R$ 42.300
-                                </h2>
-                            </div>
-                            <div style="margin-left: auto; display: flex; align-items: center;">
-                                <h2 class="metric-badge up">+14.9%</h2>
-                            </div>
-                        </div>
-                        <div class="chart-wrap">
+    <!-- Mini receita + profissionais top -->
+    <div class="two-col fade-in">
+        <div class="panel">
+            <div class="panel-header">
+                <h1 class="panel-title">Receita <em>Semanal</em></h1>
+                <span class="panel-action">R$ 1.240 esta semana</span>
+            </div>
+            <div class="chart-wrap">
                             <canvas id="revenueChart" role="img"
                                 aria-label="Gráfico de barras de faturamento mensal de janeiro a junho"></canvas>
                         </div>
-                    </div>
+        </div>
 
-                    <!-- TOP SERVICES -->
-                    <div class="panel">
-                        <div class="panel-header">
-                            <h1 class="panel-title">Serviços <em>top</em></h1>
-                        </div>
-                        <div id="services-bars"></div>
-                    </div>
-
+        <div class="panel">
+            <div class="panel-header">
+                <h1 class="panel-title">Top <em>Profissionais</em></h1>
+            </div>
+            ${profissionais.filter(p => p.ativo).slice(0, 4).map((p, i) => `
+            <div class="client-row">
+                <span style="font-size:11px;color:var(--text-dim);width:14px;">${i + 1}</span>
+                <img src="${p.foto}" class="avatar-sm" />
+                <div style="flex:1">
+                    <p class="client-name">${p.nome}</p>
+                    <p class="client-meta">${p.role}</p>
                 </div>
+                <div style="display:flex;gap:2px;font-size:11px;color:var(--gold);">${stars(5)}</div>
+                <span style="font-size:11px;color:var(--gold-dark);margin-left:4px;">${p.nota}</span>
+            </div>`).join('')}
+        </div>
+    </div>
+    `;
+            const canvas = document.getElementById('revenueChart');
+            const meses = [];
+            const hoje = new Date();
 
-                <!-- ROW: APPOINTMENTS + CALENDAR + ACTIONS -->
-                <div class="grid-2 fade-in delay-3">
+            for (let i = 4; i >= 0; i--) {
+                const data = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
 
-                    <!-- APPOINTMENTS TABLE -->
-                    <div class="panel">
-                        <div class="panel-header">
-                            <h1 class="panel-title">Agendamentos <em>de hoje</em></h1>
-                            <button class="panel-action cursor-pointer">Ver todos <i class="ti ti-arrow-right"
-                                    style="font-size:13px;"></i></button>
-                        </div>
-                        <table class="apt-table">
-                            <thead>
-                                <tr>
-                                    <th>Cliente</th>
-                                    <th>Serviço</th>
-                                    <th>Hora</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="apt-tbody"></tbody>
-                        </table>
-                    </div>
-
-                    <!-- RIGHT: CALENDAR + QUICK ACTIONS -->
-                    <div style="display: flex; flex-direction: column; gap: 16px;">
-
-                        <!-- CALENDAR -->
-                        <div class="panel">
-                            <div class="panel-header">
-                                <h1 class="panel-title">Junho <em>2025</em></h1>
-                                <div style="display: flex; gap: 6px;">
-                                    <span class="panel-action"><i class="ti ti-chevron-left"
-                                            style="font-size:14px;"></i></span>
-                                    <span class="panel-action"><i class="ti ti-chevron-right"
-                                            style="font-size:14px;"></i></span>
-                                </div>
-                            </div>
-                            <div id="cal-grid" class="cal-grid"></div>
-                        </div>
-
-                        <!-- QUICK ACTIONS -->
-                        <div class="panel">
-                            <div class="panel-header" style="margin-bottom: 12px;">
-                                <h1 class="panel-title">Ações <em>rápidas</em></h1>
-                            </div>
-                            <div class="quick-grid">
-                                <button class="quick-btn"><i class="ti ti-calendar-plus" aria-hidden="true"></i>Novo
-                                    agendamento</button>
-                                <button class="quick-btn"><i class="ti ti-user-plus" aria-hidden="true"></i>Novo
-                                    cliente</button>
-                                <button class="quick-btn"><i class="ti ti-receipt" aria-hidden="true"></i>Gerar
-                                    relatório</button>
-                                <button class="quick-btn"><i class="ti ti-send" aria-hidden="true"></i>Enviar
-                                    lembrete</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- ROW: STAFF + UPCOMING -->
-                <div class="grid-2 fade-in delay-4">
-
-                    <!-- STAFF -->
-                    <div class="panel">
-                        <div class="panel-header">
-                            <h1 class="panel-title">Profissionais <em>em serviço</em></h1>
-                            <span class="panel-action">Gerenciar <i class="ti ti-arrow-right"
-                                    style="font-size:13px;"></i></span>
-                        </div>
-                        <div class="staff-grid" id="staff-grid"></div>
-                    </div>
-
-                    <!-- UPCOMING -->
-                    <div class="panel">
-                        <div class="panel-header">
-                            <h2 class="panel-title">Próximos <em>horários</em></h2>
-                        </div>
-                        <div id="upcoming-list"></div>
-                    </div>
-
-                </div>
-
-            </main>
-        </div><!-- end .main -->
-    </div><!-- end .layout -->
-
-    <script>
-        /* ==================== DADOS E FUNÇÕES GLOBAIS ==================== */
-
-        // DATA
-        const d = new Date();
-        document.getElementById('topbar-date').textContent = d.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-
-        // GRÁFICO
-        const ctx = document.getElementById('revenueChart').getContext('2d');
-        let revenueChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-                datasets: [{
-                    label: 'Faturamento (R$)',
-                    data: [28400, 31200, 35800, 33600, 42300, 48620],
-                    backgroundColor: (c) => c.dataIndex === 5 ? 'rgba(255,204,127,0.85)' : 'rgba(255,204,127,0.18)',
-                    borderColor: 'rgba(255,204,127,0.5)',
-                    borderWidth: 1,
-                    borderRadius: 6,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-
-                onHover: (event, activeElements) => {
-                    event.native.target.style.cursor =
-                        activeElements.length ? 'pointer' : 'default';
-                },
-
-                plugins: { legend: { display: false } },
-
-                scales: {
-                    x: { grid: { color: 'rgba(255,204,127,0.05)' }, ticks: { color: 'rgba(245,239,230,0.45)' } },
-                    y: { grid: { color: 'rgba(255,204,127,0.05)' }, ticks: { color: 'rgba(245,239,230,0.45)' } }
-                }
-            }
-        });
-
-        // SERVIÇOS TOP
-        const services = [
-            { name: 'Coloração', pct: 82, color: '#FFCC7F' },
-            { name: 'Corte feminino', pct: 74, color: '#F4C0AD' },
-            { name: 'Escova & Tratamento', pct: 61, color: '#CA9440' },
-            { name: 'Manicure', pct: 48, color: '#e8ae92' },
-            { name: 'Sobrancelha', pct: 35, color: '#FFCC7F' },
-        ];
-        const sb = document.getElementById('services-bars');
-        services.forEach(s => {
-            sb.innerHTML += `<div class="service-item"><div class="service-header"><span class="service-name">${s.name}</span><span class="service-pct">${s.pct}%</span></div><div class="bar-track"><div class="bar-fill" style="width:${s.pct}%;background:${s.color};"></div></div></div>`;
-        });
-
-        // AGENDAMENTOS DO DASHBOARD
-        const apts = [
-            { name: 'Mariana S.', img: 'https://randomuser.me/api/portraits/women/68.jpg', service: 'Coloração', hora: '09:00', status: 'confirmed' },
-            { name: 'Bruna L.', img: 'https://randomuser.me/api/portraits/women/44.jpg', service: 'Corte + Escova', hora: '10:30', status: 'confirmed' },
-            { name: 'Carlos M.', img: 'https://randomuser.me/api/portraits/men/32.jpg', service: 'Barba', hora: '11:00', status: 'pending' },
-            { name: 'Jéssica O.', img: 'https://randomuser.me/api/portraits/women/12.jpg', service: 'Manicure', hora: '13:00', status: 'done' },
-            { name: 'Fernanda R.', img: 'https://randomuser.me/api/portraits/women/65.jpg', service: 'Hidratação', hora: '14:30', status: 'cancelled' },
-            { name: 'Tatiane V.', img: 'https://randomuser.me/api/portraits/women/30.jpg', service: 'Sobrancelha', hora: '15:00', status: 'confirmed' },
-        ];
-        const statusLabel = { confirmed: 'Confirmado', pending: 'Pendente', cancelled: 'Cancelado', done: 'Concluído' };
-        const tbody = document.getElementById('apt-tbody');
-        apts.forEach(a => {
-            tbody.innerHTML += `<tr><td><div class="client-cell"><img src="${a.img}" class="client-avatar" alt="${a.name}"/><span class="client-name">${a.name}</span></div></td><td style="font-size:12px;color:var(--text-muted);">${a.service}</td><td style="font-size:12px;color:var(--gold);font-weight:500;">${a.hora}</td><td><span class="status-pill ${a.status}"><span class="status-dot"></span>${statusLabel[a.status]}</span></td></tr>`;
-        });
-
-        // CALENDÁRIO
-        const calGrid = document.getElementById('cal-grid');
-        ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].forEach(d => {
-            calGrid.innerHTML += `<div class="cal-day-label cursor-pointer">${d}</div>`;
-        });
-        const startDay = 0;
-        const daysInMonth = 30;
-        const today = 31;
-        const withApt = [2, 5, 8, 10, 13, 15, 18, 20, 22, 25, 27, 28];
-        for (let i = 0; i < startDay; i++) {
-            calGrid.innerHTML += `<div class="cal-day other">—</div>`;
-        }
-        for (let d = 1; d <= daysInMonth; d++) {
-            const isToday = d === today;
-            const hasApt = withApt.includes(d);
-            calGrid.innerHTML += `<div class="cal-day${isToday ? ' today' : hasApt ? ' has-apt' : ''}">${d}</div>`;
-        }
-
-        // STAFF
-        const staff = [
-            { name: 'Camila R.', role: 'Colorista', img: 'https://randomuser.me/api/portraits/women/21.jpg', count: 8 },
-            { name: 'Priya A.', role: 'Cabeleireira', img: 'https://randomuser.me/api/portraits/women/33.jpg', count: 6 },
-            { name: 'Lucas T.', role: 'Barbeiro', img: 'https://randomuser.me/api/portraits/men/45.jpg', count: 5 },
-            { name: 'Aline F.', role: 'Manicure', img: 'https://randomuser.me/api/portraits/women/57.jpg', count: 7 },
-            { name: 'Renata M.', role: 'Estética', img: 'https://randomuser.me/api/portraits/women/10.jpg', count: 4 },
-            { name: 'Diego P.', role: 'Cabeleireiro', img: 'https://randomuser.me/api/portraits/men/22.jpg', count: 6 },
-        ];
-        const sg = document.getElementById('staff-grid');
-        staff.forEach(s => {
-            sg.innerHTML += `<div class="staff-card"><img src="${s.img}" class="staff-avatar" alt="${s.name}"/><h1 class="staff-name">${s.name}</h1><h1 class="staff-role">${s.role}</h1><h1 class="staff-count">${s.count}</h1><h1 class="staff-lbl">hoje</h1></div>`;
-        });
-
-        // PRÓXIMOS HORÁRIOS
-        const upcoming = [
-            { hour: '15', min: '00', period: 'PM', service: 'Coloração — Tatiane V.', prof: 'Camila R.' },
-            { hour: '15', min: '30', period: 'PM', service: 'Corte masculino — Paulo M.', prof: 'Lucas T.' },
-            { hour: '16', min: '00', period: 'PM', service: 'Hidratação profunda', prof: 'Priya A.' },
-            { hour: '16', min: '30', period: 'PM', service: 'Manicure & Pedicure', prof: 'Aline F.' },
-            { hour: '17', min: '00', period: 'PM', service: 'Escova modeladora', prof: 'Camila R.' },
-        ];
-        const ul = document.getElementById('upcoming-list');
-        upcoming.forEach(u => {
-            ul.innerHTML += `<div class="upcoming-item"><h1 class="upcoming-time"><div class="hour">${u.hour}:${u.min}</div><div class="period">${u.period}</div></h1><div class="upcoming-dot"></div><div class="upcoming-info"><p>${u.service}</p><span>com ${u.prof}</span></div></div>`;
-        });
-
-        /* ==================== ALTERNÂNCIA ENTRE TELAS ==================== */
-
-        document.addEventListener('DOMContentLoaded', function () {
-
-            // Salva o HTML original do dashboard
-            const containerPrincipal = document.querySelector('.content');
-            const htmlDashboard = containerPrincipal.innerHTML;
-            let telaAtual = 'dashboard';
-
-            // Seleciona os itens do menu
-            const menuDashboard = document.querySelector('.nav-item.active');
-            const menuAgendamentos = document.querySelector('#agendamentos');
-            const menuClientes = document.querySelector('#clientes');
-            const menuServicos = document.querySelector('#servicos');
-            const menuProfissionais = document.querySelector('#professionais');
-
-            // Função para mostrar o Dashboard
-            function mostrarDashboard() {
-                if (telaAtual === 'dashboard') return;
-
-                containerPrincipal.style.transition = 'opacity 0.3s ease';
-                containerPrincipal.style.opacity = '0';
-
-                setTimeout(() => {
-                    containerPrincipal.innerHTML = htmlDashboard;
-                    telaAtual = 'dashboard';
-
-                    // Recria os componentes do dashboard
-                    recriarDashboard();
-
-                    containerPrincipal.style.opacity = '1';
-
-                    // Atualiza classe active no menu
-                    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-                    menuDashboard.classList.add('active');
-                }, 300);
+                meses.push(
+                    data.toLocaleDateString('pt-BR', {
+                        month: 'short'
+                    })
+                );
             }
 
-            // Função para mostrar a tela de Agendamentos
-            function mostrarAgendamentos() {
-                if (telaAtual === 'agendamentos') return;
-
-                containerPrincipal.style.transition = 'opacity 0.3s ease';
-                containerPrincipal.style.opacity = '0';
-
-                setTimeout(() => {
-                    containerPrincipal.innerHTML = `
-                    <div class="panel" style="animation: fadeIn 0.4s ease;">
-                        <div class="panel-header">
-                            <h1 class="panel-title">Gestão de <em>Agendamentos</em></h1>
-                            <button class="panel-action" id="btnVoltarDashboard">
-                                <i class="ti ti-arrow-left"></i> Voltar ao Dashboard
-                            </button>
-                        </div>
-                        <div style="padding: 20px;">
-                            <!-- Filtros -->
-                            <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-                                <select class="quick-btn" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,204,127,0.2);">
-                                    <option>Todos os status</option>
-                                    <option>Confirmados</option>
-                                    <option>Pendentes</option>
-                                    <option>Concluídos</option>
-                                    <option>Cancelados</option>
-                                </select>
-                                <select class="quick-btn" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,204,127,0.2);">
-                                    <option>Esta semana</option>
-                                    <option>Próxima semana</option>
-                                    <option>Este mês</option>
-                                </select>
-                                <input type="text" placeholder="Buscar cliente..." class="quick-btn" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,204,127,0.2);">
-                            </div>
-                            
-                            <!-- Tabela de agendamentos -->
-                            <div style="overflow-x: auto;">
-                                <table class="apt-table" style="width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Cliente</th>
-                                            <th>Serviço</th>
-                                            <th>Profissional</th>
-                                            <th>Data</th>
-                                            <th>Hora</th>
-                                            <th>Status</th>
-                                            <th>Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tabelaAgendamentos"></tbody>
-                                </table>
-                            </div>
-                            
-                            <button class="quick-btn" style="margin-top: 20px;" id="novoAgendamentoBtn">
-                                <i class="ti ti-calendar-plus"></i> Novo Agendamento
-                            </button>
-                        </div>
-                    </div>
-                `;
-
-                    telaAtual = 'agendamentos';
-
-                    // Preenche a tabela
-                    const agendamentos = [
-                        { cliente: 'Mariana Silva', servico: 'Coloração', profissional: 'Camila R.', data: '15/06/2025', hora: '09:00', status: 'confirmed' },
-                        { cliente: 'João Santos', servico: 'Corte Masculino', profissional: 'Lucas T.', data: '15/06/2025', hora: '10:30', status: 'pending' },
-                        { cliente: 'Ana Paula', servico: 'Manicure', profissional: 'Aline F.', data: '15/06/2025', hora: '14:00', status: 'confirmed' },
-                        { cliente: 'Fernanda Lima', servico: 'Hidratação', profissional: 'Priya A.', data: '16/06/2025', hora: '11:00', status: 'confirmed' },
-                        { cliente: 'Carlos Eduardo', servico: 'Barba', profissional: 'Lucas T.', data: '16/06/2025', hora: '15:30', status: 'done' },
-                        { cliente: 'Beatriz Souza', servico: 'Sobrancelha', profissional: 'Renata M.', data: '17/06/2025', hora: '09:30', status: 'cancelled' },
-                    ];
-
-                    const tbodyAgend = document.getElementById('tabelaAgendamentos');
-                    if (tbodyAgend) {
-                        agendamentos.forEach(a => {
-                            tbodyAgend.innerHTML += `
-                            <tr>
-                                <td style="padding: 12px;"><div class="client-cell"><span class="client-name">${a.cliente}</span></div></td>
-                                <td style="font-size: 12px; color: var(--text-muted);">${a.servico}</td>
-                                <td style="font-size: 12px; color: var(--text-muted);">${a.profissional}</td>
-                                <td style="font-size: 12px; color: var(--text-muted);">${a.data}</td>
-                                <td style="font-size: 12px; color: var(--gold); font-weight: 500;">${a.hora}</td>
-                                <td><span class="status-pill ${a.status}"><span class="status-dot"></span>${statusLabel[a.status]}</span></td>
-                                <td><button class="quick-btn" style="padding: 4px 8px; font-size: 11px;" onclick="alert('Editar ${a.cliente}')"><i class="ti ti-edit"></i></button></td>
-                            </tr>
-                        `;
-                        });
-                    }
-
-                    // Botão para voltar
-                    document.getElementById('btnVoltarDashboard').addEventListener('click', mostrarDashboard);
-                    document.getElementById('novoAgendamentoBtn').addEventListener('click', () => alert('Abrir formulário de novo agendamento'));
-
-                    containerPrincipal.style.opacity = '1';
-
-                    // Atualiza classe active no menu
-                    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-                    menuAgendamentos.classList.add('active');
-                }, 300);
-            }
-
-            // Função para recriar o dashboard (gráfico e dados dinâmicos)
-            function recriarDashboard() {
-                // Recria o gráfico
-                const canvas = document.getElementById('revenueChart');
-                if (canvas && typeof Chart !== 'undefined') {
-                    if (revenueChart) revenueChart.destroy();
-                    new Chart(canvas.getContext('2d'), {
-                        type: 'bar',
-                        data: {
-                            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-                            datasets: [{
+            console.log(meses);
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar', data:
+                    {
+                        labels: meses,
+                        datasets: [
+                            {
                                 label: 'Faturamento (R$)',
-                                data: [28400, 31200, 35800, 33600, 42300, 48620],
-                                backgroundColor: (c) => c.dataIndex === 5 ? 'rgba(255,204,127,0.85)' : 'rgba(255,204,127,0.18)',
-                                borderColor: 'rgba(255,204,127,0.5)',
-                                borderWidth: 1,
-                                borderRadius: 6,
-                            }]
+                                data: [28400, 31200, 35800, 33600, 42300, 48620, 32000, 50000, 45000, 47000, 52000, 60000],
+                                backgroundColor: (c) => c.dataIndex === 5 ? 'rgba(255,204,127,0.85)' : 'rgba(255,204,127,0.18)', borderColor: 'rgba(255,204,127,0.5)', borderWidth: 1, borderRadius: 6
+                            }
+                        ]
+                    }, options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        onHover: (event, activeElements) => {
+                            event.native.target.style.cursor = activeElements.length ? 'pointer' : 'default';
                         },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: { legend: { display: false } },
-                            scales: {
-                                x: { grid: { color: 'rgba(255,204,127,0.05)' }, ticks: { color: 'rgba(245,239,230,0.45)' } },
-                                y: { grid: { color: 'rgba(255,204,127,0.05)' }, ticks: { color: 'rgba(245,239,230,0.45)', callback: v => 'R$' + (v / 1000).toFixed(0) + 'k' } }
+                        plugins:
+                        {
+                            legend: {
+                                display: false
+                            }
+                        }, scales: {
+                            x: {
+                                grid: {
+                                    color: 'rgba(255,204,127,0.05)'
+                                }, ticks: {
+                                    color: 'rgba(245,239,230,0.45)'
+                                }
+                            }, y: {
+                                grid: {
+                                    color: 'rgba(255,204,127,0.05)'
+                                }, ticks: {
+                                    color: 'rgba(245,239,230,0.45)'
+                                }
                             }
                         }
-                    });
-                }
-
-                // Recria a tabela de agendamentos
-                const tbodyDash = document.getElementById('apt-tbody');
-                if (tbodyDash) {
-                    tbodyDash.innerHTML = '';
-                    apts.forEach(a => {
-                        tbodyDash.innerHTML += `<tr><td><div class="client-cell"><img src="${a.img}" class="client-avatar"/><span class="client-name">${a.name}</span></div></td><td style="font-size:12px;color:var(--text-muted);">${a.service}</td><td style="font-size:12px;color:var(--gold);font-weight:500;">${a.hora}</td><td><span class="status-pill ${a.status}"><span class="status-dot"></span>${statusLabel[a.status]}</span></td></tr>`;
-                    });
-                }
+                    }
+                });
             }
-            function mostrarClientes() {
-                if (telaAtual === 'clientes') return;
 
-                containerPrincipal.style.opacity = '0';
+            document.getElementById('btn-ver-todos')?.addEventListener('click', () => {
 
-                setTimeout(() => {
+                setActive('nav-agendamentos');
+                nav(renderAgendamentos, 'Gestão de <em>Agendamentos</em>');
+            });
+        }
 
-                    containerPrincipal.innerHTML = `
+        /* ---- AGENDAMENTOS ---- */
+        function renderAgendamentos(c) {
+            c.innerHTML = `
+    <div class="panel fade-in">
+        <div class="panel-header">
+            <h1 class="panel-title">Todos os <em>Agendamentos</em></h1>
+            <button class="btn btn-gold" id="btn-novo-apt"><i class="ti ti-calendar-plus"></i> Novo Agendamento</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+            ${['Todos', 'Confirmado', 'Pendente', 'Concluído', 'Cancelado'].map((l, i) => `
+            <button class="btn btn-ghost btn-sm filter-btn" data-filter="${['all', 'confirmed', 'pending', 'done', 'cancelled'][i]}"
+                style="${i === 0 ? 'background:var(--surface-2);color:var(--text);border-color:var(--border-strong);' : ''}">
+                ${l}
+            </button>`).join('')}
+        </div>
+        <div style="overflow-x:auto;">
+            <table>
+                <thead><tr>
+                    <th>Cliente</th><th>Serviço</th><th>Profissional</th>
+                    <th>Data</th><th>Hora</th><th>Status</th><th>Ações</th>
+                </tr></thead>
+                <tbody id="tbody-apt"></tbody>
+            </table>
+        </div>
+    </div>`;
+
+            function renderRows(filter) {
+                const tbody = document.getElementById('tbody-apt');
+                tbody.innerHTML = '';
+                const filtered = filter === 'all' ? agendamentos : agendamentos.filter(a => a.status === filter);
+                filtered.forEach(a => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+            <td style="font-weight:500;font-size:12.5px;">${a.cliente}</td>
+            <td style="font-size:12px;color:var(--text-muted);">${a.servico}</td>
+            <td style="font-size:12px;color:var(--text-muted);">${a.prof}</td>
+            <td style="font-size:12px;">${a.data}</td>
+            <td style="font-size:12px;color:var(--gold);font-weight:500;">${a.hora}</td>
+            <td><span class="pill ${a.status}"><span class="pill-dot"></span>${LABEL[a.status]}</span></td>
+            <td>
+                <div style="display:flex;gap:5px;">
+                    ${a.status === 'pending' ? `<button class="btn btn-green btn-sm" data-id="${a.id}" data-action="confirmar"><i class="ti ti-check"></i> Confirmar</button>` : ''}
+                    ${a.status !== 'cancelled' && a.status !== 'done' ? `<button class="btn btn-danger btn-sm" data-id="${a.id}" data-action="cancelar"><i class="ti ti-x"></i></button>` : ''}
+                </div>
+            </td>`;
+                    tbody.appendChild(tr);
+                });
+
+                tbody.addEventListener('click', e => {
+                    const btn = e.target.closest('[data-action]');
+                    if (!btn) return;
+                    const id = parseInt(btn.dataset.id);
+                    const apt = agendamentos.find(x => x.id === id);
+                    if (!apt) return;
+                    if (btn.dataset.action === 'confirmar') {
+                        apt.status = 'confirmed';
+                        toast('Agendamento confirmado!', 'ti-check');
+                        updateBadge();
+                        renderRows(filter);
+                    }
+                    if (btn.dataset.action === 'cancelar') {
+                        if (confirm('Cancelar este agendamento?')) {
+                            apt.status = 'cancelled';
+                            toast('Agendamento cancelado.', 'ti-x');
+                            updateBadge();
+                            renderRows(filter);
+                        }
+                    }
+                });
+            }
+
+            renderRows('all');
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.style.background = ''; b.style.color = ''; b.style.borderColor = '';
+                    });
+                    btn.style.background = 'var(--surface-2)';
+                    btn.style.color = 'var(--text)';
+                    btn.style.borderColor = 'var(--border-strong)';
+                    renderRows(btn.dataset.filter);
+                });
+            });
+
+            document.getElementById('btn-novo-apt')?.addEventListener('click', () => openModal('modalAgendar'));
+        }
+        /* ---- CLIENTES ---- */
+        function renderClientes(c) {
+            let busca = '';
+            c.innerHTML = `
+    <div class="panel fade-in">
+        <div class="panel-header">
+            <h1 class="panel-title">Gestão de <em>Clientes</em></h1>
+            <span class="panel-action">${clientes.length} clientes</span>
+        </div>
+        <div class="search-wrap">
+            <i class="ti ti-search"></i>
+            <input type="text" class="form-input" id="busca-cliente" placeholder="Buscar cliente..." />
+        </div>
+        <table>
+            <thead><tr>
+                <th>Cliente</th><th>E-mail</th><th>Telefone</th><th>Agendamentos</th><th>Ações</th>
+            </tr></thead>
+            <tbody id="tbody-clientes"></tbody>
+        </table>
+    </div>`;
+
+            function renderRows() {
+                const tbody = document.getElementById('tbody-clientes');
+                tbody.innerHTML = '';
+                const filtrados = clientes.filter(cl => cl.nome.toLowerCase().includes(busca.toLowerCase()) || cl.email.toLowerCase().includes(busca.toLowerCase()));
+                filtrados.forEach(cl => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+            <td>
+                <div style="display:flex;align-items:center;gap:9px;">
+                    <img src="${cl.foto}" class="avatar" />
+                    <span style="font-size:12.5px;font-weight:500;">${cl.nome}</span>
+                </div>
+            </td>
+            <td style="font-size:12px;color:var(--text-muted);">${cl.email}</td>
+            <td style="font-size:12px;color:var(--text-muted);">${cl.tel}</td>
+            <td style="font-size:13px;font-weight:600;color:var(--gold);">${cl.agendamentos}</td>
+            <td>
+                <div style="display:flex;gap:5px;">
+                    <button class="btn btn-ghost btn-sm" onclick="toast('Perfil de ${cl.nome} em breve!')"><i class="ti ti-eye"></i></button>
+                    <button class="btn btn-danger btn-sm" data-del="${cl.id}"><i class="ti ti-trash"></i></button>
+                </div>
+            </td>`;
+                    tbody.appendChild(tr);
+                });
+                tbody.querySelectorAll('[data-del]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = parseInt(btn.dataset.del);
+                        const cl = clientes.find(x => x.id === id);
+                        if (confirm(`Remover ${cl.nome}?`)) {
+                            clientes = clientes.filter(x => x.id !== id);
+                            toast(`${cl.nome} removido.`, 'ti-trash');
+                            renderRows();
+                        }
+                    });
+                });
+            }
+
+            renderRows();
+            document.getElementById('busca-cliente').addEventListener('input', e => {
+                busca = e.target.value; renderRows();
+            });
+        }
+
+        /* ---- PROFISSIONAIS ---- */
+        function renderProfissionais(c) {
+            c.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;" class="fade-in">
+        <div>
+            <h1 style="font-size:22px;font-weight:500;">Nossa <em>Equipe</em></h1>
+            <p style="font-size:12px;color:var(--text-dim);margin-top:3px;">${profissionais.length} profissionais cadastrados</p>
+        </div>
+        <button class="btn btn-gold" id="btn-novo-prof"><i class="ti ti-user-plus"></i> Novo Profissional</button>
+    </div>
+    <div class="prof-grid fade-in" id="prof-grid"></div>`;
+
+            function renderGrid() {
+                const grid = document.getElementById('prof-grid');
+                grid.innerHTML = '';
+                profissionais.forEach(p => {
+                    const div = document.createElement('div');
+                    div.className = 'prof-card';
+                    div.innerHTML = `
+            <img src="${p.foto}" class="prof-avatar" />
+            <p class="prof-name">${p.nome}</p>
+            <p class="prof-role">${p.role}</p>
+            <div class="prof-stars">${stars(Math.round(p.nota))} <span style="color:var(--text-dim);margin-left:3px;font-size:11px;">${p.nota}</span></div>
+            <span class="pill ${p.ativo ? 'confirmed' : 'cancelled'}" style="margin:8px 0 10px;font-size:9px;">
+                <span class="pill-dot"></span>${p.ativo ? 'Ativo' : 'Inativo'}
+            </span>
+            <div style="display:flex;gap:6px;margin-top:4px;">
+                <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="toast('Editando ${p.nome} em breve!')"><i class="ti ti-edit"></i> Editar</button>
+                <button class="btn btn-danger btn-sm" data-del-prof="${p.id}"><i class="ti ti-trash"></i></button>
+            </div>`;
+                    grid.appendChild(div);
+                });
+                grid.querySelectorAll('[data-del-prof]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = parseInt(btn.dataset.delProf);
+                        const pr = profissionais.find(x => x.id === id);
+                        if (confirm(`Remover ${pr.nome}?`)) {
+                            profissionais = profissionais.filter(x => x.id !== id);
+                            toast(`${pr.nome} removido.`, 'ti-trash');
+                            renderGrid();
+                        }
+                    });
+                });
+            }
+
+            renderGrid();
+            document.getElementById('btn-novo-prof')?.addEventListener('click', () => openModal('modalProf'));
+        }
+
+        /* ---- SERVIÇOS ---- */
+        function renderServicos(c) {
+            c.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;" class="fade-in">
+        <div>
+            <h1 style="font-size:22px;font-weight:500;">Catálogo de <em>Serviços</em></h1>
+            <p style="font-size:12px;color:var(--text-dim);margin-top:3px;">${catalogo.length} serviços ativos</p>
+        </div>
+        <button class="btn btn-gold" id="btn-novo-serv"><i class="ti ti-plus"></i> Novo Serviço</button>
+    </div>
+    <div class="service-grid fade-in" id="service-grid"></div>`;
+
+            function renderGrid() {
+                const grid = document.getElementById('service-grid');
+                grid.innerHTML = '';
+                catalogo.forEach(s => {
+                    const div = document.createElement('div');
+                    div.className = 'service-card';
+                    div.innerHTML = `
+            <div class="service-icon"><i class="ti ${s.icon}"></i></div>
+            <p class="service-name">${s.nome}</p>
+            <p class="service-desc">${s.desc}</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+                <span style="font-size:10px;color:var(--text-dim);"><i class="ti ti-clock"></i> ${s.duracao}</span>
+                <span class="service-price">${s.valor}</span>
+            </div>
+            <div style="display:flex;gap:6px;margin-top:10px;">
+                <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="toast('Editando ${s.nome} em breve!')"><i class="ti ti-edit"></i> Editar</button>
+                <button class="btn btn-danger btn-sm" data-del-serv="${s.id}"><i class="ti ti-trash"></i></button>
+            </div>`;
+                    grid.appendChild(div);
+                });
+                grid.querySelectorAll('[data-del-serv]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = parseInt(btn.dataset.delServ);
+                        const sv = catalogo.find(x => x.id === id);
+                        if (confirm(`Remover serviço "${sv.nome}"?`)) {
+                            catalogo = catalogo.filter(x => x.id !== id);
+                            toast(`"${sv.nome}" removido.`, 'ti-trash');
+                            renderGrid();
+                        }
+                    });
+                });
+            }
+
+            renderGrid();
+            document.getElementById('btn-novo-serv')?.addEventListener('click', () => openModal('modalServico'));
+        }
+
+        /* ---- AVALIAÇÕES ---- */
+        function renderAvaliacoes(c) {
+            const media =
+                (avaliacoesPendentes.reduce((s, a) => s + a.nota, 0) / avaliacoesPendentes.length).toFixed(1);
+
+            const total5 = avaliacoesPendentes.filter(a => a.nota === 5).length;
+            const total4 = avaliacoesPendentes.filter(a => a.nota === 4).length;
+            const total3 = avaliacoesPendentes.filter(a => a.nota === 3).length;
+            const total2 = avaliacoesPendentes.filter(a => a.nota === 2).length;
+            const total1 = avaliacoesPendentes.filter(a => a.nota === 1).length;
+
+            c.innerHTML = `
+    <div class="fade-in">
+
+        <!-- Resumo -->
+        <div class="metrics-grid" style="margin-bottom:20px;">
+
+            <div class="metric-card">
+                <div class="metric-icon gold">
+                    <i class="ti ti-star-filled"></i>
+                </div>
+                <h1 class="metric-value">${media}</h1>
+                <h2 class="metric-label">Nota média</h2>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon rose">
+                    <i class="ti ti-message-circle"></i>
+                </div>
+                <h1 class="metric-value">${avaliacoesPendentes.length}</h1>
+                <h2 class="metric-label">Avaliações</h2>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon gold">
+                    <i class="ti ti-mood-smile"></i>
+                </div>
+                <h1 class="metric-value">
+                    ${Math.round((total5 / avaliacoesPendentes.length) * 100)}%
+                </h1>
+                <h2 class="metric-label">Satisfação</h2>
+            </div>
+
+        </div>
+
+        <!-- Distribuição -->
+        <div class="panel" style="margin-bottom:20px;">
+            <div class="panel-header">
+                <h1 class="panel-title">Distribuição das <em>Notas</em></h1>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:12px;">
+                ${[
+                    [5, total5],
+                    [4, total4],
+                    [3, total3],
+                    [2, total2],
+                    [1, total1]
+                ].map(([nota, total]) => `
+                    <div>
+                        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+                            <span>${nota} ★</span>
+                            <span>${total}</span>
+                        </div>
+                        <div style="
+                            height:8px;
+                            border-radius:999px;
+                            background:rgba(255,255,255,.05);
+                            overflow:hidden;">
+                            <div style="
+                                width:${(total / avaliacoesPendentes.length) * 100}%;
+                                height:100%;
+                                background:linear-gradient(90deg,var(--gold),var(--gold-dark));
+                                border-radius:999px;">
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+
+        <!-- Lista -->
+        <div class="panel">
+            <div class="panel-header">
+                <h1 class="panel-title">Últimas <em>Avaliações</em></h1>
+            </div>
+
+            <div id="aval-list" style="display:flex;flex-direction:column;gap:14px;"></div>
+        </div>
+
+    </div>
+    `;
+
+            const list = document.getElementById('aval-list');
+
+            avaliacoesPendentes.forEach(av => {
+                const div = document.createElement('div');
+
+                div.innerHTML = `
+        <div style="
+            padding:18px;
+            border:1px solid var(--border);
+            border-radius:18px;
+            background:rgba(255,255,255,.02);
+            transition:.3s;">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:flex-start;
+                gap:16px;">
+
+                <div style="display:flex;gap:12px;">
+                    <div style="
+                        width:46px;
+                        height:46px;
+                        border-radius:14px;
+                        background:rgba(255,204,127,.12);
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        color:var(--gold);
+                        font-size:20px;">
+                        <i class="ti ti-user"></i>
+                    </div>
+
+                    <div>
+                        <h3 style="
+                            font-size:14px;
+                            font-weight:600;
+                            color:var(--text);">
+                            ${av.cliente}
+                        </h3>
+
+                        <p style="
+                            font-size:11px;
+                            color:var(--text-dim);
+                            margin-top:2px;">
+                            ${av.servico} • ${av.prof}
+                        </p>
+
+                        <div style="
+                            display:flex;
+                            gap:2px;
+                            margin-top:8px;">
+                            ${stars(av.nota)}
+                        </div>
+                    </div>
+                </div>
+
+                <span style="
+                    font-size:11px;
+                    color:var(--text-dim);">
+                    ${av.data}
+                </span>
+
+            </div>
+
+            <p style="
+                margin-top:14px;
+                color:var(--text-muted);
+                line-height:1.6;
+                font-size:13px;">
+                "${av.comentario}"
+            </p>
+        </div>
+        `;
+
+                list.appendChild(div);
+            });
+        }
+
+        /* ---- CONFIGURAÇÕES ---- */
+        function renderPerfil(c) {
+            c.innerHTML = `
+        <div class="grid-2-1 fade-in">
+
+            <!-- Formulário -->
             <div class="panel">
                 <div class="panel-header">
-                    <h1 class="panel-title">
-                        Gestão de <em>Clientes</em>
-                    </h1>
+                    <h1 class="panel-title">Meu <em>Perfil</em></h1>
                 </div>
 
-                <div style="padding:20px;">
-                    <h2>Lista de Clientes</h2>
+                <!-- Avatar -->
+                <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
+                    <div class="profile-avatar-wrap">
+                        <img src="${CLIENTE.foto}" class="profile-avatar" id="perfil-foto" alt="${CLIENTE.nome}" />
+                        <div class="profile-avatar-edit" onclick="toast('Upload de foto em breve!','ti-camera')">
+                            <i class="ti ti-camera"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <p style="font-size:15px;font-weight:600;color:var(--text);">${CLIENTE.nome}</p>
+                        <p style="font-size:11px;color:var(--text-dim);">${CLIENTE.email}</p>
+                    </div>
+                </div>
 
-                    <table class="apt-table">
-                        <tr>
-                            <th>Nome</th>
-                            <th>Telefone</th>
-                        </tr>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-input" id="input-nome" value="${CLIENTE.nome}" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Telefone</label>
+                        <input type="text" class="form-input" id="input-tel" value="${CLIENTE.telefone}" />
+                    </div>
+                </div>
 
-                        <tr>
-                            <td>Maria Silva</td>
-                            <td>(51) 99999-9999</td>
-                        </tr>
+                <div class="form-group">
+                    <label class="form-label">E-mail</label>
+                    <input type="email" class="form-input" id="input-email" value="${CLIENTE.email}" />
+                </div>
 
-                        <tr>
-                            <td>João Santos</td>
-                            <td>(51) 98888-8888</td>
-                        </tr>
-                    </table>
+                <div style="border-top:1px solid var(--border);margin:20px 0;padding-top:20px;">
+                    <p style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:14px;">
+                        <i class="ti ti-lock" style="color:var(--gold-dark);margin-right:4px;"></i>
+                        Alterar Senha
+                    </p>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Senha atual</label>
+                            <input type="password" class="form-input" placeholder="••••••••" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nova senha</label>
+                            <input type="password" class="form-input" placeholder="••••••••" />
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-gold" id="btn-salvar" style="width:100%;justify-content:center;">
+                    <i class="ti ti-device-floppy"></i> Salvar Alterações
+                </button>
+            </div>
+
+            <!-- Resumo -->
+            <div class="gap-y">
+                <div class="panel fade-in delay-1">
+                    <div class="panel-header" style="margin-bottom:12px;">
+                        <h1 class="panel-title">Resumo <em>da conta</em></h1>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:12px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span style="font-size:12px;color:var(--text-dim);">Agendamentos realizados</span>
+                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${CLIENTE.totalAgendamentos}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span style="font-size:12px;color:var(--text-dim);">Avaliações feitas</span>
+                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${CLIENTE.avaliacoesFeitas}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span style="font-size:12px;color:var(--text-dim);">Próximos agendamentos</span>
+                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${meusAgendamentos.filter(a => a.status !== 'cancelled').length}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel fade-in delay-2">
+                    <div class="panel-header" style="margin-bottom:12px;">
+                        <h1 class="panel-title">Serviços <em>favoritos</em></h1>
+                    </div>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                        ${CLIENTE.favoritos.map(f => `<span class="fav-chip"><i class="ti ti-heart-filled" style="font-size:10px;"></i> ${f}</span>`).join('')}
+                    </div>
                 </div>
             </div>
+
+        </div>
         `;
 
-                    telaAtual = 'clientes';
+            document.getElementById('btn-salvar')?.addEventListener('click', () => {
+                CLIENTE.nome = document.getElementById('input-nome').value;
+                CLIENTE.email = document.getElementById('input-email').value;
+                CLIENTE.telefone = document.getElementById('input-tel').value;
+                toast('Perfil atualizado com sucesso!', 'ti-check');
+            });
+        }
 
-                    document.querySelectorAll('.nav-item')
-                        .forEach(item => item.classList.remove('active'));
+        /* ---- BADGE UPDATE ---- */
+        function updateBadge() {
+            const p = agendamentos.filter(a => a.status === 'pending').length;
 
-                    menuClientes.classList.add('active');
-
-                    containerPrincipal.style.opacity = '1';
-
-                }, 300);
+            const badge = document.getElementById('badge-apt');
+            if (badge) {
+                badge.textContent = p;
             }
+        }
 
-            // Adiciona eventos de clique
-            if (menuDashboard) {
-                menuDashboard.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    mostrarDashboard();
-                });
-            }
+        /* ---- MODAIS ---- */
+        document.getElementById('m-cancelar').addEventListener('click', () => closeModal('modalAgendar'));
+        document.getElementById('modalAgendar').addEventListener('click', e => { if (e.target === document.getElementById('modalAgendar')) closeModal('modalAgendar'); });
+        document.getElementById('m-confirmar').addEventListener('click', () => {
+            const cliente = document.getElementById('m-cliente').value.trim();
+            const data = document.getElementById('m-data').value;
+            if (!cliente) { toast('Informe o nome do cliente!', 'ti-alert-circle'); return; }
+            if (!data) { toast('Selecione uma data!', 'ti-alert-circle'); return; }
+            const [y, m, d] = data.split('-');
+            agendamentos.push({
+                id: Date.now(),
+                cliente,
+                servico: document.getElementById('m-servico').value,
+                prof: document.getElementById('m-prof').value,
+                data: `${d}/${m}/${y}`,
+                hora: document.getElementById('m-hora').value,
+                status: 'pending'
+            });
+            updateBadge();
+            closeModal('modalAgendar');
+            toast('Agendamento criado!');
+            nav(renderAgendamentos, 'Gestão de <em>Agendamentos</em>');
+            setActive('nav-agendamentos');
+        });
 
-            if (menuAgendamentos) {
-                menuAgendamentos.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    mostrarAgendamentos();
-                });
-            }
-            if (menuClientes) {
-                menuClientes.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    mostrarClientes();
-                })
-            }
+        document.getElementById('ms-cancelar').addEventListener('click', () => closeModal('modalServico'));
+        document.getElementById('modalServico').addEventListener('click', e => { if (e.target === document.getElementById('modalServico')) closeModal('modalServico'); });
+        document.getElementById('ms-confirmar').addEventListener('click', () => {
+            const nome = document.getElementById('ms-nome').value.trim();
+            if (!nome) { toast('Informe o nome do serviço!', 'ti-alert-circle'); return; }
+            catalogo.push({ id: Date.now(), icon: 'ti-sparkles', nome, desc: document.getElementById('ms-desc').value, duracao: document.getElementById('ms-dur').value || '—', valor: document.getElementById('ms-valor').value || 'R$ —' });
+            closeModal('modalServico');
+            toast('Serviço criado!');
+            nav(renderServicos, 'Catálogo de <em>Serviços</em>');
+            setActive('nav-servicos');
+        });
 
-            // Adiciona animação CSS
-            const style = document.createElement('style');
-            style.textContent = `
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-        `;
-            document.head.appendChild(style);
+        document.getElementById('mp-cancelar').addEventListener('click', () => closeModal('modalProf'));
+        document.getElementById('modalProf').addEventListener('click', e => { if (e.target === document.getElementById('modalProf')) closeModal('modalProf'); });
+        document.getElementById('mp-confirmar').addEventListener('click', () => {
+            const nome = document.getElementById('mp-nome').value.trim();
+            if (!nome) { toast('Informe o nome!', 'ti-alert-circle'); return; }
+            profissionais.push({ id: Date.now(), nome, role: document.getElementById('mp-role').value || 'Especialista', foto: `https://i.pravatar.cc/80?img=${Math.floor(Math.random() * 70)}`, nota: 5.0, ativo: true });
+            closeModal('modalProf');
+            toast('Profissional cadastrado!');
+            nav(renderProfissionais, 'Nossa <em>Equipe</em>');
+            setActive('nav-profissionais');
+        });
 
-            // Previne recarregamento dos outros menus
-            document.querySelectorAll('.nav-item').forEach(item => {
-                if (item !== menuDashboard && item !== menuAgendamentos && item !== menuClientes) {
-                    item.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        alert(`Funcionalidade "${item.querySelector('h1')?.innerText || 'item'}" em desenvolvimento`);
-                    });
-                }
+        /* ---- NAVEGAÇÃO ---- */
+        const rotas = {
+            'nav-dashboard': { fn: renderDashboard, titulo: 'Dashboard <em>Geral</em>' },
+            'nav-agendamentos': { fn: renderAgendamentos, titulo: 'Gestão de <em>Agendamentos</em>' },
+            'nav-clientes': { fn: renderClientes, titulo: 'Gestão de <em>Clientes</em>' },
+            'nav-profissionais': { fn: renderProfissionais, titulo: 'Nossa <em>Equipe</em>' },
+            'nav-servicos': { fn: renderServicos, titulo: 'Catálogo de <em>Serviços</em>' },
+            'nav-avaliacoes': { fn: renderAvaliacoes, titulo: 'Central de <em>Avaliações</em>' },
+            'nav-perfil': { fn: renderPerfil, titulo: '<em>Perfil</em>' },
+        };
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', e => {
+                e.preventDefault();
+                const rota = rotas[item.id];
+                if (!rota) return;
+                setActive(item.id);
+                nav(rota.fn, rota.titulo);
             });
         });
+
+        /* ---- TOPBAR DATE ---- */
+        document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('pt-BR', {
+            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        });
+
+        /* ---- INIT ---- */
+        nav(renderDashboard, 'Dashboard <em>Geral</em>');
     </script>
 </body>
 

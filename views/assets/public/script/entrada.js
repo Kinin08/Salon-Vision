@@ -5,12 +5,12 @@ const authTabs = document.querySelectorAll('[data-auth-tab]');
 const loginForm = document.getElementById('loginForm');
 const signupForm = document.getElementById('signupForm');
 const signupEmail = document.getElementById('signupEmail');
-const signupRolePreview = document.getElementById('signupRolePreview');
 
 function getRoleByEmail(email) {
     const normalizedEmail = email.trim().toLowerCase();
 
     if (normalizedEmail.includes('@adm')) return 'Administrador';
+    if (normalizedEmail.includes('@func')) return 'Funcionario';
 
     return 'Cliente';
 }
@@ -72,6 +72,8 @@ loginForm?.addEventListener('submit', event => {
     setTimeout(() => {
         if (role === 'Administrador') {
             window.location.href = 'views/assets/admin/index.html';
+        }else if(role === 'Funcionario'){
+            window.location.href = 'views/assets/employee/index.html';
         }
         else {
             window.location.href = 'views/assets/app/index.html';
@@ -92,6 +94,8 @@ signupForm?.addEventListener('submit', event => {
     setTimeout(() => {
         if (role === 'Administrador') {
             window.location.href = 'views/assets/admin/index.html';
+        }else if(role === 'Funcionario'){
+            window.location.href = 'views/assets/employee/index.html';
         }
         else {
             window.location.href = 'views/assets/app/index.html';
@@ -99,9 +103,6 @@ signupForm?.addEventListener('submit', event => {
     }, 1000);
 });
 
-signupEmail?.addEventListener('input', () => {
-    signupRolePreview.textContent = getRoleByEmail(signupEmail.value);
-});
 
 if (typeof renderDashBars === "function") {
     renderDashBars();

@@ -515,7 +515,6 @@ Make sure disabled buttons don't get the pointer cursor.
 */
 
 :disabled {
-  cursor: default;
 }
 
 /*
@@ -934,9 +933,7 @@ video {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.cursor-none {
-  cursor: none;
-}
+
 
 .select-none {
   -webkit-user-select: none;
@@ -1897,7 +1894,7 @@ video {
   background: rgba(255, 255, 255, .05);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  cursor: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1965,7 +1962,7 @@ video {
 }
 
 .nav-item {
-  cursor: none;
+  cursor: pointer;
   position: fixed;
   bottom: 40px;
   left: 50%;

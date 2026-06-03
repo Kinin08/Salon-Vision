@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Salon Vision | Painel do Cliente</title>
 
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@300;400;500;600;700&family=Yuji+Syuku&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
-    <link rel="stylesheet" href="styles/styles.css" />
-    <link rel="stylesheet" href="./../_common/style/mouse.css" />
+    <link rel="stylesheet" href="./styles/styles.css" />
 </head>
 
-<body class="cursor-none bg-black font-['Poppins']">
+<body class="bg-black font-['Poppins']">
 
     <!-- Aurora de fundo -->
     <div class="aurora-wrap">
@@ -25,62 +25,56 @@
 
     <!-- Layout principal -->
     <div class="layout">
-        <div id="cursor" class="opacity-0 fixed w-[14px] h-[14px] rounded-full pointer-events-none z-[9999]
-               -translate-x-1/2 -translate-y-1/2
-               bg-[#FFCC7F] shadow-[0_0_15px_rgba(232,178,95,0.6)]">
-        </div>
 
         <!-- ===== SIDEBAR ===== -->
         <aside class="sidebar">
 
             <!-- Logo -->
-            <div class="sidebar-logo flex items-center gap-3 px-5 py-4 border-b border-[#ffffff10]">
-
-                <div class="flex items-center justify-center w-10 h-10">
-                    <svg class="w-6 h-6 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="1.5">
-                        <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
-                    </svg>
+            <div class="sidebar-logo">
+                <svg class="w-8 h-8 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5">
+                    <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
+                </svg>
+                <div>
+                    <div class="font-yuji text-xl text-white [text-shadow:0_0_10px_rgba(255,204,127,0.8)]">
+                        <span class="text-[#CA9440]">S</span><span>alon</span>
+                        <span class="text-[#CA9440]">V</span><span>ision</span>
+                    </div>
+                    <span class="logo-badge-admin">CLIENTE</span>
                 </div>
-
-                <div class="font-yuji text-xl text-white [text-shadow:0_0_10px_rgba(255,204,127,0.8)]">
-                    <span class="text-[#CA9440]">S</span><span>alon</span>
-                    <span class="text-[#CA9440]">V</span><span>ision</span>
-                </div>
-
             </div>
 
             <!-- Nav -->
             <nav class="nav-section">
                 <h2 class="nav-label">Menu</h2>
 
-                <a id="nav-inicio" class="nav-item active" href="#">
+                <a id="nav-inicio" class="nav-item active cursor-pointer" href="#">
                     <i class="ti ti-home"></i>
                     <h1>Início</h1>
                 </a>
-                <a id="nav-agendamentos" class="nav-item" href="#">
+                <a id="nav-agendamentos" class="nav-item cursor-pointer" href="#">
                     <i class="ti ti-calendar"></i>
-                    <h1>Meus Agendamentos</h1>
+                    <h1>Agendar</h1>
                 </a>
-                <a id="nav-historico" class="nav-item" href="#">
-                    <i class="ti ti-clock-history"></i>
+                <a id="nav-historico" class="nav-item cursor-pointer" href="#">
+                    <i class="ti ti-history"></i>
                     <h1>Histórico</h1>
                 </a>
 
                 <h2 class="nav-label" style="margin-top:10px;">Descobrir</h2>
 
-                <a id="nav-servicos" class="nav-item" href="#">
+                <a id="nav-servicos" class="nav-item cursor-pointer" href="#">
                     <i class="ti ti-cut"></i>
                     <h1>Serviços</h1>
                 </a>
-                <a id="nav-profissionais" class="nav-item" href="#">
+                <a id="nav-profissionais" class="nav-item cursor-pointer" href="#">
                     <i class="ti ti-user-star"></i>
                     <h1>Profissionais</h1>
                 </a>
 
                 <h2 class="nav-label" style="margin-top:10px;">Conta</h2>
 
-                <a id="nav-perfil" class="nav-item" href="#">
+                <a id="nav-perfil" class="nav-item cursor-pointer" href="#">
                     <i class="ti ti-user-circle"></i>
                     <h1>Meu Perfil</h1>
                 </a>
@@ -375,7 +369,10 @@
         </div>
         `;
 
-            document.getElementById('btnNovoApt')?.addEventListener('click', abrirModal);
+            document.getElementById('btnNovoApt')?.addEventListener('click', () => {
+                setNavActive('nav-agendamentos');
+                navegarPara(renderAgendamentos);
+            });
             document.getElementById('btnVerServicos')?.addEventListener('click', () => {
                 setNavActive('nav-servicos');
                 navegarPara(renderServicos);
@@ -739,6 +736,7 @@
             });
         });
 
+
         /* ================================================================
            DATA NO TOPBAR
         ================================================================ */
@@ -754,7 +752,6 @@
 
     </script>
 
-    <script type="module" src="./../_common/script/mouse.js"></script>
 </body>
 
 </html>

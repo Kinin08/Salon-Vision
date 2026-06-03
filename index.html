@@ -44,18 +44,18 @@
                 </button>
             </div>
             <form id="loginForm" class="auth-form p-6 space-y-4">
-                <label class="block cursor-pointer">
+                <label class="block">
                     <span class="text-white/45 text-xs">E-mail</span>
                     <input id="email" type="email" required placeholder="voce@email.com"
-                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F] cursor-pointer">
+                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
                 </label>
-                <label class="block cursor-pointer">
+                <label class="block">
                     <span class="text-white/45 text-xs">Senha</span>
                     <input id="senha" type="password" required placeholder="Sua senha"
-                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F] cursor-pointer">
+                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
                 </label>
                 <div class="flex items-center justify-between text-xs">
-                    <button type="button" class="text-[#FFCC7F] hover:text-[#f2bd6d] cursor-pointer">Esqueci a
+                    <button type="button" class="text-[#FFCC7F] hover:text-[#f2bd6d]">Esqueci a
                         senha</button>
                 </div>
                 <button id="submit" type="submit"
@@ -65,25 +65,20 @@
             </form>
 
             <form id="signupForm" class="auth-form hidden p-6 space-y-4">
-                <label class="block cursor-pointer">
+                <label class="block">
                     <span class="text-white/45 text-xs">Nome</span>
                     <input type="text" required placeholder="Seu nome"
-                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F] cursor-pointer">
+                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
                 </label>
-                <label class="block cursor-pointer">
+                <label class="block">
                     <span class="text-white/45 text-xs">E-mail</span>
                     <input id="signupEmail" type="email" required placeholder="voce@email.com"
-                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F] cursor-pointer">
+                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
                 </label>
-                <div class="rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-                    <p class="text-white/35 text-[10px] uppercase tracking-[2px] mb-1">Função identificada</p>
-                    <p id="signupRolePreview" class="text-[#FFCC7F] text-sm font-semibold">Cliente</p>
-                    <p class="text-white/35 text-[10px] mt-1">A função é definida automaticamente pelo e-mail.</p>
-                </div>
-                <label class="block cursor-pointer">
+                <label class="block">
                     <span class="text-white/45 text-xs">Senha</span>
                     <input type="password" required minlength="6" placeholder="Mínimo 6 caracteres"
-                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F] cursor-pointer">
+                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
                 </label>
                 <button type="submit"
                     class="w-full rounded-xl bg-[#FFCC7F] text-[#3B3B42] font-bold py-3 hover:bg-[#f2bd6d] transition cursor-pointer">
@@ -111,28 +106,39 @@
 
             <!-- Logo imagem -->
             <div
-                class="absolute top-0 left-0 flex items-center py-2 px-4 sm:px-6 animate-[slideLeft_0.9s_ease_forwards] opacity-0">
-                <div class="w-16 h-16 lg:w-24 lg:h-24 flex items-center justify-center">
-                    <svg class="w-10 h-10 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="1.5">
+                class="absolute top-3 left-3 sm:top-4 sm:left-4 lg:top-5 lg:left-6 flex items-center gap-3 lg:gap-4 animate-[slideLeft_0.8s_ease_forwards] opacity-0">
+
+                <!-- Ícone -->
+                <div
+                    class="flex items-center justify-center w-14 h-14 lg:w-20 lg:h-20 rounded-2xl">
+
+                    <svg class="w-8 h-8 lg:w-12 lg:h-12 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5">
                         <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
                     </svg>
+
                 </div>
-            </div>
-            <!-- Nome do salão -->
-            <div
-                class="absolute top-4 lg:top-7 left-16 sm:left-20 lg:left-24 flex items-center text-2xl lg:text-3xl text-white py-2 px-4 lg:px-6 [text-shadow:0_0_10px_rgba(255,204,127,0.8)] font-yuji animate-[slideLeft_0.7s_ease_forwards] opacity-0">
-                <h2 class="text-[#CA9440]">S</h2>
-                <h2 class="mr-1">alon</h2>
-                <h2 class="text-[#CA9440]">V</h2>
-                <h2>ision</h2>
+
+                <!-- Logo -->
+                <div
+                    class="flex items-center font-yuji text-2xl sm:text-3xl lg:text-4xl text-white tracking-wide [text-shadow:0_0_20px_rgba(255,204,127,0.45)]">
+
+                    <span class="text-[#CA9440]">S</span>
+                    <span>alon</span>
+
+                    <span class="ml-1 text-[#CA9440]">V</span>
+                    <span>ision</span>
+
+                </div>
+
             </div>
 
             <!-- Nav links -->
             <div class="animate-[slideUp_0.6s_ease_forwards] opacity-0">
                 <div class="hidden xl:flex absolute top-6 left-1/2 -translate-x-1/2 items-center gap-8 text-white
                         bg-white/10 backdrop-blur-md border border-white/20 rounded-full py-2 px-6 shadow-lg ">
-                    <a href="#home" class="hover:scale-110 transition cursor-pointer text-sm hover:text-[#FFCC7F]">Home</a>
+                    <a href="#home"
+                        class="hover:scale-110 transition cursor-pointer text-sm hover:text-[#FFCC7F]">Home</a>
                     <a href="#servicos"
                         class="hover:scale-110 transition cursor-pointer text-sm hover:text-[#FFCC7F]">Serviços</a>
                     <a href="#agendar"
@@ -629,7 +635,8 @@
                                 </div>
                             </div>
 
-                            <div class="group bg-white/5 hover:bg-white/10 rounded-xl p-4 transition-all duration-300 cursor-pointer">
+                            <div
+                                class="group bg-white/5 hover:bg-white/10 rounded-xl p-4 transition-all duration-300 cursor-pointer">
                                 <div class="flex gap-3">
                                     <div
                                         class="w-10 h-10 rounded-xl bg-[#FFCC7F]/10 group-hover:bg-[#FFCC7F]/20 flex items-center justify-center text-[#FFCC7F] flex-shrink-0 transition-all">
@@ -646,7 +653,8 @@
                                 </div>
                             </div>
 
-                            <div class="group bg-white/5 hover:bg-white/10 rounded-xl p-4 transition-all duration-300 cursor-pointer">
+                            <div
+                                class="group bg-white/5 hover:bg-white/10 rounded-xl p-4 transition-all duration-300 cursor-pointer">
                                 <div class="flex gap-3">
                                     <div
                                         class="w-10 h-10 rounded-xl bg-[#FFCC7F]/10 group-hover:bg-[#FFCC7F]/20 flex items-center justify-center text-[#FFCC7F] flex-shrink-0 transition-all">
@@ -664,7 +672,8 @@
                                 </div>
                             </div>
 
-                            <div class="group bg-white/5 hover:bg-white/10 rounded-xl p-4 transition-all duration-300 cursor-pointer">
+                            <div
+                                class="group bg-white/5 hover:bg-white/10 rounded-xl p-4 transition-all duration-300 cursor-pointer">
                                 <div class="flex gap-3">
                                     <div
                                         class="w-10 h-10 rounded-xl bg-[#FFCC7F]/10 group-hover:bg-[#FFCC7F]/20 flex items-center justify-center text-[#FFCC7F] flex-shrink-0 transition-all">
@@ -793,9 +802,9 @@
         <!-- DEPOIMENTOS -->
         <section class="bg-[#1D1D1D] py-20 px-20">
             <div class="text-center reveal delay-1">
-                    <span
-                        class="text-[11px] tracking-[4px] uppercase text-[#ffd173] font-semibold bg-[#C18057]/10 px-4 py-2 rounded-full inline-block mb-4 reveal delay-1">Depoimentos</span>
-                </div>
+                <span
+                    class="text-[11px] tracking-[4px] uppercase text-[#ffd173] font-semibold bg-[#C18057]/10 px-4 py-2 rounded-full inline-block mb-4 reveal delay-1">Depoimentos</span>
+            </div>
             <h2 class="font-['Cormorant_Garamond'] text-4xl font-light text-center text-white mb-4 reveal delay-1">
                 O que nossos clientes dizem
             </h2>
@@ -980,4 +989,5 @@
 
     </script>
 </body>
+
 </html>

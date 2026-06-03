@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salon Vision | Painel do Funcionário</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@300;400;500;600;700&family=Yuji+Syuku&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link rel="stylesheet" href="./styles/styles.css"/>
+</head>
+
+<body>
+
+    <div class="aurora-wrap">
+        <div class="aurora-1"></div>
+        <div class="aurora-2"></div>
+    </div>
+
+    <div class="layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <svg class="w-8 h-8 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5">
+                    <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
+                </svg>
+                <div>
+                    <div class="font-yuji text-xl text-white [text-shadow:0_0_10px_rgba(255,204,127,0.8)]">
+                        <span class="text-[#CA9440]">S</span><span>alon</span>
+                        <span class="text-[#CA9440]">V</span><span>ision</span>
+                    </div>
+                    <span class="logo-badge-admin">FUNCIONÁRIO</span>
+                </div>
+            </div>
+
+
+            <nav class="nav-section">
+                <h2 class="nav-label">Menu</h2>
+                <a id="nav-inicio" class="nav-item active" href="#">
+                    <i class="ti ti-home"></i><span>Início</span>
+                    <div class="online-dot" style="display:none;" id="dot-inicio"></div>
+                </a>
+                <a id="nav-agendamentos" class="nav-item" href="#">
+                    <i class="ti ti-calendar"></i><span>Agenda</span>
+                </a>
+                <a id="nav-historico" class="nav-item" href="#">
+                    <i class="ti ti-history"></i><span>Histórico</span>
+                </a>
+
+                <h2 class="nav-label" style="margin-top:12px;">Profissional</h2>
+                <a id="nav-servicos" class="nav-item" href="#">
+                    <i class="ti ti-cut"></i><span>Serviços</span>
+                </a>
+                <a id="nav-avaliacoes" class="nav-item" href="#">
+                    <i class="ti ti-user-star"></i><span>Avaliações</span>
+                </a>
+
+                <h2 class="nav-label" style="margin-top:12px;">Conta</h2>
+                <a id="nav-perfil" class="nav-item" href="#">
+                    <i class="ti ti-user-circle"></i><span>Meu Perfil</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="user-card">
+                    <img src="https://i.pravatar.cc/80?img=47" class="user-avatar" alt="Camila Rocha" />
+                    <div class="user-info">
+                        <p>Camila Rocha</p>
+                        <span>Profissional</span>
+                    </div>
+                    <i class="ti ti-dots-vertical" style="margin-left:auto;color:var(--text-dim);font-size:13px;"></i>
+                </div>
+        </aside>
+
+        <!-- MAIN -->
+        <div class="main">
+            <header class="topbar">
+                <div>
+                    <h1 class="topbar-title" id="topbar-title">Olá, <em>Camila!</em></h1>
+                    <h2 class="tb-date" id="topbar-date"></h2>
+                </div>
+                <div class="topbar-right">
+                    <div class="topbar-icon-btn" title="Notificações"
+                        onclick="toast('3 novos agendamentos hoje!','ti-bell')">
+                        <i class="ti ti-bell" style="font-size:16px;"></i>
+                        <div class="notif-dot"></div>
+                    </div>
+                    <img src="https://i.pravatar.cc/80?img=47"
+                        style="width:34px;height:34px;border-radius:10px;object-fit:cover;border:1px solid var(--border-strong);cursor:pointer;"
+                        alt="Camila Rocha"
+                        onclick="setNavActive('nav-perfil');document.getElementById('topbar-title').innerHTML='Meu <em>Perfil</em>';navegarPara(renderPerfil)" />
+                </div>
+            </header>
+
+            <main class="content" id="page-content"></main>
+        </div>
+    </div>
+
+    <!-- MODAL: CONFIRMAR ATENDIMENTO -->
+    <div class="modal-overlay" id="modalCheckin">
+        <div class="modal-box">
+            <h2 class="modal-title">Confirmar <em>Atendimento</em></h2>
+            <div id="modal-checkin-info"
+                style="padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:20px;">
+            </div>
+            <div style="display:flex;gap:10px;margin-top:4px;">
+                <button class="btn btn-green" style="flex:1;" id="modalCheckinConfirmar">
+                    <i class="ti ti-check"></i> Iniciar Atendimento
+                </button>
+                <button class="btn btn-ghost" id="modalCheckinCancelar">
+                    <i class="ti ti-x"></i> Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVO AGENDAMENTO -->
+    <div class="modal-overlay" id="modalAgendar">
+        <div class="modal-box">
+            <h2 class="modal-title">Novo <em>Agendamento</em></h2>
+            <div class="form-group">
+                <label class="form-label">Cliente</label>
+                <input type="text" class="form-input" id="modalCliente" placeholder="Nome do cliente" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Serviço</label>
+                <select class="form-input" id="modalServico">
+                    <option>Coloração</option>
+                    <option>Corte Feminino</option>
+                    <option>Escova & Tratamento</option>
+                    <option>Manicure</option>
+                    <option>Hidratação Profunda</option>
+                    <option>Sobrancelha</option>
+                </select>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Data</label>
+                    <input type="date" class="form-input" id="modalData" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Horário</label>
+                    <select class="form-input" id="modalHora">
+                        <option>09:00</option>
+                        <option>09:30</option>
+                        <option>10:00</option>
+                        <option>10:30</option>
+                        <option>11:00</option>
+                        <option>11:30</option>
+                        <option>14:00</option>
+                        <option>14:30</option>
+                        <option>15:00</option>
+                        <option>15:30</option>
+                        <option>16:00</option>
+                        <option>16:30</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Observações</label>
+                <input type="text" class="form-input" id="modalObs" placeholder="Ex: cliente prefere sem química" />
+            </div>
+            <div style="display:flex;gap:10px;margin-top:8px;">
+                <button class="btn btn-gold" style="flex:1;" id="modalConfirmar">
+                    <i class="ti ti-check"></i> Confirmar
+                </button>
+                <button class="btn btn-ghost" id="modalCancelar">
+                    <i class="ti ti-x"></i> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast"><i class="ti ti-check"></i> <span id="toast-msg">Ação realizada!</span></div>
+
+    <script>
+        /* ================================================================
+           SALON VISION — PAINEL DO FUNCIONÁRIO
+        ================================================================ */
+
+        const FUNCIONARIO = {
+            nome: 'Camila Rocha',
+            especialidade: 'Colorista & Cabeleireira',
+            email: 'camila.rocha@salonvision.com',
+            telefone: '(51) 99345-6789',
+            foto: 'https://i.pravatar.cc/80?img=47',
+            comissao: 40, // % de comissão
+            meta: 3200,   // meta mensal R$
+            ganhosMes: 2560,
+            atendimentosMes: 28,
+            atendimentosSemana: 7,
+            mediaAvaliacao: 4.8,
+        };
+
+        const STATUS_LABEL = {
+            confirmed: 'Confirmado',
+            pending: 'Pendente',
+            done: 'Concluído',
+            cancelled: 'Cancelado',
+            in_progress: 'Em andamento',
+        };
+
+        /* ---- Agendamentos do funcionário ---- */
+        let meusAgendamentos = [
+            { id: 1, cliente: 'Ana Costa', servico: 'Coloração', data: '20/06/2025', hora: '10:00', valor: 280, status: 'confirmed', obs: '' },
+            { id: 2, cliente: 'Julia Moraes', servico: 'Sobrancelha', data: '20/06/2025', hora: '14:30', valor: 45, status: 'pending', obs: 'Prefere henna marrom' },
+            { id: 3, cliente: 'Fernanda Lima', servico: 'Escova & Tratamento', data: '22/06/2025', hora: '09:30', valor: 120, status: 'confirmed', obs: '' },
+            { id: 4, cliente: 'Clara Vieira', servico: 'Manicure', data: '25/06/2025', hora: '16:00', valor: 60, status: 'pending', obs: '' },
+            { id: 5, cliente: 'Beatriz Nunes', servico: 'Hidratação Profunda', data: '28/06/2025', hora: '11:00', valor: 95, status: 'confirmed', obs: 'Cabelo muito ressecado' },
+            { id: 6, cliente: 'Sofia Andrade', servico: 'Corte Feminino', data: '01/07/2025', hora: '14:00', valor: 90, status: 'confirmed', obs: '' },
+        ];
+
+        /* ---- Histórico ---- */
+        const historico = [
+            { cliente: 'Paula Ribeiro', servico: 'Coloração', data: '10/06/2025', valor: 280, duracao: '2h30', avaliacao: 5, obs: 'Ótimo resultado!' },
+            { cliente: 'Mariana Souza', servico: 'Escova & Tratamento', data: '08/06/2025', valor: 120, duracao: '1h20', avaliacao: 5, obs: '' },
+            { cliente: 'Lívia Torres', servico: 'Sobrancelha', data: '07/06/2025', valor: 45, duracao: '40min', avaliacao: 4, obs: 'Gostou da henna' },
+            { cliente: 'Rebecca Alves', servico: 'Hidratação Profunda', data: '05/06/2025', valor: 95, duracao: '1h', avaliacao: 5, obs: '' },
+            { cliente: 'Giovanna Martins', servico: 'Corte Feminino', data: '03/06/2025', valor: 90, duracao: '55min', avaliacao: 5, obs: '' },
+            { cliente: 'Ana Costa', servico: 'Coloração', data: '01/06/2025', valor: 280, duracao: '2h30', avaliacao: 5, obs: 'Cliente fiel' },
+        ];
+
+        /* ---- Avaliações ---- */
+        const avaliacoes = [
+            { cliente: 'Paula Ribeiro', servico: 'Coloração', nota: 5, comentario: 'Adorei o resultado! Ficou perfeito, superou as expectativas.', data: '10/06/2025' },
+            { cliente: 'Mariana Souza', servico: 'Escova & Tratamento', nota: 5, comentario: 'Maravilhosa! Saí do salão me sentindo outra pessoa.', data: '08/06/2025' },
+            { cliente: 'Lívia Torres', servico: 'Sobrancelha', nota: 4, comentario: 'Muito bom, mas poderia durar um pouco mais.', data: '07/06/2025' },
+            { cliente: 'Rebecca Alves', servico: 'Hidratação', nota: 5, comentario: 'Cabelo ficou incrível! Recomendo muito a Camila.', data: '05/06/2025' },
+            { cliente: 'Giovanna Martins', servico: 'Corte Feminino', nota: 5, comentario: 'Corte perfeito para o meu rosto. Amei demais!', data: '03/06/2025' },
+        ];
+
+        /* ---- Catálogo ---- */
+        const catalogo = [
+            { icon: 'ti-palette', nome: 'Coloração', desc: 'Coloração completa com produtos profissionais.', duracao: '2h30', valor: 280, comissao: 112 },
+            { icon: 'ti-cut', nome: 'Corte Feminino', desc: 'Corte personalizado para valorizar seu estilo.', duracao: '1h', valor: 90, comissao: 36 },
+            { icon: 'ti-wind', nome: 'Escova & Tratamento', desc: 'Escova modeladora com hidratação profunda.', duracao: '1h30', valor: 120, comissao: 48 },
+            { icon: 'ti-sparkles', nome: 'Manicure', desc: 'Cuidado completo para unhas das mãos.', duracao: '50min', valor: 60, comissao: 24 },
+            { icon: 'ti-droplet', nome: 'Hidratação Profunda', desc: 'Máscara nutritiva para brilho e saúde capilar.', duracao: '1h', valor: 95, comissao: 38 },
+            { icon: 'ti-eye', nome: 'Sobrancelha', desc: 'Design com henna e brow lamination.', duracao: '45min', valor: 45, comissao: 18 },
+        ];
+
+        /* ================================================================
+           HELPERS
+        ================================================================ */
+        function setNavActive(id) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const el = document.getElementById(id);
+            if (el) el.classList.add('active');
+        }
+
+        function navegarPara(renderFn) {
+            const c = document.getElementById('page-content');
+            c.style.transition = 'opacity 0.2s ease';
+            c.style.opacity = '0';
+            setTimeout(() => {
+                c.innerHTML = '';
+                renderFn(c);
+                c.style.opacity = '1';
+            }, 200);
+        }
+
+        function toast(msg, icon = 'ti-check') {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            t.querySelector('i').className = `ti ${icon}`;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        function stars(n) {
+            let s = '';
+            for (let i = 1; i <= 5; i++) s += `<i class="ti ti-star${i <= n ? '-filled star-filled' : ''}" style="font-size:12px;"></i>`;
+            return s;
+        }
+
+        function formatCurrency(v) { return `R$ ${v.toLocaleString('pt-BR')}`; }
+
+        /* ================================================================
+           INÍCIO
+        ================================================================ */
+        function renderInicio(c) {
+            const hoje = meusAgendamentos.filter(a => a.data === '20/06/2025' && a.status !== 'cancelled');
+            const proximo = meusAgendamentos.find(a => a.status === 'confirmed' || a.status === 'pending');
+            const progressoPct = Math.min(100, Math.round((FUNCIONARIO.ganhosMes / FUNCIONARIO.meta) * 100));
+            const ganhosSemana = meusAgendamentos.filter(a => a.status === 'confirmed').reduce((s, a) => s + (a.valor * FUNCIONARIO.comissao / 100), 0).toFixed(0);
+
+            c.innerHTML = `
+  <div class="greeting-hero fade-in">
+    <p class="greeting-kicker">Bem-vinda de volta</p>
+    <h2 class="greeting-title">Olá, <strong>${FUNCIONARIO.nome.split(' ')[0]}!</strong></h2>
+    <p class="greeting-sub">${FUNCIONARIO.especialidade} · Você tem <strong style="color:var(--gold);">${hoje.length} atendimento${hoje.length !== 1 ? 's' : ''}</strong> agendados hoje.</p>
+  </div>
+
+  <!-- Métricas -->
+  <div class="metrics-grid fade-in delay-1" style="margin-bottom:20px;">
+    <div class="metric-card">
+      <div class="metric-icon gold"><i class="ti ti-calendar-check"></i></div>
+      <h1 class="metric-value">${FUNCIONARIO.atendimentosMes}</h1>
+      <h2 class="metric-label">Atendimentos no mês</h2>
+      <div class="metric-delta up"><i class="ti ti-trending-up" style="font-size:12px;"></i> +3 vs mês anterior</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon green"><i class="ti ti-coin"></i></div>
+      <h1 class="metric-value">${formatCurrency(FUNCIONARIO.ganhosMes)}</h1>
+      <h2 class="metric-label">Comissões no mês</h2>
+      <div class="metric-delta up"><i class="ti ti-trending-up" style="font-size:12px;"></i> ${progressoPct}% da meta</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon gold"><i class="ti ti-star-filled"></i></div>
+      <h1 class="metric-value">${FUNCIONARIO.mediaAvaliacao}</h1>
+      <h2 class="metric-label">Nota média</h2>
+      <div style="display:flex;gap:2px;margin-top:6px;">${stars(5)}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon blue"><i class="ti ti-calendar-week"></i></div>
+      <h1 class="metric-value">${FUNCIONARIO.atendimentosSemana}</h1>
+      <h2 class="metric-label">Atendimentos esta semana</h2>
+      <div class="metric-delta up"><i class="ti ti-trending-up" style="font-size:12px;"></i> Acima da média</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+
+    <!-- Próximo atendimento -->
+    <div class="panel fade-in delay-2">
+      <div class="panel-header">
+        <h1 class="panel-title">Próximo <em>Atendimento</em></h1>
+        <span class="status-pill ${proximo?.status || 'pending'}">
+          <span class="status-dot"></span>${STATUS_LABEL[proximo?.status || 'pending']}
+        </span>
+      </div>
+      ${proximo ? `
+        <p class="next-apt-service">${proximo.servico}</p>
+        <div class="next-apt-row"><i class="ti ti-user"></i> ${proximo.cliente}</div>
+        <div class="next-apt-row"><i class="ti ti-calendar"></i> ${proximo.data}</div>
+        <div class="next-apt-row"><i class="ti ti-clock"></i> ${proximo.hora}</div>
+        ${proximo.obs ? `<div class="next-apt-row" style="margin-top:6px;"><i class="ti ti-notes" style="color:var(--text-dim);"></i> <span style="font-size:11px;color:var(--text-dim);font-style:italic;">${proximo.obs}</span></div>` : ''}
+        <div style="margin-top:14px;display:flex;gap:8px;">
+          <button class="checkin-btn start" onclick="iniciarAtendimento(${proximo.id})">
+            <i class="ti ti-player-play"></i> Iniciar
+          </button>
+          <button class="btn btn-ghost" style="padding:5px 12px;font-size:11px;" onclick="setNavActive('nav-agendamentos');document.getElementById('topbar-title').innerHTML='Minha <em>Agenda</em>';navegarPara(renderAgendamentos)">
+            Ver agenda
+          </button>
+        </div>
+      ` : `<p style="color:var(--text-dim);font-size:12px;">Nenhum atendimento próximo.</p>`}
+    </div>
+
+    <!-- Meta mensal -->
+    <div class="panel fade-in delay-2">
+      <div class="panel-header">
+        <h1 class="panel-title">Meta <em>Mensal</em></h1>
+        <span class="earn-chip"><i class="ti ti-coin" style="font-size:12px;"></i> ${progressoPct}%</span>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
+          <span style="font-size:22px;font-weight:600;color:var(--green);">${formatCurrency(FUNCIONARIO.ganhosMes)}</span>
+          <span style="font-size:11px;color:var(--text-dim);">meta: ${formatCurrency(FUNCIONARIO.meta)}</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="width:${progressoPct}%;"></div>
+        </div>
+        <p style="font-size:11px;color:var(--text-dim);margin-top:8px;">Faltam <strong style="color:var(--gold);">${formatCurrency(FUNCIONARIO.meta - FUNCIONARIO.ganhosMes)}</strong> para bater a meta</p>
+      </div>
+      <hr class="section-divider" style="margin:14px 0;"/>
+      <div style="display:flex;justify-content:space-between;">
+        <div>
+          <p style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;">Comissão</p>
+          <p style="font-size:15px;font-weight:600;color:var(--text);margin-top:2px;">${FUNCIONARIO.comissao}%</p>
+        </div>
+        <div style="text-align:right;">
+          <p style="font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;">Projeção</p>
+          <p style="font-size:15px;font-weight:600;color:var(--gold);margin-top:2px;">${formatCurrency(Math.round(FUNCIONARIO.ganhosMes * 1.18))}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Agenda de hoje -->
+  <div class="panel fade-in delay-3">
+    <div class="panel-header">
+      <h1 class="panel-title">Agenda <em>de Hoje</em></h1>
+    </div>
+    ${hoje.length === 0 ? `<p style="color:var(--text-dim);font-size:12px;padding:10px 0;">Sem atendimentos hoje.</p>` : ''}
+    <div id="hoje-list"></div>
+  </div>
+  `;
+
+            const list = document.getElementById('hoje-list');
+            if (list) {
+                hoje.forEach(a => {
+                    const div = document.createElement('div');
+                    div.className = 'schedule-row';
+                    div.innerHTML = `
+        <div class="sched-time">${a.hora}<span>${a.data.split('/').slice(0, 2).join('/')}</span></div>
+        <div class="sched-bar ${a.status}"></div>
+        <div class="sched-info">
+          <div class="sched-service">${a.servico}</div>
+          <div class="sched-client"><i class="ti ti-user" style="font-size:10px;"></i> ${a.cliente}${a.obs ? ` · <em style="font-style:italic;">${a.obs}</em>` : ''}</div>
+        </div>
+        <div class="sched-actions">
+          <span class="status-pill ${a.status}"><span class="status-dot"></span>${STATUS_LABEL[a.status]}</span>
+        </div>
+      `;
+                    list.appendChild(div);
+                });
+            }
+        }
+
+        /* ================================================================
+           AGENDA
+        ================================================================ */
+        function renderAgendamentos(c) {
+            c.innerHTML = `
+  <div class="panel fade-in">
+    <div class="panel-header">
+      <h1 class="panel-title">Minha <em>Agenda</em></h1>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <select class="form-input" id="filtro-status" style="width:auto;padding:6px 10px;font-size:11px;">
+          <option value="">Todos os status</option>
+          <option value="confirmed">Confirmado</option>
+          <option value="pending">Pendente</option>
+          <option value="done">Concluído</option>
+          <option value="cancelled">Cancelado</option>
+        </select>
+        <button class="btn btn-gold" style="padding:6px 14px;font-size:11px;" id="btnNovoAptTabela">
+          <i class="ti ti-calendar-plus"></i> Novo Agendamento
+        </button>
+      </div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="apt-table">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Serviço</th>
+            <th>Data</th>
+            <th>Hora</th>
+            <th>Comissão</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-agendamentos"></tbody>
+      </table>
+    </div>
+  </div>
+  `;
+
+            const renderTabela = (filtro) => {
+                const tbody = document.getElementById('tbody-agendamentos');
+                tbody.innerHTML = '';
+                const lista = filtro ? meusAgendamentos.filter(a => a.status === filtro) : meusAgendamentos;
+                if (lista.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-dim);">Nenhum agendamento encontrado.</td></tr>`;
+                    return;
+                }
+                lista.forEach(a => {
+                    const comissao = (a.valor * FUNCIONARIO.comissao / 100).toFixed(0);
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+        <td>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:28px;height:28px;border-radius:8px;background:var(--gold-dim);display:flex;align-items:center;justify-content:center;color:var(--gold-dark);font-size:11px;font-weight:600;flex-shrink:0;">
+              ${a.cliente.split(' ').map(n => n[0]).slice(0, 2).join('')}
+            </div>
+            <span style="font-size:12px;font-weight:500;">${a.cliente}</span>
+          </div>
+        </td>
+        <td style="font-size:12px;color:var(--text-muted);">${a.servico}</td>
+        <td style="font-size:12px;color:var(--text-muted);">${a.data}</td>
+        <td style="font-size:12px;color:var(--gold);font-weight:600;">${a.hora}</td>
+        <td style="font-size:12px;color:var(--green);font-weight:500;">R$ ${comissao}</td>
+        <td><span class="status-pill ${a.status}"><span class="status-dot"></span>${STATUS_LABEL[a.status]}</span></td>
+        <td>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;">
+            ${a.status === 'confirmed' || a.status === 'pending' ? `
+              <button class="checkin-btn start" style="padding:4px 10px;font-size:10px;" data-id="${a.id}" data-action="iniciar">
+                <i class="ti ti-player-play"></i> Iniciar
+              </button>
+              <button class="btn btn-danger" style="padding:4px 8px;font-size:10px;" data-id="${a.id}" data-action="cancelar">
+                <i class="ti ti-x"></i>
+              </button>
+            ` : `<span style="font-size:11px;color:var(--text-dim);">—</span>`}
+          </div>
+        </td>
+      `;
+                    if (a.obs) {
+                        const obsRow = document.createElement('tr');
+                        obsRow.innerHTML = `<td colspan="7" style="padding:4px 12px 10px 50px;font-size:11px;color:var(--text-dim);font-style:italic;border-bottom:1px solid var(--border);">
+          <i class="ti ti-notes" style="margin-right:4px;"></i>${a.obs}
+        </td>`;
+                        tbody.appendChild(tr);
+                        tbody.appendChild(obsRow);
+                    } else {
+                        tbody.appendChild(tr);
+                    }
+                });
+
+                tbody.addEventListener('click', e => {
+                    const btn = e.target.closest('[data-action]');
+                    if (!btn) return;
+                    const id = parseInt(btn.dataset.id);
+                    const action = btn.dataset.action;
+                    if (action === 'cancelar') {
+                        if (confirm('Cancelar este agendamento?')) {
+                            const apt = meusAgendamentos.find(x => x.id === id);
+                            if (apt) apt.status = 'cancelled';
+                            toast('Agendamento cancelado.', 'ti-x');
+                            renderTabela(document.getElementById('filtro-status')?.value);
+                        }
+                    }
+                    if (action === 'iniciar') {
+                        iniciarAtendimento(id);
+                    }
+                });
+            };
+
+            renderTabela('');
+            document.getElementById('btnNovoAptTabela')?.addEventListener('click', abrirModal);
+            document.getElementById('filtro-status')?.addEventListener('change', e => renderTabela(e.target.value));
+        }
+
+        /* ================================================================
+           HISTÓRICO
+        ================================================================ */
+        function renderHistorico(c) {
+            const totalGanho = historico.reduce((s, h) => s + h.valor, 0);
+            const totalComissao = Math.round(totalGanho * FUNCIONARIO.comissao / 100);
+
+            c.innerHTML = `
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;" class="fade-in">
+    <div class="metric-card">
+      <div class="metric-icon gold"><i class="ti ti-history"></i></div>
+      <h1 class="metric-value">${historico.length}</h1>
+      <h2 class="metric-label">Atendimentos (período)</h2>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon green"><i class="ti ti-coin"></i></div>
+      <h1 class="metric-value">${formatCurrency(totalComissao)}</h1>
+      <h2 class="metric-label">Comissões (período)</h2>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon gold"><i class="ti ti-star-filled"></i></div>
+      <h1 class="metric-value">${(historico.reduce((s, h) => s + h.avaliacao, 0) / historico.length).toFixed(1)}</h1>
+      <h2 class="metric-label">Nota média (período)</h2>
+    </div>
+  </div>
+
+  <div class="panel fade-in delay-1">
+    <div class="panel-header">
+      <h1 class="panel-title">Histórico de <em>Atendimentos</em></h1>
+      <span class="panel-action">${historico.length} atendimentos</span>
+    </div>
+    <div id="historico-list"></div>
+  </div>
+  `;
+
+            const list = document.getElementById('historico-list');
+            historico.forEach(h => {
+                const comissao = Math.round(h.valor * FUNCIONARIO.comissao / 100);
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `
+      <div class="history-icon"><i class="ti ti-cut"></i></div>
+      <div class="history-info">
+        <p class="history-service">${h.servico}</p>
+        <p class="history-meta">
+          <i class="ti ti-user" style="font-size:10px;"></i> ${h.cliente} · ${h.data} · <i class="ti ti-clock" style="font-size:10px;"></i> ${h.duracao}
+          ${h.obs ? ` · <em style="font-style:italic;color:var(--text-dim);">${h.obs}</em>` : ''}
+        </p>
+      </div>
+      <div class="history-right">
+        <p class="history-value" style="color:var(--green);">+ R$ ${comissao}</p>
+        <p style="font-size:10px;color:var(--text-dim);margin-top:1px;text-align:right;">serviço: ${formatCurrency(h.valor)}</p>
+        <div class="history-stars">${stars(h.avaliacao)}</div>
+      </div>
+    `;
+                list.appendChild(div);
+            });
+        }
+
+        /* ================================================================
+           SERVIÇOS
+        ================================================================ */
+        function renderServicos(c) {
+            c.innerHTML = `
+  <div style="margin-bottom:16px;" class="fade-in">
+    <h1 style="font-size:22px;font-weight:400;">Meus <em style="font-style:italic;font-family:'Cormorant Garamond',serif;font-size:27px;color:var(--gold);">Serviços</em></h1>
+    <p style="font-size:12px;color:var(--text-dim);margin-top:4px;">Serviços que você oferece · Comissão de <strong style="color:var(--green);">${FUNCIONARIO.comissao}%</strong> em todos</p>
+  </div>
+  <div class="services-grid" id="services-grid"></div>
+  `;
+
+            const grid = document.getElementById('services-grid');
+            catalogo.forEach((s, i) => {
+                const div = document.createElement('div');
+                div.className = `service-card fade-in`;
+                div.style.animationDelay = `${i * 0.06}s`;
+                div.innerHTML = `
+      <div class="service-card-icon"><i class="ti ${s.icon}"></i></div>
+      <p class="service-card-name">${s.nome}</p>
+      <p class="service-card-desc">${s.desc}</p>
+      <div class="service-card-meta">
+        <span class="service-meta-item"><i class="ti ti-clock"></i> ${s.duracao}</span>
+      </div>
+      <p class="service-price">${formatCurrency(s.valor)}</p>
+      <p class="service-commission"><i class="ti ti-coin" style="font-size:10px;"></i> Sua comissão: ${formatCurrency(s.comissao)}</p>
+      <button class="btn btn-ghost" style="margin-top:10px;width:100%;justify-content:center;font-size:11px;" onclick="abrirModal()">
+        <i class="ti ti-calendar-plus"></i> Agendar cliente
+      </button>
+    `;
+                grid.appendChild(div);
+            });
+        }
+
+        /* ================================================================
+           AVALIAÇÕES
+        ================================================================ */
+        function renderAvaliacoes(c) {
+            const media = (avaliacoes.reduce((s, a) => s + a.nota, 0) / avaliacoes.length).toFixed(1);
+            const dist = [5, 4, 3, 2, 1].map(n => [n, avaliacoes.filter(a => a.nota === n).length]);
+            const pct5 = Math.round((avaliacoes.filter(a => a.nota === 5).length / avaliacoes.length) * 100);
+
+            c.innerHTML = `
+  <div class="metrics-grid fade-in" style="margin-bottom:20px;">
+    <div class="metric-card">
+      <div class="metric-icon gold"><i class="ti ti-star-filled"></i></div>
+      <h1 class="metric-value">${media}</h1>
+      <h2 class="metric-label">Nota média</h2>
+      <div style="display:flex;gap:2px;margin-top:6px;">${stars(Math.round(parseFloat(media)))}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon rose"><i class="ti ti-message-circle"></i></div>
+      <h1 class="metric-value">${avaliacoes.length}</h1>
+      <h2 class="metric-label">Total de avaliações</h2>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon green"><i class="ti ti-mood-smile"></i></div>
+      <h1 class="metric-value">${pct5}%</h1>
+      <h2 class="metric-label">Avaliações 5 estrelas</h2>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon gold"><i class="ti ti-trophy"></i></div>
+      <h1 class="metric-value">#1</h1>
+      <h2 class="metric-label">Ranking da equipe</h2>
+      <div class="metric-delta up"><i class="ti ti-trending-up" style="font-size:12px;"></i> Melhor avaliada</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:300px 1fr;gap:16px;">
+    <div class="panel fade-in delay-1">
+      <div class="panel-header">
+        <h1 class="panel-title">Distribuição <em>das notas</em></h1>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        ${dist.map(([nota, total]) => `
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;color:var(--text-muted);">
+              <span>${nota} ★</span><span>${total}</span>
+            </div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" style="width:${avaliacoes.length ? (total / avaliacoes.length) * 100 : 0}%;"></div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <hr class="section-divider"/>
+      <div style="text-align:center;">
+        <p style="font-size:38px;font-weight:700;color:var(--gold);line-height:1;">${media}</p>
+        <div style="display:flex;justify-content:center;gap:3px;margin:6px 0;">${stars(5)}</div>
+        <p style="font-size:11px;color:var(--text-dim);">${avaliacoes.length} avaliações recebidas</p>
+      </div>
+    </div>
+
+    <div class="panel fade-in delay-2">
+      <div class="panel-header">
+        <h1 class="panel-title">Últimas <em>Avaliações</em></h1>
+      </div>
+      <div id="aval-list" style="display:flex;flex-direction:column;gap:12px;"></div>
+    </div>
+  </div>
+  `;
+
+            const list = document.getElementById('aval-list');
+            avaliacoes.forEach(av => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+      <div style="padding:16px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.02);transition:.2s;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+          <div style="display:flex;gap:10px;">
+            <div style="width:40px;height:40px;border-radius:12px;background:var(--gold-dim);display:flex;align-items:center;justify-content:center;color:var(--gold-dark);font-size:13px;font-weight:700;flex-shrink:0;">
+              ${av.cliente.split(' ').map(n => n[0]).slice(0, 2).join('')}
+            </div>
+            <div>
+              <h3 style="font-size:13px;font-weight:600;color:var(--text);">${av.cliente}</h3>
+              <p style="font-size:11px;color:var(--text-dim);margin-top:1px;">${av.servico}</p>
+              <div style="display:flex;gap:2px;margin-top:5px;">${stars(av.nota)}</div>
+            </div>
+          </div>
+          <span style="font-size:10px;color:var(--text-dim);white-space:nowrap;">${av.data}</span>
+        </div>
+        <p style="margin-top:12px;color:var(--text-muted);line-height:1.6;font-size:12px;font-style:italic;">"${av.comentario}"</p>
+      </div>
+    `;
+                list.appendChild(div);
+            });
+        }
+
+        /* ================================================================
+           PERFIL
+        ================================================================ */
+        function renderPerfil(c) {
+            c.innerHTML = `
+  <div class="grid-2-1 fade-in">
+    <div class="panel">
+      <div class="panel-header">
+        <h1 class="panel-title">Meu <em>Perfil</em></h1>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
+        <div class="profile-avatar-wrap">
+          <img src="${FUNCIONARIO.foto}" class="profile-avatar" alt="${FUNCIONARIO.nome}"/>
+          <div class="profile-avatar-edit" onclick="toast('Upload em breve!','ti-camera')">
+            <i class="ti ti-camera"></i>
+          </div>
+        </div>
+        <div>
+          <p style="font-size:15px;font-weight:600;color:var(--text);">${FUNCIONARIO.nome}</p>
+          <p style="font-size:11px;color:var(--gold-dark);">${FUNCIONARIO.especialidade}</p>
+          <p style="font-size:11px;color:var(--text-dim);margin-top:2px;">${FUNCIONARIO.email}</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Nome completo</label>
+          <input type="text" class="form-input" id="input-nome" value="${FUNCIONARIO.nome}"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Especialidade</label>
+          <input type="text" class="form-input" id="input-esp" value="${FUNCIONARIO.especialidade}"/>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Telefone</label>
+          <input type="text" class="form-input" id="input-tel" value="${FUNCIONARIO.telefone}"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">E-mail</label>
+          <input type="email" class="form-input" id="input-email" value="${FUNCIONARIO.email}"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Dias de trabalho</label>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;" id="dias-work">
+          ${['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map((d, i) => `
+            <button onclick="this.classList.toggle('active-day')" style="padding:5px 12px;border-radius:8px;font-size:11px;cursor:pointer;border:1px solid var(--border);background:${i < 6 ? 'var(--gold-dim)' : 'var(--surface)'};color:${i < 6 ? 'var(--gold)' : 'var(--text-dim)'};transition:.2s;" class="${i < 6 ? 'active-day' : ''}">
+              ${d}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <hr class="section-divider"/>
+      <p style="font-size:11px;font-weight:500;color:var(--text);margin-bottom:12px;">
+        <i class="ti ti-lock" style="color:var(--gold-dark);margin-right:4px;"></i> Alterar Senha
+      </p>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Senha atual</label>
+          <input type="password" class="form-input" placeholder="••••••••"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nova senha</label>
+          <input type="password" class="form-input" placeholder="••••••••"/>
+        </div>
+      </div>
+
+      <button class="btn btn-gold" id="btn-salvar" style="width:100%;justify-content:center;">
+        <i class="ti ti-device-floppy"></i> Salvar Alterações
+      </button>
+    </div>
+
+    <div class="gap-y">
+      <div class="panel fade-in delay-1">
+        <div class="panel-header" style="margin-bottom:14px;">
+          <h1 class="panel-title">Resumo <em>profissional</em></h1>
+        </div>
+        ${[
+                    ['Atendimentos no mês', FUNCIONARIO.atendimentosMes, 'var(--gold)'],
+                    ['Comissão acumulada', formatCurrency(FUNCIONARIO.ganhosMes), 'var(--green)'],
+                    ['Meta mensal', formatCurrency(FUNCIONARIO.meta), 'var(--text-muted)'],
+                    ['Nota média', FUNCIONARIO.mediaAvaliacao + ' ★', 'var(--gold)'],
+                    ['Comissão %', FUNCIONARIO.comissao + '%', 'var(--blue)'],
+                ].map(([label, val, color]) => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+            <span style="font-size:12px;color:var(--text-dim);">${label}</span>
+            <span style="font-size:13px;font-weight:600;color:${color};">${val}</span>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="panel fade-in delay-2">
+        <div class="panel-header" style="margin-bottom:14px;">
+          <h1 class="panel-title">Próximos <em>agendamentos</em></h1>
+        </div>
+        ${meusAgendamentos.filter(a => a.status !== 'cancelled').slice(0, 3).map(a => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+            <div>
+              <p style="font-size:12px;font-weight:500;color:var(--text);">${a.cliente}</p>
+              <p style="font-size:10px;color:var(--text-dim);">${a.servico}</p>
+            </div>
+            <div style="text-align:right;">
+              <p style="font-size:11px;color:var(--gold);">${a.hora}</p>
+              <p style="font-size:10px;color:var(--text-dim);">${a.data}</p>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  </div>
+  `;
+
+            document.getElementById('btn-salvar')?.addEventListener('click', () => {
+                FUNCIONARIO.nome = document.getElementById('input-nome').value;
+                FUNCIONARIO.especialidade = document.getElementById('input-esp').value;
+                FUNCIONARIO.email = document.getElementById('input-email').value;
+                FUNCIONARIO.telefone = document.getElementById('input-tel').value;
+                toast('Perfil atualizado!', 'ti-check');
+            });
+        }
+
+        /* ================================================================
+           CHECK-IN / INICIAR ATENDIMENTO
+        ================================================================ */
+        function iniciarAtendimento(id) {
+            const apt = meusAgendamentos.find(a => a.id === id);
+            if (!apt) return;
+            const infoEl = document.getElementById('modal-checkin-info');
+            if (infoEl) {
+                infoEl.innerHTML = `
+      <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--text);font-style:italic;margin-bottom:10px;">${apt.servico}</p>
+      <div class="next-apt-row"><i class="ti ti-user"></i> ${apt.cliente}</div>
+      <div class="next-apt-row"><i class="ti ti-clock"></i> ${apt.hora} · ${apt.data}</div>
+      ${apt.obs ? `<div class="next-apt-row"><i class="ti ti-notes" style="color:var(--text-dim);"></i> <em style="font-style:italic;font-size:11px;color:var(--text-dim);">${apt.obs}</em></div>` : ''}
+      <div class="next-apt-row" style="margin-top:8px;">
+        <i class="ti ti-coin" style="color:var(--green);"></i>
+        <span style="color:var(--green);font-weight:600;">Comissão: R$ ${Math.round(apt.valor * FUNCIONARIO.comissao / 100)}</span>
+      </div>
+    `;
+            }
+            document.getElementById('modalCheckin').classList.add('open');
+            document.getElementById('modalCheckinConfirmar').onclick = () => {
+                apt.status = 'in_progress';
+                document.getElementById('modalCheckin').classList.remove('open');
+                toast(`Atendimento de ${apt.cliente} iniciado!`, 'ti-player-play');
+            };
+        }
+
+        document.getElementById('modalCheckinCancelar')?.addEventListener('click', () => {
+            document.getElementById('modalCheckin').classList.remove('open');
+        });
+        document.getElementById('modalCheckin')?.addEventListener('click', e => {
+            if (e.target === document.getElementById('modalCheckin')) document.getElementById('modalCheckin').classList.remove('open');
+        });
+
+        /* ================================================================
+           MODAL NOVO AGENDAMENTO
+        ================================================================ */
+        function abrirModal(servicoPresel) {
+            document.getElementById('modalAgendar').classList.add('open');
+            if (servicoPresel) {
+                const sel = document.getElementById('modalServico');
+                for (let opt of sel.options) if (opt.value === servicoPresel) { sel.value = servicoPresel; break; }
+            }
+        }
+        function fecharModal() { document.getElementById('modalAgendar').classList.remove('open'); }
+
+        document.getElementById('modalCancelar')?.addEventListener('click', fecharModal);
+        document.getElementById('modalAgendar')?.addEventListener('click', e => {
+            if (e.target === document.getElementById('modalAgendar')) fecharModal();
+        });
+        document.getElementById('modalConfirmar')?.addEventListener('click', () => {
+            const cliente = document.getElementById('modalCliente').value.trim();
+            const servico = document.getElementById('modalServico').value;
+            const data = document.getElementById('modalData').value;
+            const hora = document.getElementById('modalHora').value;
+            const obs = document.getElementById('modalObs').value.trim();
+
+            if (!cliente) { toast('Informe o nome do cliente!', 'ti-alert-circle'); return; }
+            if (!data) { toast('Selecione uma data!', 'ti-alert-circle'); return; }
+
+            const [y, m, d] = data.split('-');
+            const item = catalogo.find(s => s.nome === servico);
+            meusAgendamentos.push({
+                id: Date.now(), cliente, servico,
+                data: `${d}/${m}/${y}`, hora,
+                valor: item?.valor || 0,
+                status: 'pending', obs
+            });
+
+            document.getElementById('modalCliente').value = '';
+            document.getElementById('modalObs').value = '';
+            fecharModal();
+            toast(`Agendamento de ${cliente} criado!`, 'ti-calendar-plus');
+        });
+
+        /* ================================================================
+           ROTEAMENTO
+        ================================================================ */
+        const rotas = {
+            'nav-inicio': { fn: renderInicio, titulo: 'Olá, <em>Camila!</em>' },
+            'nav-agendamentos': { fn: renderAgendamentos, titulo: 'Minha <em>Agenda</em>' },
+            'nav-historico': { fn: renderHistorico, titulo: 'Histórico de <em>Atendimentos</em>' },
+            'nav-servicos': { fn: renderServicos, titulo: 'Meus <em>Serviços</em>' },
+            'nav-avaliacoes': { fn: renderAvaliacoes, titulo: 'Minhas <em>Avaliações</em>' },
+            'nav-perfil': { fn: renderPerfil, titulo: 'Meu <em>Perfil</em>' },
+        };
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', e => {
+                e.preventDefault();
+                const rota = rotas[item.id];
+                if (!rota) return;
+                setNavActive(item.id);
+                document.getElementById('topbar-title').innerHTML = rota.titulo;
+                navegarPara(rota.fn);
+            });
+        });
+
+        /* ================================================================
+           INICIALIZAÇÃO
+        ================================================================ */
+        const hoje = new Date();
+        document.getElementById('topbar-date').textContent = hoje.toLocaleDateString('pt-BR', {
+            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        });
+        navegarPara(renderInicio);
+    </script>
+</body>
+
+</html>
