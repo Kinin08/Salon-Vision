@@ -53,7 +53,9 @@
                 <a id="nav-avaliacoes" class="nav-item">
                     <i class="ti ti-star"></i> Avaliações
                 </a>
-
+                <a id="nav-faqs" class="nav-item">
+                    <i class="ti ti-home-question"></i> Perguntas Frequentes
+                </a>
                 <div class="nav-section-label">Gestão</div>
                 <a id="nav-clientes" class="nav-item">
                     <i class="ti ti-users"></i> Clientes
@@ -282,7 +284,11 @@
             { id: 5, nome: 'Renata M.', role: 'Design & Estética', foto: 'https://randomuser.me/api/portraits/women/10.jpg', nota: 4.8, ativo: false },
             { id: 6, nome: 'Diego P.', role: 'Cabeleireiro', foto: 'https://randomuser.me/api/portraits/men/22.jpg', nota: 4.6, ativo: true },
         ];
-
+        let perguntasPendentes = [
+            { cliente: 'Ana Costa', pergunta: 'Quais produtos são usados na coloração?', data: '05/06/2025' },
+            { cliente: 'Julia Moraes', pergunta: 'Vocês oferecem pacotes promocionais?', data: '04/06/2025' },
+            { cliente: 'Clara Vieira', pergunta: 'Qual a política de cancelamento?', data: '03/06/2025' },
+        ];
         let catalogo = [
             { id: 1, icon: 'ti-palette', nome: 'Coloração', desc: 'Coloração completa com produtos profissionais.', duracao: '2h30', valor: 'R$ 280' },
             { id: 2, icon: 'ti-cut', nome: 'Corte Feminino', desc: 'Corte personalizado para valorizar seu estilo.', duracao: '1h', valor: 'R$ 90' },
@@ -951,7 +957,98 @@
                 list.appendChild(div);
             });
         }
+        /* --- FAQS ---*/
+        function renderFaqs(c) {
+            c.innerHTML = `
+                <div class="panel fade-in">
+                    <div class="panel-header">
+                        <h1 class="panel-title">Últimas <em>perguntas</em></h1>
+                    </div>
+                    
+                    <div id="faq-list" style="display:flex;flex-direction:column;gap:14px;"></div>
+                </div>
+            `;
 
+            const list = document.getElementById('faq-list');
+
+            perguntasPendentes.forEach(p => {
+                const item = document.createElement('div');
+
+                item.innerHTML = `
+                    <div style="
+                        padding:18px;
+                        border:1px solid var(--border);
+                        border-radius:16px;
+                        background:rgba(255,255,255,0.02);
+                        transition:0.2s;
+                        " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:flex-start;
+                        gap:14px;
+                    ">
+
+                    <!-- ÍCONE + INFO -->
+                    <div style="display:flex;gap:12px;flex:1;">
+
+                        <div style="
+                            width:44px;
+                            height:44px;
+                            border-radius:12px;
+                            background:rgba(255,204,127,0.12);
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            color:var(--gold);
+                            font-size:18px;
+                            flex-shrink:0;
+                        ">
+                            <i class="ti ti-user"></i>
+                        </div>
+
+                        <div style="flex:1;">
+                            
+                            <!-- CLIENTE -->
+                            <h3 style="
+                                font-size:14px;
+                                font-weight:600;
+                                color:var(--text);
+                                margin:0;
+                            ">
+                                ${p.cliente}
+                            </h3>
+
+                            <!-- PERGUNTA -->
+                            <p style="
+                                margin-top:6px;
+                                font-size:13px;
+                                color:var(--text-muted);
+                                line-height:1.5;
+                            ">
+                                ${p.pergunta}
+                            </p>
+
+                        </div>
+                    </div>
+
+                    <!-- DATA -->
+                    <span style="
+                        font-size:11px;
+                        color:var(--text-dim);
+                        white-space:nowrap;
+                    ">
+                        ${p.data}
+                    </span>
+
+                </div>
+            </div>
+        `;
+
+                list.appendChild(item);
+            });
+        }
         /* ---- CONFIGURAÇÕES ---- */
         function renderPerfil(c) {
             c.innerHTML = `
@@ -1123,11 +1220,11 @@
             'nav-agendamentos': { fn: renderAgendamentos, titulo: 'Gestão de <em>Agendamentos</em>' },
             'nav-clientes': { fn: renderClientes, titulo: 'Gestão de <em>Clientes</em>' },
             'nav-profissionais': { fn: renderProfissionais, titulo: 'Nossa <em>Equipe</em>' },
+            'nav-faqs': { fn: renderFaqs, titulo: 'Perguntas mais <em>Frequentes</em>' },
             'nav-servicos': { fn: renderServicos, titulo: 'Catálogo de <em>Serviços</em>' },
             'nav-avaliacoes': { fn: renderAvaliacoes, titulo: 'Central de <em>Avaliações</em>' },
             'nav-perfil': { fn: renderPerfil, titulo: '<em>Perfil</em>' },
         };
-
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', e => {
                 e.preventDefault();

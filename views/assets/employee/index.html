@@ -2,294 +2,300 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Salon Vision | Painel do Funcionário</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@300;400;500;600;700&family=Yuji+Syuku&display=swap"
-        rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
-    <link rel="stylesheet" href="./styles/styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salon Vision | Painel do Funcionário</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@300;400;500;600;700&family=Yuji+Syuku&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="./styles/styles.css" />
 </head>
 
 <body>
 
-    <div class="aurora-wrap">
-        <div class="aurora-1"></div>
-        <div class="aurora-2"></div>
-    </div>
+  <div class="aurora-wrap">
+    <div class="aurora-1"></div>
+    <div class="aurora-2"></div>
+  </div>
 
-    <div class="layout">
+  <div class="layout">
 
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">
-                <svg class="w-8 h-8 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="1.5">
-                    <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
-                </svg>
-                <div>
-                    <div class="font-yuji text-xl text-white [text-shadow:0_0_10px_rgba(255,204,127,0.8)]">
-                        <span class="text-[#CA9440]">S</span><span>alon</span>
-                        <span class="text-[#CA9440]">V</span><span>ision</span>
-                    </div>
-                    <span class="logo-badge-admin">FUNCIONÁRIO</span>
-                </div>
-            </div>
-
-
-            <nav class="nav-section">
-                <h2 class="nav-label">Menu</h2>
-                <a id="nav-inicio" class="nav-item active" href="#">
-                    <i class="ti ti-home"></i><span>Início</span>
-                    <div class="online-dot" style="display:none;" id="dot-inicio"></div>
-                </a>
-                <a id="nav-agendamentos" class="nav-item" href="#">
-                    <i class="ti ti-calendar"></i><span>Agenda</span>
-                </a>
-                <a id="nav-historico" class="nav-item" href="#">
-                    <i class="ti ti-history"></i><span>Histórico</span>
-                </a>
-
-                <h2 class="nav-label" style="margin-top:12px;">Profissional</h2>
-                <a id="nav-servicos" class="nav-item" href="#">
-                    <i class="ti ti-cut"></i><span>Serviços</span>
-                </a>
-                <a id="nav-avaliacoes" class="nav-item" href="#">
-                    <i class="ti ti-user-star"></i><span>Avaliações</span>
-                </a>
-
-                <h2 class="nav-label" style="margin-top:12px;">Conta</h2>
-                <a id="nav-perfil" class="nav-item" href="#">
-                    <i class="ti ti-user-circle"></i><span>Meu Perfil</span>
-                </a>
-            </nav>
-
-            <div class="sidebar-bottom">
-                <div class="user-card">
-                    <img src="https://i.pravatar.cc/80?img=47" class="user-avatar" alt="Camila Rocha" />
-                    <div class="user-info">
-                        <p>Camila Rocha</p>
-                        <span>Profissional</span>
-                    </div>
-                    <i class="ti ti-dots-vertical" style="margin-left:auto;color:var(--text-dim);font-size:13px;"></i>
-                </div>
-        </aside>
-
-        <!-- MAIN -->
-        <div class="main">
-            <header class="topbar">
-                <div>
-                    <h1 class="topbar-title" id="topbar-title">Olá, <em>Camila!</em></h1>
-                    <h2 class="tb-date" id="topbar-date"></h2>
-                </div>
-                <div class="topbar-right">
-                    <div class="topbar-icon-btn" title="Notificações"
-                        onclick="toast('3 novos agendamentos hoje!','ti-bell')">
-                        <i class="ti ti-bell" style="font-size:16px;"></i>
-                        <div class="notif-dot"></div>
-                    </div>
-                    <img src="https://i.pravatar.cc/80?img=47"
-                        style="width:34px;height:34px;border-radius:10px;object-fit:cover;border:1px solid var(--border-strong);cursor:pointer;"
-                        alt="Camila Rocha"
-                        onclick="setNavActive('nav-perfil');document.getElementById('topbar-title').innerHTML='Meu <em>Perfil</em>';navegarPara(renderPerfil)" />
-                </div>
-            </header>
-
-            <main class="content" id="page-content"></main>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <svg class="w-8 h-8 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
+        </svg>
+        <div>
+          <div class="font-yuji text-xl text-white [text-shadow:0_0_10px_rgba(255,204,127,0.8)]">
+            <span class="text-[#CA9440]">S</span><span>alon</span>
+            <span class="text-[#CA9440]">V</span><span>ision</span>
+          </div>
+          <span class="logo-badge-admin">FUNCIONÁRIO</span>
         </div>
-    </div>
+      </div>
 
-    <!-- MODAL: CONFIRMAR ATENDIMENTO -->
-    <div class="modal-overlay" id="modalCheckin">
-        <div class="modal-box">
-            <h2 class="modal-title">Confirmar <em>Atendimento</em></h2>
-            <div id="modal-checkin-info"
-                style="padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:20px;">
-            </div>
-            <div style="display:flex;gap:10px;margin-top:4px;">
-                <button class="btn btn-green" style="flex:1;" id="modalCheckinConfirmar">
-                    <i class="ti ti-check"></i> Iniciar Atendimento
-                </button>
-                <button class="btn btn-ghost" id="modalCheckinCancelar">
-                    <i class="ti ti-x"></i> Fechar
-                </button>
-            </div>
+
+      <nav class="nav-section">
+        <h2 class="nav-label">Menu</h2>
+        <a id="nav-inicio" class="nav-item active" href="#">
+          <i class="ti ti-home"></i><span>Início</span>
+          <div class="online-dot" style="display:none;" id="dot-inicio"></div>
+        </a>
+        <a id="nav-agendamentos" class="nav-item" href="#">
+          <i class="ti ti-calendar"></i><span>Agenda</span>
+        </a>
+        <a id="nav-historico" class="nav-item" href="#">
+          <i class="ti ti-history"></i><span>Histórico</span>
+        </a>
+        <a id="nav-faqs" class="nav-item" href="#">
+          <i class="ti ti-home-question"></i><span>Perguntas Frequentes</span>
+        </a>
+
+        <h2 class="nav-label" style="margin-top:12px;">Profissional</h2>
+        <a id="nav-servicos" class="nav-item" href="#">
+          <i class="ti ti-cut"></i><span>Serviços</span>
+        </a>
+        <a id="nav-avaliacoes" class="nav-item" href="#">
+          <i class="ti ti-user-star"></i><span>Avaliações</span>
+        </a>
+
+        <h2 class="nav-label" style="margin-top:12px;">Conta</h2>
+        <a id="nav-perfil" class="nav-item" href="#">
+          <i class="ti ti-user-circle"></i><span>Meu Perfil</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="user-card">
+          <img src="https://i.pravatar.cc/80?img=47" class="user-avatar" alt="Camila Rocha" />
+          <div class="user-info">
+            <p>Camila Rocha</p>
+            <span>Profissional</span>
+          </div>
+          <i class="ti ti-dots-vertical" style="margin-left:auto;color:var(--text-dim);font-size:13px;"></i>
         </div>
-    </div>
+    </aside>
 
-    <!-- MODAL: NOVO AGENDAMENTO -->
-    <div class="modal-overlay" id="modalAgendar">
-        <div class="modal-box">
-            <h2 class="modal-title">Novo <em>Agendamento</em></h2>
-            <div class="form-group">
-                <label class="form-label">Cliente</label>
-                <input type="text" class="form-input" id="modalCliente" placeholder="Nome do cliente" />
-            </div>
-            <div class="form-group">
-                <label class="form-label">Serviço</label>
-                <select class="form-input" id="modalServico">
-                    <option>Coloração</option>
-                    <option>Corte Feminino</option>
-                    <option>Escova & Tratamento</option>
-                    <option>Manicure</option>
-                    <option>Hidratação Profunda</option>
-                    <option>Sobrancelha</option>
-                </select>
-            </div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label">Data</label>
-                    <input type="date" class="form-input" id="modalData" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Horário</label>
-                    <select class="form-input" id="modalHora">
-                        <option>09:00</option>
-                        <option>09:30</option>
-                        <option>10:00</option>
-                        <option>10:30</option>
-                        <option>11:00</option>
-                        <option>11:30</option>
-                        <option>14:00</option>
-                        <option>14:30</option>
-                        <option>15:00</option>
-                        <option>15:30</option>
-                        <option>16:00</option>
-                        <option>16:30</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Observações</label>
-                <input type="text" class="form-input" id="modalObs" placeholder="Ex: cliente prefere sem química" />
-            </div>
-            <div style="display:flex;gap:10px;margin-top:8px;">
-                <button class="btn btn-gold" style="flex:1;" id="modalConfirmar">
-                    <i class="ti ti-check"></i> Confirmar
-                </button>
-                <button class="btn btn-ghost" id="modalCancelar">
-                    <i class="ti ti-x"></i> Cancelar
-                </button>
-            </div>
+    <!-- MAIN -->
+    <div class="main">
+      <header class="topbar">
+        <div>
+          <h1 class="topbar-title" id="topbar-title">Olá, <em>Camila!</em></h1>
+          <h2 class="tb-date" id="topbar-date"></h2>
         </div>
+        <div class="topbar-right">
+          <div class="topbar-icon-btn" title="Notificações" onclick="toast('3 novos agendamentos hoje!','ti-bell')">
+            <i class="ti ti-bell" style="font-size:16px;"></i>
+            <div class="notif-dot"></div>
+          </div>
+          <img src="https://i.pravatar.cc/80?img=47"
+            style="width:34px;height:34px;border-radius:10px;object-fit:cover;border:1px solid var(--border-strong);cursor:pointer;"
+            alt="Camila Rocha"
+            onclick="setNavActive('nav-perfil');document.getElementById('topbar-title').innerHTML='Meu <em>Perfil</em>';navegarPara(renderPerfil)" />
+        </div>
+      </header>
+
+      <main class="content" id="page-content"></main>
     </div>
+  </div>
 
-    <div id="toast"><i class="ti ti-check"></i> <span id="toast-msg">Ação realizada!</span></div>
+  <!-- MODAL: CONFIRMAR ATENDIMENTO -->
+  <div class="modal-overlay" id="modalCheckin">
+    <div class="modal-box">
+      <h2 class="modal-title">Confirmar <em>Atendimento</em></h2>
+      <div id="modal-checkin-info"
+        style="padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:20px;">
+      </div>
+      <div style="display:flex;gap:10px;margin-top:4px;">
+        <button class="btn btn-green" style="flex:1;" id="modalCheckinConfirmar">
+          <i class="ti ti-check"></i> Iniciar Atendimento
+        </button>
+        <button class="btn btn-ghost" id="modalCheckinCancelar">
+          <i class="ti ti-x"></i> Fechar
+        </button>
+      </div>
+    </div>
+  </div>
 
-    <script>
-        /* ================================================================
-           SALON VISION — PAINEL DO FUNCIONÁRIO
-        ================================================================ */
+  <!-- MODAL: NOVO AGENDAMENTO -->
+  <div class="modal-overlay" id="modalAgendar">
+    <div class="modal-box">
+      <h2 class="modal-title">Novo <em>Agendamento</em></h2>
+      <div class="form-group">
+        <label class="form-label">Cliente</label>
+        <input type="text" class="form-input" id="modalCliente" placeholder="Nome do cliente" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Serviço</label>
+        <select class="form-input" id="modalServico">
+          <option>Coloração</option>
+          <option>Corte Feminino</option>
+          <option>Escova & Tratamento</option>
+          <option>Manicure</option>
+          <option>Hidratação Profunda</option>
+          <option>Sobrancelha</option>
+        </select>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Data</label>
+          <input type="date" class="form-input" id="modalData" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Horário</label>
+          <select class="form-input" id="modalHora">
+            <option>09:00</option>
+            <option>09:30</option>
+            <option>10:00</option>
+            <option>10:30</option>
+            <option>11:00</option>
+            <option>11:30</option>
+            <option>14:00</option>
+            <option>14:30</option>
+            <option>15:00</option>
+            <option>15:30</option>
+            <option>16:00</option>
+            <option>16:30</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Observações</label>
+        <input type="text" class="form-input" id="modalObs" placeholder="Ex: cliente prefere sem química" />
+      </div>
+      <div style="display:flex;gap:10px;margin-top:8px;">
+        <button class="btn btn-gold" style="flex:1;" id="modalConfirmar">
+          <i class="ti ti-check"></i> Confirmar
+        </button>
+        <button class="btn btn-ghost" id="modalCancelar">
+          <i class="ti ti-x"></i> Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
 
-        const FUNCIONARIO = {
-            nome: 'Camila Rocha',
-            especialidade: 'Colorista & Cabeleireira',
-            email: 'camila.rocha@salonvision.com',
-            telefone: '(51) 99345-6789',
-            foto: 'https://i.pravatar.cc/80?img=47',
-            comissao: 40, // % de comissão
-            meta: 3200,   // meta mensal R$
-            ganhosMes: 2560,
-            atendimentosMes: 28,
-            atendimentosSemana: 7,
-            mediaAvaliacao: 4.8,
-        };
+  <div id="toast"><i class="ti ti-check"></i> <span id="toast-msg">Ação realizada!</span></div>
 
-        const STATUS_LABEL = {
-            confirmed: 'Confirmado',
-            pending: 'Pendente',
-            done: 'Concluído',
-            cancelled: 'Cancelado',
-            in_progress: 'Em andamento',
-        };
+  <script>
+    /* ================================================================
+       SALON VISION — PAINEL DO FUNCIONÁRIO
+    ================================================================ */
 
-        /* ---- Agendamentos do funcionário ---- */
-        let meusAgendamentos = [
-            { id: 1, cliente: 'Ana Costa', servico: 'Coloração', data: '20/06/2025', hora: '10:00', valor: 280, status: 'confirmed', obs: '' },
-            { id: 2, cliente: 'Julia Moraes', servico: 'Sobrancelha', data: '20/06/2025', hora: '14:30', valor: 45, status: 'pending', obs: 'Prefere henna marrom' },
-            { id: 3, cliente: 'Fernanda Lima', servico: 'Escova & Tratamento', data: '22/06/2025', hora: '09:30', valor: 120, status: 'confirmed', obs: '' },
-            { id: 4, cliente: 'Clara Vieira', servico: 'Manicure', data: '25/06/2025', hora: '16:00', valor: 60, status: 'pending', obs: '' },
-            { id: 5, cliente: 'Beatriz Nunes', servico: 'Hidratação Profunda', data: '28/06/2025', hora: '11:00', valor: 95, status: 'confirmed', obs: 'Cabelo muito ressecado' },
-            { id: 6, cliente: 'Sofia Andrade', servico: 'Corte Feminino', data: '01/07/2025', hora: '14:00', valor: 90, status: 'confirmed', obs: '' },
-        ];
+    const FUNCIONARIO = {
+      nome: 'Camila Rocha',
+      especialidade: 'Colorista & Cabeleireira',
+      email: 'camila.rocha@salonvision.com',
+      telefone: '(51) 99345-6789',
+      foto: 'https://i.pravatar.cc/80?img=47',
+      comissao: 40, // % de comissão
+      meta: 3200,   // meta mensal R$
+      ganhosMes: 2560,
+      atendimentosMes: 28,
+      atendimentosSemana: 7,
+      mediaAvaliacao: 4.8,
+    };
 
-        /* ---- Histórico ---- */
-        const historico = [
-            { cliente: 'Paula Ribeiro', servico: 'Coloração', data: '10/06/2025', valor: 280, duracao: '2h30', avaliacao: 5, obs: 'Ótimo resultado!' },
-            { cliente: 'Mariana Souza', servico: 'Escova & Tratamento', data: '08/06/2025', valor: 120, duracao: '1h20', avaliacao: 5, obs: '' },
-            { cliente: 'Lívia Torres', servico: 'Sobrancelha', data: '07/06/2025', valor: 45, duracao: '40min', avaliacao: 4, obs: 'Gostou da henna' },
-            { cliente: 'Rebecca Alves', servico: 'Hidratação Profunda', data: '05/06/2025', valor: 95, duracao: '1h', avaliacao: 5, obs: '' },
-            { cliente: 'Giovanna Martins', servico: 'Corte Feminino', data: '03/06/2025', valor: 90, duracao: '55min', avaliacao: 5, obs: '' },
-            { cliente: 'Ana Costa', servico: 'Coloração', data: '01/06/2025', valor: 280, duracao: '2h30', avaliacao: 5, obs: 'Cliente fiel' },
-        ];
+    const STATUS_LABEL = {
+      confirmed: 'Confirmado',
+      pending: 'Pendente',
+      done: 'Concluído',
+      cancelled: 'Cancelado',
+      in_progress: 'Em andamento',
+    };
 
-        /* ---- Avaliações ---- */
-        const avaliacoes = [
-            { cliente: 'Paula Ribeiro', servico: 'Coloração', nota: 5, comentario: 'Adorei o resultado! Ficou perfeito, superou as expectativas.', data: '10/06/2025' },
-            { cliente: 'Mariana Souza', servico: 'Escova & Tratamento', nota: 5, comentario: 'Maravilhosa! Saí do salão me sentindo outra pessoa.', data: '08/06/2025' },
-            { cliente: 'Lívia Torres', servico: 'Sobrancelha', nota: 4, comentario: 'Muito bom, mas poderia durar um pouco mais.', data: '07/06/2025' },
-            { cliente: 'Rebecca Alves', servico: 'Hidratação', nota: 5, comentario: 'Cabelo ficou incrível! Recomendo muito a Camila.', data: '05/06/2025' },
-            { cliente: 'Giovanna Martins', servico: 'Corte Feminino', nota: 5, comentario: 'Corte perfeito para o meu rosto. Amei demais!', data: '03/06/2025' },
-        ];
+    /* ---- Agendamentos do funcionário ---- */
+    let meusAgendamentos = [
+      { id: 1, cliente: 'Ana Costa', servico: 'Coloração', data: '20/06/2025', hora: '10:00', valor: 280, status: 'confirmed', obs: '' },
+      { id: 2, cliente: 'Julia Moraes', servico: 'Sobrancelha', data: '20/06/2025', hora: '14:30', valor: 45, status: 'pending', obs: 'Prefere henna marrom' },
+      { id: 3, cliente: 'Fernanda Lima', servico: 'Escova & Tratamento', data: '22/06/2025', hora: '09:30', valor: 120, status: 'confirmed', obs: '' },
+      { id: 4, cliente: 'Clara Vieira', servico: 'Manicure', data: '25/06/2025', hora: '16:00', valor: 60, status: 'pending', obs: '' },
+      { id: 5, cliente: 'Beatriz Nunes', servico: 'Hidratação Profunda', data: '28/06/2025', hora: '11:00', valor: 95, status: 'confirmed', obs: 'Cabelo muito ressecado' },
+      { id: 6, cliente: 'Sofia Andrade', servico: 'Corte Feminino', data: '01/07/2025', hora: '14:00', valor: 90, status: 'confirmed', obs: '' },
+    ];
 
-        /* ---- Catálogo ---- */
-        const catalogo = [
-            { icon: 'ti-palette', nome: 'Coloração', desc: 'Coloração completa com produtos profissionais.', duracao: '2h30', valor: 280, comissao: 112 },
-            { icon: 'ti-cut', nome: 'Corte Feminino', desc: 'Corte personalizado para valorizar seu estilo.', duracao: '1h', valor: 90, comissao: 36 },
-            { icon: 'ti-wind', nome: 'Escova & Tratamento', desc: 'Escova modeladora com hidratação profunda.', duracao: '1h30', valor: 120, comissao: 48 },
-            { icon: 'ti-sparkles', nome: 'Manicure', desc: 'Cuidado completo para unhas das mãos.', duracao: '50min', valor: 60, comissao: 24 },
-            { icon: 'ti-droplet', nome: 'Hidratação Profunda', desc: 'Máscara nutritiva para brilho e saúde capilar.', duracao: '1h', valor: 95, comissao: 38 },
-            { icon: 'ti-eye', nome: 'Sobrancelha', desc: 'Design com henna e brow lamination.', duracao: '45min', valor: 45, comissao: 18 },
-        ];
+    /* ---- Histórico ---- */
+    const historico = [
+      { cliente: 'Paula Ribeiro', servico: 'Coloração', data: '10/06/2025', valor: 280, duracao: '2h30', avaliacao: 5, obs: 'Ótimo resultado!' },
+      { cliente: 'Mariana Souza', servico: 'Escova & Tratamento', data: '08/06/2025', valor: 120, duracao: '1h20', avaliacao: 5, obs: '' },
+      { cliente: 'Lívia Torres', servico: 'Sobrancelha', data: '07/06/2025', valor: 45, duracao: '40min', avaliacao: 4, obs: 'Gostou da henna' },
+      { cliente: 'Rebecca Alves', servico: 'Hidratação Profunda', data: '05/06/2025', valor: 95, duracao: '1h', avaliacao: 5, obs: '' },
+      { cliente: 'Giovanna Martins', servico: 'Corte Feminino', data: '03/06/2025', valor: 90, duracao: '55min', avaliacao: 5, obs: '' },
+      { cliente: 'Ana Costa', servico: 'Coloração', data: '01/06/2025', valor: 280, duracao: '2h30', avaliacao: 5, obs: 'Cliente fiel' },
+    ];
 
-        /* ================================================================
-           HELPERS
-        ================================================================ */
-        function setNavActive(id) {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            const el = document.getElementById(id);
-            if (el) el.classList.add('active');
-        }
+    /* ---- Avaliações ---- */
+    const avaliacoes = [
+      { cliente: 'Paula Ribeiro', servico: 'Coloração', nota: 5, comentario: 'Adorei o resultado! Ficou perfeito, superou as expectativas.', data: '10/06/2025' },
+      { cliente: 'Mariana Souza', servico: 'Escova & Tratamento', nota: 5, comentario: 'Maravilhosa! Saí do salão me sentindo outra pessoa.', data: '08/06/2025' },
+      { cliente: 'Lívia Torres', servico: 'Sobrancelha', nota: 4, comentario: 'Muito bom, mas poderia durar um pouco mais.', data: '07/06/2025' },
+      { cliente: 'Rebecca Alves', servico: 'Hidratação', nota: 5, comentario: 'Cabelo ficou incrível! Recomendo muito a Camila.', data: '05/06/2025' },
+      { cliente: 'Giovanna Martins', servico: 'Corte Feminino', nota: 5, comentario: 'Corte perfeito para o meu rosto. Amei demais!', data: '03/06/2025' },
+    ];
+    let perguntasPendentes = [
+      { cliente: 'Ana Costa', pergunta: 'Quais produtos são usados na coloração?', data: '05/06/2025' },
+      { cliente: 'Julia Moraes', pergunta: 'Vocês oferecem pacotes promocionais?', data: '04/06/2025' },
+      { cliente: 'Clara Vieira', pergunta: 'Qual a política de cancelamento?', data: '03/06/2025' },
+    ];
 
-        function navegarPara(renderFn) {
-            const c = document.getElementById('page-content');
-            c.style.transition = 'opacity 0.2s ease';
-            c.style.opacity = '0';
-            setTimeout(() => {
-                c.innerHTML = '';
-                renderFn(c);
-                c.style.opacity = '1';
-            }, 200);
-        }
+    /* ---- Catálogo ---- */
+    const catalogo = [
+      { icon: 'ti-palette', nome: 'Coloração', desc: 'Coloração completa com produtos profissionais.', duracao: '2h30', valor: 280, comissao: 112 },
+      { icon: 'ti-cut', nome: 'Corte Feminino', desc: 'Corte personalizado para valorizar seu estilo.', duracao: '1h', valor: 90, comissao: 36 },
+      { icon: 'ti-wind', nome: 'Escova & Tratamento', desc: 'Escova modeladora com hidratação profunda.', duracao: '1h30', valor: 120, comissao: 48 },
+      { icon: 'ti-sparkles', nome: 'Manicure', desc: 'Cuidado completo para unhas das mãos.', duracao: '50min', valor: 60, comissao: 24 },
+      { icon: 'ti-droplet', nome: 'Hidratação Profunda', desc: 'Máscara nutritiva para brilho e saúde capilar.', duracao: '1h', valor: 95, comissao: 38 },
+      { icon: 'ti-eye', nome: 'Sobrancelha', desc: 'Design com henna e brow lamination.', duracao: '45min', valor: 45, comissao: 18 },
+    ];
 
-        function toast(msg, icon = 'ti-check') {
-            const t = document.getElementById('toast');
-            document.getElementById('toast-msg').textContent = msg;
-            t.querySelector('i').className = `ti ${icon}`;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
-        }
+    /* ================================================================
+       HELPERS
+    ================================================================ */
+    function setNavActive(id) {
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      const el = document.getElementById(id);
+      if (el) el.classList.add('active');
+    }
 
-        function stars(n) {
-            let s = '';
-            for (let i = 1; i <= 5; i++) s += `<i class="ti ti-star${i <= n ? '-filled star-filled' : ''}" style="font-size:12px;"></i>`;
-            return s;
-        }
+    function navegarPara(renderFn) {
+      const c = document.getElementById('page-content');
+      c.style.transition = 'opacity 0.2s ease';
+      c.style.opacity = '0';
+      setTimeout(() => {
+        c.innerHTML = '';
+        renderFn(c);
+        c.style.opacity = '1';
+      }, 200);
+    }
 
-        function formatCurrency(v) { return `R$ ${v.toLocaleString('pt-BR')}`; }
+    function toast(msg, icon = 'ti-check') {
+      const t = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      t.querySelector('i').className = `ti ${icon}`;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
 
-        /* ================================================================
-           INÍCIO
-        ================================================================ */
-        function renderInicio(c) {
-            const hoje = meusAgendamentos.filter(a => a.data === '20/06/2025' && a.status !== 'cancelled');
-            const proximo = meusAgendamentos.find(a => a.status === 'confirmed' || a.status === 'pending');
-            const progressoPct = Math.min(100, Math.round((FUNCIONARIO.ganhosMes / FUNCIONARIO.meta) * 100));
-            const ganhosSemana = meusAgendamentos.filter(a => a.status === 'confirmed').reduce((s, a) => s + (a.valor * FUNCIONARIO.comissao / 100), 0).toFixed(0);
+    function stars(n) {
+      let s = '';
+      for (let i = 1; i <= 5; i++) s += `<i class="ti ti-star${i <= n ? '-filled star-filled' : ''}" style="font-size:12px;"></i>`;
+      return s;
+    }
 
-            c.innerHTML = `
+    function formatCurrency(v) { return `R$ ${v.toLocaleString('pt-BR')}`; }
+
+    /* ================================================================
+       INÍCIO
+    ================================================================ */
+    function renderInicio(c) {
+      const hoje = meusAgendamentos.filter(a => a.data === '20/06/2025' && a.status !== 'cancelled');
+      const proximo = meusAgendamentos.find(a => a.status === 'confirmed' || a.status === 'pending');
+      const progressoPct = Math.min(100, Math.round((FUNCIONARIO.ganhosMes / FUNCIONARIO.meta) * 100));
+      const ganhosSemana = meusAgendamentos.filter(a => a.status === 'confirmed').reduce((s, a) => s + (a.valor * FUNCIONARIO.comissao / 100), 0).toFixed(0);
+
+      c.innerHTML = `
   <div class="greeting-hero fade-in">
     <p class="greeting-kicker">Bem-vinda de volta</p>
     <h2 class="greeting-title">Olá, <strong>${FUNCIONARIO.nome.split(' ')[0]}!</strong></h2>
@@ -391,12 +397,12 @@
   </div>
   `;
 
-            const list = document.getElementById('hoje-list');
-            if (list) {
-                hoje.forEach(a => {
-                    const div = document.createElement('div');
-                    div.className = 'schedule-row';
-                    div.innerHTML = `
+      const list = document.getElementById('hoje-list');
+      if (list) {
+        hoje.forEach(a => {
+          const div = document.createElement('div');
+          div.className = 'schedule-row';
+          div.innerHTML = `
         <div class="sched-time">${a.hora}<span>${a.data.split('/').slice(0, 2).join('/')}</span></div>
         <div class="sched-bar ${a.status}"></div>
         <div class="sched-info">
@@ -407,16 +413,16 @@
           <span class="status-pill ${a.status}"><span class="status-dot"></span>${STATUS_LABEL[a.status]}</span>
         </div>
       `;
-                    list.appendChild(div);
-                });
-            }
-        }
+          list.appendChild(div);
+        });
+      }
+    }
 
-        /* ================================================================
-           AGENDA
-        ================================================================ */
-        function renderAgendamentos(c) {
-            c.innerHTML = `
+    /* ================================================================
+       AGENDA
+    ================================================================ */
+    function renderAgendamentos(c) {
+      c.innerHTML = `
   <div class="panel fade-in">
     <div class="panel-header">
       <h1 class="panel-title">Minha <em>Agenda</em></h1>
@@ -452,18 +458,18 @@
   </div>
   `;
 
-            const renderTabela = (filtro) => {
-                const tbody = document.getElementById('tbody-agendamentos');
-                tbody.innerHTML = '';
-                const lista = filtro ? meusAgendamentos.filter(a => a.status === filtro) : meusAgendamentos;
-                if (lista.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-dim);">Nenhum agendamento encontrado.</td></tr>`;
-                    return;
-                }
-                lista.forEach(a => {
-                    const comissao = (a.valor * FUNCIONARIO.comissao / 100).toFixed(0);
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
+      const renderTabela = (filtro) => {
+        const tbody = document.getElementById('tbody-agendamentos');
+        tbody.innerHTML = '';
+        const lista = filtro ? meusAgendamentos.filter(a => a.status === filtro) : meusAgendamentos;
+        if (lista.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-dim);">Nenhum agendamento encontrado.</td></tr>`;
+          return;
+        }
+        lista.forEach(a => {
+          const comissao = (a.valor * FUNCIONARIO.comissao / 100).toFixed(0);
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
         <td>
           <div style="display:flex;align-items:center;gap:8px;">
             <div style="width:28px;height:28px;border-radius:8px;background:var(--gold-dim);display:flex;align-items:center;justify-content:center;color:var(--gold-dark);font-size:11px;font-weight:600;flex-shrink:0;">
@@ -490,50 +496,50 @@
           </div>
         </td>
       `;
-                    if (a.obs) {
-                        const obsRow = document.createElement('tr');
-                        obsRow.innerHTML = `<td colspan="7" style="padding:4px 12px 10px 50px;font-size:11px;color:var(--text-dim);font-style:italic;border-bottom:1px solid var(--border);">
+          if (a.obs) {
+            const obsRow = document.createElement('tr');
+            obsRow.innerHTML = `<td colspan="7" style="padding:4px 12px 10px 50px;font-size:11px;color:var(--text-dim);font-style:italic;border-bottom:1px solid var(--border);">
           <i class="ti ti-notes" style="margin-right:4px;"></i>${a.obs}
         </td>`;
-                        tbody.appendChild(tr);
-                        tbody.appendChild(obsRow);
-                    } else {
-                        tbody.appendChild(tr);
-                    }
-                });
+            tbody.appendChild(tr);
+            tbody.appendChild(obsRow);
+          } else {
+            tbody.appendChild(tr);
+          }
+        });
 
-                tbody.addEventListener('click', e => {
-                    const btn = e.target.closest('[data-action]');
-                    if (!btn) return;
-                    const id = parseInt(btn.dataset.id);
-                    const action = btn.dataset.action;
-                    if (action === 'cancelar') {
-                        if (confirm('Cancelar este agendamento?')) {
-                            const apt = meusAgendamentos.find(x => x.id === id);
-                            if (apt) apt.status = 'cancelled';
-                            toast('Agendamento cancelado.', 'ti-x');
-                            renderTabela(document.getElementById('filtro-status')?.value);
-                        }
-                    }
-                    if (action === 'iniciar') {
-                        iniciarAtendimento(id);
-                    }
-                });
-            };
+        tbody.addEventListener('click', e => {
+          const btn = e.target.closest('[data-action]');
+          if (!btn) return;
+          const id = parseInt(btn.dataset.id);
+          const action = btn.dataset.action;
+          if (action === 'cancelar') {
+            if (confirm('Cancelar este agendamento?')) {
+              const apt = meusAgendamentos.find(x => x.id === id);
+              if (apt) apt.status = 'cancelled';
+              toast('Agendamento cancelado.', 'ti-x');
+              renderTabela(document.getElementById('filtro-status')?.value);
+            }
+          }
+          if (action === 'iniciar') {
+            iniciarAtendimento(id);
+          }
+        });
+      };
 
-            renderTabela('');
-            document.getElementById('btnNovoAptTabela')?.addEventListener('click', abrirModal);
-            document.getElementById('filtro-status')?.addEventListener('change', e => renderTabela(e.target.value));
-        }
+      renderTabela('');
+      document.getElementById('btnNovoAptTabela')?.addEventListener('click', abrirModal);
+      document.getElementById('filtro-status')?.addEventListener('change', e => renderTabela(e.target.value));
+    }
 
-        /* ================================================================
-           HISTÓRICO
-        ================================================================ */
-        function renderHistorico(c) {
-            const totalGanho = historico.reduce((s, h) => s + h.valor, 0);
-            const totalComissao = Math.round(totalGanho * FUNCIONARIO.comissao / 100);
+    /* ================================================================
+       HISTÓRICO
+    ================================================================ */
+    function renderHistorico(c) {
+      const totalGanho = historico.reduce((s, h) => s + h.valor, 0);
+      const totalComissao = Math.round(totalGanho * FUNCIONARIO.comissao / 100);
 
-            c.innerHTML = `
+      c.innerHTML = `
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;" class="fade-in">
     <div class="metric-card">
       <div class="metric-icon gold"><i class="ti ti-history"></i></div>
@@ -561,12 +567,12 @@
   </div>
   `;
 
-            const list = document.getElementById('historico-list');
-            historico.forEach(h => {
-                const comissao = Math.round(h.valor * FUNCIONARIO.comissao / 100);
-                const div = document.createElement('div');
-                div.className = 'history-item';
-                div.innerHTML = `
+      const list = document.getElementById('historico-list');
+      historico.forEach(h => {
+        const comissao = Math.round(h.valor * FUNCIONARIO.comissao / 100);
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.innerHTML = `
       <div class="history-icon"><i class="ti ti-cut"></i></div>
       <div class="history-info">
         <p class="history-service">${h.servico}</p>
@@ -581,15 +587,106 @@
         <div class="history-stars">${stars(h.avaliacao)}</div>
       </div>
     `;
-                list.appendChild(div);
-            });
-        }
+        list.appendChild(div);
+      });
+    }
+    function renderFaqs(c) {
+      c.innerHTML = `
+                <div class="panel fade-in">
+                    <div class="panel-header">
+                        <h1 class="panel-title">Últimas <em>perguntas</em></h1>
+                    </div>
 
-        /* ================================================================
-           SERVIÇOS
-        ================================================================ */
-        function renderServicos(c) {
-            c.innerHTML = `
+                    <div id="faq-list" style="display:flex;flex-direction:column;gap:14px;"></div>
+                </div>
+            `;
+
+      const list = document.getElementById('faq-list');
+
+      perguntasPendentes.forEach(p => {
+        const item = document.createElement('div');
+
+        item.innerHTML = `
+                    <div style="
+                        padding:18px;
+                        border:1px solid var(--border);
+                        border-radius:16px;
+                        background:rgba(255,255,255,0.02);
+                        transition:0.2s;
+                        " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:flex-start;
+                        gap:14px;
+                    ">
+
+                    <!-- ÍCONE + INFO -->
+                    <div style="display:flex;gap:12px;flex:1;">
+
+                        <div style="
+                            width:44px;
+                            height:44px;
+                            border-radius:12px;
+                            background:rgba(255,204,127,0.12);
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            color:var(--gold);
+                            font-size:18px;
+                            flex-shrink:0;
+                        ">
+                            <i class="ti ti-user"></i>
+                        </div>
+
+                        <div style="flex:1;">
+                            
+                            <!-- CLIENTE -->
+                            <h3 style="
+                                font-size:14px;
+                                font-weight:600;
+                                color:var(--text);
+                                margin:0;
+                            ">
+                                ${p.cliente}
+                            </h3>
+
+                            <!-- PERGUNTA -->
+                            <p style="
+                                margin-top:6px;
+                                font-size:13px;
+                                color:var(--text-muted);
+                                line-height:1.5;
+                            ">
+                                ${p.pergunta}
+                            </p>
+
+                        </div>
+                    </div>
+
+                    <!-- DATA -->
+                    <span style="
+                        font-size:11px;
+                        color:var(--text-dim);
+                        white-space:nowrap;
+                    ">
+                        ${p.data}
+                    </span>
+
+                </div>
+            </div>
+        `;
+
+        list.appendChild(item);
+      });
+    }
+
+    /* ================================================================
+       SERVIÇOS
+    ================================================================ */
+    function renderServicos(c) {
+      c.innerHTML = `
   <div style="margin-bottom:16px;" class="fade-in">
     <h1 style="font-size:22px;font-weight:400;">Meus <em style="font-style:italic;font-family:'Cormorant Garamond',serif;font-size:27px;color:var(--gold);">Serviços</em></h1>
     <p style="font-size:12px;color:var(--text-dim);margin-top:4px;">Serviços que você oferece · Comissão de <strong style="color:var(--green);">${FUNCIONARIO.comissao}%</strong> em todos</p>
@@ -597,12 +694,12 @@
   <div class="services-grid" id="services-grid"></div>
   `;
 
-            const grid = document.getElementById('services-grid');
-            catalogo.forEach((s, i) => {
-                const div = document.createElement('div');
-                div.className = `service-card fade-in`;
-                div.style.animationDelay = `${i * 0.06}s`;
-                div.innerHTML = `
+      const grid = document.getElementById('services-grid');
+      catalogo.forEach((s, i) => {
+        const div = document.createElement('div');
+        div.className = `service-card fade-in`;
+        div.style.animationDelay = `${i * 0.06}s`;
+        div.innerHTML = `
       <div class="service-card-icon"><i class="ti ${s.icon}"></i></div>
       <p class="service-card-name">${s.nome}</p>
       <p class="service-card-desc">${s.desc}</p>
@@ -615,19 +712,19 @@
         <i class="ti ti-calendar-plus"></i> Agendar cliente
       </button>
     `;
-                grid.appendChild(div);
-            });
-        }
+        grid.appendChild(div);
+      });
+    }
 
-        /* ================================================================
-           AVALIAÇÕES
-        ================================================================ */
-        function renderAvaliacoes(c) {
-            const media = (avaliacoes.reduce((s, a) => s + a.nota, 0) / avaliacoes.length).toFixed(1);
-            const dist = [5, 4, 3, 2, 1].map(n => [n, avaliacoes.filter(a => a.nota === n).length]);
-            const pct5 = Math.round((avaliacoes.filter(a => a.nota === 5).length / avaliacoes.length) * 100);
+    /* ================================================================
+       AVALIAÇÕES
+    ================================================================ */
+    function renderAvaliacoes(c) {
+      const media = (avaliacoes.reduce((s, a) => s + a.nota, 0) / avaliacoes.length).toFixed(1);
+      const dist = [5, 4, 3, 2, 1].map(n => [n, avaliacoes.filter(a => a.nota === n).length]);
+      const pct5 = Math.round((avaliacoes.filter(a => a.nota === 5).length / avaliacoes.length) * 100);
 
-            c.innerHTML = `
+      c.innerHTML = `
   <div class="metrics-grid fade-in" style="margin-bottom:20px;">
     <div class="metric-card">
       <div class="metric-icon gold"><i class="ti ti-star-filled"></i></div>
@@ -688,10 +785,10 @@
   </div>
   `;
 
-            const list = document.getElementById('aval-list');
-            avaliacoes.forEach(av => {
-                const div = document.createElement('div');
-                div.innerHTML = `
+      const list = document.getElementById('aval-list');
+      avaliacoes.forEach(av => {
+        const div = document.createElement('div');
+        div.innerHTML = `
       <div style="padding:16px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.02);transition:.2s;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
           <div style="display:flex;gap:10px;">
@@ -709,15 +806,15 @@
         <p style="margin-top:12px;color:var(--text-muted);line-height:1.6;font-size:12px;font-style:italic;">"${av.comentario}"</p>
       </div>
     `;
-                list.appendChild(div);
-            });
-        }
+        list.appendChild(div);
+      });
+    }
 
-        /* ================================================================
-           PERFIL
-        ================================================================ */
-        function renderPerfil(c) {
-            c.innerHTML = `
+    /* ================================================================
+       PERFIL
+    ================================================================ */
+    function renderPerfil(c) {
+      c.innerHTML = `
   <div class="grid-2-1 fade-in">
     <div class="panel">
       <div class="panel-header">
@@ -796,12 +893,12 @@
           <h1 class="panel-title">Resumo <em>profissional</em></h1>
         </div>
         ${[
-                    ['Atendimentos no mês', FUNCIONARIO.atendimentosMes, 'var(--gold)'],
-                    ['Comissão acumulada', formatCurrency(FUNCIONARIO.ganhosMes), 'var(--green)'],
-                    ['Meta mensal', formatCurrency(FUNCIONARIO.meta), 'var(--text-muted)'],
-                    ['Nota média', FUNCIONARIO.mediaAvaliacao + ' ★', 'var(--gold)'],
-                    ['Comissão %', FUNCIONARIO.comissao + '%', 'var(--blue)'],
-                ].map(([label, val, color]) => `
+          ['Atendimentos no mês', FUNCIONARIO.atendimentosMes, 'var(--gold)'],
+          ['Comissão acumulada', formatCurrency(FUNCIONARIO.ganhosMes), 'var(--green)'],
+          ['Meta mensal', formatCurrency(FUNCIONARIO.meta), 'var(--text-muted)'],
+          ['Nota média', FUNCIONARIO.mediaAvaliacao + ' ★', 'var(--gold)'],
+          ['Comissão %', FUNCIONARIO.comissao + '%', 'var(--blue)'],
+        ].map(([label, val, color]) => `
           <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
             <span style="font-size:12px;color:var(--text-dim);">${label}</span>
             <span style="font-size:13px;font-weight:600;color:${color};">${val}</span>
@@ -830,24 +927,24 @@
   </div>
   `;
 
-            document.getElementById('btn-salvar')?.addEventListener('click', () => {
-                FUNCIONARIO.nome = document.getElementById('input-nome').value;
-                FUNCIONARIO.especialidade = document.getElementById('input-esp').value;
-                FUNCIONARIO.email = document.getElementById('input-email').value;
-                FUNCIONARIO.telefone = document.getElementById('input-tel').value;
-                toast('Perfil atualizado!', 'ti-check');
-            });
-        }
+      document.getElementById('btn-salvar')?.addEventListener('click', () => {
+        FUNCIONARIO.nome = document.getElementById('input-nome').value;
+        FUNCIONARIO.especialidade = document.getElementById('input-esp').value;
+        FUNCIONARIO.email = document.getElementById('input-email').value;
+        FUNCIONARIO.telefone = document.getElementById('input-tel').value;
+        toast('Perfil atualizado!', 'ti-check');
+      });
+    }
 
-        /* ================================================================
-           CHECK-IN / INICIAR ATENDIMENTO
-        ================================================================ */
-        function iniciarAtendimento(id) {
-            const apt = meusAgendamentos.find(a => a.id === id);
-            if (!apt) return;
-            const infoEl = document.getElementById('modal-checkin-info');
-            if (infoEl) {
-                infoEl.innerHTML = `
+    /* ================================================================
+       CHECK-IN / INICIAR ATENDIMENTO
+    ================================================================ */
+    function iniciarAtendimento(id) {
+      const apt = meusAgendamentos.find(a => a.id === id);
+      if (!apt) return;
+      const infoEl = document.getElementById('modal-checkin-info');
+      if (infoEl) {
+        infoEl.innerHTML = `
       <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--text);font-style:italic;margin-bottom:10px;">${apt.servico}</p>
       <div class="next-apt-row"><i class="ti ti-user"></i> ${apt.cliente}</div>
       <div class="next-apt-row"><i class="ti ti-clock"></i> ${apt.hora} · ${apt.data}</div>
@@ -857,95 +954,96 @@
         <span style="color:var(--green);font-weight:600;">Comissão: R$ ${Math.round(apt.valor * FUNCIONARIO.comissao / 100)}</span>
       </div>
     `;
-            }
-            document.getElementById('modalCheckin').classList.add('open');
-            document.getElementById('modalCheckinConfirmar').onclick = () => {
-                apt.status = 'in_progress';
-                document.getElementById('modalCheckin').classList.remove('open');
-                toast(`Atendimento de ${apt.cliente} iniciado!`, 'ti-player-play');
-            };
-        }
+      }
+      document.getElementById('modalCheckin').classList.add('open');
+      document.getElementById('modalCheckinConfirmar').onclick = () => {
+        apt.status = 'in_progress';
+        document.getElementById('modalCheckin').classList.remove('open');
+        toast(`Atendimento de ${apt.cliente} iniciado!`, 'ti-player-play');
+      };
+    }
 
-        document.getElementById('modalCheckinCancelar')?.addEventListener('click', () => {
-            document.getElementById('modalCheckin').classList.remove('open');
-        });
-        document.getElementById('modalCheckin')?.addEventListener('click', e => {
-            if (e.target === document.getElementById('modalCheckin')) document.getElementById('modalCheckin').classList.remove('open');
-        });
+    document.getElementById('modalCheckinCancelar')?.addEventListener('click', () => {
+      document.getElementById('modalCheckin').classList.remove('open');
+    });
+    document.getElementById('modalCheckin')?.addEventListener('click', e => {
+      if (e.target === document.getElementById('modalCheckin')) document.getElementById('modalCheckin').classList.remove('open');
+    });
 
-        /* ================================================================
-           MODAL NOVO AGENDAMENTO
-        ================================================================ */
-        function abrirModal(servicoPresel) {
-            document.getElementById('modalAgendar').classList.add('open');
-            if (servicoPresel) {
-                const sel = document.getElementById('modalServico');
-                for (let opt of sel.options) if (opt.value === servicoPresel) { sel.value = servicoPresel; break; }
-            }
-        }
-        function fecharModal() { document.getElementById('modalAgendar').classList.remove('open'); }
+    /* ================================================================
+       MODAL NOVO AGENDAMENTO
+    ================================================================ */
+    function abrirModal(servicoPresel) {
+      document.getElementById('modalAgendar').classList.add('open');
+      if (servicoPresel) {
+        const sel = document.getElementById('modalServico');
+        for (let opt of sel.options) if (opt.value === servicoPresel) { sel.value = servicoPresel; break; }
+      }
+    }
+    function fecharModal() { document.getElementById('modalAgendar').classList.remove('open'); }
 
-        document.getElementById('modalCancelar')?.addEventListener('click', fecharModal);
-        document.getElementById('modalAgendar')?.addEventListener('click', e => {
-            if (e.target === document.getElementById('modalAgendar')) fecharModal();
-        });
-        document.getElementById('modalConfirmar')?.addEventListener('click', () => {
-            const cliente = document.getElementById('modalCliente').value.trim();
-            const servico = document.getElementById('modalServico').value;
-            const data = document.getElementById('modalData').value;
-            const hora = document.getElementById('modalHora').value;
-            const obs = document.getElementById('modalObs').value.trim();
+    document.getElementById('modalCancelar')?.addEventListener('click', fecharModal);
+    document.getElementById('modalAgendar')?.addEventListener('click', e => {
+      if (e.target === document.getElementById('modalAgendar')) fecharModal();
+    });
+    document.getElementById('modalConfirmar')?.addEventListener('click', () => {
+      const cliente = document.getElementById('modalCliente').value.trim();
+      const servico = document.getElementById('modalServico').value;
+      const data = document.getElementById('modalData').value;
+      const hora = document.getElementById('modalHora').value;
+      const obs = document.getElementById('modalObs').value.trim();
 
-            if (!cliente) { toast('Informe o nome do cliente!', 'ti-alert-circle'); return; }
-            if (!data) { toast('Selecione uma data!', 'ti-alert-circle'); return; }
+      if (!cliente) { toast('Informe o nome do cliente!', 'ti-alert-circle'); return; }
+      if (!data) { toast('Selecione uma data!', 'ti-alert-circle'); return; }
 
-            const [y, m, d] = data.split('-');
-            const item = catalogo.find(s => s.nome === servico);
-            meusAgendamentos.push({
-                id: Date.now(), cliente, servico,
-                data: `${d}/${m}/${y}`, hora,
-                valor: item?.valor || 0,
-                status: 'pending', obs
-            });
+      const [y, m, d] = data.split('-');
+      const item = catalogo.find(s => s.nome === servico);
+      meusAgendamentos.push({
+        id: Date.now(), cliente, servico,
+        data: `${d}/${m}/${y}`, hora,
+        valor: item?.valor || 0,
+        status: 'pending', obs
+      });
 
-            document.getElementById('modalCliente').value = '';
-            document.getElementById('modalObs').value = '';
-            fecharModal();
-            toast(`Agendamento de ${cliente} criado!`, 'ti-calendar-plus');
-        });
+      document.getElementById('modalCliente').value = '';
+      document.getElementById('modalObs').value = '';
+      fecharModal();
+      toast(`Agendamento de ${cliente} criado!`, 'ti-calendar-plus');
+    });
 
-        /* ================================================================
-           ROTEAMENTO
-        ================================================================ */
-        const rotas = {
-            'nav-inicio': { fn: renderInicio, titulo: 'Olá, <em>Camila!</em>' },
-            'nav-agendamentos': { fn: renderAgendamentos, titulo: 'Minha <em>Agenda</em>' },
-            'nav-historico': { fn: renderHistorico, titulo: 'Histórico de <em>Atendimentos</em>' },
-            'nav-servicos': { fn: renderServicos, titulo: 'Meus <em>Serviços</em>' },
-            'nav-avaliacoes': { fn: renderAvaliacoes, titulo: 'Minhas <em>Avaliações</em>' },
-            'nav-perfil': { fn: renderPerfil, titulo: 'Meu <em>Perfil</em>' },
-        };
+    /* ================================================================
+       ROTEAMENTO
+    ================================================================ */
+    const rotas = {
+      'nav-inicio': { fn: renderInicio, titulo: 'Olá, <em>Camila!</em>' },
+      'nav-agendamentos': { fn: renderAgendamentos, titulo: 'Minha <em>Agenda</em>' },
+      'nav-historico': { fn: renderHistorico, titulo: 'Histórico de <em>Atendimentos</em>' },
+      'nav-faqs': { fn: renderFaqs, titulo: 'Perguntas <em>Frequentes</em>' },
+      'nav-servicos': { fn: renderServicos, titulo: 'Meus <em>Serviços</em>' },
+      'nav-avaliacoes': { fn: renderAvaliacoes, titulo: 'Minhas <em>Avaliações</em>' },
+      'nav-perfil': { fn: renderPerfil, titulo: 'Meu <em>Perfil</em>' },
+    };
 
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', e => {
-                e.preventDefault();
-                const rota = rotas[item.id];
-                if (!rota) return;
-                setNavActive(item.id);
-                document.getElementById('topbar-title').innerHTML = rota.titulo;
-                navegarPara(rota.fn);
-            });
-        });
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', e => {
+        e.preventDefault();
+        const rota = rotas[item.id];
+        if (!rota) return;
+        setNavActive(item.id);
+        document.getElementById('topbar-title').innerHTML = rota.titulo;
+        navegarPara(rota.fn);
+      });
+    });
 
-        /* ================================================================
-           INICIALIZAÇÃO
-        ================================================================ */
-        const hoje = new Date();
-        document.getElementById('topbar-date').textContent = hoje.toLocaleDateString('pt-BR', {
-            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-        });
-        navegarPara(renderInicio);
-    </script>
+    /* ================================================================
+       INICIALIZAÇÃO
+    ================================================================ */
+    const hoje = new Date();
+    document.getElementById('topbar-date').textContent = hoje.toLocaleDateString('pt-BR', {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    });
+    navegarPara(renderInicio);
+  </script>
 </body>
 
 </html>
