@@ -1,9 +1,10 @@
 <?php
 
-namespace source\Controller\Faqs;
+namespace Source\Controller\Faqs;
 
 use Source\Controller\Api;
 use Source\Models\Faq\Faq;
+use Source\Models\Faq\FaqCategorie;
 
 class Faqs extends Api
 {
@@ -18,6 +19,17 @@ class Faqs extends Api
             "success"
         )->back($faq->selectAll());
     }
+    public function selectFaq(array $data): void
+    {
+        $faq = new Faq();
+
+        $this->call(
+            200,
+            "success",
+            "Lista de FAQs",
+            "success"
+        )->back($faq->selectFaq());
+    }
     public function listById(array $data): void
     {
 
@@ -30,7 +42,6 @@ class Faqs extends Api
             )->back(null);
             return;
         }
-
         $faq = new Faq();
         if (!$faq->selectById($data["faq_id"])) {
             $this->call(
@@ -44,9 +55,10 @@ class Faqs extends Api
 
         $response = [
             "id" => $faq->getId(),
-            "faqCategoryId" => $faq->getFaqsCategoryId(),
+            "faqsCategoryId" => $faq->getFaqsCategoryId(),
             "question" => $faq->getQuestion(),
-            "answer" => $faq->getAnswer()
+            "answer" => $faq->getAnswer(),
+            "createdAt" => $faq->getCreatedAt()
         ];
 
         $this->call(200, "success", "FAQ encontrado", "success")->back($response);
@@ -54,6 +66,8 @@ class Faqs extends Api
     }
     public function create(array $data): void
     {
+        $data = json_decode(file_get_contents("php://input"), true) ?? [];
+
         if (!$this->validate($data)) {
             $this->call(
                 400,
@@ -63,6 +77,18 @@ class Faqs extends Api
             )->back();
             return;
         }
+        $faqCategory = new FaqCategorie();
+
+        if (!$faqCategory->listById($data["faqsCategoryId"])) {
+            $this->call(
+                404,
+                "error",
+                "O faqCategoryId informado não existe",
+                "error"
+            )->back();
+            return;
+        }
+        ;
 
         $faq = new Faq(
             null,
@@ -82,14 +108,13 @@ class Faqs extends Api
             return;
         }
 
-        $response = [
-            "id" => $faq->getId(),
-            "faqsCategoryId" => $faq->getFaqsCategoryId(),
-            "question" => $faq->getQuestion(),
-            "answer" => $faq->getAnswer()
-        ];
-
-        $this->call(201, "success", "FAQ inserido com sucesso", "success")->back($response);
+        $this->call(201, "success", "FAQ inserido com sucesso", "success")
+            ->back([
+                "id" => $faq->getId(),
+                "faqsCategoryId" => $faq->getFaqsCategoryId(),
+                "question" => $faq->getQuestion(),
+                "answer" => $faq->getAnswer()
+            ]);
     }
     public function update(array $data): void
     {

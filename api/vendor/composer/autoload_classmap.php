@@ -6,5 +6,17 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'CoffeeCode\\Router\\Dispatch' => $vendorDir . '/coffeecode/router/src/Dispatch.php',
+    'CoffeeCode\\Router\\Router' => $vendorDir . '/coffeecode/router/src/Router.php',
+    'CoffeeCode\\Router\\RouterTrait' => $vendorDir . '/coffeecode/router/src/RouterTrait.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'Source\\Controller\\Api' => $baseDir . '/source/Controller/Api.php',
+    'Source\\Controller\\Faqs\\Faqs' => $baseDir . '/source/Controller/Faqs/Faqs.php',
+    'Source\\Controller\\Users' => $baseDir . '/source/Controller/Users.php',
+    'Source\\Core\\Model' => $baseDir . '/source/Core/Model.php',
+    'source\\Controller\\Faqs\\FaqsCategories' => $baseDir . '/source/Controller/Faqs/FaqsCategories.php',
+    'source\\Controller\\Products\\Products' => $baseDir . '/source/Controller/Products/Products.php',
+    'source\\Controller\\Products\\ProductsCategories' => $baseDir . '/source/Controller/Products/ProductsCategories.php',
+    'source\\Core\\Connect' => $baseDir . '/source/Core/Connect.php',
+    'source\\Core\\Router' => $baseDir . '/source/Core/Router.php',
 );

@@ -34,7 +34,7 @@ $route->post("/login-admin","Users:authAdmin"); // login de usuário admin
 $route->put("/update-admin","Users:updateAdmin"); // update de usuário admin
 $route->group(null);
 
-// Produtos$route->group("/products");
+$route->group("/products");
 $route->get("/list", "Products\\Products:productsList");
 $route->get("/list/{productId}", "Products\\Products:productById");
 $route->post("/", "Products\\Products:create");
@@ -58,6 +58,7 @@ $route->group(null);
 
 $route->group("/faqs");
 $route->get("/list", "Faqs\\Faqs:listAll");
+$route->get("/listFaq", "Faqs\\Faqs:selectFaq");
 $route->get("/list/{faq_id}", "Faqs\\Faqs:listById");
 $route->post("/", "Faqs\\Faqs:create");
 $route->put("/{faq_id}", "Faqs\\Faqs:update");
