@@ -5,9 +5,11 @@ const CONF_URL_TEST = "http://localhost:8080/Salon-Vision"; // URL base do site,
 
 
 const CONF_DB_HOST = "localhost";
-const CONF_DB_NAME = "salon_vision";
+const CONF_DB_NAME = "Salon_Vision";
 const CONF_DB_USER= "root";
 const CONF_DB_PORT = 3306;
 const CONF_DB_PASS= "12345678";
 
-const JWT_SECRET_KEY = "355a2e701dd4281b8272f7aa3243fbe8b1e8bb1e7bf3d270bcda9788a9cb7907";
+// Chave secreta para criação do token JWT, deve ser uma string complexa e única para cada aplicação
+// para gerar a sua acesse: https://jwtsecrets.com/
+const JWT_SECRET_KEY = "e17851db9fee8e49f728550fc2f82111c4374f426c9cadda9403390ef638073ff21fd7a7e35d025861e175b0fb93609d838fba3185c859c13b9f43cf92ecbd48";
