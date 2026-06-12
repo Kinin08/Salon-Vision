@@ -2,7 +2,7 @@
 
 namespace Source\Controller;
 
-use Source\Models\User;
+use Source\Models\User\User;
 use Source\Core\JWTToken;
 
 class Api

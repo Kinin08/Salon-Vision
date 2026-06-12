@@ -1,9 +1,7 @@
 <?php
 namespace source\Controller\Faqs;
 
-use PDO;
 use Source\Controller\Api;
-use source\Core\Connect;
 use Source\Models\Faq\FaqCategorie;
 
 class FaqsCategories extends Api
