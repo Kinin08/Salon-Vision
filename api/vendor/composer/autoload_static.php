@@ -16,6 +16,10 @@ class ComposerStaticInit005683ec4e262a29d04b9ead07429804
         array (
             'Source\\' => 7,
         ),
+        'F' =>
+        array (
+            'Firebase\\JWT\\' => 13,
+        ),
         'C' =>
         array (
             'CoffeeCode\\Router\\' => 18,
@@ -27,6 +31,10 @@ class ComposerStaticInit005683ec4e262a29d04b9ead07429804
         array (
             0 => __DIR__ . '/../..' . '/source',
         ),
+        'Firebase\\JWT\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
+        ),
         'CoffeeCode\\Router\\' =>
         array (
             0 => __DIR__ . '/..' . '/coffeecode/router/src',
@@ -34,19 +42,7 @@ class ComposerStaticInit005683ec4e262a29d04b9ead07429804
     );
 
     public static $classMap = array (
-        'CoffeeCode\\Router\\Dispatch' => __DIR__ . '/..' . '/coffeecode/router/src/Dispatch.php',
-        'CoffeeCode\\Router\\Router' => __DIR__ . '/..' . '/coffeecode/router/src/Router.php',
-        'CoffeeCode\\Router\\RouterTrait' => __DIR__ . '/..' . '/coffeecode/router/src/RouterTrait.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Source\\Controller\\Api' => __DIR__ . '/../..' . '/source/Controller/Api.php',
-        'Source\\Controller\\Faqs\\Faqs' => __DIR__ . '/../..' . '/source/Controller/Faqs/Faqs.php',
-        'Source\\Controller\\Users' => __DIR__ . '/../..' . '/source/Controller/Users.php',
-        'Source\\Core\\Model' => __DIR__ . '/../..' . '/source/Core/Model.php',
-        'source\\Controller\\Faqs\\FaqsCategories' => __DIR__ . '/../..' . '/source/Controller/Faqs/FaqsCategories.php',
-        'source\\Controller\\Products\\Products' => __DIR__ . '/../..' . '/source/Controller/Products/Products.php',
-        'source\\Controller\\Products\\ProductsCategories' => __DIR__ . '/../..' . '/source/Controller/Products/ProductsCategories.php',
-        'source\\Core\\Connect' => __DIR__ . '/../..' . '/source/Core/Connect.php',
-        'source\\Core\\Router' => __DIR__ . '/../..' . '/source/Core/Router.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

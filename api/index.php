@@ -64,6 +64,20 @@ $route->post("/", "Faqs\\Faqs:create");
 $route->put("/{faq_id}", "Faqs\\Faqs:update");
 $route->delete("/{faq_id}", "Faqs\\Faqs:softDelete");
 $route->group(null);
+
+$route->group("/users");
+$route->get("/list", "Users\\Users:listAll");
+$route->post("/register", "Users\\Users:register");
+$route->post("/register/admin", "Users\\Users:registerAdmin");
+$route->post("/register/employee", "Users\\Users:registerEmployee");
+$route->post("/login", "Users\\Users:login");
+$route->post("/login/admin", "Users\\Users:loginAdmin");
+$route->post("/login/employee", "Users\\Users:loginEmployee");
+$route->put("/update", "Users\\Users:update");
+$route->put("/update/admin/{user_id}", "Users\\Users:updateAdmin");
+$route->put("/update/employee/{user_id}", "Users\\Users:updateEmployee");
+$route->group(null);
+
 // Fim - Exercícios - Desafios
 
 $route->dispatch();
