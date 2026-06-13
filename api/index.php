@@ -78,6 +78,13 @@ $route->put("/update/admin/{user_id}", "Users\\Users:updateAdmin");
 $route->put("/update/employee/{user_id}", "Users\\Users:updateEmployee");
 $route->group(null);
 
+$route->group("/appointments");
+$route->get("/list", "Appointments\\Appointments:listAll");
+$route->get("/list/{appointmentId}", "Appointments\\Appointments:listById");
+$route->post("/create", "Appointments\\Appointments:create");
+$route->put("/update/{appointmentId}", "Appointments\\Appointments:update");
+$route->group(null);
+
 // Fim - Exercícios - Desafios
 
 $route->dispatch();

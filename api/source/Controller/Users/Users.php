@@ -424,7 +424,7 @@ class Users extends Api
             return;
         }
 
-        $tokenData = $this->getTokenData();
+        $tokenData = $this->getToken();
         $adminId = $tokenData->id ?? null;
 
         if (!$adminId) {

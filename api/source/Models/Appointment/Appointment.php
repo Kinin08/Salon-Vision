@@ -1,41 +1,49 @@
 <?php
 
-namespace Source\Models\Appointment\Appointment;
+namespace Source\Models\Appointment;
 
+use PDO;
+use Source\Core\Connect;
 use Source\Core\Model;
+use Source\Core\JWTToken;
 
 class Appointment extends Model
 {
     private ?int $id = null;
     private ?int $clientId = null;
-    private ?int $employeesId = null;
+    private ?int $employeeId = null;
     private ?int $serviceId = null;
     private ?string $dateTime = null;
     private ?int $rating = null;
     private ?string $comment = null;
     private ?string $status = null;
-    private ?string $observation = null;
     private ?string $createdIn = null;
 
-    public function __construct(?int $id = null, ?int $clientId = null, ?int $employeesId=null, ?int $serviceId = null, ?string $dataTime)
+    public function __construct(?int $id = null, ?int $clientId = null, ?int $employeeId = null, ?int $serviceId = null, ?string $dateTime = null, ?int $rating = null, ?string $comment = null, ?string $status = null)
     {
+        $this->id = $id;
+        $this->clientId = $clientId;
+        $this->employeeId = $employeeId;
+        $this->serviceId = $serviceId;
+        $this->dateTime = $dateTime;
+        $this->rating = $rating;
+        $this->comment = $comment;
+        $this->status = $status ?? "scheduled";
+
         $this->table = 'appointments';
         $this->primaryKey = 'id';
 
         $this->fillable = [
             'clientId',
-            'employeesId',
+            'employeeId',
             'serviceId',
             'dateTime',
             'rating',
             'comment',
             'status',
-            'observation',
             'createdIn'
         ];
     }
-
-    // GETTERS / SETTERS
 
     public function getId(): ?int
     {
@@ -55,13 +63,13 @@ class Appointment extends Model
         $this->clientId = $clientId;
     }
 
-    public function getEmployeesId(): ?int
+    public function getEmployeeId(): ?int
     {
-        return $this->employeesId;
+        return $this->employeeId;
     }
-    public function setEmployeesId(?int $employeesId): void
+    public function setEmployeeId(?int $employeeId): void
     {
-        $this->employeesId = $employeesId;
+        $this->employeeId = $employeeId;
     }
 
     public function getServiceId(): ?int
@@ -90,7 +98,6 @@ class Appointment extends Model
     {
         $this->rating = $rating;
     }
-
     public function getComment(): ?string
     {
         return $this->comment;
@@ -99,25 +106,14 @@ class Appointment extends Model
     {
         $this->comment = $comment;
     }
-
     public function getStatus(): ?string
     {
         return $this->status;
     }
     public function setStatus(?string $status): void
     {
-        $this->status = $status;
+        $this->status = $status ?? 'scheduled';
     }
-
-    public function getObservation(): ?string
-    {
-        return $this->observation;
-    }
-    public function setObservation(?string $observation): void
-    {
-        $this->observation = $observation;
-    }
-
     public function getCreatedIn(): ?string
     {
         return $this->createdIn;

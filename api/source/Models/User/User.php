@@ -108,8 +108,13 @@ class User extends Model
     {
         return $this->userTypeId;
     }
-    public function getRegistrationDate():?string{
+    public function getRegistrationDate(): ?string
+    {
         return $this->registrationDate;
+    }
+    public function setRegistrationDate(?string $registrationDate): void
+    {
+        $this->registrationDate = $registrationDate;
     }
     public function getActive(): ?int
     {
