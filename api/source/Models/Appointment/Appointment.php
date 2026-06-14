@@ -16,10 +16,11 @@ class Appointment extends Model
     private ?string $dateTime = null;
     private ?int $rating = null;
     private ?string $comment = null;
+    private ?int $active = null;
     private ?string $status = null;
     private ?string $createdIn = null;
 
-    public function __construct(?int $id = null, ?int $clientId = null, ?int $employeeId = null, ?int $serviceId = null, ?string $dateTime = null, ?int $rating = null, ?string $comment = null, ?string $status = null)
+    public function __construct(?int $id = null, ?int $clientId = null, ?int $employeeId = null, ?int $serviceId = null, ?string $dateTime = null, ?int $rating = null, ?string $comment = null, ?int $active = 1, ?string $status = null)
     {
         $this->id = $id;
         $this->clientId = $clientId;
@@ -27,6 +28,7 @@ class Appointment extends Model
         $this->serviceId = $serviceId;
         $this->dateTime = $dateTime;
         $this->rating = $rating;
+        $this->active = $active;
         $this->comment = $comment;
         $this->status = $status ?? "scheduled";
 
@@ -106,6 +108,14 @@ class Appointment extends Model
     {
         $this->comment = $comment;
     }
+    public function getActive(): ?int
+    {
+        return $this->active;
+    }
+    public function setActive(?int $active): void
+    {
+        $this->active = $active;
+    }
     public function getStatus(): ?string
     {
         return $this->status;
@@ -121,5 +131,36 @@ class Appointment extends Model
     public function setCreatedIn(?string $createdIn): void
     {
         $this->createdIn = $createdIn;
+    }
+    public function findById(int $id): ?array
+    {
+        $query = "SELECT * FROM {$this->table} WHERE id = :id LIMIT 1";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+    public function softDeleteById(int $id): bool
+    {
+        $query = "
+            UPDATE {$this->table}
+            SET
+                status = 'canceled',
+                active = 0
+            WHERE id = :id
+            AND active = 1
+            AND (
+                status = 'scheduled'
+                OR status = 'confirmed'
+                )
+        ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0;
     }
 }

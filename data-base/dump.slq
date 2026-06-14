@@ -2,6 +2,15 @@ DROP DATABASE IF EXISTS Salon_Vision;
 CREATE DATABASE Salon_Vision;
 USE Salon_Vision;
 
+drop table if exists users_types;
+CREATE TABLE users_types (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
+  active TINYINT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+drop table if exists users;
 CREATE TABLE users(
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -9,33 +18,33 @@ CREATE TABLE users(
     password VARCHAR(255) NOT NULL,
     telephone VARCHAR(20),
     photo VARCHAR(255),
-    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-CREATE TABLE users_types (
-  id int NOT NULL AUTO_INCREMENT,
-  name varchar(255) NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+    user_type_id INT NOT NULL,
+    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	active TINYINT(1) NOT NULL DEFAULT 1,
 
+    FOREIGN KEY (user_type_id) REFERENCES users_types(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+drop table if exists services;
 CREATE TABLE services (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT,
     price DECIMAL(10,2) NOT NULL,
     duration_minutes INT NOT NULL,
-    active BOOLEAN DEFAULT TRUE
-);
+	active TINYINT(1) NOT NULL DEFAULT 1
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+drop table if exists appointments;
 CREATE TABLE appointments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     client_id INT NOT NULL,
-    employees_id INT NOT NULL,
+    employee_id INT NOT NULL,
     service_id INT NOT NULL,
     date_time DATETIME NOT NULL,
-    description TEXT,
-    notice INT CHECK (notice BETWEEN 1 AND 5),
+    rating INT CHECK (rating BETWEEN 1 AND 5),
     comment TEXT,
-    
+    active TINYINT(1) NOT NULL DEFAULT 1,
 	status ENUM(
 		'scheduled',
 		'confirmed',
@@ -43,53 +52,60 @@ CREATE TABLE appointments (
 		'completed',
 		'canceled'
 	) DEFAULT 'scheduled',
-    observation TEXT,
     created_in TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (client_id) REFERENCES users(id),
-    FOREIGN KEY (employees_id) REFERENCES users(id),
+    FOREIGN KEY (employee_id) REFERENCES users(id),
     FOREIGN KEY (service_id) REFERENCES services(id),
     
-    UNIQUE (employees_id, date_time)
-);
+    UNIQUE (employee_id, date_time)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS faqs_categories;
 CREATE TABLE faqs_categories (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
+  active tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
-LOCK TABLES `faqs_categories` WRITE;
-INSERT INTO `faqs_categories` VALUES (1,'Pedidos',1),(2,'Pagamentos',1),(3,'Entregas',1),(4,'Devoluções e Trocas',1),(5,'Cadastro e Conta',1);
-UNLOCK TABLES;
+drop table if exists faqs;
+CREATE TABLE faqs (
+    id INT NOT NULL AUTO_INCREMENT,
+    faqs_category_id INT NOT NULL,
 
-CREATE TABLE `faqs` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `faqs_category_id` int NOT NULL,
-  `question` varchar(255) NOT NULL,
-  `answer` varchar(255) NOT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  KEY `fk_faqs_faqs_categories1_idx` (`faqs_category_id`),
-  CONSTRAINT `fk_faqs_faqs_categories1` FOREIGN KEY (`faqs_category_id`) REFERENCES `faqs_categories` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb3;
+    question VARCHAR(255) NOT NULL,
+    answer TEXT,
 
-LOCK TABLES `faqs` WRITE;
-INSERT INTO `faqs` VALUES (1,1,'Como faço para acompanhar o status do meu pedido?','Acesse a área \"Meus Pedidos\" no seu perfil e clique sobre o número do pedido para ver o status detalhado.',1),(2,1,'Posso cancelar um pedido após a confirmação?','Pedidos podem ser cancelados em até 1 hora após a confirmação, desde que ainda não tenham sido separados para envio.',1),(3,1,'É possível alterar o endereço de entrega após o pedido?','Sim, contate nosso suporte em até 2 horas após a compra com o número do pedido e o novo endereço.',1),(4,2,'Quais formas de pagamento são aceitas?','Aceitamos cartão de crédito (Visa, Mastercard, Elo), boleto bancário e Pix.',1),(5,2,'Em quantas parcelas posso parcelar minha compra?','Compras com cartão de crédito podem ser parceladas em até 12 vezes sem juros para pedidos acima de R$ 200,00.',1),(6,2,'Meu pagamento foi recusado. O que fazer?','Verifique os dados do cartão e o limite disponível. Se o problema persistir, tente outra forma de pagamento ou entre em contato com seu banco.',1),(7,2,'O boleto venceu. Posso gerar um novo?','Sim. Acesse \"Meus Pedidos\", localize o pedido em questão e clique em \"Gerar novo boleto\". O prazo de pagamento será de 1 dia útil.',1),(8,3,'Qual o prazo de entrega?','O prazo varia conforme a região e o produto. Após a confirmação do pagamento, o prazo estimado é exibido no resumo do pedido.',1),(9,3,'Meu pedido está atrasado. O que fazer?','Se o prazo estimado já passou, acesse \"Meus Pedidos\" e clique em \"Falar com suporte\" para abrir um chamado de rastreamento.',1),(10,3,'Posso retirar meu pedido na loja?','Sim. Selecione a opção \"Retirar na loja\" durante o checkout e aguarde o e-mail de confirmação de disponibilidade.',1),(11,4,'Como solicito a troca de um produto?','Acesse \"Meus Pedidos\", selecione o produto e clique em \"Solicitar troca\". O prazo para solicitação é de até 7 dias após o recebimento.',1),(12,4,'Qual o prazo para devolução?','De acordo com o Código de Defesa do Consumidor, você tem até 7 dias corridos após o recebimento para desistir da compra.',1),(13,4,'Quem paga o frete da devolução?','Caso o produto apresente defeito, o frete de devolução é por nossa conta. Em caso de desistência, o frete é de responsabilidade do cliente.',1),(14,5,'Como altero minha senha?','Acesse \"Minha Conta\" > \"Segurança\" > \"Alterar senha\". Você receberá um e-mail de confirmação para concluir a alteração.',1),(15,5,'Esqueci minha senha. Como recuperá-la?','Na tela de login, clique em \"Esqueci minha senha\" e informe o e-mail cadastrado. Você receberá um link de redefinição em até 5 minutos.',1);
-UNLOCK TABLES;
+    active TINYINT(1) NOT NULL DEFAULT 1,
 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
+    PRIMARY KEY (id),
 
-INSERT INTO users (name, email, password, telephone, type)
+    CONSTRAINT fk_faqs_category
+        FOREIGN KEY (faqs_category_id)
+        REFERENCES faqs_categories(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE faqs
+ADD user_id INT NULL,
+ADD CONSTRAINT fk_faq_user
+FOREIGN KEY (user_id) REFERENCES users(id);
+
+INSERT INTO users_types(name)
 VALUES
-('João Silva', 'joao@email.com', '123456', '51999999999', 'client'),
-('Maria Souza', 'maria@email.com', '123456', '51888888888', 'client'),
-('Carlos Barber', 'carlos@email.com', '123456', '51777777777', 'employee'),
-('Ana Cabeleireira', 'ana@email.com', '123456', '51666666666', 'employee'),
-('Administrador', 'admin@email.com', '123456', '51555555555', 'admin');
-select * from users;
+('admin'),
+('cliente'),
+('funcionario');
+
+INSERT INTO users (name, email, password, telephone, user_type_id)
+VALUES
+('João Silva', 'joao@email.com', '123456', '51999999999',5),
+('Maria Souza', 'maria@email.com', '123456', '51888888888',4),
+('Carlos Barber', 'carlos@email.com', '123456', '51777777777',5),
+('Ana Cabeleireira', 'ana@email.com', '123456', '51666666666',4),
+('Administrador', 'admin@email.com', '123456', '51555555555',3);
 
 INSERT INTO services(name, description, price, duration_minutes)
 VALUES
@@ -97,15 +113,33 @@ VALUES
 ('Corte Feminino', 'Corte feminino completo', 60.00, 60),
 ('Barba', 'Aparar e modelar barba', 20.00, 20),
 ('Coloração', 'Tintura capilar', 120.00, 120);
-select * from services;
+
+INSERT INTO faqs_categories (name, active)
+VALUES 
+('Pedidos', 1),
+('Pagamentos', 1),
+('Entregas', 1),
+('Devoluções e Trocas', 1),
+('Cadastro e Conta', 1);
+
+INSERT INTO faqs (faqs_category_id,question,answer,active,user_id)
+VALUES
+(6,'Como faço para acompanhar...','Acesse a área...',1,1),
+(7,'qual a catedral da colonia','se vira',1,2),
+(8,'maior planeta do oceano','da teus pulos',1,3),
+(9,'como liga a luz','acontece',1,4),
+(10,'como pisca','piscando',1,5),
+(10,'como pisca','piscando',1,5);
 
 INSERT INTO appointments
-(client_id, employees_id, service_id, date_time, description, notice, comment, status, observation)
+(client_id, employee_id, service_id, date_time, rating, comment, status)
 VALUES
-(1, 3, 1, '2026-06-10 14:00:00', 'Corte masculino simples', 5, 'Cliente frequente', 'scheduled', 'Prefere máquina baixa'),
-(2, 4, 2, '2026-06-10 15:30:00', 'Mudança de visual', 4, 'Primeira visita', 'confirmed', 'Levar referências de corte'),
-(1, 3, 3, '2026-06-12 10:00:00', 'Ajuste de barba', 5, 'Atendimento rápido','completed', 'Cliente satisfeito');
+(1, 3, 1, '2026-06-10 14:00:00', 5, 'Cliente frequente', 'scheduled'),
+(2, 4, 2, '2026-06-10 15:30:00', 4, 'Primeira visita', 'confirmed'),
+(1, 3, 3, '2026-06-12 10:00:00', 5, 'Atendimento rápido','completed');
+select * from users_types;
+select * from users;
 select * from appointments;
-
+select * from services;
 select * from faqs;
 select * from faqs_categories;

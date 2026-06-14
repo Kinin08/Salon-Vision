@@ -83,6 +83,15 @@ $route->get("/list", "Appointments\\Appointments:listAll");
 $route->get("/list/{appointmentId}", "Appointments\\Appointments:listById");
 $route->post("/create", "Appointments\\Appointments:create");
 $route->put("/update/{appointmentId}", "Appointments\\Appointments:update");
+$route->delete("/delete/{appointmentId}", "Appointments\\Appointments:softDelete");
+$route->group(null);
+
+$route->group("/services");
+$route->get("/list", "Services\\Services:listAll");
+$route->get("/list/{serviceId}", "Services\\Services:listById");
+$route->post("/create", "Services\\Services:create");
+$route->put("/update/{serviceId}", "Services\\Services:update");
+$route->delete("/delete/{serviceId}", "Services\\Services:softDelete");
 $route->group(null);
 
 // Fim - Exercícios - Desafios

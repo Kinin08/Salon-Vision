@@ -331,4 +331,39 @@ class Appointments extends Api
             "success"
         )->back($response);
     }
+    public function softDelete(array $data): void
+    {
+
+        $id = $data["appointmentId"] ?? null;
+
+
+        if (!filter_var($id, FILTER_VALIDATE_INT)) {
+            $this->call(400, "error", "ID do appointment é obrigatório e deve ser um número inteiro", "bad_request")->back();
+            return;
+        }
+        $appointment = new Appointment();
+        $data = $appointment->findById($id);
+
+        if (!$data) {
+            $this->call(404, "error", "Appointment não existe", "not_found")->back();
+            return;
+        }
+
+        if ($data['status'] === 'canceled') {
+            $this->call(400, "error", "O appointment já foi cancelado", "bad_request")->back();
+            return;
+        }
+
+        if (!$appointment->softDeleteById($id)) {
+            $this->call(
+                400,
+                "error",
+                "O appointment não pode ser cancelado",
+                "bad_request"
+            )->back();
+            return;
+        }
+
+        $this->call(200, "success", "appointment removido com sucesso", "success")->back(null);
+    }
 }
