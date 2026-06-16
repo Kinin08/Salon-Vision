@@ -48,7 +48,7 @@ $route->get("/list", "Products\\ProductsCategories:productsCategoryList");
 $route->post("/", "Products\\ProductsCategories:create");
 $route->group(null);
 
-$route->group("/faqs_categories");
+$route->group("/faqsCategories");
 $route->get("/list", "Faqs\\FaqsCategories:listAll");
 $route->get("/list/{faqCategorieId}", "Faqs\\FaqsCategories:listById");
 $route->post("/", "Faqs\\FaqsCategories:create");
@@ -60,7 +60,7 @@ $route->group("/faqs");
 $route->get("/list", "Faqs\\Faqs:listAll");
 $route->get("/listFaq", "Faqs\\Faqs:selectFaq");
 $route->get("/list/{faq_id}", "Faqs\\Faqs:listById");
-$route->post("/", "Faqs\\Faqs:create");
+$route->post("/create", "Faqs\\Faqs:create");
 $route->put("/{faq_id}", "Faqs\\Faqs:update");
 $route->delete("/{faq_id}", "Faqs\\Faqs:softDelete");
 $route->group(null);

@@ -104,6 +104,7 @@ class Appointments extends Api
             )->back();
             return;
         }
+
         $dateTime = $data['dateTime'] ?? null;
         if (!\DateTime::createFromFormat('Y-m-d H:i:s', $dateTime)) {
             $this->call(
@@ -161,7 +162,6 @@ class Appointments extends Api
             $this->call(500, "internal_server_error", $appointment->getErrorMessage(), "error")->back();
             return;
         }
-
 
         $response = [
             "id" => $appointment->getId(),
@@ -288,7 +288,8 @@ class Appointments extends Api
             $data['dateTime'] ?? $appointmentAtual->getDateTime(),
             $data['rating'] ?? $appointmentAtual->getRating(),
             $data['comment'] ?? $appointmentAtual->getComment(),
-            $data['status'] ?? $appointmentAtual->getStatus(),
+            $appointmentAtual->getActive(),
+            $data['status'] ?? $appointmentAtual->getStatus()
         );
 
         if (!$appointment->updateById($data["appointmentId"])) {
@@ -334,15 +335,13 @@ class Appointments extends Api
     public function softDelete(array $data): void
     {
 
-        $id = $data["appointmentId"] ?? null;
 
-
-        if (!filter_var($id, FILTER_VALIDATE_INT)) {
+        if (!filter_var($data["appointmentId"], FILTER_VALIDATE_INT)) {
             $this->call(400, "error", "ID do appointment é obrigatório e deve ser um número inteiro", "bad_request")->back();
             return;
         }
         $appointment = new Appointment();
-        $data = $appointment->findById($id);
+        $data = $appointment->findById($data["appointmentId"]);
 
         if (!$data) {
             $this->call(404, "error", "Appointment não existe", "not_found")->back();
@@ -354,7 +353,7 @@ class Appointments extends Api
             return;
         }
 
-        if (!$appointment->softDeleteById($id)) {
+        if (!$appointment->softDeleteById($data["appointmentId"])) {
             $this->call(
                 400,
                 "error",

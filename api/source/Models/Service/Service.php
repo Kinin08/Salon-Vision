@@ -16,7 +16,7 @@ class Service extends Model
     private ?int $durationMinutes = null;
     private ?int $active = null;
 
-    public function __construct(?int $id = null, ?string $name = null, ?string $description = null, ?float $price = null, ?int $durationMinutes = null, ?int $active = 1, )
+    public function __construct(?int $id = null, ?string $name = null, ?string $description = null, ?float $price = null, ?int $durationMinutes = null, ?int $active = 1)
     {
         $this->id = $id;
         $this->name = $name;

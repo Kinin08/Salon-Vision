@@ -28,8 +28,8 @@ class Appointment extends Model
         $this->serviceId = $serviceId;
         $this->dateTime = $dateTime;
         $this->rating = $rating;
-        $this->active = $active;
         $this->comment = $comment;
+        $this->active = $active;
         $this->status = $status ?? "scheduled";
 
         $this->table = 'appointments';
@@ -42,6 +42,7 @@ class Appointment extends Model
             'dateTime',
             'rating',
             'comment',
+            'active',
             'status',
             'createdIn'
         ];

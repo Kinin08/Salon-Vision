@@ -64,57 +64,43 @@ class Faqs extends Api
         $this->call(200, "success", "FAQ encontrado", "success")->back($response);
 
     }
-    public function create(array $data): void
+    public function create(array $data)
     {
-        $data = json_decode(file_get_contents("php://input"), true) ?? [];
-
-        if (!$this->validate($data)) {
+        if (
+            !isset($data['faqCategoryId']) || empty($data['faqCategoryId']) ||
+            !isset($data['question']) || empty($data['question']) ||
+            !isset($data['answer']) || empty($data['answer'])
+        ) {
             $this->call(
                 400,
                 "bad_request",
-                "Os campos faqsCategoryId, question e answer são obrigatórios",
+                "Preencha tudo.",
                 "error"
             )->back();
             return;
         }
-        $faqCategory = new FaqCategorie();
-
-        if (!$faqCategory->listById($data["faqsCategoryId"])) {
-            $this->call(
-                404,
-                "error",
-                "O faqCategoryId informado não existe",
-                "error"
-            )->back();
-            return;
-        }
-        ;
 
         $faq = new Faq(
             null,
-            $data["faqsCategoryId"],
-            $data["question"],
-            $data["answer"],
+            $data['faqCategoryId'],
+            $data['question'],
+            $data['answer'],
             1
         );
-
         if (!$faq->insert()) {
-            $this->call(
-                500,
-                "internal_server_error",
-                $faq->getErrorMessage(),
-                "error"
-            )->back();
+            $this->call(500, "internal_server_error", $faq->getErrorMessage(), "error")->back();
             return;
         }
 
-        $this->call(201, "success", "FAQ inserido com sucesso", "success")
-            ->back([
-                "id" => $faq->getId(),
-                "faqsCategoryId" => $faq->getFaqsCategoryId(),
-                "question" => $faq->getQuestion(),
-                "answer" => $faq->getAnswer()
-            ]);
+
+        $response = [
+            "id" => $faq->getId(),
+            "faqCategoryId" => $faq->getFaqsCategoryId(),
+            "question" => $faq->getQuestion(),
+            "answer" => $faq->getAnswer()
+        ];
+
+        $this->call(201, "success", "faq inserido com sucesso", "created")->back($response);
     }
     public function update(array $data): void
     {

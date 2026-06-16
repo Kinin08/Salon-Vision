@@ -9,150 +9,197 @@ class FaqsCategories extends Api
     public function listAll(): void
     {
         $faq = new FaqCategorie();
-        $categories = $faq->listAll();
 
         $this->call(
             200,
             "success",
-            "Lista de categorias de FAQ",
+            "Lista de FAQs Categories",
             "success"
-        )->back($categories);
+        )->back($faq->selectAll());
     }
     public function listById(array $data): void
     {
-        if (!filter_var($data["faqCategorieId"], FILTER_VALIDATE_INT)) {
+
+        if (!isset($data["faqCategorieId"]) || empty($data["faqCategorieId"]) || !filter_var($data["faqCategorieId"], FILTER_VALIDATE_INT)) {
             $this->call(
                 400,
                 "bad_request",
-                "O id é obrigatorio e deve ser um numero inteiro",
+                "ID do FAQ Category é obrigatório e deve ser um número inteiro",
                 "error"
-            )->back();
+            )->back(null);
             return;
         }
         $faq = new FaqCategorie();
-        $categories = $faq->listById($data["faqCategorieId"]);
-        if (!$categories) {
+        if (!$faq->selectById($data["faqCategorieId"])) {
             $this->call(
                 404,
                 "not_found",
-                "Categoria não achada",
+                "FAQ não encontrado",
                 "error"
-            )->back();
-            return;
-        }
-        $this->call(
-            200,
-            "succes",
-            "Produto encontrado pelo id",
-            "success"
-        )->back($categories);
-    }
-    public function create(array $data): void
-    {
-        if (!isset($data["name"]) || empty($data["name"])) {
-            $this->call(
-                400,
-                "bad_request",
-                "O campo name é obrigatorio",
-                "error"
-            )->back();
-            return;
-        }
-        $faq = new FaqCategorie();
-        $create = $faq->create($data["name"]);
-
-        if (!$create) {
-            $this->call(
-                500,
-                "error",
-                "Não foi possível cadastrar a categoria",
-                "internal_server_error"
             )->back(null);
             return;
         }
 
-        $this->call(
-            201,
-            "success",
-            "Categoria de FAQ criada com sucesso",
-            "created"
-        )->back($create);
+        $response = [
+            "id" => $faq->getId(),
+            "name" => $faq->getName()
+        ];
+
+        $this->call(200, "success", "FAQ Category encontrado", "success")->back($response);
+
+    }
+    public function create(array $data)
+    {
+        if (
+            !isset($data['name']) || empty($data['name'])
+        ) {
+            $this->call(
+                400,
+                "bad_request",
+                "Preencha tudo.",
+                "error"
+            )->back();
+            return;
+        }
+
+        $faq = new FaqCategorie(
+            null,
+            $data['name'],
+            1
+        );
+        if (!$faq->insert()) {
+            $this->call(500, "internal_server_error", $faq->getErrorMessage(), "error")->back();
+            return;
+        }
+
+
+        $response = [
+            "id" => $faq->getId(),
+            "name" => $faq->getName()
+        ];
+
+        $this->call(201, "success", "FAQ Category inserido com sucesso", "created")->back($response);
     }
     public function update(array $data): void
     {
-        $faqId = $data["faqCategorieId"] ?? null;
-
-        if (!filter_var($faqId, FILTER_VALIDATE_INT)) {
+        if (
+            !isset($data["faqCategorieId"]) ||
+            !filter_var($data["faqCategorieId"], FILTER_VALIDATE_INT)
+        ) {
             $this->call(
                 400,
-                "error",
-                "ID inválido",
-                "bad_request"
+                "bad_request",
+                "ID do FAQ é obrigatório e deve ser um número inteiro",
+                "error"
             )->back();
             return;
         }
 
-        if (empty($data["name"])) {
+        if (
+            !isset($data["name"]) ||
+            empty(trim($data["name"]))
+        ) {
             $this->call(
                 400,
-                "error",
+                "bad_request",
                 "O campo name é obrigatório",
+                "error"
+            )->back();
+            return;
+        }
+
+        $faq = new FaqCategorie(
+            null,
+            $data["name"]
+        );
+
+        if (!$faq->updateById($data["faqCategorieId"])) {
+            $this->call(
+                404,
+                "not_found",
+                $faq->getErrorMessage(),
+                "error"
+            )->back();
+            return;
+        }
+
+        $faqAtualizado = new FaqCategorie();
+
+        if (!$faqAtualizado->selectById($data["faqCategorieId"])) {
+            $this->call(
+                500,
+                "internal_server_error",
+                "Erro ao recuperar FAQ atualizado",
+                "error"
+            )->back();
+            return;
+        }
+
+        $response = [
+            "id" => $faqAtualizado->getId(),
+            "name" => $faqAtualizado->getName(),
+            "active" => $faqAtualizado->getActive()
+        ];
+
+        $this->call(
+            200,
+            "success",
+            "FAQ Category atualizado com sucesso",
+            "success"
+        )->back($response);
+    }
+    public function softDelete(array $data): void
+    {
+        if (
+            !isset($data["faqCategorieId"]) ||
+            !filter_var($data["faqCategorieId"], FILTER_VALIDATE_INT)
+        ) {
+            $this->call(
+                400,
+                "error",
+                "ID do FAQ Category é obrigatório e deve ser um número inteiro",
                 "bad_request"
             )->back();
             return;
         }
 
-        $faqCategory = new FaqCategorie();
+        $faq = new FaqCategorie();
 
-        if (!$faqCategory->listById($faqId)) {
+        if (!$faq->selectById($data["faqCategorieId"])) {
             $this->call(
                 404,
                 "error",
-                "FAQ category não encontrado",
+                "FAQ Category não encontrado",
                 "not_found"
             )->back();
             return;
         }
 
-        $faqCategory->setId($faqId);
-        $faqCategory->setName($data["name"]);
-
-        if (!$faqCategory->update()) {
+        if ($faq->getActive() === 0) {
             $this->call(
-                500,
+                409,
                 "error",
-                "Erro ao atualizar o FAQ category",
-                "internal_error"
+                "FAQ Category já está removido",
+                "conflict"
             )->back();
             return;
         }
 
-        // Busca novamente os dados atualizados
-        $updatedFaq = $faqCategory->listById($faqId);
+        if (!$faq->softDeleteById($data["faqCategorieId"])) {
+            $this->call(
+                500,
+                "error",
+                $faq->getErrorMessage(),
+                "internal_server_error"
+            )->back();
+            return;
+        }
 
         $this->call(
             200,
             "success",
-            "Categoria de FAQ atualizada com sucesso",
+            "FAQ Category removido com sucesso",
             "success"
-        )->back($updatedFaq);
-    }
-    public function softDelete(array $data): void
-    {
-        $id = $data["faqCategorieId"] ?? null;
-
-        if (!filter_var($id, FILTER_VALIDATE_INT)) {
-            $this->call(400, "error", "ID do FAQ category é obrigatório e deve ser um número inteiro", "bad_request")->back();
-            return;
-        }
-
-        $faq = new FaqCategorie();
-
-        if (!$faq->softDelete($id)) {
-            $this->call(404, "error", "FAQ category não encontrado", "not_found")->back();
-            return;
-        }
-
-        $this->call(200, "success", "FAQ category removido com sucesso", "success")->back(null);
+        )->back(null);
     }
 }
