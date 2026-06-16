@@ -1,37 +1,102 @@
-import { catalogo } from '../data.js';
-export function renderServicos(c) {
+export async function renderServicos(c) {
     c.innerHTML = `
-        <div style="margin-bottom:16px;" class="fade-in">
-            <h1 style="font-size:22px;font-weight:500;">Nossos <em>Serviços</em></h1>
-            <p style="font-size:12px;color:var(--text-dim);margin-top:4px;">Escolha o serviço ideal para você e agende em poucos cliques.</p>
+    <div class="panel fade-in">
+
+        <div class="panel-header">
+            <h1 class="panel-title">Nossos <em>Serviços</em></h1>
         </div>
-        <div class="services-grid" id="services-grid"></div>
-        `;
 
-    const grid = document.getElementById('services-grid');
-    catalogo.forEach((s, i) => {
-        const div = document.createElement('div');
-        div.className = `service-card fade-in`;
-        div.style.animationDelay = `${i * 0.06}s`;
-        div.innerHTML = `
-                <div class="service-card-icon"><i class="ti ${s.icon}"></i></div>
-                <p class="service-card-name">${s.nome}</p>
-                <p class="service-card-desc">${s.desc}</p>
-                <div class="service-card-meta">
-                    <span class="service-meta-item"><i class="ti ti-clock"></i> ${s.duracao}</span>
+        <div id="services-list"
+            style="
+                display:grid;
+                grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+                gap:16px;
+            ">
+        </div>
+
+    </div>
+    `;
+
+    const list = document.getElementById('services-list');
+
+    let allServices = [];
+
+    function renderList(data) {
+        list.innerHTML = '';
+
+        data.forEach(service => {
+            const item = document.createElement('div');
+
+            item.innerHTML = `
+            <div class="service-card">
+
+                <div class="service-card-icon">
+                    <i class="ti ti-scissors"></i>
                 </div>
-                <p class="service-price">${s.valor}</p>
-                <button class="btn btn-gold" style="margin-top:8px;width:100%;justify-content:center;" data-servico="${s.nome}">
-                    <i class="ti ti-calendar-plus"></i> Agendar
-                </button>
-            `;
-        grid.appendChild(div);
-    });
 
-    grid.addEventListener('click', e => {
-        const btn = e.target.closest('[data-servico]');
-        if (btn) {
-            abrirModal(btn.dataset.servico);
+                <p class="service-card-name">
+                    ${service.name}
+                </p>
+
+                <p class="service-card-desc">
+                    ${service.description || 'Sem descrição'}
+                </p>
+
+                <div class="service-card-meta">
+                    <span class="service-meta-item">
+                        <i class="ti ti-clock"></i>
+                        ${service.durationMinutes} min
+                    </span>
+                </div>
+
+                <p class="service-price">
+                    R$ ${Number(service.price).toFixed(2)}
+                </p>
+
+                <button
+                    class="btn btn-gold"
+                    style="margin-top:8px;width:100%;justify-content:center;"
+                    data-servico="${service.name}"
+                >
+                    <i class="ti ti-calendar-plus"></i>
+                    Agendar
+                </button>
+
+            </div>
+            `;
+
+            list.appendChild(item);
+        });
+
+        document.querySelectorAll('[data-servico]').forEach(btn => {
+            btn.onclick = () => {
+                abrirModal(btn.dataset.servico);
+            };
+        });
+    }
+
+    async function loadServices() {
+        try {
+            const response = await fetch(
+                'http://localhost/Salon-Vision/api/services/list'
+            );
+
+            const data = await response.json();
+
+            console.log(data);
+
+            allServices = data.data || [];
+
+            renderList(allServices);
+
+        } catch (error) {
+            console.error(error);
+
+            list.innerHTML = `
+                <p>Erro ao carregar serviços.</p>
+            `;
         }
-    });
+    }
+
+    await loadServices();
 }
