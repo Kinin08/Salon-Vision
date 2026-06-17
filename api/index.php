@@ -25,15 +25,6 @@ $route = new Router(url("api"),":");
 
 $route->namespace("Source\Controller");
 
-$route->group("/users");
-$route->post("/register","Users:register"); // Registrar usuário comum
-$route->post("/login","Users:auth"); // login de usuário comum
-$route->put("/update","Users:update"); // update de usuário comum
-$route->post("/register-admin","Users:registerAdmin"); // Registrar usuário admin NÃO IMPLEMENTADO
-$route->post("/login-admin","Users:authAdmin"); // login de usuário admin
-$route->put("/update-admin","Users:updateAdmin"); // update de usuário admin
-$route->group(null);
-
 $route->group("/products");
 $route->get("/list", "Products\\Products:productsList");
 $route->get("/list/{productId}", "Products\\Products:productById");
@@ -66,7 +57,10 @@ $route->delete("/{faq_id}", "Faqs\\Faqs:softDelete");
 $route->group(null);
 
 $route->group("/users");
+$route->get("/profile", "Users\\Users:profile");
 $route->get("/list", "Users\\Users:listAll");
+$route->get("/employee", "Users\\Users:listEmployee");
+$route->get("/cliente", "Users\\Users:listCliente");
 $route->post("/register", "Users\\Users:register");
 $route->post("/register/admin", "Users\\Users:registerAdmin");
 $route->post("/register/employee", "Users\\Users:registerEmployee");
@@ -79,6 +73,8 @@ $route->put("/update/employee/{user_id}", "Users\\Users:updateEmployee");
 $route->group(null);
 
 $route->group("/appointments");
+$route->get("/my", "Appointments\\Appointments:history");
+$route->get("/history", "Appointments\\Appointments:history");
 $route->get("/list", "Appointments\\Appointments:listAll");
 $route->get("/list/{appointmentId}", "Appointments\\Appointments:listById");
 $route->post("/create", "Appointments\\Appointments:create");

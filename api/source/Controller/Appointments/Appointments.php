@@ -9,6 +9,31 @@ use Source\Core\JWTToken;
 
 class Appointments extends Api
 {
+    public function history(): void
+    {
+        $userId = $this->authToken(4);
+
+        if (!$userId) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+            return;
+        }
+
+        $appointment = new Appointment();
+
+        $this->call(
+            200,
+            "success",
+            "Histórico encontrado",
+            "success"
+        )->back(
+                $appointment->historic($userId)
+            );
+    }
     public function listAll(): void
     {
         $appointment = new Appointment();

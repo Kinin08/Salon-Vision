@@ -8,6 +8,42 @@ use Source\Core\JWTToken;
 
 class Users extends Api
 {
+    public function listEmployees(): void
+    {
+        $user = new User();
+
+        $this->call(
+            200,
+            "success",
+            "Lista de funcionários",
+            "success"
+        )->back($user->listEmployees());
+    }
+    public function profile(): void
+    {
+        $userId = $this->authToken(4);
+
+        if (!$userId) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+            return;
+        }
+
+        $user = new User();
+
+        $this->call(
+            200,
+            "success",
+            "Perfil encontrado",
+            "success"
+        )->back(
+                $user->findById($userId)
+            );
+    }
     public function listAll(): void
     {
         $user = new User();
@@ -21,7 +57,7 @@ class Users extends Api
     }
     public function register(array $data): void
     {
-        var_dump($data);
+        $body = json_decode(file_get_contents("php://input"), true) ?? [];
         if (!isset($data['password']) || empty($data['password'])) {
             $this->call(
                 400,
@@ -41,24 +77,13 @@ class Users extends Api
             )->back();
             return;
         }
-        if (strlen($data["password"]) < 6 || strlen($data["password"]) > 20) {
-            $this->call(
-                400,
-                "error",
-                "Senha deve ter entre 6 e 20 caracter",
-                "error"
-            )->back();
-            return;
-        }
 
         $user = new User(
             null,
+            2,
             $data['name'],
             $data['email'],
-            $data['password'],
-            $data['telephone'] ?? null,
-            $data['photo'] ?? null,
-            4
+            $data['password']
         );
 
         if (!$user->insert()) {
@@ -74,6 +99,7 @@ class Users extends Api
 
         $this->call(201, "success", "Usuário inserido com sucesso", "created")->back($response);
     }
+
     public function registerAdmin(array $data): void
     {
         if (!isset($data['password']) || empty($data['password'])) {

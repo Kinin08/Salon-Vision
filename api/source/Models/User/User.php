@@ -144,6 +144,24 @@ class User extends Model
     {
         return $this->token;
     }
+    public function findById(int $id): ?array
+    {
+        $query = "
+        SELECT
+        *
+        FROM users
+        WHERE id = :id
+        LIMIT 1
+    ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(":id", $id);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result ?: null;
+    }
     public function insert(): bool
     {
         $query = "SELECT * FROM {$this->table} WHERE email = :email";
@@ -214,6 +232,37 @@ class User extends Model
             return false;
         }
         return true;
+    }
+    public function listEmployees(): array
+    {
+        $query = "
+        SELECT
+        *
+        FROM users
+        WHERE user_type_id = 5
+        AND active = 1
+    ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function listCliente(): array
+    {
+        $query = "
+        SELECT
+        *
+        FROM users
+        WHERE user_type_id = 4
+        AND active = 1
+    ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     }
     /**
      * Verifica se o email já existe em outro usuário

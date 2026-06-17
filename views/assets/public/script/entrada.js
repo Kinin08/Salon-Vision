@@ -4,16 +4,9 @@ const authFeedback = document.getElementById('authFeedback');
 const authTabs = document.querySelectorAll('[data-auth-tab]');
 const loginForm = document.getElementById('loginForm');
 const signupForm = document.getElementById('signupForm');
+const signupName = document.getElementById('signupName');
 const signupEmail = document.getElementById('signupEmail');
-
-function getRoleByEmail(email) {
-    const normalizedEmail = email.trim().toLowerCase();
-
-    if (normalizedEmail.includes('@adm')) return 'Administrador';
-    if (normalizedEmail.includes('@func')) return 'Funcionario';
-
-    return 'Cliente';
-}
+const signupPassword = document.getElementById('signupPassword');
 
 function setAuthMode(mode) {
     const isLogin = mode === 'login';
@@ -72,7 +65,7 @@ loginForm?.addEventListener('submit', event => {
     setTimeout(() => {
         if (role === 'Administrador') {
             window.location.href = 'views/assets/admin/index.html';
-        }else if(role === 'Funcionario'){
+        } else if (role === 'Funcionario') {
             window.location.href = 'views/assets/employee/index.html';
         }
         else {
@@ -81,26 +74,61 @@ loginForm?.addEventListener('submit', event => {
     }, 1000);
 });
 
-signupForm?.addEventListener('submit', event => {
+signupForm?.addEventListener('submit', async event => {
     event.preventDefault();
 
+    const name = signupName.value;
     const email = signupEmail.value;
-    const role = getRoleByEmail(email);
+    const password = signupPassword.value;
+    console.log({
+        name,
+        email,
+        password
+    });
+    try {
 
-    authFeedback.textContent = `Cadastro criado como ${role}`;
-    authFeedback.classList.remove('hidden');
+        const response = await fetch(
+            'http://localhost/Salon-Vision/api/users/register',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    password
+                })
+            }
+        );
 
-    // opcional: redirecionar depois de cadastrar
-    setTimeout(() => {
-        if (role === 'Administrador') {
-            window.location.href = 'views/assets/admin/index.html';
-        }else if(role === 'Funcionario'){
-            window.location.href = 'views/assets/employee/index.html';
+        const result = await response.json();
+        console.log(response.status)
+        console.log(result)
+        if (!response.ok) {
+            authFeedback.textContent =
+                result.message || 'Erro ao cadastrar';
+            authFeedback.classList.remove('hidden');
+            return;
         }
-        else {
-            window.location.href = 'views/assets/app/index.html';
-        }
-    }, 1000);
+
+        authFeedback.textContent =
+            'Cadastro realizado com sucesso!';
+        authFeedback.classList.remove('hidden');
+
+        signupForm.reset();
+
+        setTimeout(() => {
+            setAuthMode('login');
+        }, 1500);
+
+    } catch (error) {
+        console.error(error);
+
+        authFeedback.textContent =
+            'Erro ao conectar com o servidor';
+        authFeedback.classList.remove('hidden');
+    }
 });
 
 

@@ -51,13 +51,9 @@
                 </label>
                 <label class="block">
                     <span class="text-white/45 text-xs">Senha</span>
-                    <input id="senha" type="password" required placeholder="Sua senha"
+                    <input id="password" type="password" required placeholder="Sua senha"
                         class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
                 </label>
-                <div class="flex items-center justify-between text-xs">
-                    <button type="button" class="text-[#FFCC7F] hover:text-[#f2bd6d]">Esqueci a
-                        senha</button>
-                </div>
                 <button id="submit" type="submit"
                     class="w-full rounded-xl bg-[#FFCC7F] text-[#3B3B42] font-bold py-3 hover:bg-[#f2bd6d] transition cursor-pointer">
                     Entrar
@@ -67,7 +63,7 @@
             <form id="signupForm" class="auth-form hidden p-6 space-y-4">
                 <label class="block">
                     <span class="text-white/45 text-xs">Nome</span>
-                    <input type="text" required placeholder="Seu nome"
+                    <input id="signupName" type="text" required placeholder="Seu nome"
                         class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
                 </label>
                 <label class="block">
@@ -77,10 +73,10 @@
                 </label>
                 <label class="block">
                     <span class="text-white/45 text-xs">Senha</span>
-                    <input type="password" required minlength="6" placeholder="Mínimo 6 caracteres"
+                    <input id="signupPassword" type="password" required minlength="6" placeholder="Mínimo 6 caracteres"
                         class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
                 </label>
-                <button type="submit"
+                <button id="submit" type="submit"
                     class="w-full rounded-xl bg-[#FFCC7F] text-[#3B3B42] font-bold py-3 hover:bg-[#f2bd6d] transition cursor-pointer">
                     Criar conta
                 </button>
