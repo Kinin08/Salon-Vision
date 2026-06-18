@@ -57,6 +57,7 @@ $route->delete("/{faq_id}", "Faqs\\Faqs:softDelete");
 $route->group(null);
 
 $route->group("/users");
+$route->post("/upload-photo", "Users\\Users:uploadPhoto");
 $route->get("/profile", "Users\\Users:profile");
 $route->get("/list", "Users\\Users:listAll");
 $route->get("/employee", "Users\\Users:listEmployee");

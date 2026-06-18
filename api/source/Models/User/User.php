@@ -147,8 +147,7 @@ class User extends Model
     public function findById(int $id): ?array
     {
         $query = "
-        SELECT
-        *
+        SELECT id, name, email, telephone, photo, user_type_id, active, registration_date
         FROM users
         WHERE id = :id
         LIMIT 1
@@ -159,7 +158,6 @@ class User extends Model
         $stmt->execute();
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
         return $result ?: null;
     }
     public function insert(): bool
@@ -220,18 +218,29 @@ class User extends Model
         ]);
         return true;
     }
-
-    public function permissionVerify(string $email, $typeId): bool
+    public function updatePhotoById(int $id, string $photo): bool
     {
-        $query = "SELECT * FROM {$this->table} WHERE email = :email AND user_type_id = :userTypeId";
+        $query = "UPDATE {$this->table} SET photo = :photo WHERE id = :id";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindParam(":email", $email);
+        $stmt->bindParam(":photo", $photo);
+        $stmt->bindParam(":id", $id);
+        return $stmt->execute();
+    }
+
+    // Em User.php — troca o permissionVerify
+    public function permissionVerify(int $userId, int $typeId): bool
+    {
+        $query = "SELECT id FROM {$this->table} 
+              WHERE id = :id 
+              AND user_type_id = :userTypeId 
+              AND active = 1";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindParam(":id", $userId);
         $stmt->bindParam(":userTypeId", $typeId);
         $stmt->execute();
-        if ($stmt->rowCount() == 0) {
-            return false;
-        }
-        return true;
+
+        return $stmt->rowCount() > 0;
     }
     public function listEmployees(): array
     {

@@ -8,43 +8,40 @@ use Source\Core\JWTToken;
 class Api
 {
     protected $userAuthId = 0;
-    public function authToken (int $typeId): bool
+    public function authToken(int $typeId = 0): int|false
     {
-
         $header = getallheaders();
-
         $token = $header["token"] ?? $header['Authorization'] ?? $header['authorization'] ?? null;
 
-        if(!$token){
+        if (!$token)
             return false;
-        }
 
-        if(str_starts_with($token, 'Bearer ')){
+        if (str_starts_with($token, 'Bearer ')) {
             $token = substr($token, 7);
         }
 
         $jwt = new JWTToken();
-
         $jwtToken = $jwt->decode($token);
 
-        if(!$jwtToken){
+        if (!$jwtToken)
             return false;
+
+        $id = $jwtToken->data->id;
+
+        if ($typeId !== 0) {
+            $user = new User();
+            if (!$user->permissionVerify($id, $typeId))
+                return false; // verifica por ID
         }
 
-        //var_dump($jwtToken->data->id, $jwtToken->data->email);
-        $user = new User();
-        if(!$user->permissionVerify($jwtToken->data->email, $typeId)){
-            return false;
-        }
-        $this->userAuthId = $jwtToken;
-        return true;
-
+        $this->userAuthId = $id;
+        return $id;
     }
 
-    protected function call (int $code, ?string $status = null, ?string $message = null, ?string $type = null): Api
+    protected function call(int $code, ?string $status = null, ?string $message = null, ?string $type = null): Api
     {
         http_response_code($code);
-        if(!empty($status)){
+        if (!empty($status)) {
             $this->response = [
                 "code" => $code,
                 "type" => $type,
@@ -55,7 +52,7 @@ class Api
         return $this;
     }
 
-    protected function back(object | array $data = null): Api
+    protected function back(object|array $data = null): Api
     {
         header('Content-Type: application/json');
         if ($data) {

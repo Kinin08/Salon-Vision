@@ -2,7 +2,6 @@ import { STATUS_LABEL } from '../data.js';
 import { setNavActive, navegarPara } from '../helpers.js';
 import { renderAgendamentos } from './agendamentos.js';
 import { renderServicos } from './servicos.js';
-import { renderHistorico } from './historico.js';
 
 export async function renderInicio(c) {
     try {
@@ -206,13 +205,6 @@ export async function renderInicio(c) {
                         Ver Serviços
                     </button>
 
-                    <button
-                        class="btn btn-ghost cursor-pointer"
-                        id="btnVerHistorico"
-                    >
-                        <i class="ti ti-clock-history"></i>
-                        Meu Histórico
-                    </button>
                 </div>
             </div>
         `;
@@ -231,12 +223,6 @@ export async function renderInicio(c) {
                 navegarPara(renderServicos);
             });
 
-        document
-            .getElementById('btnVerHistorico')
-            ?.addEventListener('click', () => {
-                setNavActive('nav-historico');
-                navegarPara(renderHistorico);
-            });
 
     } catch (error) {
         console.error(error);
