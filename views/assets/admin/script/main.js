@@ -1,8 +1,7 @@
-import { CLIENTE, agendamentos } from './data.js';
 import { setActive, nav, toast, updateBadge } from './helpers.js';
 import { initModals } from './modals.js';
 import { renderDashboard } from './renders/dashboard.js';
-import { renderAgendamentos } from './renders/agendamento.js';
+import { renderAgendamentos,  } from './renders/agendamento.js';
 import { renderClientes } from './renders/clientes.js';
 import { renderProfissionais } from './renders/profissionais.js';
 import { renderServicos } from './renders/servicos.js';
@@ -40,7 +39,7 @@ function initTopbarDate() {
     const topbarDate = document.getElementById('topbar-date');
     if (topbarDate) {
         topbarDate.textContent = new Date().toLocaleDateString('pt-BR', {
-            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+         weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
         });
     }
 }

@@ -32,11 +32,11 @@ class Users extends Api
         return $len >= $min && $len <= $max;
     }
 
-    public function listEmployees(): void
+    public function listEmployee(): void
     {
         $user = new User();
         $this->call(200, "success", "Lista de funcionários", "success")
-            ->back($user->listEmployees());
+            ->back($user->listEmployee());
     }
 
     public function listAll(): void
@@ -48,7 +48,7 @@ class Users extends Api
 
     public function profile(): void
     {
-        $userId = $this->authToken(0); // 0 = aceita qualquer tipo
+        $userId = $this->authToken(0);
 
         if (!$userId) {
             $this->call(401, "unauthorized", "Usuário não autenticado", "error")->back();
@@ -256,6 +256,60 @@ class Users extends Api
             "token" => $user->getToken(),
         ]);
     }
+    public function loginAdmin(array $data): void
+    {
+        $data = $this->mergeBody($data);
+
+        if (
+            empty($data['email']) || empty($data['password']) ||
+            !filter_var($data['email'], FILTER_VALIDATE_EMAIL)
+        ) {
+            $this->call(400, "bad_request", "E-mail e senha são obrigatórios. O e-mail deve ser válido.", "error")->back();
+            return;
+        }
+
+        $user = new User();
+
+        if (!$user->login($data['email'], $data['password'], 3)) {
+            $this->call(401, "unauthorized", $user->getErrorMessage(), "error")->back();
+            return;
+        }
+
+        $this->call(200, "success", "Login realizado com sucesso", "success")->back([
+            "id" => $user->getId(),
+            "name" => $user->getName(),
+            "photo" => $user->getPhoto(),
+            "userType" => $user->getUserTypeName(),
+            "token" => $user->getToken(),
+        ]);
+    }
+    public function loginEmployee(array $data): void
+    {
+        $data = $this->mergeBody($data);
+
+        if (
+            empty($data['email']) || empty($data['password']) ||
+            !filter_var($data['email'], FILTER_VALIDATE_EMAIL)
+        ) {
+            $this->call(400, "bad_request", "E-mail e senha são obrigatórios. O e-mail deve ser válido.", "error")->back();
+            return;
+        }
+
+        $user = new User();
+
+        if (!$user->login($data['email'], $data['password'], 5)) {
+            $this->call(401, "unauthorized", $user->getErrorMessage(), "error")->back();
+            return;
+        }
+
+        $this->call(200, "success", "Login realizado com sucesso", "success")->back([
+            "id" => $user->getId(),
+            "name" => $user->getName(),
+            "photo" => $user->getPhoto(),
+            "userType" => $user->getUserTypeName(),
+            "token" => $user->getToken(),
+        ]);
+    }
 
     public function update(array $data): void
     {
@@ -267,7 +321,7 @@ class Users extends Api
             return;
         }
 
-        if (empty($data["name"]) || empty($data["email"])) {
+        if (!$this->validateNameEmail($data)) {
             $this->call(400, "bad_request", "Os campos name e email são obrigatórios.", "error")->back();
             return;
         }

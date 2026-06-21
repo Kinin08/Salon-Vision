@@ -242,7 +242,7 @@ class User extends Model
 
         return $stmt->rowCount() > 0;
     }
-    public function listEmployees(): array
+    public function listEmployee(): array
     {
         $query = "
         SELECT

@@ -3,6 +3,20 @@ export function setActive(id) {
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
     document.getElementById(id)?.classList.add('active');
 }
+
+export function getUserIdFromToken() {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    try {
+        const payload = token.split('.')[1];
+        const decoded = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+        return decoded.id ?? decoded.sub ?? null;
+    } catch (e) {
+        console.error('Erro ao decodificar token', e);
+        return null;
+    }
+}
 export function nav(renderFn, title) {
     const c = document.getElementById('page-content');
     c.style.transition = 'opacity .22s';

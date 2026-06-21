@@ -1,5 +1,83 @@
 import { estrelas, toast } from '../helpers.js';
 
+function garantirModalPerfil() {
+    if (document.getElementById('modalPerfilProf')) return;
+
+    const modal = document.createElement('div');
+    modal.id = 'modalPerfilProf';
+    modal.className = 'fixed inset-0 hidden items-center justify-center bg-black/60 backdrop-blur-sm z-50';
+
+    modal.innerHTML = `
+        <div class="w-full max-w-md rounded-2xl bg-[#0B0B0B] p-6 shadow-2xl animate-fade-in">
+
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold text-white">
+                    Perfil do <span class="text-[#FFCC7F]">Profissional</span>
+                </h2>
+
+                <button id="modalPerfilFechar" class="text-gray-400 hover:text-red-500 text-xl font-bold">
+                    ✕
+                </button>
+            </div>
+
+            <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+                <img
+                    id="perfilFoto"
+                    src=""
+                    alt=""
+                    style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:2px solid #FFCC7F;"
+                />
+
+                <p id="perfilNome" style="font-size:18px;font-weight:600;color:#fff;"></p>
+
+                <p style="font-size:12px;color:var(--text-dim);">
+                    Funcionário
+                </p>
+
+                <div id="perfilStars" style="display:flex;align-items:center;gap:4px;"></div>
+
+                <p id="perfilEmail" style="font-size:13px;color:var(--text-dim);margin-top:6px;"></p>
+                <p id="perfilTelefone" style="font-size:13px;color:var(--text-dim);"></p>
+            </div>
+
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    document
+        .getElementById('modalPerfilFechar')
+        .addEventListener('click', () => fecharModalPerfil());
+}
+
+function abrirModalPerfil(p) {
+    garantirModalPerfil();
+
+    document.getElementById('perfilFoto').src = p.photo || './assets/default-user.png';
+    document.getElementById('perfilFoto').alt = p.name;
+    document.getElementById('perfilNome').textContent = p.name;
+    document.getElementById('perfilStars').innerHTML = `
+        ${estrelas(5)}
+        <span style="color:var(--text-dim);margin-left:2px;">5.0</span>
+    `;
+    document.getElementById('perfilEmail').textContent = p.email
+        ? `📧 ${p.email}`
+        : '';
+    document.getElementById('perfilTelefone').textContent = p.telephone
+        ? `📞 ${p.telephone}`
+        : '';
+
+    const modal = document.getElementById('modalPerfilProf');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function fecharModalPerfil() {
+    const modal = document.getElementById('modalPerfilProf');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
 export async function renderProfissionais(c) {
     c.innerHTML = `
         <div style="margin-bottom:16px;" class="fade-in">
@@ -18,7 +96,7 @@ export async function renderProfissionais(c) {
 
     try {
         const response = await fetch(
-            'http://localhost/Salon-Vision/api/users/employees'
+            'http://localhost/Salon-Vision/api/users/employee'
         );
 
         const result = await response.json();
@@ -57,12 +135,15 @@ export async function renderProfissionais(c) {
                 <button
                     class="btn btn-ghost"
                     style="margin-top:10px;font-size:11px;"
-                    onclick="toast('Perfil de ${p.name} em breve!','ti-user')"
+                    data-action="ver-perfil"
                 >
                     <i class="ti ti-user"></i>
                     Ver Perfil
                 </button>
             `;
+
+            div.querySelector('[data-action="ver-perfil"]')
+                .addEventListener('click', () => abrirModalPerfil(p));
 
             grid.appendChild(div);
         });

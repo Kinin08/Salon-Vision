@@ -1,9 +1,17 @@
-import { STATUS_LABEL } from '../data.js';
 import { estrelas, toast } from '../helpers.js';
 import { abrirModal } from '../modals.js';
+import { carregarDadosAgendamento } from './agendamentosService.js';
 
 export async function renderAgendamentos(c) {
+    const STATUS_LABEL = {
+        scheduled: 'Agendado',
+        confirmed: 'Confirmado',
+        in_progress: 'Em andamento',
+        completed: 'Concluído',
+        canceled: 'Cancelado'
+    };
     try {
+
         const token = localStorage.getItem('token');
 
         const response = await fetch(
@@ -24,7 +32,7 @@ export async function renderAgendamentos(c) {
         );
 
         const historico = agendamentos.filter(a =>
-            ['completed', 'cancelled'].includes(a.status)
+            ['completed', 'canceled'].includes(a.status)
         );
 
         c.innerHTML = `
@@ -104,9 +112,9 @@ export async function renderAgendamentos(c) {
                 <td>${data.toLocaleDateString('pt-BR')}</td>
                 <td>
                     ${data.toLocaleTimeString('pt-BR', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    })}
+                hour: '2-digit',
+                minute: '2-digit'
+            })}
                 </td>
 
                 <td>
@@ -173,7 +181,7 @@ export async function renderAgendamentos(c) {
                         com ${h.employee}
                         ·
                         ${new Date(h.date_time)
-                            .toLocaleDateString('pt-BR')}
+                    .toLocaleDateString('pt-BR')}
                     </p>
                 </div>
 
@@ -182,15 +190,14 @@ export async function renderAgendamentos(c) {
                         R$ ${Number(h.price).toFixed(2)}
                     </p>
 
-                    ${
-                        h.rating
-                            ? `
+                    ${h.rating
+                    ? `
                             <p class="history-stars">
                                 ${estrelas(h.rating)}
                             </p>
                         `
-                            : ''
-                    }
+                    : ''
+                }
                 </div>
             `;
 
@@ -206,12 +213,23 @@ export async function renderAgendamentos(c) {
             const action = btn.dataset.action;
 
             if (action === 'reagendar') {
-                abrirModal();
+                try {
+                    const detalheRes = await fetch(
+                        `http://localhost/Salon-Vision/api/appointments/list/${id}`,
+                        { headers: { Authorization: `Bearer ${token}` } }
+                    );
 
-                toast(
-                    'Selecione uma nova data e horário.',
-                    'ti-calendar'
-                );
+                    const detalheResult = await detalheRes.json();
+                    const agendamentoCompleto = detalheResult.data;
+
+                    abrirModal(agendamentoCompleto); // agora com serviceId/employeeId reais
+
+                    toast('Selecione uma nova data e horário.', 'ti-calendar');
+
+                } catch (error) {
+                    console.error(error);
+                    toast('Erro ao carregar dados do agendamento.', 'ti-alert-circle');
+                }
 
                 return;
             }
@@ -223,12 +241,10 @@ export async function renderAgendamentos(c) {
 
                 try {
                     const response = await fetch(
-                        `http://localhost/Salon-Vision/api/appointments/${id}`,
+                        `http://localhost/Salon-Vision/api/appointments/delete/${id}`,
                         {
                             method: 'DELETE',
-                            headers: {
-                                Authorization: `Bearer ${token}`
-                            }
+                            headers: { Authorization: `Bearer ${token}` }
                         }
                     );
 

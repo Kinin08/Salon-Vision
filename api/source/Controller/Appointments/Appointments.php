@@ -9,6 +9,15 @@ use Source\Core\JWTToken;
 
 class Appointments extends Api
 {
+    private ?array $bodyCache = null;
+
+    private function mergeBody(array $data): array
+    {
+        if ($this->bodyCache === null) {
+            $this->bodyCache = json_decode(file_get_contents("php://input"), true) ?? [];
+        }
+        return array_merge($this->bodyCache, $data);
+    }
     public function history(): void
     {
         $userId = $this->authToken(4);
@@ -85,6 +94,8 @@ class Appointments extends Api
     }
     public function create(array $data)
     {
+        $data = $this->mergeBody($data);
+
         if (
             !isset($data['clientId']) || empty($data['clientId']) ||
             !isset($data['employeeId']) || empty($data['employeeId']) ||
@@ -202,6 +213,8 @@ class Appointments extends Api
     }
     public function update(array $data): void
     {
+        $data = $this->mergeBody($data);
+
         if (
             !isset($data["appointmentId"]) ||
             !filter_var($data["appointmentId"], FILTER_VALIDATE_INT)
@@ -359,32 +372,30 @@ class Appointments extends Api
     }
     public function softDelete(array $data): void
     {
-
+        $data = $this->mergeBody($data);
 
         if (!filter_var($data["appointmentId"], FILTER_VALIDATE_INT)) {
             $this->call(400, "error", "ID do appointment é obrigatório e deve ser um número inteiro", "bad_request")->back();
             return;
         }
-        $appointment = new Appointment();
-        $data = $appointment->findById($data["appointmentId"]);
 
-        if (!$data) {
+        $appointmentId = $data["appointmentId"];
+
+        $appointment = new Appointment();
+        $atual = $appointment->findById($appointmentId);
+
+        if (!$atual) {
             $this->call(404, "error", "Appointment não existe", "not_found")->back();
             return;
         }
 
-        if ($data['status'] === 'canceled') {
+        if ($atual['status'] === 'canceled') {
             $this->call(400, "error", "O appointment já foi cancelado", "bad_request")->back();
             return;
         }
 
-        if (!$appointment->softDeleteById($data["appointmentId"])) {
-            $this->call(
-                400,
-                "error",
-                "O appointment não pode ser cancelado",
-                "bad_request"
-            )->back();
+        if (!$appointment->softDeleteById($appointmentId)) {
+            $this->call(400, "error", "O appointment não pode ser cancelado", "bad_request")->back();
             return;
         }
 

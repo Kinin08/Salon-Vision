@@ -6,7 +6,19 @@ export function setNavActive(id) {
     const el = document.getElementById(id);
     if (el) el.classList.add('active');
 }
+export function getUserIdFromToken() {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
 
+    try {
+        const payload = token.split('.')[1];
+        const decoded = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+        return decoded.data?.id ?? null;
+    } catch (e) {
+        console.error('Erro ao decodificar token', e);
+        return null;
+    }
+}
 /** Troca o conteúdo com fade */
 export function navegarPara(renderFn, containerId = 'page-content') {
     const c = document.getElementById(containerId);

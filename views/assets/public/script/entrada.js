@@ -1,31 +1,5 @@
 const BASE_URL = "http://localhost/Salon-Vision/api";
 
-// ── Verifica se já está logado ─────────────────────────────
-// Roda imediatamente: se tiver token válido, redireciona sem mostrar a página
-(async () => {
-    const token = localStorage.getItem("token");
-    const userType = localStorage.getItem("userType");
-
-    if (!token) return; // não logado, fica na landing
-
-    try {
-        const res = await fetch(`${BASE_URL}/users/profile`, {
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-
-        if (res.ok) {
-            redirectByRole(userType); // token válido → redireciona
-        } else {
-            // Token expirado ou inválido → limpa localStorage
-            localStorage.removeItem("token");
-            localStorage.removeItem("userName");
-            localStorage.removeItem("userType");
-        }
-    } catch (_) {
-        // erro de rede → fica na página sem limpar
-    }
-})();
-
 // ── Elementos ──────────────────────────────────────────────
 const authModal = document.getElementById("authModal");
 const authTitle = document.getElementById("authTitle");
@@ -48,16 +22,13 @@ function redirectByRole(userType) {
 function showFeedback(message, isError = false) {
     authFeedback.textContent = message;
 
-    // remove hidden primeiro
     authFeedback.classList.remove("hidden");
 
-    // remove classes de cor antigas
     authFeedback.classList.remove(
         "border-red-400/20", "bg-red-400/10", "text-red-300",
         "border-green-400/20", "bg-green-400/10", "text-green-300"
     );
 
-    // adiciona as certas
     if (isError) {
         authFeedback.classList.add("border-red-400/20", "bg-red-400/10", "text-red-300");
     } else {
@@ -143,7 +114,7 @@ loginForm.addEventListener("submit", async (e) => {
         email: document.getElementById("email").value.trim(),
         password: document.getElementById("password").value,
     };
-
+    
     try {
         const { status, data } = await postJSON("/users/login", body);
 

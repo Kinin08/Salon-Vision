@@ -1,6 +1,12 @@
-import { agendamentos, LABEL } from '../data.js';
 import { toast, updateBadge, openModal } from '../helpers.js';
 export function renderAgendamentos(c) {
+    const STATUS_LABEL = {
+        scheduled: 'scheduled',
+        confirmed: 'confirmed',
+        inProgress: 'in_progress',
+        completed: 'completed',
+        canceled: 'canceled'
+    };
     c.innerHTML = `
     <div class="panel fade-in">
         <div class="panel-header">

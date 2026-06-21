@@ -1,75 +1,68 @@
-import { meusAgendamentos } from './data.js';
-import { toast, navegarPara } from './helpers.js';
-import { renderAgendamentos } from './renders/agendamentos.js';
+import { toast, getUserIdFromToken } from './helpers.js';
+import { carregarDadosAgendamento, salvarAgendamento } from './renders/agendamentosService.js';
 
-// Funções para o modal de agendamento
-export function abrirModal(servicoPresel = null) {
-    const modal = document.getElementById('modalAgendar');
-    modal.classList.add('open');
-    if (servicoPresel) {
-        const sel = document.getElementById('modalServico');
-        if (sel) {
-            for (let opt of sel.options) {
-                if (opt.value === servicoPresel) {
-                    sel.value = servicoPresel;
-                    break;
-                }
-            }
-        }
-    }
-}
+let agendamentoEditandoId = null;
 
-export function fecharModal() {
-    document.getElementById('modalAgendar').classList.remove('open');
-}
-
-// Funções para o modal de FAQ
-export function abrirModalFaq() {
-    document.getElementById('modalFaq').classList.add('open');
-}
-
-export function fecharModalFaq() {
-    document.getElementById('modalFaq').classList.remove('open');
-}
-
-// Inicializar todos os modais
 export function initModals() {
-    // Modal Agendamento
     document.getElementById('modalCancelar')?.addEventListener('click', fecharModal);
-    document.getElementById('modalAgendar')?.addEventListener('click', e => {
-        if (e.target === document.getElementById('modalAgendar')) fecharModal();
-    });
 
-    document.getElementById('modalConfirmar')?.addEventListener('click', () => {
+    document.getElementById('modalConfirmar')?.addEventListener('click', async () => {
         const servico = document.getElementById('modalServico').value;
-        const prof = document.getElementById('modalProf').value;
+        const profissional = document.getElementById('modalProf').value;
         const data = document.getElementById('modalData').value;
         const hora = document.getElementById('modalHora').value;
 
-        if (!data) {
-            toast('Selecione uma data!', 'ti-alert-circle');
+        if (!servico || !profissional || !data || !hora) {
+            toast('Preencha todos os campos.', 'ti-alert-circle');
             return;
         }
 
-        const [y, m, d] = data.split('-');
-        const dataFmt = `${d}/${m}/${y}`;
+        const clientId = getUserIdFromToken();
 
-        meusAgendamentos.push({
-            id: Date.now(),
-            servico,
-            profissional: prof,
-            data: dataFmt,
-            hora,
-            status: 'pending'
-        });
+        if (!clientId) {
+            toast('Sessão inválida. Faça login novamente.', 'ti-alert-circle');
+            return;
+        }
 
-        fecharModal();
-        toast(`Agendamento de ${servico} confirmado!`);
+        const payload = {
+            clientId: clientId,
+            employeeId: profissional,
+            serviceId: servico,
+            dateTime: `${data} ${hora}:00`
+        };
+
+        const sucesso = await salvarAgendamento(payload, agendamentoEditandoId);
+
+        if (sucesso) {
+            const editando = !!agendamentoEditandoId;
+            fecharModal();
+            toast(editando ? 'Agendamento reagendado!' : 'Agendamento criado!', 'ti-check');
+
+            const { renderAgendamentos } = await import('./renders/agendamentos.js');
+            renderAgendamentos(document.getElementById('page-content'));
+        }
     });
+}
 
-    // Modal FAQ
-    document.getElementById('faqCancelar')?.addEventListener('click', fecharModalFaq);
-    document.getElementById('modalFaq')?.addEventListener('click', e => {
-        if (e.target === document.getElementById('modalFaq')) fecharModalFaq();
-    });
+export function abrirModal(agendamento = null) {
+    agendamentoEditandoId = agendamento ? agendamento.id : null;
+
+    const modal = document.getElementById('modalAgendar');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    carregarDadosAgendamento(agendamento);
+}
+
+export function fecharModal() {
+    const modal = document.getElementById('modalAgendar');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+
+    agendamentoEditandoId = null;
+
+    document.getElementById('modalServico').value = '';
+    document.getElementById('modalProf').value = '';
+    document.getElementById('modalData').value = '';
+    document.getElementById('modalHora').value = '';
 }

@@ -136,21 +136,22 @@ class Appointment extends Model
     public function historic(int $clientId): array
     {
         $query = "
-        SELECT
-            a.id,
-            a.date_time,
-            a.rating,
-            s.name AS service,
-            s.price,
-            u.name AS employee
-        FROM appointments a
-        INNER JOIN services s
-            ON s.id = a.service_id
-        INNER JOIN users u
-            ON u.id = a.employee_id
-        WHERE a.client_id = :clientId
-        ORDER BY a.date_time DESC
-    ";
+    SELECT
+        a.id,
+        a.date_time,
+        a.rating,
+        a.status,
+        s.name AS service,
+        s.price,
+        u.name AS employee
+    FROM appointments a
+    INNER JOIN services s
+        ON s.id = a.service_id
+    INNER JOIN users u
+        ON u.id = a.employee_id
+    WHERE a.client_id = :clientId
+    ORDER BY a.date_time DESC
+";
 
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindValue(":clientId", $clientId, PDO::PARAM_INT);
