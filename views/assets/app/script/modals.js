@@ -1,4 +1,4 @@
-import { toast, getUserIdFromToken } from './helpers.js';
+import { toast } from './helpers.js';
 import { carregarDadosAgendamento, salvarAgendamento } from './renders/agendamentosService.js';
 
 let agendamentoEditandoId = null;
@@ -7,6 +7,8 @@ export function initModals() {
     document.getElementById('modalCancelar')?.addEventListener('click', fecharModal);
 
     document.getElementById('modalConfirmar')?.addEventListener('click', async () => {
+        const token = localStorage.getItem('token');
+        const payloadToken = JSON.parse(atob(token.split('.')[1]));
         const servico = document.getElementById('modalServico').value;
         const profissional = document.getElementById('modalProf').value;
         const data = document.getElementById('modalData').value;
@@ -17,15 +19,8 @@ export function initModals() {
             return;
         }
 
-        const clientId = getUserIdFromToken();
-
-        if (!clientId) {
-            toast('Sessão inválida. Faça login novamente.', 'ti-alert-circle');
-            return;
-        }
-
         const payload = {
-            clientId: clientId,
+            clientId: payloadToken.data.id,
             employeeId: profissional,
             serviceId: servico,
             dateTime: `${data} ${hora}:00`

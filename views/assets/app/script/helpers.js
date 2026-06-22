@@ -1,23 +1,8 @@
-import { meusAgendamentos } from './data.js';
-
 /** Atualiza classe active na sidebar */
 export function setNavActive(id) {
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
     const el = document.getElementById(id);
     if (el) el.classList.add('active');
-}
-export function getUserIdFromToken() {
-    const token = localStorage.getItem('token');
-    if (!token) return null;
-
-    try {
-        const payload = token.split('.')[1];
-        const decoded = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
-        return decoded.data?.id ?? null;
-    } catch (e) {
-        console.error('Erro ao decodificar token', e);
-        return null;
-    }
 }
 /** Troca o conteúdo com fade */
 export function navegarPara(renderFn, containerId = 'page-content') {

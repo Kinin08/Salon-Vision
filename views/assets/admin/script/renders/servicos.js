@@ -1,51 +1,94 @@
-import { catalogo } from '../data.js';
-import { toast, openModal } from '../helpers.js';
-import { nav } from '../helpers.js';
-import { initModals } from '../modals.js';
-export function renderServicos(c) {
+export async function renderServicos(c) {
     c.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;" class="fade-in">
-        <div>
-            <h1 style="font-size:22px;font-weight:500;">Catálogo de <em>Serviços</em></h1>
-            <p style="font-size:12px;color:var(--text-dim);margin-top:3px;">${catalogo.length} serviços ativos</p>
-        </div>
-        <button class="btn btn-gold" id="btn-novo-serv"><i class="ti ti-plus"></i> Novo Serviço</button>
-    </div>
-    <div class="service-grid fade-in" id="service-grid"></div>`;
+    <div class="panel fade-in">
 
-    function renderGrid() {
-        const grid = document.getElementById('service-grid');
-        grid.innerHTML = '';
-        catalogo.forEach(s => {
-            const div = document.createElement('div');
-            div.className = 'service-card';
-            div.innerHTML = `
-            <div class="service-icon"><i class="ti ${s.icon}"></i></div>
-            <p class="service-name">${s.nome}</p>
-            <p class="service-desc">${s.desc}</p>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
-                <span style="font-size:10px;color:var(--text-dim);"><i class="ti ti-clock"></i> ${s.duracao}</span>
-                <span class="service-price">${s.valor}</span>
+        <div class="panel-header">
+            <h1 class="panel-title">Nossos <em>Serviços</em></h1>
+        </div>
+
+        <div id="services-list"
+            style="
+                display:grid;
+                grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+                gap:16px;
+            ">
+        </div>
+
+    </div>
+    `;
+
+    const list = document.getElementById('services-list');
+
+    let allServices = [];
+
+    function renderList(data) {
+        list.innerHTML = '';
+
+        data.forEach(service => {
+            const item = document.createElement('div');
+
+            item.innerHTML = `
+            <div class="service-card">
+
+                <div class="service-card-icon">
+                    <i class="ti ti-scissors"></i>
+                </div>
+
+                <p class="service-card-name">
+                    ${service.name}
+                </p>
+
+                <p class="service-card-desc">
+                    ${service.description || 'Sem descrição'}
+                </p>
+
+                <div class="service-card-meta">
+                    <span class="service-meta-item">
+                        <i class="ti ti-clock"></i>
+                        ${service.durationMinutes} min
+                    </span>
+                </div>
+
+                <p class="service-price">
+                    R$ ${Number(service.price).toFixed(2)}
+                </p>
+
+
             </div>
-            <div style="display:flex;gap:6px;margin-top:10px;">
-                <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="toast('Editando ${s.nome} em breve!')"><i class="ti ti-edit"></i> Editar</button>
-                <button class="btn btn-danger btn-sm" data-del-serv="${s.id}"><i class="ti ti-trash"></i></button>
-            </div>`;
-            grid.appendChild(div);
+            `;
+
+            list.appendChild(item);
         });
-        grid.querySelectorAll('[data-del-serv]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const id = parseInt(btn.dataset.delServ);
-                const sv = catalogo.find(x => x.id === id);
-                if (confirm(`Remover serviço "${sv.nome}"?`)) {
-                    catalogo = catalogo.filter(x => x.id !== id);
-                    toast(`"${sv.nome}" removido.`, 'ti-trash');
-                    renderGrid();
-                }
-            });
+
+        document.querySelectorAll('[data-servico]').forEach(btn => {
+            btn.onclick = () => {
+                abrirModal(btn.dataset.servico);
+            };
         });
     }
 
-    renderGrid();
-    document.getElementById('btn-novo-serv')?.addEventListener('click', () => openModal('modalServico'));
+    async function loadServices() {
+        try {
+            const response = await fetch(
+                'http://localhost/Salon-Vision/api/services/list'
+            );
+
+            const data = await response.json();
+
+            console.log(data);
+
+            allServices = data.data || [];
+
+            renderList(allServices);
+
+        } catch (error) {
+            console.error(error);
+
+            list.innerHTML = `
+                <p>Erro ao carregar serviços.</p>
+            `;
+        }
+    }
+
+    await loadServices();
 }

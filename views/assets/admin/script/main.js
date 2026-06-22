@@ -1,24 +1,22 @@
-import { setActive, nav, toast, updateBadge } from './helpers.js';
+import { setNavActive, navegarPara, updateTopbarTitle } from './helpers.js';
 import { initModals } from './modals.js';
-import { renderDashboard } from './renders/dashboard.js';
-import { renderAgendamentos,  } from './renders/agendamento.js';
-import { renderClientes } from './renders/clientes.js';
-import { renderProfissionais } from './renders/profissionais.js';
+import { renderInicio } from './renders/inicio.js';
+import { renderAgendamentos } from './renders/agendamentos.js';
 import { renderServicos } from './renders/servicos.js';
-import { renderAvaliacoes } from './renders/avaliacoes.js';
+import { renderProfissionais } from './renders/profissionais.js';
 import { renderFaqs } from './renders/faqs.js';
 import { renderPerfil } from './renders/perfil.js';
+import { renderClientesAdmin } from './renders/clientes.js';
 
-// Configuração de rotas
+// Configuração das rotas
 const rotas = {
-    'nav-dashboard': { fn: renderDashboard, titulo: 'Dashboard <em>Geral</em>' },
-    'nav-agendamentos': { fn: renderAgendamentos, titulo: 'Gestão de <em>Agendamentos</em>' },
-    'nav-clientes': { fn: renderClientes, titulo: 'Gestão de <em>Clientes</em>' },
+    'nav-dashboard': { fn: renderInicio, titulo: 'Olá, <em>Ana!</em>' },
+    'nav-agendamentos': { fn: renderAgendamentos, titulo: 'Meus <em>Agendamentos</em>' },
+    'nav-faqs': { fn: renderFaqs, titulo: 'Perguntas <em>Pendentes</em>' },
+    'nav-servicos': { fn: renderServicos, titulo: 'Nossos <em>Serviços</em>' },
     'nav-profissionais': { fn: renderProfissionais, titulo: 'Nossa <em>Equipe</em>' },
-    'nav-faqs': { fn: renderFaqs, titulo: 'Perguntas mais <em>Frequentes</em>' },
-    'nav-servicos': { fn: renderServicos, titulo: 'Catálogo de <em>Serviços</em>' },
-    'nav-avaliacoes': { fn: renderAvaliacoes, titulo: 'Central de <em>Avaliações</em>' },
-    'nav-perfil': { fn: renderPerfil, titulo: '<em>Perfil</em>' },
+    'nav-perfil': { fn: renderPerfil, titulo: 'Meu <em>Perfil</em>' },
+    'nav-clientes': { fn: renderClientesAdmin, titulo: 'Meus <em>Clientes</em>' },
 };
 
 // Inicializar navegação
@@ -26,22 +24,23 @@ function initNavigation() {
     document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', e => {
             e.preventDefault();
-            const rota = rotas[item.id];
+            const id = item.id;
+            const rota = rotas[id];
             if (!rota) return;
-            setActive(item.id);
-            nav(rota.fn, rota.titulo);
+
+            setNavActive(id);
+            updateTopbarTitle(rota.titulo);
+            navegarPara(rota.fn);
         });
     });
 }
 
-// Inicializar data/hora do topbar
+// Inicializar data no topbar
 function initTopbarDate() {
-    const topbarDate = document.getElementById('topbar-date');
-    if (topbarDate) {
-        topbarDate.textContent = new Date().toLocaleDateString('pt-BR', {
-         weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-        });
-    }
+    const hoje = new Date();
+    document.getElementById('topbar-date').textContent = hoje.toLocaleDateString('pt-BR', {
+        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    });
 }
 
 // Inicializar aplicação
@@ -49,7 +48,7 @@ function init() {
     initTopbarDate();
     initNavigation();
     initModals();
-    nav(renderDashboard, 'Dashboard <em>Geral</em>');
+    navegarPara(renderInicio);
 }
 
 // Iniciar quando o DOM estiver pronto

@@ -194,20 +194,19 @@ export async function renderFaqs(c) {
                 return;
             }
 
-            const res = await fetch('http://localhost/Salon-Vision/api/faqs/', {
+            const res = await fetch('http://localhost/Salon-Vision/api/faqs/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    faqCategoryId: Number(category),
                     question,
-                    faqsCategoryId: Number(category),
                     answer
                 })
             });
 
             const data = await res.json();
-
             if (!res.ok) {
                 alert(data.message)
                 return;

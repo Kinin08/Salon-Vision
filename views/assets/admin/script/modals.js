@@ -1,101 +1,63 @@
-import { closeModal, toast, openModal, updateBadge, nav, setActive } from './helpers.js';
-import { agendamentos, catalogo, profissionais } from './data.js';
-import { renderAgendamentos } from './renders/agendamento.js';
-import { renderServicos } from './renders/servicos.js';
-import { renderProfissionais } from './renders/profissionais.js';
+import { toast } from './helpers.js';
+import { carregarDadosAgendamento, salvarAgendamento } from './renders/agendamentosService.js';
+
+let agendamentoEditandoId = null;
 
 export function initModals() {
-    // Modal Agendamento
-    document.getElementById('m-cancelar')?.addEventListener('click', () => closeModal('modalAgendar'));
-    document.getElementById('modalAgendar')?.addEventListener('click', e => {
-        if (e.target === document.getElementById('modalAgendar')) closeModal('modalAgendar');
-    });
-    document.getElementById('m-confirmar')?.addEventListener('click', () => {
-        const cliente = document.getElementById('m-cliente').value.trim();
-        const data = document.getElementById('m-data').value;
-        if (!cliente) { toast('Informe o nome do cliente!', 'ti-alert-circle'); return; }
-        if (!data) { toast('Selecione uma data!', 'ti-alert-circle'); return; }
-        const [y, m, d] = data.split('-');
-        agendamentos.push({
-            id: Date.now(),
-            cliente,
-            servico: document.getElementById('m-servico').value,
-            prof: document.getElementById('m-prof').value,
-            data: `${d}/${m}/${y}`,
-            hora: document.getElementById('m-hora').value,
-            status: 'pending'
-        });
-        updateBadge();
-        closeModal('modalAgendar');
-        toast('Agendamento criado!');
-        nav(renderAgendamentos, 'Gestão de <em>Agendamentos</em>');
-        setActive('nav-agendamentos');
-        
-    });
+    document.getElementById('modalCancelar')?.addEventListener('click', fecharModal);
 
-    // Modal Serviço
-    document.getElementById('ms-cancelar')?.addEventListener('click', () => closeModal('modalServico'));
-    document.getElementById('modalServico')?.addEventListener('click', e => {
-        if (e.target === document.getElementById('modalServico')) closeModal('modalServico');
-    });
-    document.getElementById('ms-confirmar')?.addEventListener('click', () => {
-        const nome = document.getElementById('ms-nome').value.trim();
-        if (!nome) { toast('Informe o nome do serviço!', 'ti-alert-circle'); return; }
-        catalogo.push({
-            id: Date.now(),
-            icon: 'ti-sparkles',
-            nome,
-            desc: document.getElementById('ms-desc').value,
-            duracao: document.getElementById('ms-dur').value || '—',
-            valor: document.getElementById('ms-valor').value || 'R$ —'
-        });
-        closeModal('modalServico');
-        toast('Serviço criado!');
-        nav(renderServicos, 'Catálogo de <em>Serviços</em>');
-        setActive('nav-servicos');
-    });
+    document.getElementById('modalConfirmar')?.addEventListener('click', async () => {
+        const token = localStorage.getItem('token');
+        const payloadToken = JSON.parse(atob(token.split('.')[1]));
+        const servico = document.getElementById('modalServico').value;
+        const profissional = document.getElementById('modalProf').value;
+        const data = document.getElementById('modalData').value;
+        const hora = document.getElementById('modalHora').value;
 
-    // Modal Profissional
-    document.getElementById('mp-cancelar')?.addEventListener('click', () => closeModal('modalProf'));
-    document.getElementById('modalProf')?.addEventListener('click', e => {
-        if (e.target === document.getElementById('modalProf')) closeModal('modalProf');
-    });
-    document.getElementById('mp-confirmar')?.addEventListener('click', () => {
-        const nome = document.getElementById('mp-nome').value.trim();
-        if (!nome) { toast('Informe o nome!', 'ti-alert-circle'); return; }
-        profissionais.push({
-            id: Date.now(),
-            nome,
-            role: document.getElementById('mp-role').value || 'Especialista',
-            foto: `https://i.pravatar.cc/80?img=${Math.floor(Math.random() * 70)}`,
-            nota: 5.0,
-            ativo: true
-        });
-        closeModal('modalProf');
-        toast('Profissional cadastrado!');
-        nav(renderProfissionais, 'Nossa <em>Equipe</em>');
-        setActive('nav-profissionais');
-    });
-        // 🔥 ABRIR MODAL FAQ
-    document.getElementById('faq-create-btn')?.addEventListener('click', () => {
-        openModal('modalFaq');
-    });
+        if (!servico || !profissional || !data || !hora) {
+            toast('Preencha todos os campos.', 'ti-alert-circle');
+            return;
+        }
 
-    // 🔥 CANCELAR BOTÃO
-    document.getElementById('faq-cancelar')?.addEventListener('click', () => {
-        closeModal('modalFaq');
-    });
+        const payload = {
+            clientId: payloadToken.data.id,
+            employeeId: profissional,
+            serviceId: servico,
+            dateTime: `${data} ${hora}:00`
+        };
 
-    // 🔥 FECHAR CLICANDO FORA
-    document.getElementById('modalFaq')?.addEventListener('click', (e) => {
-        if (e.target.id === 'modalFaq') {
-            closeModal('modalFaq');
+        const sucesso = await salvarAgendamento(payload, agendamentoEditandoId);
+
+        if (sucesso) {
+            const editando = !!agendamentoEditandoId;
+            fecharModal();
+            toast(editando ? 'Agendamento reagendado!' : 'Agendamento criado!', 'ti-check');
+
+            const { renderAgendamentos } = await import('./renders/agendamentos.js');
+            renderAgendamentos(document.getElementById('page-content'));
         }
     });
+}
 
-    // 🔥 BOTÃO CRIAR (sem lógica ainda)
-    document.getElementById('faq-confirmar')?.addEventListener('click', () => {
-        toast('Ação de criar ainda não implementada', 'ti-info-circle');
-        closeModal('modalFaq');
-    });
+export function abrirModal(agendamento = null) {
+    agendamentoEditandoId = agendamento ? agendamento.id : null;
+
+    const modal = document.getElementById('modalAgendar');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    carregarDadosAgendamento(agendamento);
+}
+
+export function fecharModal() {
+    const modal = document.getElementById('modalAgendar');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+
+    agendamentoEditandoId = null;
+
+    document.getElementById('modalServico').value = '';
+    document.getElementById('modalProf').value = '';
+    document.getElementById('modalData').value = '';
+    document.getElementById('modalHora').value = '';
 }

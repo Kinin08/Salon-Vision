@@ -133,6 +133,29 @@ class Appointment extends Model
     {
         $this->createdIn = $createdIn;
     }
+public function listAll(): array
+{
+    $query = "
+        SELECT
+            a.id,
+            a.date_time,
+            a.status,
+            a.rating,
+            s.name AS service,
+            e.name AS employee,
+            c.name AS client
+        FROM appointments a
+        INNER JOIN services s ON s.id = a.service_id
+        INNER JOIN users    e ON e.id = a.employee_id
+        INNER JOIN users    c ON c.id = a.client_id
+        ORDER BY a.date_time DESC
+    ";
+
+    $stmt = Connect::getInstance()->prepare($query);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
     public function historic(int $clientId): array
     {
         $query = "

@@ -10,9 +10,9 @@ const signupForm = document.getElementById("signupForm");
 // ── Redirecionamento por tipo ──────────────────────────────
 function redirectByRole(userType) {
     const routes = {
-        "Administrador": "/Salon-Vision/views/assets/admin/index.html",
-        "Funcionario": "/Salon-Vision/views/assets/employee/index.html",
-        "Cliente": "/Salon-Vision/views/assets/app/index.html",
+        "admin": "/Salon-Vision/views/assets/admin/index.html",
+        "funcionario": "/Salon-Vision/views/assets/employee/index.html",
+        "cliente": "/Salon-Vision/views/assets/app/index.html",
     };
     const path = routes[userType] ?? routes["Cliente"];
     setTimeout(() => window.location.href = path, 1000);
@@ -21,14 +21,11 @@ function redirectByRole(userType) {
 // ── Helpers ────────────────────────────────────────────────
 function showFeedback(message, isError = false) {
     authFeedback.textContent = message;
-
     authFeedback.classList.remove("hidden");
-
     authFeedback.classList.remove(
         "border-red-400/20", "bg-red-400/10", "text-red-300",
         "border-green-400/20", "bg-green-400/10", "text-green-300"
     );
-
     if (isError) {
         authFeedback.classList.add("border-red-400/20", "bg-red-400/10", "text-red-300");
     } else {
@@ -114,8 +111,9 @@ loginForm.addEventListener("submit", async (e) => {
         email: document.getElementById("email").value.trim(),
         password: document.getElementById("password").value,
     };
-    
+
     try {
+        
         const { status, data } = await postJSON("/users/login", body);
 
         if (status === 200) {
@@ -127,6 +125,7 @@ loginForm.addEventListener("submit", async (e) => {
 
             showFeedback(`Bem-vindo, ${userData?.name}! Redirecionando...`);
             redirectByRole(userData?.userType);
+            console.log("Tipo:", userData.userType);
         } else {
             showFeedback(data.message ?? "Erro ao fazer login.", true);
             setLoading(submitBtn, false);
@@ -176,7 +175,6 @@ signupForm.addEventListener("submit", async (e) => {
             }
         } else {
             console.log("ERRO:", data.message);
-
             showFeedback(data.message ?? "Erro ao criar conta.", true);
             setLoading(submitBtn, false);
         }

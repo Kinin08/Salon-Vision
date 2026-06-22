@@ -45,14 +45,14 @@ class Appointments extends Api
     }
     public function listAll(): void
     {
-        $appointment = new Appointment();
+        if (!$this->authToken(3)) {
+            $this->call(401, "unauthorized", "Acesso restrito a administradores.", "error")->back();
+            return;
+        }
 
-        $this->call(
-            200,
-            "success",
-            "Lista de FAQs",
-            "success"
-        )->back($appointment->selectAll());
+        $appointment = new Appointment();
+        $this->call(200, "success", "Lista de agendamentos", "success")
+            ->back($appointment->listAll());
     }
 
     public function listById(array $data): void

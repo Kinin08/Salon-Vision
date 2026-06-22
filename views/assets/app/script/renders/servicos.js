@@ -53,14 +53,6 @@ export async function renderServicos(c) {
                     R$ ${Number(service.price).toFixed(2)}
                 </p>
 
-                <button
-                    class="btn btn-gold"
-                    style="margin-top:8px;width:100%;justify-content:center;"
-                    data-servico="${service.name}"
-                >
-                    <i class="ti ti-calendar-plus"></i>
-                    Agendar
-                </button>
 
             </div>
             `;

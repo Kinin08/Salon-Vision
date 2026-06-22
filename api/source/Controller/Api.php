@@ -11,8 +11,13 @@ class Api
     public function authToken(int $typeId = 0): int|false
     {
         $header = getallheaders();
-        $token = $header["token"] ?? $header['Authorization'] ?? $header['authorization'] ?? null;
 
+        $token = $header['Authorization']
+            ?? $header['authorization']
+            ?? $_SERVER['HTTP_AUTHORIZATION']
+            ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
+            ?? $header['token']
+            ?? null;
         if (!$token)
             return false;
 

@@ -1,9 +1,15 @@
-import { STATUS_LABEL } from '../data.js';
 import { setNavActive, navegarPara } from '../helpers.js';
 import { renderAgendamentos } from './agendamentos.js';
 import { renderServicos } from './servicos.js';
 
 export async function renderInicio(c) {
+    const STATUS_LABEL = {
+        scheduled: 'Agendado',
+        confirmed: 'Confirmado',
+        in_progress: 'Em andamento',
+        completed: 'Concluído',
+        canceled: 'Cancelado'
+    };
     try {
         const token = localStorage.getItem('token');
 
@@ -87,9 +93,8 @@ export async function renderInicio(c) {
                         Próximo agendamento
                     </p>
 
-                    ${
-                        proximo
-                            ? `
+                    ${proximo
+                ? `
                                 <p class="next-apt-service">
                                     ${proximo.service}
                                 </p>
@@ -107,9 +112,9 @@ export async function renderInicio(c) {
                                 <div class="next-apt-row">
                                     <i class="ti ti-clock"></i>
                                     ${new Date(proximo.date_time).toLocaleTimeString('pt-BR', {
-                                        hour: '2-digit',
-                                        minute: '2-digit'
-                                    })}
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })}
                                 </div>
 
                                 <div style="margin-top:10px;">
@@ -119,12 +124,12 @@ export async function renderInicio(c) {
                                     </span>
                                 </div>
                             `
-                            : `
+                : `
                                 <p style="color:var(--text-dim);font-size:12px;">
                                     Nenhum agendamento próximo.
                                 </p>
                             `
-                    }
+            }
                 </div>
 
                 <div class="metric-card fade-in delay-1">

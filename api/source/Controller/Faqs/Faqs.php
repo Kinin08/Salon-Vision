@@ -8,6 +8,15 @@ use Source\Models\Faq\FaqCategorie;
 
 class Faqs extends Api
 {
+    private ?array $bodyCache = null;
+
+    private function mergeBody(array $data): array
+    {
+        if ($this->bodyCache === null) {
+            $this->bodyCache = json_decode(file_get_contents("php://input"), true) ?? [];
+        }
+        return array_merge($this->bodyCache, $data);
+    }
     public function listAll(): void
     {
         $faq = new Faq();
@@ -66,6 +75,8 @@ class Faqs extends Api
     }
     public function create(array $data)
     {
+        $data = $this->mergeBody($data);
+
         if (
             !isset($data['faqCategoryId']) || empty($data['faqCategoryId']) ||
             !isset($data['question']) || empty($data['question']) ||

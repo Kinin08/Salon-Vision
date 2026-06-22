@@ -1,33 +1,22 @@
-
-export function setActive(id) {
+/** Atualiza classe active na sidebar */
+export function setNavActive(id) {
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-    document.getElementById(id)?.classList.add('active');
+    const el = document.getElementById(id);
+    if (el) el.classList.add('active');
 }
-
-export function getUserIdFromToken() {
-    const token = localStorage.getItem('token');
-    if (!token) return null;
-
-    try {
-        const payload = token.split('.')[1];
-        const decoded = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
-        return decoded.id ?? decoded.sub ?? null;
-    } catch (e) {
-        console.error('Erro ao decodificar token', e);
-        return null;
-    }
-}
-export function nav(renderFn, title) {
-    const c = document.getElementById('page-content');
-    c.style.transition = 'opacity .22s';
+/** Troca o conteúdo com fade */
+export function navegarPara(renderFn, containerId = 'page-content') {
+    const c = document.getElementById(containerId);
+    c.style.transition = 'opacity 0.25s ease';
     c.style.opacity = '0';
     setTimeout(() => {
         c.innerHTML = '';
         renderFn(c);
         c.style.opacity = '1';
-        document.getElementById('topbar-title').innerHTML = title;
-    }, 220);
+    }, 250);
 }
+
+/** Exibe toast */
 export function toast(msg, icon = 'ti-check') {
     const t = document.getElementById('toast');
     document.getElementById('toast-msg').textContent = msg;
@@ -35,19 +24,17 @@ export function toast(msg, icon = 'ti-check') {
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
 }
-export function stars(n) {
+
+/** Gera estrelas HTML */
+export function estrelas(n) {
     let s = '';
-    for (let i = 1; i <= 5; i++) s += `<i class="ti ti-star${i <= n ? '-filled star-filled' : ''}"></i>`;
+    for (let i = 1; i <= 5; i++) {
+        s += `<i class="ti ti-star${i <= n ? '-filled star-filled' : ''}"></i>`;
+    }
     return s;
 }
-export function openModal(id) { document.getElementById(id).classList.add('open'); }
-export function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-export function updateBadge() {
-    const p = agendamentos.filter(a => a.status === 'pending').length;
-
-    const badge = document.getElementById('badge-apt');
-    if (badge) {
-        badge.textContent = p;
-    }
+/** Atualiza o título do topbar */
+export function updateTopbarTitle(titulo) {
+    document.getElementById('topbar-title').innerHTML = titulo;
 }

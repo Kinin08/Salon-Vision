@@ -179,19 +179,26 @@ class User extends Model
         return true;
     }
 
-    public function login(string $email, string $password, int $typeId = 4): bool
+    public function login(string $email, string $password, int $typeId = null): bool
     {
         $query = "SELECT
-            u.*,
-            ut.name AS user_type
-          FROM users u
-          INNER JOIN users_types ut
-            ON ut.id = u.user_type_id
-          WHERE u.email = :email
-            AND u.user_type_id = :userTypeId";
+    u.*,
+    ut.name AS user_type
+  FROM users u
+  INNER JOIN users_types ut
+    ON ut.id = u.user_type_id
+  WHERE u.email = :email";
+        ;
+        if ($typeId !== null) {
+            $query .= " AND u.user_type_id = :userTypeId";
+        }
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":userTypeId", $typeId);
+
+        if ($typeId !== null) {
+            $stmt->bindParam(":userTypeId", $typeId);
+        }
+
         $stmt->execute();
         if ($stmt->rowCount() == 0) {
             $this->errorMessage = "Email não cadastrado";
@@ -218,16 +225,6 @@ class User extends Model
         ]);
         return true;
     }
-    public function updatePhotoById(int $id, string $photo): bool
-    {
-        $query = "UPDATE {$this->table} SET photo = :photo WHERE id = :id";
-        $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindParam(":photo", $photo);
-        $stmt->bindParam(":id", $id);
-        return $stmt->execute();
-    }
-
-    // Em User.php — troca o permissionVerify
     public function permissionVerify(int $userId, int $typeId): bool
     {
         $query = "SELECT id FROM {$this->table} 
@@ -272,6 +269,45 @@ class User extends Model
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    }
+    public function softDelete(int $id): bool
+    {
+        $query = "
+            UPDATE {$this->table}
+            SET
+                active = 0
+            WHERE id = :id
+            AND active = 1
+        ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->rowCount() > 0;
+    }
+    public function updateRole(int $id, int $role): bool
+    {
+        $stmt = Connect::getInstance()->prepare("
+        UPDATE users
+        SET user_type_id = :roleId
+        WHERE id = :id
+    ");
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':roleId', $role, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        echo "DB: " . Connect::getInstance()->query("SELECT DATABASE()")->fetchColumn();
+        var_dump([
+            'id' => $id,
+            'role' => $role,
+            'rows' => $stmt->rowCount(),
+            'error' => $stmt->errorInfo()
+        ]);
+
+        exit;
     }
     /**
      * Verifica se o email já existe em outro usuário

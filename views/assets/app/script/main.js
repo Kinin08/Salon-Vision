@@ -33,7 +33,6 @@ function initNavigation() {
     });
 }
 
-// Inicializar data no topbar
 function initTopbarDate() {
     const hoje = new Date();
     document.getElementById('topbar-date').textContent = hoje.toLocaleDateString('pt-BR', {

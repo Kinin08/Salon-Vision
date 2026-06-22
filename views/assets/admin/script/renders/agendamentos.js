@@ -1,8 +1,16 @@
 import { estrelas, toast } from '../helpers.js';
 import { abrirModal } from '../modals.js';
-import { carregarDadosAgendamento } from './agendamentosService.js';
+
+const BASE_URL = 'http://localhost/Salon-Vision/api';
 
 export async function renderAgendamentos(c) {
+    const STATUS_CLASS = {
+        scheduled: 'pending',
+        confirmed: 'confirmed',
+        in_progress: 'in-progress',
+        completed: 'done',
+        canceled: 'cancelled'
+    };
     const STATUS_LABEL = {
         scheduled: 'Agendado',
         confirmed: 'Confirmado',
@@ -10,12 +18,13 @@ export async function renderAgendamentos(c) {
         completed: 'Concluído',
         canceled: 'Cancelado'
     };
-    try {
 
+
+    try {
         const token = localStorage.getItem('token');
 
         const response = await fetch(
-            'http://localhost/Salon-Vision/api/appointments/my',
+            `${BASE_URL}/appointments/listAll`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -24,6 +33,17 @@ export async function renderAgendamentos(c) {
         );
 
         const result = await response.json();
+
+        if (!response.ok) {
+            c.innerHTML = `
+                <div class="panel">
+                    <p style="padding:20px;text-align:center;">
+                        ${result?.message || 'Acesso não autorizado.'}
+                    </p>
+                </div>
+            `;
+            return;
+        }
 
         const agendamentos = result.data || [];
 
@@ -41,22 +61,19 @@ export async function renderAgendamentos(c) {
                 <div class="panel fade-in">
                     <div class="panel-header">
                         <h1 class="panel-title">
-                            Meus <em>Agendamentos</em>
+                            Agendamentos <em>Ativos</em>
                         </h1>
 
-                        <button
-                            class="btn btn-gold"
-                            id="btnNovoAptTabela"
-                        >
-                            <i class="ti ti-calendar-plus"></i>
-                            Novo Agendamento
-                        </button>
+                        <span class="panel-action">
+                            ${ativos.length} no total
+                        </span>
                     </div>
 
                     <div style="overflow-x:auto;">
                         <table class="apt-table" style="width:100%;">
                             <thead>
                                 <tr>
+                                    <th>Cliente</th>
                                     <th>Serviço</th>
                                     <th>Profissional</th>
                                     <th>Data</th>
@@ -93,7 +110,7 @@ export async function renderAgendamentos(c) {
         if (!ativos.length) {
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="6"
+                    <td colspan="7"
                         style="text-align:center;padding:20px;color:var(--text-dim);">
                         Nenhum agendamento ativo.
                     </td>
@@ -107,6 +124,7 @@ export async function renderAgendamentos(c) {
             const data = new Date(a.date_time);
 
             tr.innerHTML = `
+                <td>${a.client}</td>
                 <td>${a.service}</td>
                 <td>${a.employee}</td>
                 <td>${data.toLocaleDateString('pt-BR')}</td>
@@ -118,10 +136,10 @@ export async function renderAgendamentos(c) {
                 </td>
 
                 <td>
-                    <span class="status-pill ${a.status}">
-                        <span class="status-dot"></span>
-                        ${STATUS_LABEL[a.status] || a.status}
-                    </span>
+<span class="status-pill ${STATUS_CLASS[a.status] || a.status}">
+    <span class="status-dot"></span>
+    ${STATUS_LABEL[a.status] || a.status}
+</span>
                 </td>
 
                 <td>
@@ -178,16 +196,17 @@ export async function renderAgendamentos(c) {
                     </p>
 
                     <p class="history-meta">
+                        ${h.client}
+                        ·
                         com ${h.employee}
                         ·
-                        ${new Date(h.date_time)
-                    .toLocaleDateString('pt-BR')}
+                        ${new Date(h.date_time).toLocaleDateString('pt-BR')}
                     </p>
                 </div>
 
                 <div class="history-right">
                     <p class="history-value">
-                        R$ ${Number(h.price).toFixed(2)}
+                        R$ ${Number(h.price ?? 0).toFixed(2)}
                     </p>
 
                     ${h.rating
@@ -215,15 +234,15 @@ export async function renderAgendamentos(c) {
             if (action === 'reagendar') {
                 try {
                     const detalheRes = await fetch(
-                        `http://localhost/Salon-Vision/api/appointments/list/${id}`,
+                        `${BASE_URL}/appointments/list/${id}`,
                         { headers: { Authorization: `Bearer ${token}` } }
                     );
 
                     const detalheResult = await detalheRes.json();
                     const agendamentoCompleto = detalheResult.data;
 
-                    abrirModal(agendamentoCompleto); 
-                    
+                    abrirModal(agendamentoCompleto);
+
                     toast('Selecione uma nova data e horário.', 'ti-calendar');
 
                 } catch (error) {
@@ -241,7 +260,7 @@ export async function renderAgendamentos(c) {
 
                 try {
                     const response = await fetch(
-                        `http://localhost/Salon-Vision/api/appointments/delete/${id}`,
+                        `${BASE_URL}/appointments/delete/${id}`,
                         {
                             method: 'DELETE',
                             headers: { Authorization: `Bearer ${token}` }
