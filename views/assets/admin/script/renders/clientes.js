@@ -92,7 +92,7 @@ export async function renderClientesAdmin(c) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`${BASE_URL}/users/list`, {
+        const response = await fetch(`${BASE_URL}/users/cliente`, {
             headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -118,7 +118,6 @@ export async function renderClientesAdmin(c) {
                 />
 
                 <p class="prof-name">${c.name}</p>
-                <p class="prof-name">${c.telephone ?? ''}</p>
 
                 <div style="display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap;">
 
@@ -144,6 +143,7 @@ export async function renderClientesAdmin(c) {
             /* 👔 PROMOVER */
             card.querySelector('[data-action="promote"]')
                 .addEventListener('click', async () => {
+                    if (!confirm('Promover para Funcionario?')) return;
                     console.log('USER:', c);
                     const res = await fetch(`${BASE_URL}/users/roleFunc/${c.id}`, {
                         method: 'PUT',
@@ -169,7 +169,7 @@ export async function renderClientesAdmin(c) {
                         method: 'DELETE',
                         headers: { Authorization: `Bearer ${token}` }
                     });
-                    
+
 
                     if (res.ok) {
                         toast('Cliente removido');

@@ -35,8 +35,20 @@ class Users extends Api
     public function listEmployee(): void
     {
         $user = new User();
-        $this->call(200, "success", "Lista de funcionários", "success")
+        $this->call(200, "success", "Lista de Funcionários", "success")
             ->back($user->listEmployee());
+    }
+    public function listCliente(): void
+    {
+        $user = new User();
+        $this->call(200, "success", "Lista de Clientes", "success")
+            ->back($user->listCliente());
+    }
+    public function listAdmin(): void
+    {
+        $user = new User();
+        $this->call(200, "success", "Lista de Admins", "success")
+            ->back($user->listAdmin());
     }
 
     public function listAll(): void
@@ -234,30 +246,46 @@ class Users extends Api
 
     public function softDelete(array $data): void
     {
-        $data = $this->mergeBody($data);
+        $userId = $data["user_id"] ?? null;
 
-        if (!filter_var($data["appointmentId"], FILTER_VALIDATE_INT)) {
-            $this->call(400, "error", "ID do appointment é obrigatório e deve ser um número inteiro", "bad_request")->back();
+        if (!filter_var($userId, FILTER_VALIDATE_INT)) {
+            $this->call(
+                400,
+                "error",
+                "ID do usuário é obrigatório",
+                "bad_request"
+            )->back();
             return;
         }
-
-        $userId = $data["user_id"];
 
         $user = new User();
-        $atual = $user->findById($userId);
 
-        if (!$atual) {
-            $this->call(404, "error", "Usuario não existe", "not_found")->back();
+        if (!$user->findById($userId)) {
+            $this->call(
+                404,
+                "error",
+                "Usuário não encontrado",
+                "not_found"
+            )->back();
             return;
         }
-
 
         if (!$user->softDelete($userId)) {
-            $this->call(400, "error", "O Usuario não pode ser cancelado", "bad_request")->back();
+            $this->call(
+                400,
+                "error",
+                "Não foi possível remover o usuário",
+                "bad_request"
+            )->back();
             return;
         }
 
-        $this->call(200, "success", "Usuario removido com sucesso", "success")->back(null);
+        $this->call(
+            200,
+            "success",
+            "Usuário removido com sucesso",
+            "success"
+        )->back();
     }
     public function roleFunc(array $data): void
     {

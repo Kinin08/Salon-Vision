@@ -1,4 +1,4 @@
-import { toast } from '../helpers.js';
+import { estrelas, toast } from '../helpers.js';
 import { logout } from '../../../public/script/logout.js';
 
 const API = 'http://localhost/Salon-Vision/api';
@@ -11,6 +11,9 @@ export async function renderPerfil(c) {
         </div>
     `;
 
+
+
+
     try {
         const token = localStorage.getItem('token');
 
@@ -18,9 +21,70 @@ export async function renderPerfil(c) {
             headers: { Authorization: `Bearer ${token}` }
         });
 
-        const result = await response.json();
-        const user   = result.data;
+        const adminsReq = await fetch(`${API}/users/admin`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
 
+        const result = await response.json();
+        const adminRes = await adminsReq.json();
+
+        const user = result.data;
+        const admins = adminRes.data || [];
+
+        function abrirModalAdmin(p) {
+
+            let modal = document.getElementById('modalAdmin');
+
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'modalAdmin';
+                modal.className = 'fixed inset-0 hidden items-center justify-center bg-black/60 backdrop-blur-sm z-50';
+
+                modal.innerHTML = `
+                    <div class="w-full max-w-md rounded-2xl bg-[#0B0B0B] p-6 shadow-2xl">
+
+                        <div style="display:flex;justify-content:space-between;">
+                        
+                    <div class="panel-header">
+                        <h1 class="panel-title">Perfil do <em>Admin</em></h1>
+                    </div>
+                            <button id="closeAdmin">✕</button>
+                        </div>
+
+                        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:20px;">
+                            <img id="adminFoto" style="width:90px;height:90px;border-radius:50%;" />
+                            <p id="adminNome" style="color:white;font-weight:600;"></p>
+                            <p id="adminEmail" style="color:gray;font-size:12px;"></p>
+                            <p id="adminTelephone" style="color:gray;font-size:12px;"></p>
+                        </div>
+
+                    </div>
+                `;
+
+                document.body.appendChild(modal);
+
+                document.getElementById('closeAdmin')
+                    .addEventListener('click', () => {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                    });
+            }
+
+            document.getElementById('adminFoto').src = p.photo || './assets/default-user.png';
+            document.getElementById('adminNome').textContent = p.name;
+            document.getElementById('adminEmail').textContent = p.email || '';
+            document.getElementById('adminTelephone').textContent = p.telephone || '';
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+
+        function fecharModalAdmin() {
+            const modal = document.getElementById('modalCliente');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
         c.innerHTML = `
         <div class="grid-2-1 fade-in">
 
@@ -91,101 +155,59 @@ export async function renderPerfil(c) {
 
             <div class="gap-y">
                 <div class="panel">
-                    <div class="panel-header">
-                        <h1 class="panel-title">Resumo <em>da conta</em></h1>
-                    </div>
-                    <div style="display:flex;flex-direction:column;gap:12px;">
-                        <div style="display:flex;justify-content:space-between;">
-                            <span>Agendamentos</span>
-                            <span>${user.totalAppointments ?? 0}</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;">
-                            <span>Avaliações</span>
-                            <span>${user.totalRatings ?? 0}</span>
-                        </div>
-                    </div>
+                <div class="panel-header">
+                    <h1 class="panel-title">Admins <em>do sistema</em></h1>
                 </div>
+                    <div style="display:flex;flex-direction:column;gap:12px;">
+                        <div class="panel-header">
+                            <h1 class="panel-title">Total de <em>Admins ${admins.length}</em></h1>
+                        </div>
+                    </div>
+
+                <div id="admin-grid" style="display:flex;flex-direction:column;gap:10px;"></div>
             </div>
+                
+            </div>
+
 
         </div>
         `;
 
-        // ── Upload de foto ─────────────────────────────────────
-        document.getElementById('btn-foto')
-            ?.addEventListener('click', () => {
-                document.getElementById('input-foto').click();
-            });
+        /* ================= LISTA DE ADMINS ================= */
+        const grid = document.getElementById('admin-grid');
 
-        document.getElementById('input-foto')
-            ?.addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
+        admins.forEach((p, i) => {
 
-                const formData = new FormData();
-                formData.append('photo', file);
+            const div = document.createElement('div');
 
-                try {
-                    toast('Enviando foto...', 'ti-upload');
+            div.className = 'prof-card fade-in';
+            div.style.animationDelay = `${i * 0.05}s`;
 
-                    const res = await fetch(`${API}/users/upload-photo`, {
-                        method: 'POST',
-                        headers: { Authorization: `Bearer ${token}` },
-                        body: formData,
-                    });
+            div.innerHTML = `
+                <img src="${p.photo || './assets/default-user.png'}" class="prof-avatar" />
 
-                    const data = await res.json();
+                <div>
+                    <p class="prof-name">${p.name}</p>
+                </div>
 
-                    if (!res.ok) {
-                        toast(data.message ?? 'Erro ao enviar foto.', 'ti-alert-circle');
-                        return;
-                    }
+                <button class="btn btn-ghost" data-action="view">
+                    Ver
+                </button>
+            `;
 
-                    document.getElementById('perfil-foto').src = data.data.photo;
-                    toast('Foto atualizada!', 'ti-check');
 
-                } catch (err) {
-                    console.error(err);
-                    toast('Erro de conexão.', 'ti-alert-circle');
-                }
-            });
+            /* VER PERFIL */
+            div.querySelector('[data-action="view"]')
+                .addEventListener('click', () => {
+                    abrirModalAdmin(p)
+                });
 
-        // ── Logout ─────────────────────────────────────────────
+            grid.appendChild(div);
+        });
+
+        /* ================= LOGOUT ================= */
         document.querySelector("[data-action='logout']")
             ?.addEventListener('click', logout);
-
-        // ── Salvar dados ───────────────────────────────────────
-        document.getElementById('btn-salvar')
-            ?.addEventListener('click', async () => {
-                try {
-                    const body = {
-                        name:      document.getElementById('input-nome').value,
-                        email:     document.getElementById('input-email').value,
-                        telephone: document.getElementById('input-tel').value,
-                    };
-
-                    const res = await fetch(`${API}/users/update`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${token}`,
-                        },
-                        body: JSON.stringify(body),
-                    });
-
-                    const data = await res.json();
-
-                    if (!res.ok) {
-                        toast(data.message ?? 'Erro ao salvar.', 'ti-alert-circle');
-                        return;
-                    }
-
-                    toast('Perfil atualizado com sucesso!', 'ti-check');
-
-                } catch (err) {
-                    console.error(err);
-                    toast('Erro de conexão.', 'ti-alert-circle');
-                }
-            });
 
     } catch (error) {
         console.error(error);

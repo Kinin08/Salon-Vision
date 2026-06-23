@@ -1,10 +1,10 @@
 import { estrelas, toast } from '../helpers.js';
 
 const BASE_URL = 'http://localhost/Salon-Vision/api';
+const token = localStorage.getItem("token");
 
 function garantirModalPerfil() {
     if (document.getElementById('modalPerfilProf')) return;
-
     const modal = document.createElement('div');
     modal.id = 'modalPerfilProf';
     modal.className = 'fixed inset-0 hidden items-center justify-center bg-black/60 backdrop-blur-sm z-50';
@@ -154,9 +154,12 @@ export async function renderProfissionais(c) {
             div.querySelector('[data-action="ver-perfil"]')
                 .addEventListener('click', () => abrirModalPerfil(p));
             div.querySelector('[data-action="promote"]')
+
                 .addEventListener('click', async () => {
-                    console.log('USER:', c);
-                    const res = await fetch(`${BASE_URL}/users/roleCliente/${c.id}`, {
+                    if (!confirm('Promover para Admin?')) return;
+
+                    console.log('USER:', p);
+                    const res = await fetch(`${BASE_URL}/users/roleAdmin/${p.id}`, {
                         method: 'PUT',
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -164,7 +167,7 @@ export async function renderProfissionais(c) {
                     });
 
                     if (res.ok) {
-                        toast('Usuário promovido para Funcionário');
+                        toast('Funcionario promovido para Admin');
                         div.remove();
                     } else {
                         toast('Erro ao promover');
@@ -172,18 +175,18 @@ export async function renderProfissionais(c) {
                 });
             div.querySelector('[data-action="delete"]')
                 .addEventListener('click', async () => {
-                    if (!confirm('Excluir cliente?')) return;
+                    if (!confirm('Promover para Cliente?')) return;
 
-                    const res = await fetch(`${BASE_URL}/users/delete/${c.id}`, {
-                        method: 'DELETE',
+                    const res = await fetch(`${BASE_URL}/users/roleCliente/${p.id}`, {
+                        method: 'PUT',
                         headers: { Authorization: `Bearer ${token}` }
                     });
 
                     if (res.ok) {
-                        toast('Cliente removido');
+                        toast('Funcionario virou cliente');
                         div.remove();
                     } else {
-                        toast('Erro ao remover');
+                        toast('Erro ao promover');
                     }
                 });
             grid.appendChild(div);

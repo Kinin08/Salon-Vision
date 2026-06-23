@@ -61,6 +61,7 @@ $route->get("/profile", "Users\\Users:profile");
 $route->get("/list", "Users\\Users:listAll");
 $route->get("/employee", "Users\\Users:listEmployee");
 $route->get("/cliente", "Users\\Users:listCliente");
+$route->get("/admin", "Users\\Users:listAdmin");
 $route->post("/register", "Users\\Users:register");
 $route->post("/login", "Users\\Users:login");
 $route->post("/login/admin", "Users\\Users:loginAdmin");
@@ -69,8 +70,8 @@ $route->put("/update", "Users\\Users:update");
 $route->put("/update/admin/{user_id}", "Users\\Users:updateAdmin");
 $route->put("/update/employee/{user_id}", "Users\\Users:updateEmployee");
 $route->put("/roleFunc/{user_id}", "Users\\Users:roleFunc");
-$route->put("/roleCliente/{user_id}", "Users\\Users:roleFunc");
-$route->put("/roleAdmin/{user_id}", "Users\\Users:roleFunc");
+$route->put("/roleCliente/{user_id}", "Users\\Users:roleCliente");
+$route->put("/roleAdmin/{user_id}", "Users\\Users:roleAdmin");
 $route->delete("/delete/{user_id}", "Users\\Users:softDelete");
 $route->group(null);
 

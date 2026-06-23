@@ -254,6 +254,21 @@ class User extends Model
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function listAdmin(): array
+    {
+        $query = "
+        SELECT
+        *
+        FROM users
+        WHERE user_type_id = 3
+        AND active = 1
+    ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function listCliente(): array
     {
         $query = "
