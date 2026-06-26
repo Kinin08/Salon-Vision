@@ -8,16 +8,6 @@ use Source\Core\JWTToken;
 
 class Users extends Api
 {
-    private ?array $bodyCache = null;
-
-    private function mergeBody(array $data): array
-    {
-        if ($this->bodyCache === null) {
-            $this->bodyCache = json_decode(file_get_contents("php://input"), true) ?? [];
-        }
-        return array_merge($this->bodyCache, $data);
-    }
-
     private function validateNameEmail(array $data): bool
     {
         return isset($data["name"], $data["email"])
@@ -34,18 +24,37 @@ class Users extends Api
 
     public function listEmployee(): void
     {
+        $userId = $this->authToken(3);
+
+        if (!$userId) {
+            $this->call(401, "unauthorized", "Usuário não autenticado", "error")->back();
+            return;
+        }
+
         $user = new User();
         $this->call(200, "success", "Lista de Funcionários", "success")
             ->back($user->listEmployee());
     }
     public function listCliente(): void
     {
+        $userId = $this->authToken(3);
+
+        if (!$userId) {
+            $this->call(401, "unauthorized", "Usuário não autenticado", "error")->back();
+            return;
+        }
         $user = new User();
         $this->call(200, "success", "Lista de Clientes", "success")
             ->back($user->listCliente());
     }
     public function listAdmin(): void
     {
+        $userId = $this->authToken(3);
+
+        if (!$userId) {
+            $this->call(401, "unauthorized", "Usuário não autenticado", "error")->back();
+            return;
+        }
         $user = new User();
         $this->call(200, "success", "Lista de Admins", "success")
             ->back($user->listAdmin());
@@ -73,7 +82,6 @@ class Users extends Api
     }
     public function register(array $data): void
     {
-        $data = $this->mergeBody($data);
 
         if (!$this->validateNameEmail($data)) {
             $this->call(400, "bad_request", "Nome e e-mail são obrigatórios. O e-mail deve ser válido.", "error")->back();
