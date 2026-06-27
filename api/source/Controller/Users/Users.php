@@ -24,10 +24,13 @@ class Users extends Api
 
     public function listEmployee(): void
     {
-        $userId = $this->authToken(3);
-
-        if (!$userId) {
-            $this->call(401, "unauthorized", "Usuário não autenticado", "error")->back();
+        if (!$this->authToken(3)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
             return;
         }
 
@@ -37,24 +40,32 @@ class Users extends Api
     }
     public function listCliente(): void
     {
-        $userId = $this->authToken(3);
-
-        if (!$userId) {
-            $this->call(401, "unauthorized", "Usuário não autenticado", "error")->back();
+        if (!$this->authToken(3)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
             return;
         }
+
         $user = new User();
         $this->call(200, "success", "Lista de Clientes", "success")
             ->back($user->listCliente());
     }
     public function listAdmin(): void
     {
-        $userId = $this->authToken(3);
-
-        if (!$userId) {
-            $this->call(401, "unauthorized", "Usuário não autenticado", "error")->back();
+        if (!$this->authToken(3)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
             return;
         }
+
         $user = new User();
         $this->call(200, "success", "Lista de Admins", "success")
             ->back($user->listAdmin());
@@ -119,9 +130,84 @@ class Users extends Api
             "email" => $user->getEmail(),
         ]);
     }
+    public function registerAdmin(array $data): void
+    {
+        if (!$this->validateNameEmail($data)) {
+            $this->call(400, "bad_request", "Nome e e-mail são obrigatórios. O e-mail deve ser válido.", "error")->back();
+            return;
+        }
+
+        if (empty($data['password'])) {
+            $this->call(400, "bad_request", "A senha é obrigatória.", "error")->back();
+            return;
+        }
+
+        if (!$this->validatePassword($data)) {
+            $this->call(400, "bad_request", "A senha deve ter entre 6 e 20 caracteres.", "error")->back();
+            return;
+        }
+
+        $user = new User(
+            null,
+            $data['name'],
+            $data['email'],
+            $data['password'],
+            $data['telephone'] ?? null,
+            $data['photo'] ?? null,
+            3
+        );
+
+        if (!$user->insert()) {
+            $this->call(500, "internal_server_error", $user->getErrorMessage(), "error")->back();
+            return;
+        }
+
+        $this->call(201, "success", "Usuário criado com sucesso", "created")->back([
+            "id" => $user->getId(),
+            "name" => $user->getName(),
+            "email" => $user->getEmail(),
+        ]);
+    }
+    public function registerEmployee(array $data): void
+    {
+        if (!$this->validateNameEmail($data)) {
+            $this->call(400, "bad_request", "Nome e e-mail são obrigatórios. O e-mail deve ser válido.", "error")->back();
+            return;
+        }
+
+        if (empty($data['password'])) {
+            $this->call(400, "bad_request", "A senha é obrigatória.", "error")->back();
+            return;
+        }
+
+        if (!$this->validatePassword($data)) {
+            $this->call(400, "bad_request", "A senha deve ter entre 6 e 20 caracteres.", "error")->back();
+            return;
+        }
+
+        $user = new User(
+            null,
+            $data['name'],
+            $data['email'],
+            $data['password'],
+            $data['telephone'] ?? null,
+            $data['photo'] ?? null,
+            5
+        );
+
+        if (!$user->insert()) {
+            $this->call(500, "internal_server_error", $user->getErrorMessage(), "error")->back();
+            return;
+        }
+
+        $this->call(201, "success", "Usuário criado com sucesso", "created")->back([
+            "id" => $user->getId(),
+            "name" => $user->getName(),
+            "email" => $user->getEmail(),
+        ]);
+    }
     public function login(array $data): void
     {
-        $data = $this->mergeBody($data);
 
         if (
             empty($data['email']) || empty($data['password']) ||
@@ -148,8 +234,6 @@ class Users extends Api
     }
     public function loginAdmin(array $data): void
     {
-        $data = $this->mergeBody($data);
-
         if (
             empty($data['email']) || empty($data['password']) ||
             !filter_var($data['email'], FILTER_VALIDATE_EMAIL)
@@ -175,7 +259,6 @@ class Users extends Api
     }
     public function loginEmployee(array $data): void
     {
-        $data = $this->mergeBody($data);
 
         if (
             empty($data['email']) || empty($data['password']) ||
@@ -201,16 +284,20 @@ class Users extends Api
         ]);
     }
 
+
     public function update(array $data): void
     {
-        $data = $this->mergeBody($data);
-
-        $userId = $this->authToken(4);
-
-        if (!$userId) {
-            $this->call(401, "unauthorized", "Usuário não autenticado.", "error")->back();
+        if (!$this->authToken(4)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
             return;
         }
+
+        $userId = $this->userAuthId;
 
         if (!$this->validateNameEmail($data)) {
             $this->call(400, "bad_request", "Os campos name e email são obrigatórios.", "error")->back();
@@ -251,7 +338,112 @@ class Users extends Api
             "active" => $userUpdated->getActive(),
         ]);
     }
+    public function updateAdmin(array $data): void
+    {
+        if (!$this->authToken(3)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+            return;
+        }
 
+        $userId = $this->userAuthId;
+
+        if (!$this->validateNameEmail($data)) {
+            $this->call(400, "bad_request", "Os campos name e email são obrigatórios.", "error")->back();
+            return;
+        }
+
+        $checkUser = new User();
+        if (!$checkUser->selectById($userId)) {
+            $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
+            return;
+        }
+
+        $user = new User(
+            $userId,
+            $data["name"],
+            $data["email"],
+            $data["password"] ?? null,
+            $data["telephone"] ?? null,
+            $data["photo"] ?? null,
+            3
+        );
+
+        if (!$user->updateById($userId)) {
+            $this->call(500, "internal_server_error", $user->getErrorMessage(), "error")->back();
+            return;
+        }
+
+        $userUpdated = new User();
+        $userUpdated->selectById($userId);
+
+        $this->call(200, "success", "Usuário atualizado com sucesso", "success")->back([
+            "id" => $userUpdated->getId(),
+            "name" => $userUpdated->getName(),
+            "email" => $userUpdated->getEmail(),
+            "telephone" => $userUpdated->getTelephone(),
+            "photo" => $userUpdated->getPhoto(),
+            "userTypeId" => $userUpdated->getUserTypeId(),
+            "active" => $userUpdated->getActive(),
+        ]);
+    }
+    public function updateEmployee(array $data): void
+    {
+        if (!$this->authToken(5)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+            return;
+        }
+
+        $userId = $this->userAuthId;
+
+        if (!$this->validateNameEmail($data)) {
+            $this->call(400, "bad_request", "Os campos name e email são obrigatórios.", "error")->back();
+            return;
+        }
+
+        $checkUser = new User();
+        if (!$checkUser->selectById($userId)) {
+            $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
+            return;
+        }
+
+        $user = new User(
+            $userId,
+            $data["name"],
+            $data["email"],
+            $data["password"] ?? null,
+            $data["telephone"] ?? null,
+            $data["photo"] ?? null,
+            5
+        );
+
+        if (!$user->updateById($userId)) {
+            $this->call(500, "internal_server_error", $user->getErrorMessage(), "error")->back();
+            return;
+        }
+
+        $userUpdated = new User();
+        $userUpdated->selectById($userId);
+
+        $this->call(200, "success", "Usuário atualizado com sucesso", "success")->back([
+            "id" => $userUpdated->getId(),
+            "name" => $userUpdated->getName(),
+            "email" => $userUpdated->getEmail(),
+            "telephone" => $userUpdated->getTelephone(),
+            "photo" => $userUpdated->getPhoto(),
+            "userTypeId" => $userUpdated->getUserTypeId(),
+            "active" => $userUpdated->getActive(),
+        ]);
+    }
     public function softDelete(array $data): void
     {
         $userId = $data["user_id"] ?? null;

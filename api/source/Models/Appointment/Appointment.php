@@ -184,7 +184,12 @@ public function listAll(): array
     }
     public function findById(int $id): ?array
     {
-        $query = "SELECT * FROM {$this->table} WHERE id = :id LIMIT 1";
+        $query = "
+        SELECT * 
+        FROM appointments
+        WHERE id = :id
+        LIMIT 1
+        ";
 
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
@@ -192,10 +197,10 @@ public function listAll(): array
 
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
-    public function softDeleteById(int $id): bool
+    public function softDelete(int $id): bool
     {
         $query = "
-            UPDATE {$this->table}
+            UPDATE appointments
             SET
                 status = 'canceled',
                 active = 0

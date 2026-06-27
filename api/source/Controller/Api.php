@@ -7,19 +7,21 @@ use Source\Core\JWTToken;
 
 class Api
 {
-    protected $userAuthId = 0;
-    public function authToken(int $typeId = 0): int|false
+
+    protected int $userAuthId = 0;
+
+    public function authToken(int $typeId): bool
     {
         $header = getallheaders();
 
-        $token = $header['Authorization']
+        $token = $header["token"]
+            ?? $header['Authorization']
             ?? $header['authorization']
-            ?? $_SERVER['HTTP_AUTHORIZATION']
-            ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
-            ?? $header['token']
             ?? null;
-        if (!$token)
+
+        if (!$token) {
             return false;
+        }
 
         if (str_starts_with($token, 'Bearer ')) {
             $token = substr($token, 7);
@@ -28,19 +30,21 @@ class Api
         $jwt = new JWTToken();
         $jwtToken = $jwt->decode($token);
 
-        if (!$jwtToken)
+        if (!$jwtToken) {
             return false;
-
-        $id = $jwtToken->data->id;
-
-        if ($typeId !== 0) {
-            $user = new User();
-            if (!$user->permissionVerify($id, $typeId))
-                return false; // verifica por ID
         }
 
-        $this->userAuthId = $id;
-        return $id;
+        $user = new User();
+
+        // aqui você usa o ID (não email)
+        if (!$user->permissionVerify($jwtToken->data->id, $typeId)) {
+            return false;
+        }
+
+        // guarda o ID para uso depois no controller
+        $this->userAuthId = $jwtToken->data->id;
+
+        return true;
     }
 
     protected function call(int $code, ?string $status = null, ?string $message = null, ?string $type = null): Api

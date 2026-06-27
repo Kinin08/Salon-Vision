@@ -45,10 +45,6 @@ class Appointments extends Api
     }
     public function listAll(): void
     {
-        if (!$this->authToken(3)) {
-            $this->call(401, "unauthorized", "Acesso restrito a administradores.", "error")->back();
-            return;
-        }
 
         $appointment = new Appointment();
         $this->call(200, "success", "Lista de agendamentos", "success")
@@ -390,12 +386,12 @@ class Appointments extends Api
         }
 
         if ($atual['status'] === 'canceled') {
-            $this->call(400, "error", "O appointment já foi cancelado", "bad_request")->back();
+            $this->call(400, "error", "O appointment já foi removido", "bad_request")->back();
             return;
         }
 
-        if (!$appointment->softDeleteById($appointmentId)) {
-            $this->call(400, "error", "O appointment não pode ser cancelado", "bad_request")->back();
+        if (!$appointment->softDelete($appointmentId)) {
+            $this->call(400, "error", "O appointment não pode ser removido", "bad_request")->back();
             return;
         }
 
