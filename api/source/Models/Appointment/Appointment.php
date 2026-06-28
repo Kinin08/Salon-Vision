@@ -133,48 +133,51 @@ class Appointment extends Model
     {
         $this->createdIn = $createdIn;
     }
-public function listAll(): array
-{
-    $query = "
-        SELECT
-            a.id,
-            a.date_time,
-            a.status,
-            a.rating,
-            s.name AS service,
-            e.name AS employee,
-            c.name AS client
-        FROM appointments a
-        INNER JOIN services s ON s.id = a.service_id
-        INNER JOIN users    e ON e.id = a.employee_id
-        INNER JOIN users    c ON c.id = a.client_id
-        ORDER BY a.date_time DESC
-    ";
+    public function listAll(): array
+    {
+        $query = "
+            SELECT
+                a.id,
+                a.date_time,
+                a.status,
+                a.rating,
+                s.name AS service,
+                e.name AS employee,
+                c.name AS client
+            FROM appointments a
+            INNER JOIN services s ON s.id = a.service_id
+            INNER JOIN users    e ON e.id = a.employee_id
+            INNER JOIN users    c ON c.id = a.client_id
+            ORDER BY a.date_time DESC
+        ";
 
-    $stmt = Connect::getInstance()->prepare($query);
-    $stmt->execute();
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute();
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function historic(int $clientId): array
     {
         $query = "
-    SELECT
-        a.id,
-        a.date_time,
-        a.rating,
-        a.status,
-        s.name AS service,
-        s.price,
-        u.name AS employee
-    FROM appointments a
-    INNER JOIN services s
-        ON s.id = a.service_id
-    INNER JOIN users u
-        ON u.id = a.employee_id
-    WHERE a.client_id = :clientId
-    ORDER BY a.date_time DESC
-";
+            SELECT
+                a.id,
+                a.date_time,
+                a.rating,
+                a.status,
+                s.name AS service,
+                s.price,
+                e.name AS employee,
+                c.name AS client
+            FROM appointments a
+            INNER JOIN services s
+                ON s.id = a.service_id
+            INNER JOIN users e
+                ON e.id = a.employee_id
+            INNER JOIN users c
+                ON c.id = a.client_id
+            WHERE a.client_id = :clientId
+            ORDER BY a.date_time DESC
+        ";
 
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindValue(":clientId", $clientId, PDO::PARAM_INT);
@@ -184,12 +187,7 @@ public function listAll(): array
     }
     public function findById(int $id): ?array
     {
-        $query = "
-        SELECT * 
-        FROM appointments
-        WHERE id = :id
-        LIMIT 1
-        ";
+        $query = "SELECT * FROM appointments WHERE id = :id LIMIT 1";
 
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);

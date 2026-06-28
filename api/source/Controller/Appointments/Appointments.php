@@ -5,19 +5,9 @@ namespace Source\Controller\Appointments;
 use Source\Controller\Api;
 use Source\Models\Appointment\Appointment;
 use Source\Models\User\User;
-use Source\Core\JWTToken;
 
 class Appointments extends Api
 {
-    private ?array $bodyCache = null;
-
-    private function mergeBody(array $data): array
-    {
-        if ($this->bodyCache === null) {
-            $this->bodyCache = json_decode(file_get_contents("php://input"), true) ?? [];
-        }
-        return array_merge($this->bodyCache, $data);
-    }
     public function history(): void
     {
         $userId = $this->authToken(4);
@@ -33,19 +23,27 @@ class Appointments extends Api
         }
 
         $appointment = new Appointment();
+        $history = $appointment->historic($userId);
+
+        if (empty($history)) {
+            $this->call(
+                404,
+                "not_found",
+                "Usuário sem agendamentos",
+                "warning"
+            )->back();
+            return;
+        }
 
         $this->call(
             200,
             "success",
             "Histórico encontrado",
             "success"
-        )->back(
-                $appointment->historic($userId)
-            );
+        )->back($history);
     }
     public function listAll(): void
     {
-
         $appointment = new Appointment();
         $this->call(200, "success", "Lista de agendamentos", "success")
             ->back($appointment->listAll());
@@ -53,8 +51,10 @@ class Appointments extends Api
 
     public function listById(array $data): void
     {
-
-        if (!isset($data["appointmentId"]) || empty($data["appointmentId"]) || !filter_var($data["appointmentId"], FILTER_VALIDATE_INT)) {
+        if (
+            !isset($data["appointmentId"]) || empty($data["appointmentId"]) ||
+            !filter_var($data["appointmentId"], FILTER_VALIDATE_INT)
+        ) {
             $this->call(
                 400,
                 "bad_request",
@@ -63,7 +63,9 @@ class Appointments extends Api
             )->back(null);
             return;
         }
+
         $appointment = new Appointment();
+
         if (!$appointment->selectById($data["appointmentId"])) {
             $this->call(
                 404,
@@ -90,8 +92,6 @@ class Appointments extends Api
     }
     public function create(array $data)
     {
-        $data = $this->mergeBody($data);
-
         if (
             !isset($data['clientId']) || empty($data['clientId']) ||
             !isset($data['employeeId']) || empty($data['employeeId']) ||
@@ -138,6 +138,7 @@ class Appointments extends Api
         }
 
         $dateTime = $data['dateTime'] ?? null;
+
         if (!\DateTime::createFromFormat('Y-m-d H:i:s', $dateTime)) {
             $this->call(
                 400,
@@ -147,6 +148,7 @@ class Appointments extends Api
             )->back();
             return;
         }
+
         if (!$dateTime) {
             $this->call(
                 400,
@@ -166,6 +168,7 @@ class Appointments extends Api
             )->back();
             return;
         }
+
         $appointment = new Appointment(
             null,
             $data['clientId'],
@@ -209,8 +212,6 @@ class Appointments extends Api
     }
     public function update(array $data): void
     {
-        $data = $this->mergeBody($data);
-
         if (
             !isset($data["appointmentId"]) ||
             !filter_var($data["appointmentId"], FILTER_VALIDATE_INT)
@@ -233,33 +234,6 @@ class Appointments extends Api
                 "error"
             )->back();
             return;
-        }
-        if (isset($data['dateTime'])) {
-
-            if (
-                !\DateTime::createFromFormat(
-                    'Y-m-d H:i:s',
-                    $data['dateTime']
-                )
-            ) {
-                $this->call(
-                    400,
-                    "bad_request",
-                    "Formato inválido. Use YYYY-MM-DD HH:MM:SS.",
-                    "error"
-                )->back();
-                return;
-            }
-
-            if (strtotime($data['dateTime']) < time()) {
-                $this->call(
-                    400,
-                    "bad_request",
-                    "A data do agendamento deve ser maior que a data atual.",
-                    "error"
-                )->back();
-                return;
-            }
         }
 
         $clientId = $data['clientId'] ?? $appointmentAtual->getClientId();
@@ -314,6 +288,33 @@ class Appointments extends Api
             return;
         }
 
+        if (isset($data['dateTime'])) {
+
+            if (
+                !\DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $data['dateTime']
+                )
+            ) {
+                $this->call(
+                    400,
+                    "bad_request",
+                    "Formato inválido. Use YYYY-MM-DD HH:MM:SS.",
+                    "error"
+                )->back();
+                return;
+            }
+
+            if (strtotime($data['dateTime']) < time()) {
+                $this->call(
+                    400,
+                    "bad_request",
+                    "A data do agendamento deve ser maior que a data atual.",
+                    "error"
+                )->back();
+                return;
+            }
+        }
         $appointment = new Appointment(
             null,
             $clientId,
@@ -368,8 +369,6 @@ class Appointments extends Api
     }
     public function softDelete(array $data): void
     {
-        $data = $this->mergeBody($data);
-
         if (!filter_var($data["appointmentId"], FILTER_VALIDATE_INT)) {
             $this->call(400, "error", "ID do appointment é obrigatório e deve ser um número inteiro", "bad_request")->back();
             return;

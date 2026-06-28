@@ -56,6 +56,15 @@ class Services extends Api
     }
     public function create(array $data)
     {
+        if (!$this->authToken(3)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+            return;
+        }
         if (
             !isset($data['name']) || empty($data['name']) ||
             !isset($data['description']) || empty($data['description']) ||
@@ -96,6 +105,15 @@ class Services extends Api
     }
     public function update(array $data): void
     {
+        if (!$this->authToken(3)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+            return;
+        }
         if (
             !isset($data["serviceId"]) ||
             !filter_var($data["serviceId"], FILTER_VALIDATE_INT)
@@ -111,12 +129,23 @@ class Services extends Api
             return;
         }
 
+        $serviceAtual = new Service();
+
+        if (!$serviceAtual->selectById($data["serviceId"])) {
+            $this->call(
+                400,
+                "bad_request",
+                "Erro a achar faq atual.",
+                "error"
+            )->back();
+            return;
+        }
         $service = new Service(
             null,
-            $data['name'] ?? $service->getName(),
-            $data['description'] ?? $service->getDescription(),
-            $data['price'] ?? $service->getPrice(),
-            $data['durationMinutes'] ?? $service->getDurationMinutes()
+            $data['name'] ?? $serviceAtual->getName(),
+            $data['description'] ?? $serviceAtual->getDescription(),
+            $data['price'] ?? $serviceAtual->getPrice(),
+            $data['durationMinutes'] ?? $serviceAtual->getDurationMinutes()
         );
 
         if (!$service->updateById($data["serviceId"])) {
@@ -143,21 +172,28 @@ class Services extends Api
     }
     public function softDelete(array $data): void
     {
+        if (!$this->authToken(3)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+            return;
+        }
 
-        $id = $data["serviceId"] ?? null;
 
-
-        if (!filter_var($id, FILTER_VALIDATE_INT)) {
+        if (!filter_var($data["serviceId"], FILTER_VALIDATE_INT)) {
             $this->call(400, "error", "ID do service é obrigatório e deve ser um número inteiro", "bad_request")->back();
             return;
         }
         $service = new Service();
 
-        if (!$service->selectById($id)) {
+        if (!$service->selectById($data["serviceId"])) {
             $this->call(404, "error", "service não existe", "not_found")->back();
             return;
         }
-        if (!$service->softDeleteById($id)) {
+        if (!$service->softDeleteById($data["serviceId"])) {
             $this->call(
                 400,
                 "error",

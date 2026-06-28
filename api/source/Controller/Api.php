@@ -10,20 +10,20 @@ class Api
 
     protected int $userAuthId = 0;
 
-    public function authToken(int $typeId): bool
+    public function authToken(?int $typeId = null): int|false
     {
         $header = getallheaders();
 
         $token = $header["token"]
-            ?? $header['Authorization']
-            ?? $header['authorization']
+            ?? $header["Authorization"]
+            ?? $header["authorization"]
             ?? null;
 
         if (!$token) {
             return false;
         }
 
-        if (str_starts_with($token, 'Bearer ')) {
+        if (str_starts_with($token, "Bearer ")) {
             $token = substr($token, 7);
         }
 
@@ -34,17 +34,20 @@ class Api
             return false;
         }
 
-        $user = new User();
+        $userId = $jwtToken->data->id;
 
-        // aqui você usa o ID (não email)
-        if (!$user->permissionVerify($jwtToken->data->id, $typeId)) {
-            return false;
+        // só verifica permissão se typeId for enviado
+        if ($typeId !== null) {
+            $user = new User();
+
+            if (!$user->permissionVerify($userId, $typeId)) {
+                return false;
+            }
         }
 
-        // guarda o ID para uso depois no controller
-        $this->userAuthId = $jwtToken->data->id;
+        $this->userAuthId = $userId;
 
-        return true;
+        return $userId;
     }
 
     protected function call(int $code, ?string $status = null, ?string $message = null, ?string $type = null): Api

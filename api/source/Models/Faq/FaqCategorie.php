@@ -18,9 +18,9 @@ class FaqCategorie extends Model
         $this->name = $name;
         $this->active = $active;
 
-        $this->table = 'faqs_categories'; // nome da tabela do banco
-        $this->primaryKey = 'id'; // nome da chave primária da tabela
-        $this->fillable = ['name', 'active']; // camelCase
+        $this->table = 'faqs_categories';
+        $this->primaryKey = 'id';
+        $this->fillable = ['name', 'active'];
     }
 
     public function getId(): ?int

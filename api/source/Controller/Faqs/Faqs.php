@@ -8,15 +8,6 @@ use Source\Models\Faq\FaqCategorie;
 
 class Faqs extends Api
 {
-    private ?array $bodyCache = null;
-
-    private function mergeBody(array $data): array
-    {
-        if ($this->bodyCache === null) {
-            $this->bodyCache = json_decode(file_get_contents("php://input"), true) ?? [];
-        }
-        return array_merge($this->bodyCache, $data);
-    }
     public function listAll(): void
     {
         $faq = new Faq();
@@ -75,10 +66,18 @@ class Faqs extends Api
     }
     public function create(array $data)
     {
-        $data = $this->mergeBody($data);
+        if (!$this->authToken(4)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+            return;
+        }
 
         if (
-            !isset($data['faqCategoryId']) || empty($data['faqCategoryId']) ||
+            !isset($data['faqsCategoryId']) || empty($data['faqsCategoryId']) ||
             !isset($data['question']) || empty($data['question']) ||
             !isset($data['answer']) || empty($data['answer'])
         ) {
@@ -93,7 +92,7 @@ class Faqs extends Api
 
         $faq = new Faq(
             null,
-            $data['faqCategoryId'],
+            $data['faqsCategoryId'],
             $data['question'],
             $data['answer'],
             1
@@ -106,7 +105,7 @@ class Faqs extends Api
 
         $response = [
             "id" => $faq->getId(),
-            "faqCategoryId" => $faq->getFaqsCategoryId(),
+            "faqsCategoryId" => $faq->getFaqsCategoryId(),
             "question" => $faq->getQuestion(),
             "answer" => $faq->getAnswer()
         ];
@@ -115,6 +114,15 @@ class Faqs extends Api
     }
     public function update(array $data): void
     {
+        if (!$this->authToken(4)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+            return;
+        }
         if (!filter_var($data["faq_id"], FILTER_VALIDATE_INT)) {
             $this->call(
                 400,
@@ -138,26 +146,32 @@ class Faqs extends Api
             )->back();
             return;
         }
-
-        $faq = new Faq(
-            null,
-            $data["faqsCategoryId"],
-            $data["question"],
-            $data["answer"]
-        );
-
-        if (!$faq->updateById($data["faq_id"])) {
+        $faqAtual = new Faq();
+        if (!$faqAtual->selectById($data["faq_id"])) {
             $this->call(
-                500,
-                "internal_server_error",
-                $faq->getErrorMessage(),
+                400,
+                "bad_request",
+                "Erro a achar faq atual.",
                 "error"
             )->back();
             return;
         }
+        $faqAtualizado = new Faq(
+            null,
+            $data["faqsCategoryId"] ?? $faqAtual->getFaqsCategoryId(),
+            $data["question"] ?? $faqAtual->getQuestion(),
+            $data["answer"] ?? $faqAtual->getAnswer()
+        );
 
-        // Busca os dados atualizados
-        $faqAtualizado = new Faq();
+        if (!$faqAtualizado->updateById($data["faq_id"])) {
+            $this->call(
+                500,
+                "internal_server_error",
+                $faqAtualizado->getErrorMessage(),
+                "error"
+            )->back();
+            return;
+        }
 
         if (!$faqAtualizado->selectById($data["faq_id"])) {
             $this->call(
@@ -187,30 +201,27 @@ class Faqs extends Api
 
     public function softDelete(array $data): void
     {
-        $id = $data["faq_id"] ?? null;
-
-        if (!filter_var($id, FILTER_VALIDATE_INT)) {
+        if (!$this->authToken(3)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+            return;
+        }
+        if (!filter_var($data["faq_id"], FILTER_VALIDATE_INT)) {
             $this->call(400, "error", "ID do FAQ é obrigatório e deve ser um número inteiro", "bad_request")->back();
             return;
         }
 
         $faq = new Faq();
 
-        if (!$faq->softDeleteById($id)) {
+        if (!$faq->softDeleteById($data["faq_id"])) {
             $this->call(404, "error", "FAQ não encontrado", "not_found")->back();
             return;
         }
 
         $this->call(200, "success", "FAQ removido com sucesso", "success")->back(null);
-    }
-    public function validate(array $data): bool
-    {
-        if (
-            !isset($data["faqsCategoryId"]) || !isset($data["question"]) || !isset($data["answer"]) ||
-            empty($data["faqsCategoryId"]) || empty($data["question"]) || empty($data["answer"])
-        ) {
-            return false;
-        }
-        return true;
     }
 }

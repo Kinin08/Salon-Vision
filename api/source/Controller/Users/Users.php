@@ -4,7 +4,6 @@ namespace Source\Controller\Users;
 
 use Source\Controller\Api;
 use Source\Models\User\User;
-use Source\Core\JWTToken;
 
 class Users extends Api
 {
@@ -24,32 +23,12 @@ class Users extends Api
 
     public function listEmployee(): void
     {
-        if (!$this->authToken(3)) {
-            $this->call(
-                401,
-                "unauthorized",
-                "Usuário não autenticado",
-                "error"
-            )->back();
-            return;
-        }
-
         $user = new User();
         $this->call(200, "success", "Lista de Funcionários", "success")
             ->back($user->listEmployee());
     }
     public function listCliente(): void
     {
-        if (!$this->authToken(3)) {
-            $this->call(
-                401,
-                "unauthorized",
-                "Usuário não autenticado",
-                "error"
-            )->back();
-            return;
-        }
-
         $user = new User();
         $this->call(200, "success", "Lista de Clientes", "success")
             ->back($user->listCliente());
@@ -73,6 +52,15 @@ class Users extends Api
 
     public function listAll(): void
     {
+        if (!$this->authToken(3)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+            return;
+        }
         $user = new User();
         $this->call(200, "success", "Lista de usuários", "success")
             ->back($user->selectAll());
@@ -80,7 +68,7 @@ class Users extends Api
 
     public function profile(): void
     {
-        $userId = $this->authToken(0);
+        $userId = $this->authToken();
 
         if (!$userId) {
             $this->call(401, "unauthorized", "Usuário não autenticado", "error")->back();
@@ -119,7 +107,7 @@ class Users extends Api
             4
         );
 
-        if (!$user->insert()) {
+        if (!$user->create()) {
             $this->call(500, "internal_server_error", $user->getErrorMessage(), "error")->back();
             return;
         }
@@ -157,7 +145,7 @@ class Users extends Api
             3
         );
 
-        if (!$user->insert()) {
+        if (!$user->create(3)) {
             $this->call(500, "internal_server_error", $user->getErrorMessage(), "error")->back();
             return;
         }
@@ -195,7 +183,7 @@ class Users extends Api
             5
         );
 
-        if (!$user->insert()) {
+        if (!$user->create(5)) {
             $this->call(500, "internal_server_error", $user->getErrorMessage(), "error")->back();
             return;
         }
@@ -206,7 +194,7 @@ class Users extends Api
             "email" => $user->getEmail(),
         ]);
     }
-    public function login(array $data): void
+    public function authCliente(array $data): void
     {
 
         if (
@@ -232,7 +220,7 @@ class Users extends Api
             "token" => $user->getToken(),
         ]);
     }
-    public function loginAdmin(array $data): void
+    public function authAdmin(array $data): void
     {
         if (
             empty($data['email']) || empty($data['password']) ||
@@ -257,7 +245,7 @@ class Users extends Api
             "token" => $user->getToken(),
         ]);
     }
-    public function loginEmployee(array $data): void
+    public function authEmployee(array $data): void
     {
 
         if (
@@ -283,9 +271,7 @@ class Users extends Api
             "token" => $user->getToken(),
         ]);
     }
-
-
-    public function update(array $data): void
+    public function updateCliente(array $data): void
     {
         if (!$this->authToken(4)) {
             $this->call(
@@ -309,33 +295,58 @@ class Users extends Api
             $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
             return;
         }
-
-        $user = new User(
-            $userId,
-            $data["name"],
-            $data["email"],
-            $data["password"] ?? null,
-            $data["telephone"] ?? null,
-            $data["photo"] ?? null,
-            4
-        );
-
-        if (!$user->updateById($userId)) {
-            $this->call(500, "internal_server_error", $user->getErrorMessage(), "error")->back();
+        if (!$this->validatePassword($data)) {
+            $this->call(400, "bad_request", "A senha deve ter entre 6 e 20 caracteres.", "error")->back();
             return;
         }
 
-        $userUpdated = new User();
-        $userUpdated->selectById($userId);
+        $userAtual = new User();
+
+        if (!$userAtual->selectById($userId)) {
+            $this->call(
+                400,
+                "bad_request",
+                "Erro a achar faq atual.",
+                "error"
+            )->back();
+            return;
+        }
+        $userAtualizado = new User(
+            null,
+            $data["name"] ?? $userAtual->getName(),
+            $data["email"] ?? $userAtual->getEmail(),
+            $data["password"] ?? $userAtual->getPassword(),
+            $data["telephone"] ?? $userAtual->getTelephone(),
+            $data["photo"] ?? $userAtual->getPhoto(),
+            4
+        );
+
+        if (!$userAtualizado->update($userId)) {
+            $this->call(
+                400,
+                "bad_request",
+                $userAtualizado->getErrorMessage(),
+                "error"
+            )->back();
+            return;
+        }
+        if (!$userAtualizado->selectById($userId)) {
+            $this->call(
+                404,
+                "not_found",
+                "erro ao achar usuario",
+                "error"
+            )->back();
+        }
 
         $this->call(200, "success", "Usuário atualizado com sucesso", "success")->back([
-            "id" => $userUpdated->getId(),
-            "name" => $userUpdated->getName(),
-            "email" => $userUpdated->getEmail(),
-            "telephone" => $userUpdated->getTelephone(),
-            "photo" => $userUpdated->getPhoto(),
-            "userTypeId" => $userUpdated->getUserTypeId(),
-            "active" => $userUpdated->getActive(),
+            "id" => $userAtualizado->getId(),
+            "name" => $userAtualizado->getName(),
+            "email" => $userAtualizado->getEmail(),
+            "telephone" => $userAtualizado->getTelephone(),
+            "photo" => $userAtualizado->getPhoto(),
+            "userTypeId" => $userAtualizado->getUserTypeId(),
+            "active" => $userAtualizado->getActive(),
         ]);
     }
     public function updateAdmin(array $data): void
@@ -358,37 +369,65 @@ class Users extends Api
         }
 
         $checkUser = new User();
+
         if (!$checkUser->selectById($userId)) {
             $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
             return;
         }
+        if (!empty($data["password"])) {
+            if (!$this->validatePassword($data)) {
+                $this->call(400, "bad_request", "A senha deve ter entre 6 e 20 caracteres.", "error")->back();
+                return;
+            }
+        }
 
-        $user = new User(
-            $userId,
-            $data["name"],
-            $data["email"],
-            $data["password"] ?? null,
-            $data["telephone"] ?? null,
-            $data["photo"] ?? null,
+        $userAtual = new User();
+
+        if (!$userAtual->selectById($data["user_id"])) {
+            $this->call(
+                400,
+                "bad_request",
+                "Erro a achar faq atual.",
+                "error"
+            )->back();
+            return;
+        }
+        $userAtualizado = new User(
+            null,
+            $data["name"] ?? $userAtual->getName(),
+            $data["email"] ?? $userAtual->getEmail(),
+            $data["password"] ?? $userAtual->getPassword(),
+            $data["telephone"] ?? $userAtual->getTelephone(),
+            $data["photo"] ?? $userAtual->getPhoto(),
             3
         );
 
-        if (!$user->updateById($userId)) {
-            $this->call(500, "internal_server_error", $user->getErrorMessage(), "error")->back();
+        if (!$userAtualizado->update($userId)) {
+            $this->call(
+                400,
+                "bad_request",
+                $userAtualizado->getErrorMessage(),
+                "error"
+            )->back();
             return;
         }
-
-        $userUpdated = new User();
-        $userUpdated->selectById($userId);
+        if (!$userAtualizado->selectById($userId)) {
+            $this->call(
+                404,
+                "not_found",
+                "erro ao achar usuario",
+                "error"
+            )->back();
+        }
 
         $this->call(200, "success", "Usuário atualizado com sucesso", "success")->back([
-            "id" => $userUpdated->getId(),
-            "name" => $userUpdated->getName(),
-            "email" => $userUpdated->getEmail(),
-            "telephone" => $userUpdated->getTelephone(),
-            "photo" => $userUpdated->getPhoto(),
-            "userTypeId" => $userUpdated->getUserTypeId(),
-            "active" => $userUpdated->getActive(),
+            "id" => $userAtualizado->getId(),
+            "name" => $userAtualizado->getName(),
+            "email" => $userAtualizado->getEmail(),
+            "telephone" => $userAtualizado->getTelephone(),
+            "photo" => $userAtualizado->getPhoto(),
+            "userTypeId" => $userAtualizado->getUserTypeId(),
+            "active" => $userAtualizado->getActive(),
         ]);
     }
     public function updateEmployee(array $data): void
@@ -415,33 +454,60 @@ class Users extends Api
             $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
             return;
         }
+        if (!empty($data["password"])) {
+            if (!$this->validatePassword($data)) {
+                $this->call(400, "bad_request", "A senha deve ter entre 6 e 20 caracteres.", "error")->back();
+                return;
+            }
+        }
 
-        $user = new User(
-            $userId,
-            $data["name"],
-            $data["email"],
-            $data["password"] ?? null,
-            $data["telephone"] ?? null,
-            $data["photo"] ?? null,
+        $userAtual = new User();
+
+        if (!$userAtual->selectById($data["user_id"])) {
+            $this->call(
+                400,
+                "bad_request",
+                "Erro a achar faq atual.",
+                "error"
+            )->back();
+            return;
+        }
+        $userAtualizado = new User(
+            null,
+            $data["name"] ?? $userAtual->getName(),
+            $data["email"] ?? $userAtual->getEmail(),
+            $data["password"] ?? $userAtual->getPassword(),
+            $data["telephone"] ?? $userAtual->getTelephone(),
+            $data["photo"] ?? $userAtual->getPhoto(),
             5
         );
 
-        if (!$user->updateById($userId)) {
-            $this->call(500, "internal_server_error", $user->getErrorMessage(), "error")->back();
+        if (!$userAtualizado->update($userId)) {
+            $this->call(
+                400,
+                "bad_request",
+                $userAtualizado->getErrorMessage(),
+                "error"
+            )->back();
             return;
         }
-
-        $userUpdated = new User();
-        $userUpdated->selectById($userId);
+        if (!$userAtualizado->selectById($userId)) {
+            $this->call(
+                404,
+                "not_found",
+                "erro ao achar usuario",
+                "error"
+            )->back();
+        }
 
         $this->call(200, "success", "Usuário atualizado com sucesso", "success")->back([
-            "id" => $userUpdated->getId(),
-            "name" => $userUpdated->getName(),
-            "email" => $userUpdated->getEmail(),
-            "telephone" => $userUpdated->getTelephone(),
-            "photo" => $userUpdated->getPhoto(),
-            "userTypeId" => $userUpdated->getUserTypeId(),
-            "active" => $userUpdated->getActive(),
+            "id" => $userAtualizado->getId(),
+            "name" => $userAtualizado->getName(),
+            "email" => $userAtualizado->getEmail(),
+            "telephone" => $userAtualizado->getTelephone(),
+            "photo" => $userAtualizado->getPhoto(),
+            "userTypeId" => $userAtualizado->getUserTypeId(),
+            "active" => $userAtualizado->getActive(),
         ]);
     }
     public function softDelete(array $data): void
@@ -487,39 +553,6 @@ class Users extends Api
             "success"
         )->back();
     }
-    public function roleFunc(array $data): void
-    {
-        $adminId = $this->authToken(3);
-
-        if (!$adminId) {
-            $this->call(401, "unauthorized", "Sem permissão.", "error")->back();
-            return;
-        }
-
-        $userId = $data['user_id'] ?? null;
-
-        if (!$userId) {
-            $this->call(400, "bad_request", "ID inválido", "error")->back();
-            return;
-        }
-
-        $user = new User();
-
-        if (!$user->selectById($userId)) {
-            $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
-            return;
-        }
-
-        $ok = $user->updateRole($userId, 5);
-        var_dump(getallheaders());
-        exit;
-        if (!$ok) {
-            $this->call(500, "error", "Falha ao atualizar role.", "error")->back();
-            return;
-        }
-
-        $this->call(200, "success", "Role atualizada com sucesso")->back();
-    }
     public function roleCliente(array $data): void
     {
         $adminId = $this->authToken(3);
@@ -542,6 +575,15 @@ class Users extends Api
             $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
             return;
         }
+        if ($user->getRole($userId) == 4) {
+            $this->call(
+                400,
+                "bad_request",
+                "Usuário já é cliente.",
+                "warning"
+            )->back();
+            return;
+        }
 
         $ok = $user->updateRole($userId, 4);
 
@@ -550,7 +592,7 @@ class Users extends Api
             return;
         }
 
-        $this->call(200, "success", "Role atualizada com sucesso")->back();
+        $this->call(200, "success", "Role atualizada com sucesso", "success")->back();
     }
     public function roleAdmin(array $data): void
     {
@@ -574,6 +616,15 @@ class Users extends Api
             $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
             return;
         }
+        if ($user->getRole($userId) == 3) {
+            $this->call(
+                400,
+                "bad_request",
+                "Usuário já é admin.",
+                "warning"
+            )->back();
+            return;
+        }
 
         $ok = $user->updateRole($userId, 3);
 
@@ -582,6 +633,47 @@ class Users extends Api
             return;
         }
 
-        $this->call(200, "success", "Role atualizada com sucesso")->back();
+        $this->call(200, "success", "Role atualizada com sucesso", "success")->back();
+    }
+    public function roleEmployee(array $data): void
+    {
+        $adminId = $this->authToken(3);
+
+        if (!$adminId) {
+            $this->call(401, "unauthorized", "Sem permissão.", "error")->back();
+            return;
+        }
+
+        $userId = $data['user_id'] ?? null;
+
+        if (!$userId) {
+            $this->call(400, "bad_request", "ID inválido", "error")->back();
+            return;
+        }
+
+        $user = new User();
+
+        if (!$user->selectById($userId)) {
+            $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
+            return;
+        }
+        if ($user->getRole($userId) == 5) {
+            $this->call(
+                400,
+                "bad_request",
+                "Usuário já é funcionario.",
+                "warning"
+            )->back();
+            return;
+        }
+
+        $ok = $user->updateRole($userId, 5);
+
+        if (!$ok) {
+            $this->call(500, "error", "Falha ao atualizar role.", "error")->back();
+            return;
+        }
+
+        $this->call(200, "success", "Role atualizada com sucesso", "success")->back();
     }
 }

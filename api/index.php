@@ -25,26 +25,12 @@ $route = new Router(url("api"),":");
 
 $route->namespace("Source\Controller");
 
-$route->group("/products");
-$route->get("/list", "Products\\Products:productsList");
-$route->get("/list/{productId}", "Products\\Products:productById");
-$route->post("/", "Products\\Products:create");
-$route->put("/{product_id}", "Products\\Products:update");
-$route->delete("/{product_id}", "Products\\Products:softDelete");
-$route->group(null);
-
-$route->group("/products_categories");
-$route->get("/list/{categoryId}", "Products\\ProductsCategories:categoryFindById");
-$route->get("/list", "Products\\ProductsCategories:productsCategoryList");
-$route->post("/", "Products\\ProductsCategories:create");
-$route->group(null);
-
 $route->group("/faqsCategories");
 $route->get("/list", "Faqs\\FaqsCategories:listAll");
-$route->get("/list/{faqCategorieId}", "Faqs\\FaqsCategories:listById");
-$route->post("/", "Faqs\\FaqsCategories:create");
-$route->put("/{faqCategorieId}", "Faqs\\FaqsCategories:update");
-$route->delete("/{faqCategorieId}", "Faqs\\FaqsCategories:softDelete");
+$route->get("/listById/{faqCategorieId}", "Faqs\\FaqsCategories:listById");
+$route->post("/create", "Faqs\\FaqsCategories:create");
+$route->put("/update/{faqCategorieId}", "Faqs\\FaqsCategories:update");
+$route->delete("/delete/{faqCategorieId}", "Faqs\\FaqsCategories:softDelete");
 $route->group(null);
 
 $route->group("/faqs");
@@ -52,8 +38,8 @@ $route->get("/list", "Faqs\\Faqs:listAll");
 $route->get("/listFaq", "Faqs\\Faqs:selectFaq");
 $route->get("/list/{faq_id}", "Faqs\\Faqs:listById");
 $route->post("/create", "Faqs\\Faqs:create");
-$route->put("/{faq_id}", "Faqs\\Faqs:update");
-$route->delete("/{faq_id}", "Faqs\\Faqs:softDelete");
+$route->put("/update/{faq_id}", "Faqs\\Faqs:update");
+$route->delete("/delete/{faq_id}", "Faqs\\Faqs:softDelete");
 $route->group(null);
 
 $route->group("/users");
@@ -65,10 +51,10 @@ $route->get("/list/admin", "Users\\Users:listAdmin");
 $route->post("/register/cliente", "Users\\Users:register");
 $route->post("/register/admin", "Users\\Users:registerAdmin");
 $route->post("/register/employee", "Users\\Users:registerEmployee");
-$route->post("/login/cliente", "Users\\Users:login");
-$route->post("/login/admin", "Users\\Users:loginAdmin");
-$route->post("/login/employee", "Users\\Users:loginEmployee");
-$route->put("/update/cliente", "Users\\Users:update");
+$route->post("/login/cliente", "Users\\Users:authCliente");
+$route->post("/login/admin", "Users\\Users:authAdmin");
+$route->post("/login/employee", "Users\\Users:authEmployee");
+$route->put("/update/cliente", "Users\\Users:updateCliente");
 $route->put("/update/admin", "Users\\Users:updateAdmin");
 $route->put("/update/employee", "Users\\Users:updateEmployee");
 $route->put("/role/employee/{user_id}", "Users\\Users:roleEmployee");
@@ -78,7 +64,6 @@ $route->delete("/delete/{user_id}", "Users\\Users:softDelete");
 $route->group(null);
 
 $route->group("/appointments");
-$route->get("/my", "Appointments\\Appointments:history");
 $route->get("/history", "Appointments\\Appointments:history");
 $route->get("/listAll", "Appointments\\Appointments:listAll");
 $route->get("/list/{appointmentId}", "Appointments\\Appointments:listById");

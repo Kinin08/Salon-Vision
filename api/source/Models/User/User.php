@@ -33,8 +33,8 @@ class User extends Model
         $this->photo = $photo;
         $this->userTypeId = $userTypeId;
 
-        $this->table = 'users'; // nome da tabela do banco
-        $this->primaryKey = 'id'; // nome da chave primária da tabela
+        $this->table = 'users';
+        $this->primaryKey = 'id';
         $this->fillable = [
             'name',
             'email',
@@ -43,7 +43,7 @@ class User extends Model
             'photo',
             'userTypeId',
             'active'
-        ]; // camelCase
+        ];
     }
 
     public function getId(): ?int
@@ -147,11 +147,11 @@ class User extends Model
     public function findById(int $id): ?array
     {
         $query = "
-        SELECT id, name, email, telephone, photo, user_type_id, active, registration_date
-        FROM users
-        WHERE id = :id
-        LIMIT 1
-    ";
+            SELECT id, name, email, telephone, photo, user_type_id, active, registration_date
+            FROM users
+            WHERE id = :id
+            LIMIT 1
+        ";
 
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindValue(":id", $id);
@@ -160,35 +160,46 @@ class User extends Model
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ?: null;
     }
-    public function insert(): bool
+    public function create(int $typeId = 4): bool
     {
-        $query = "SELECT * FROM {$this->table} WHERE email = :email";
+        $query = "
+            SELECT id 
+            FROM {$this->table}
+            WHERE email = :email
+        ";
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindParam(":email", $this->email);
+
+        $stmt->bindValue(":email", $this->email);
         $stmt->execute();
-        if ($stmt->rowCount() > 0) {
+
+        if ($stmt->fetch()) {
             $this->errorMessage = "Email já cadastrado";
             return false;
         }
+
+        $this->userTypeId = $typeId;
+
         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
 
         if (!parent::insert()) {
             $this->errorMessage = "Algo deu errado";
             return false;
         }
+
         return true;
     }
 
     public function login(string $email, string $password, int $typeId = null): bool
     {
-        $query = "SELECT
-    u.*,
-    ut.name AS user_type
-  FROM users u
-  INNER JOIN users_types ut
-    ON ut.id = u.user_type_id
-  WHERE u.email = :email";
-        ;
+        $query = "
+            SELECT
+                u.*,
+                ut.name AS user_type
+            FROM users u
+            INNER JOIN users_types ut
+                ON ut.id = u.user_type_id
+            WHERE u.email = :email
+        ";
         if ($typeId !== null) {
             $query .= " AND u.user_type_id = :userTypeId";
         }
@@ -217,20 +228,21 @@ class User extends Model
         $this->photo = $user->photo;
         $this->userTypeId = $user->user_type_id;
         $jwt = new JWTToken();
-        // definir quais informações irão par o payload do token
+
         $this->token = $jwt->encode([
-            "id" => $user->id,
-            "name" => $user->name,
-            "email" => $user->email
+            "id" => $user->id
         ]);
         return true;
     }
     public function permissionVerify(int $userId, int $typeId): bool
     {
-        $query = "SELECT id FROM {$this->table} 
-              WHERE id = :id 
-              AND user_type_id = :userTypeId 
-              AND active = 1";
+        $query = "
+        SELECT
+            id 
+        FROM {$this->table} 
+            WHERE id = :id 
+            AND user_type_id = :userTypeId 
+            AND active = 1";
 
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindParam(":id", $userId);
@@ -242,12 +254,12 @@ class User extends Model
     public function listEmployee(): array
     {
         $query = "
-        SELECT
-        *
-        FROM users
-        WHERE user_type_id = 5
-        AND active = 1
-    ";
+            SELECT
+                *
+            FROM users
+                WHERE user_type_id = 5
+                AND active = 1
+        ";
 
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->execute();
@@ -257,12 +269,12 @@ class User extends Model
     public function listAdmin(): array
     {
         $query = "
-        SELECT
-        *
-        FROM users
-        WHERE user_type_id = 3
-        AND active = 1
-    ";
+            SELECT
+                *
+            FROM users
+                WHERE user_type_id = 3
+                AND active = 1
+        ";
 
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->execute();
@@ -272,12 +284,12 @@ class User extends Model
     public function listCliente(): array
     {
         $query = "
-        SELECT
-        *
-        FROM users
-        WHERE user_type_id = 4
-        AND active = 1
-    ";
+            SELECT
+                *
+            FROM users
+                WHERE user_type_id = 4
+                AND active = 1
+        ";
 
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->execute();
@@ -288,7 +300,8 @@ class User extends Model
     public function softDelete(int $id): bool
     {
         $query = "
-            UPDATE {$this->table}
+            UPDATE
+                users
             SET
                 active = 0
             WHERE id = :id
@@ -301,51 +314,70 @@ class User extends Model
 
         return $stmt->rowCount() > 0;
     }
+    public function getRole(int $id): ?int
+    {
+        $query = "
+            SELECT
+                user_type_id
+            FROM users
+                WHERE id = :id
+                LIMIT 1
+        ";
+        $stmt = Connect::getInstance()->prepare($query);
+
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result ? (int) $result['user_type_id'] : null;
+    }
+
+    public function update(int $id): bool
+    {
+        $query = "
+            SELECT
+                id 
+            FROM {$this->table}
+                WHERE email = :email AND id != :id
+        ";
+        $stmt = Connect::getInstance()->prepare($query);
+
+        $stmt->bindValue(":email", $this->email);
+        $stmt->bindValue(":id", $id);
+        $stmt->execute();
+
+        if ($stmt->fetch()) {
+            $this->errorMessage = "Email já cadastrado";
+            return false;
+        }
+
+        if (!empty($this->password)) {
+            $this->password = password_hash($this->password, PASSWORD_DEFAULT);
+        }
+
+        $ok = parent::updateById($id);
+
+        if (!$ok) {
+            $this->errorMessage = "Erro ao atualizar usuário";
+            return false;
+        }
+
+        return true;
+    }
     public function updateRole(int $id, int $role): bool
     {
         $stmt = Connect::getInstance()->prepare("
-        UPDATE users
-        SET user_type_id = :roleId
-        WHERE id = :id
-    ");
+            UPDATE
+                users
+            SET
+                user_type_id = :role
+            WHERE id = :id
+        ");
 
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->bindValue(':roleId', $role, PDO::PARAM_INT);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->bindValue(":role", $role, PDO::PARAM_INT);
 
-        $stmt->execute();
-
-        echo "DB: " . Connect::getInstance()->query("SELECT DATABASE()")->fetchColumn();
-        var_dump([
-            'id' => $id,
-            'role' => $role,
-            'rows' => $stmt->rowCount(),
-            'error' => $stmt->errorInfo()
-        ]);
-
-        exit;
-    }
-    /**
-     * Verifica se o email já existe em outro usuário
-     * @param int $excludeId ID do usuário a ser excluído da verificação
-     * @return bool
-     */
-    public function isEmailDuplicate(int $excludeId = null): bool
-    {
-        $query = "SELECT id FROM {$this->table} WHERE email = :email";
-
-        if ($excludeId !== null) {
-            $query .= " AND id != :excludeId";
-        }
-
-        $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindParam(':email', $this->email);
-
-        if ($excludeId !== null) {
-            $stmt->bindParam(':excludeId', $excludeId);
-        }
-
-        $stmt->execute();
-
-        return $stmt->rowCount() > 0;
+        return $stmt->execute();
     }
 }

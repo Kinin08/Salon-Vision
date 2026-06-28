@@ -50,6 +50,15 @@ class FaqsCategories extends Api
     }
     public function create(array $data)
     {
+        if (!$this->authToken(3)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+            return;
+        }
         if (
             !isset($data['name']) || empty($data['name'])
         ) {
@@ -82,6 +91,16 @@ class FaqsCategories extends Api
     }
     public function update(array $data): void
     {
+        if (!$this->authToken(4)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+            return;
+        }
+
         if (
             !isset($data["faqCategorieId"]) ||
             !filter_var($data["faqCategorieId"], FILTER_VALIDATE_INT)
@@ -108,32 +127,34 @@ class FaqsCategories extends Api
             return;
         }
 
-        $faq = new FaqCategorie(
-            null,
-            $data["name"]
-        );
+        $faqCategoryAtual = new FaqCategorie();
 
-        if (!$faq->updateById($data["faqCategorieId"])) {
+        if (!$faqCategoryAtual->selectById($data["faqCategorieId"])) {
             $this->call(
                 404,
                 "not_found",
-                $faq->getErrorMessage(),
+                "FAQ Category não encontrada",
                 "error"
             )->back();
             return;
         }
 
-        $faqAtualizado = new FaqCategorie();
+        $faqAtualizado = new FaqCategorie(
+            null,
+            $data["name"] ?? $faqCategoryAtual->getName()
+        );
 
-        if (!$faqAtualizado->selectById($data["faqCategorieId"])) {
+        if (!$faqAtualizado->updateById($data["faqCategorieId"])) {
             $this->call(
                 500,
                 "internal_server_error",
-                "Erro ao recuperar FAQ atualizado",
+                $faqAtualizado->getErrorMessage(),
                 "error"
             )->back();
             return;
         }
+
+        $faqAtualizado->selectById($data["faqCategorieId"]);
 
         $response = [
             "id" => $faqAtualizado->getId(),
@@ -150,6 +171,15 @@ class FaqsCategories extends Api
     }
     public function softDelete(array $data): void
     {
+        if (!$this->authToken(3)) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+            return;
+        }
         if (
             !isset($data["faqCategorieId"]) ||
             !filter_var($data["faqCategorieId"], FILTER_VALIDATE_INT)
