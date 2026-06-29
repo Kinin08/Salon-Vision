@@ -81,7 +81,6 @@ class Users extends Api
     }
     public function register(array $data): void
     {
-
         if (!$this->validateNameEmail($data)) {
             $this->call(400, "bad_request", "Nome e e-mail são obrigatórios. O e-mail deve ser válido.", "error")->back();
             return;
@@ -273,7 +272,9 @@ class Users extends Api
     }
     public function updateCliente(array $data): void
     {
-        if (!$this->authToken(4)) {
+        $userId = $this->authToken(4);
+
+        if (!$userId) {
             $this->call(
                 401,
                 "unauthorized",
@@ -283,18 +284,11 @@ class Users extends Api
             return;
         }
 
-        $userId = $this->userAuthId;
-
         if (!$this->validateNameEmail($data)) {
             $this->call(400, "bad_request", "Os campos name e email são obrigatórios.", "error")->back();
             return;
         }
 
-        $checkUser = new User();
-        if (!$checkUser->selectById($userId)) {
-            $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
-            return;
-        }
         if (!$this->validatePassword($data)) {
             $this->call(400, "bad_request", "A senha deve ter entre 6 e 20 caracteres.", "error")->back();
             return;
@@ -311,6 +305,7 @@ class Users extends Api
             )->back();
             return;
         }
+
         $userAtualizado = new User(
             null,
             $data["name"] ?? $userAtual->getName(),
@@ -330,6 +325,7 @@ class Users extends Api
             )->back();
             return;
         }
+
         if (!$userAtualizado->selectById($userId)) {
             $this->call(
                 404,
@@ -351,7 +347,8 @@ class Users extends Api
     }
     public function updateAdmin(array $data): void
     {
-        if (!$this->authToken(3)) {
+        $userId = $this->authToken(3);
+        if (!$userId) {
             $this->call(
                 401,
                 "unauthorized",
@@ -361,19 +358,11 @@ class Users extends Api
             return;
         }
 
-        $userId = $this->userAuthId;
-
         if (!$this->validateNameEmail($data)) {
             $this->call(400, "bad_request", "Os campos name e email são obrigatórios.", "error")->back();
             return;
         }
 
-        $checkUser = new User();
-
-        if (!$checkUser->selectById($userId)) {
-            $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
-            return;
-        }
         if (!empty($data["password"])) {
             if (!$this->validatePassword($data)) {
                 $this->call(400, "bad_request", "A senha deve ter entre 6 e 20 caracteres.", "error")->back();
@@ -383,7 +372,7 @@ class Users extends Api
 
         $userAtual = new User();
 
-        if (!$userAtual->selectById($data["user_id"])) {
+        if (!$userAtual->selectById($userId)) {
             $this->call(
                 400,
                 "bad_request",
@@ -432,7 +421,8 @@ class Users extends Api
     }
     public function updateEmployee(array $data): void
     {
-        if (!$this->authToken(5)) {
+        $userId = $this->authToken(5);
+        if (!$userId) {
             $this->call(
                 401,
                 "unauthorized",
@@ -442,18 +432,11 @@ class Users extends Api
             return;
         }
 
-        $userId = $this->userAuthId;
-
         if (!$this->validateNameEmail($data)) {
             $this->call(400, "bad_request", "Os campos name e email são obrigatórios.", "error")->back();
             return;
         }
 
-        $checkUser = new User();
-        if (!$checkUser->selectById($userId)) {
-            $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
-            return;
-        }
         if (!empty($data["password"])) {
             if (!$this->validatePassword($data)) {
                 $this->call(400, "bad_request", "A senha deve ter entre 6 e 20 caracteres.", "error")->back();
@@ -463,7 +446,7 @@ class Users extends Api
 
         $userAtual = new User();
 
-        if (!$userAtual->selectById($data["user_id"])) {
+        if (!$userAtual->selectById($userId)) {
             $this->call(
                 400,
                 "bad_request",
@@ -553,6 +536,7 @@ class Users extends Api
             "success"
         )->back();
     }
+
     public function roleCliente(array $data): void
     {
         $adminId = $this->authToken(3);
@@ -585,9 +569,7 @@ class Users extends Api
             return;
         }
 
-        $ok = $user->updateRole($userId, 4);
-
-        if (!$ok) {
+        if (!$user->updateRole($userId, 4)) {
             $this->call(500, "error", "Falha ao atualizar role.", "error")->back();
             return;
         }
@@ -626,9 +608,7 @@ class Users extends Api
             return;
         }
 
-        $ok = $user->updateRole($userId, 3);
-
-        if (!$ok) {
+        if (!$user->updateRole($userId, 3)) {
             $this->call(500, "error", "Falha ao atualizar role.", "error")->back();
             return;
         }
@@ -666,10 +646,8 @@ class Users extends Api
             )->back();
             return;
         }
-
-        $ok = $user->updateRole($userId, 5);
-
-        if (!$ok) {
+        
+        if (!$user->updateRole($userId, 5)) {
             $this->call(500, "error", "Falha ao atualizar role.", "error")->back();
             return;
         }
