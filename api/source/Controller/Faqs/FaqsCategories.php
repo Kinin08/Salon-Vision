@@ -42,7 +42,8 @@ class FaqsCategories extends Api
 
         $response = [
             "id" => $faq->getId(),
-            "name" => $faq->getName()
+            "name" => $faq->getName(),
+            "active" => $faq->getActive()
         ];
 
         $this->call(200, "success", "FAQ Category encontrado", "success")->back($response);
