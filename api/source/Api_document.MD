@@ -1,46 +1,11 @@
 # Documentacao das Rotas da API
 
-Base da API: `/api`
-
 Este documento foi feito com base nas rotas registradas em `api/index.php`.
-
-## Padrao de resposta
-
-As rotas retornam JSON no seguinte formato:
-
-```json
-{
-  "code": 200,
-  "type": "success",
-  "status": "success",
-  "message": "Mensagem da resposta",
-  "data": {}
-}
-```
-
-## Codigos usados
-
-| Codigo | type | status | Quando acontece |
-|---|---|---|---|
-| 200 | success | success | Quando a requisicao funciona |
-| 201 | success | created | Quando um registro e criado |
-| 400 | error | bad_request | Quando faltam dados ou algum dado esta invalido |
-| 401 | error | unauthorized | Quando a rota exige token e o usuario nao esta autenticado |
-| 404 | error | not_found | Quando o registro ou rota nao existe |
-| 500 | error | internal_server_error | Quando acontece erro interno ao salvar, atualizar ou consultar |
-
-## Autenticacao
 
 Rotas protegidas precisam receber token JWT no header:
 
 ```http
 Authorization: Bearer SEU_TOKEN
-```
-
-Tambem pode ser usado:
-
-```http
-token: SEU_TOKEN
 ```
 
 Tipos de usuario usados no projeto:
@@ -91,7 +56,7 @@ Parametro:
 |---|---|---|
 | faqCategorieId | inteiro | ID da categoria |
 
-Se o ID for invalido ou nao for enviado, retorna erro porque a API precisa de um numero inteiro para pesquisar no banco:
+Se o ID for invalido ou nao for enviado, retorna:
 
 ```json
 {
@@ -142,7 +107,7 @@ Body:
 }
 ```
 
-Se nao enviar token valido de admin, retorna erro porque essa rota exige usuario autenticado:
+Se nao enviar token valido de admin, retorna:
 
 ```json
 {
@@ -194,7 +159,7 @@ Se criar com sucesso, retorna:
 
 Atualiza uma categoria de FAQ.
 
-Precisa de token de cliente, conforme regra atual do controller.
+Precisa do token de cliente.
 
 Parametro:
 
@@ -221,7 +186,7 @@ Se nao enviar token valido, retorna:
 }
 ```
 
-Se o ID for invalido, retorna erro porque a API nao consegue localizar a categoria sem um ID inteiro:
+Se o ID for invalido, retorna:
 
 ```json
 {
@@ -309,7 +274,7 @@ Se a categoria nao existir, retorna:
 }
 ```
 
-Se a categoria ja estiver removida, retorna erro porque o registro ja esta inativo:
+Se a categoria ja estiver removida, retorna:
 
 ```json
 {
@@ -392,7 +357,7 @@ Se der certo, retorna:
 
 Busca uma FAQ pelo ID.
 
-Se o ID for invalido, retorna erro porque o sistema precisa de um numero inteiro para procurar a FAQ:
+Se o ID for invalido, retorna:
 
 ```json
 {
@@ -459,7 +424,7 @@ Se nao enviar token valido de cliente, retorna:
 }
 ```
 
-Se faltar `faqsCategoryId`, `question` ou `answer`, retorna erro porque todos esses campos sao obrigatorios para cadastrar a FAQ:
+Se faltar `faqsCategoryId`, `question` ou `answer`, retorna porque todos esses campos sao obrigatorios:
 
 ```json
 {
@@ -502,7 +467,7 @@ Se criar com sucesso, retorna:
 
 Atualiza uma FAQ.
 
-Precisa de token de cliente.
+Precisa do token de cliente.
 
 Body:
 
@@ -547,7 +512,7 @@ Se faltar `faqsCategoryId`, `question` ou `answer`, retorna:
 }
 ```
 
-Se a FAQ nao existir, o controller atual retorna erro porque nao encontrou o registro antes de atualizar:
+Se a FAQ nao existir, o controller atual retorna:
 
 ```json
 {
