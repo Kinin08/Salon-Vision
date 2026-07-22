@@ -145,10 +145,10 @@ class Appointment extends Model
                 e.name AS employee,
                 c.name AS client
             FROM appointments a
-            INNER JOIN services s ON s.id = a.service_id
-            INNER JOIN users    e ON e.id = a.employee_id
-            INNER JOIN users    c ON c.id = a.client_id
-            ORDER BY a.date_time DESC
+                INNER JOIN services s ON s.id = a.service_id
+                INNER JOIN users    e ON e.id = a.employee_id
+                INNER JOIN users    c ON c.id = a.client_id
+                ORDER BY a.date_time DESC
         ";
 
         $stmt = Connect::getInstance()->prepare($query);
@@ -169,14 +169,14 @@ class Appointment extends Model
                 e.name AS employee,
                 c.name AS client
             FROM appointments a
-            INNER JOIN services s
-                ON s.id = a.service_id
-            INNER JOIN users e
-                ON e.id = a.employee_id
-            INNER JOIN users c
-                ON c.id = a.client_id
-            WHERE a.client_id = :clientId
-            ORDER BY a.date_time DESC
+                INNER JOIN services s
+                    ON s.id = a.service_id
+                INNER JOIN users e
+                    ON e.id = a.employee_id
+                INNER JOIN users c
+                    ON c.id = a.client_id
+                WHERE a.client_id = :clientId
+                ORDER BY a.date_time DESC
         ";
 
         $stmt = Connect::getInstance()->prepare($query);
@@ -187,7 +187,11 @@ class Appointment extends Model
     }
     public function findById(int $id): ?array
     {
-        $query = "SELECT * FROM appointments WHERE id = :id LIMIT 1";
+        $query = "
+            SELECT
+                *
+            FROM appointments
+                WHERE id = :id LIMIT 1";
 
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);

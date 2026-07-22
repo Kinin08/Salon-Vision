@@ -36,7 +36,6 @@ class Api
 
         $userId = $jwtToken->data->id;
 
-        // só verifica permissão se typeId for enviado
         if ($typeId !== null) {
             $user = new User();
 

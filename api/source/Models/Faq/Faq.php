@@ -96,17 +96,17 @@ class Faq extends Model
     {
         try {
             $query = "
-            SELECT 
-                f.id,
-                f.question,
-                f.answer,
-                f.created_at,
-                c.name AS category_name,
-                u.name AS user_name
-            FROM faqs f
-            JOIN faqs_categories c ON c.id = f.faqs_category_id
-            LEFT JOIN users u ON u.id = f.user_id
-            ORDER BY f.id DESC;
+                SELECT 
+                    f.id,
+                    f.question,
+                    f.answer,
+                    f.created_at,
+                    c.name AS category_name,
+                    u.name AS user_name
+                FROM faqs f
+                    JOIN faqs_categories c ON c.id = f.faqs_category_id
+                    LEFT JOIN users u ON u.id = f.user_id
+                    ORDER BY f.id DESC;
         ";
 
             $stmt = Connect::getInstance()->prepare($query);

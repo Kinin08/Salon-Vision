@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost/Salon-Vision/api";
+const BASE_URL = "http://localhost:8080/api";
 
 // ── Elementos ──────────────────────────────────────────────
 const authModal = document.getElementById("authModal");
@@ -114,7 +114,7 @@ loginForm.addEventListener("submit", async (e) => {
 
     try {
         
-        const { status, data } = await postJSON("/users/login", body);
+        const { status, data } = await postJSON("/users/login/cliente", body);
 
         if (status === 200) {
             const userData = data.data;
@@ -151,7 +151,7 @@ signupForm.addEventListener("submit", async (e) => {
     };
 
     try {
-        const { status, data } = await postJSON("/users/register", body);
+        const { status, data } = await postJSON("/users/register/cliente", body);
         if (status === 201) {
             showFeedback("Conta criada! Entrando...");
 

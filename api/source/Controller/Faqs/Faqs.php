@@ -146,7 +146,9 @@ class Faqs extends Api
             )->back();
             return;
         }
+        
         $faqAtual = new Faq();
+
         if (!$faqAtual->selectById($data["faq_id"])) {
             $this->call(
                 400,

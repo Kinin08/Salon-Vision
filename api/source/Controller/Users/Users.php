@@ -376,7 +376,7 @@ class Users extends Api
             $this->call(
                 400,
                 "bad_request",
-                "Erro a achar faq atual.",
+                "Erro a achar user atual.",
                 "error"
             )->back();
             return;
@@ -450,7 +450,7 @@ class Users extends Api
             $this->call(
                 400,
                 "bad_request",
-                "Erro a achar faq atual.",
+                "Erro a achar user atual.",
                 "error"
             )->back();
             return;

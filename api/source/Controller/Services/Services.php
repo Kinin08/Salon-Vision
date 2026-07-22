@@ -140,6 +140,7 @@ class Services extends Api
             )->back();
             return;
         }
+
         $service = new Service(
             null,
             $data['name'] ?? $serviceAtual->getName(),
@@ -147,7 +148,7 @@ class Services extends Api
             $data['price'] ?? $serviceAtual->getPrice(),
             $data['durationMinutes'] ?? $serviceAtual->getDurationMinutes()
         );
-
+        
         if (!$service->updateById($data["serviceId"])) {
             $this->call(500, "internal_server_error", $service->getErrorMessage(), "error")->back();
             return;
