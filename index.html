@@ -8,56 +8,112 @@
 </head>
 
 <body>
+    <section class="video-container">
+
+        <video autoplay muted loop playsinline>
+            <source src="./views/assets/_common/img/From Klickpin.com- Need fresh inspiration Copy these dreamy creator workflow ideas to make your next project easier and prettier with realistic id.mp4" type="video/mp4">
+            Seu navegador não suporta vídeo.
+        </video>
+
+    </section>
     <div id="menu-wrapper">
         <header>
-            <h1 id="title">Salon Vision</h1>
+            <section id="hero">
+                <h1 id="title">Salon Vision</h1>
+            </section>
+
+            <div class="overlay"></div>
+
+            <section class="card">
+                <label class="hamburger">
+                    <input type="checkbox">
+                    <svg viewBox="0 0 32 32">
+
+                        <path class="line-menu line-top-bottom"
+                            d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
+                        </path>
+
+                        <path class="line-menu" d="M7 16 27 16">
+                        </path>
+
+                    </svg>
+                </label>
+
+                <section class="bg">
+
+                    <div id="menu-circle">
+                        <a href="#" class="item" id="home">
+                            <span class="dot"></span>Home
+                        </a>
+                        <a href="#" class="item" id="servicos">
+                            <span class="dot"></span>Serviços
+                        </a>
+                        <a href="#" class="item" id="sobre">
+                            <span class="dot"></span>Sobre
+                        </a>
+                        <a href="#" class="item" id="contato">
+                            <span class="dot"></span>Contato
+                        </a>
+                        <a href="#" class="item" id="agendar">
+                            <span class="dot"></span>Agendar
+                        </a>
+                    </div>
+                    <div class="redes">
+                        <a href="https://www.instagram.com/wely_mt/" target="_blank"
+                            rel="noopener noreferrer">Instagram</a>
+                        <a href="https://github.com/Kinin08" target="_blank" rel="noopener noreferrer">Github</a>
+                    </div>
+                </section>
+                <div class="blob"></div>
+            </section>
+            <section class="menu-login">
+
+                <button id="open">
+                    <h2>&lt;</h2>
+                </button>
+
+                <div class="buttons-login">
+                    <button id="login">Login</button>
+                    <button id="cadastro">Cadastro</button>
+                </div>
+
+            </section>
         </header>
+        <section class="svg-section">
+<svg class="svg-line"
+    viewBox="0 0 1200 3000"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg">
 
-        <div class="overlay"></div>
+    <path id="stroke-path"
+        d="
+        M600 50
 
-        <div class="card">
-            <label class="hamburger">
-                <input type="checkbox">
-                <svg viewBox="0 0 32 32">
-                    <path class="line line-top-bottom"
-                        d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
-                    </path>
-                    <path class="line" d="M7 16 27 16"></path>
-                </svg>
-            </label>
+        C1000 250 1000 600 600 750
 
-            <div class="bg">
+        C200 900 200 1200 600 1350
 
-                <div id="menu-circle">
-                    <a href="#" class="item" id="home">
-                        <span class="dot"></span>Home
-                    </a>
-                    <a href="#" class="item" id="servicos">
-                        <span class="dot"></span>Serviços
-                    </a>
-                    <a href="#" class="item" id="sobre">
-                        <span class="dot"></span>Sobre
-                    </a>
-                    <a href="#" class="item" id="contato">
-                        <span class="dot"></span>Contato
-                    </a>
-                    <a href="#" class="item" id="agendar">
-                        <span class="dot"></span>Agendar
-                    </a>
-                </div>
-                <div class="redes">
-                    <a href="https://www.instagram.com/wely_mt/">Instagram</a>
-                    <a href="https://github.com/Kinin08">Github</a>
-                </div>
-            </div>
-            <div class="blob"></div>
-        </div>
+        C1000 1500 1000 1800 600 1950
 
+        C200 2100 200 2400 600 2550
+
+        C900 2700 900 2900 600 3000
+        "
+        stroke="white"
+        stroke-width="12"
+        stroke-linecap="round"
+        fill="none"
+    />
+
+</svg>
+        </section>
     </div>
+
 
     <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
     <script src="https://unpkg.com/gsap@3/dist/TextPlugin.min.js"></script>
     <script src="https://unpkg.com/split-type"></script>
+    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
 
     <script src="script.js"></script>
 

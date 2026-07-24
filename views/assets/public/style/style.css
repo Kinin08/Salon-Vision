@@ -6,6 +6,7 @@
     --clarinho: #FFB6D5;
     --branco: #F4F1F6;
     --preto: #181818;
+    --cinza-claro: rgba(1, 1, 1, 0.15);
 }
 
 * {
@@ -14,13 +15,102 @@
     box-sizing: border-box;
 }
 
+/* Barra inteira */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Fundo */
+::-webkit-scrollbar-track {
+    background: var(--branco);
+}
+
+/* Parte que desliza */
+::-webkit-scrollbar-thumb {
+    background: var(--cinza-claro);
+    border-radius: 10px;
+}
+
+.svg-line {
+    width: 1000px;
+    height: 3000px;
+    display: block;
+    transform: translateX(-300px);
+}
+
+
+
+.line {
+
+    fill: none;
+
+    stroke: #333;
+
+    stroke-width: 30px;
+
+}
+
+
+
+#stroke-path {
+
+    fill: none;
+
+    stroke: var(--rosa);
+
+    stroke-width: 10px;
+
+    stroke-linecap: round;
+
+}
+
+
 body {
-    height: 100vh;
+    height: 400vh;
     display: flex;
     justify-content: center;
     align-items: center;
     background: var(--branco);
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.video-container {
+    width: 450px;
+    height: 450px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    overflow: hidden;
+    border-radius: 30px;
+
+    background: #181818;
+    z-index: 11;
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, .25);
+
+    border: 1px solid rgba(255, 255, 255, .15);
+}
+
+
+.video-container video {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+#hero {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .hamburger {
@@ -42,7 +132,7 @@ body {
     transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.line {
+.hamburger .line-menu {
     fill: none;
     stroke: var(--branco);
     stroke-linecap: round;
@@ -53,7 +143,7 @@ body {
         stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.line-top-bottom {
+.hamburger .line-top-bottom {
     stroke-dasharray: 12 63;
 }
 
@@ -68,8 +158,8 @@ body {
 
 .card {
     opacity: 0;
-    top: -100px;
-    position: absolute;
+    top: 10px;
+    position: fixed;
     width: 180px;
     height: 40px;
     left: 50%;
@@ -150,11 +240,11 @@ body {
 }
 
 #title {
+    position: fixed;
     color: var(--branco);
     font-size: 6rem;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
-    position: absolute;
     left: 50%;
     top: 30%;
     transform: translateX(-50%);
@@ -235,4 +325,104 @@ body {
 .redes a:hover {
     color: var(--branco);
     text-shadow: 0 0 15px var(--branco);
+}
+
+.menu-login {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+}
+
+
+#open {
+    position: relative;
+    width: 60px;
+    height: 60px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, .08);
+    backdrop-filter: blur(12px);
+
+    cursor: pointer;
+    z-index: 3;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition:
+        background .5s ease,
+        box-shadow .5s ease,
+        transform .5s ease;
+}
+
+#open:hover {
+    background: rgba(255, 79, 154, 0.15);
+    box-shadow: 0 0 20px rgba(255, 79, 154, .4);
+}
+
+#open:active {
+    transform: scale(.95);
+}
+
+#open h2 {
+    margin: 0;
+    left: 0;
+    font-size: 2rem;
+    color: #fff;
+    user-select: none;
+    transform-origin: center;
+    will-change: transform;
+}
+
+.buttons-login {
+    position: absolute;
+    right: 0;
+    width: 0;
+    overflow: hidden;
+
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    align-items: center;
+
+    height: 60px;
+
+    background: rgba(255, 79, 154, .4);
+    border-radius: 40px;
+
+    padding-right: 70px;
+}
+
+.buttons-login button {
+    width: 100px;
+    height: 45px;
+    border: none;
+    border-radius: 20px;
+    right: 0;
+    cursor: pointer;
+
+    background: rgba(255, 255, 255, .1);
+    color: white;
+    font-weight: bold;
+
+    transition:
+        background .5s ease,
+        box-shadow .5s ease,
+        transform .5s ease;
+}
+
+.buttons-login button:hover {
+    background: rgba(255, 79, 154, 0.15);
+    box-shadow: 0 0 20px rgba(255, 79, 154, .4);
+    transform: scale(1.03);
+}
+
+.buttons-login button:active {
+    transform: scale(.95);
 }

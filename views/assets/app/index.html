@@ -1,157 +1,42 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Salon Vision | Painel do Cliente</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>SVG Scroll</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@300;400;500;600;700&family=Yuji+Syuku&display=swap"
-        rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
-    <link rel="stylesheet" href="./styles/styles.css" />
-    <script type="module" src="./script/main.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+
 </head>
 
-<body class="bg-black font-['Poppins']">
 
-    <!-- Aurora de fundo -->
-    <div class="aurora-wrap">
-        <div class="aurora-1"></div>
-        <div class="aurora-2"></div>
-    </div>
-
-    <!-- Layout principal -->
-    <div class="layout">
-
-        <!-- ===== SIDEBAR ===== -->
-        <aside class="sidebar">
-
-            <!-- Logo -->
-            <div class="sidebar-logo">
-                <svg class="w-8 h-8 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="1.5">
-                    <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
-                </svg>
-                <div>
-                    <div class="font-yuji text-xl text-white [text-shadow:0_0_10px_rgba(255,204,127,0.8)]">
-                        <span class="text-[#CA9440]">S</span><span>alon</span>
-                        <span class="text-[#CA9440]">V</span><span>ision</span>
-                    </div>
-                    <span class="logo-badge-admin">CLIENTE</span>
-                </div>
-            </div>
-
-            <!-- Nav -->
-            <nav class="nav-section">
-                <h2 class="nav-label">Menu</h2>
-
-                <a id="nav-inicio" class="nav-item active cursor-pointer" href="#">
-                    <i class="ti ti-home"></i>
-                    <h1>Dashboard</h1>
-                </a>
-                <a id="nav-agendamentos" class="nav-item cursor-pointer" href="#">
-                    <i class="ti ti-calendar"></i>
-                    <h1>Agendar</h1>
-                </a>
-                <a id="nav-faqs" class="nav-item">
-                    <i class="ti ti-home-question"></i> Perguntas Frequentes
-                </a>
-                <h2 class="nav-label" style="margin-top:10px;">Descobrir</h2>
-
-                <a id="nav-servicos" class="nav-item cursor-pointer" href="#">
-                    <i class="ti ti-cut"></i>
-                    <h1>Serviços</h1>
-                </a>
-                <a id="nav-profissionais" class="nav-item cursor-pointer" href="#">
-                    <i class="ti ti-user-star"></i>
-                    <h1>Profissionais</h1>
-                </a>
-
-                <h2 class="nav-label" style="margin-top:10px;">Conta</h2>
-
-                <a id="nav-perfil" class="nav-item cursor-pointer" href="#">
-                    <i class="ti ti-user-circle"></i>
-                    <h1>Meu Perfil</h1>
-                </a>
-            </nav>
-
-        </aside>
-
-        <!-- ===== MAIN ===== -->
-        <div class="main">
-
-            <!-- TOPBAR -->
-            <header class="topbar">
-                <div>
-                    <h1 class="topbar-title" id="topbar-title">Meu <em>Dashboard</em></h1>
-                    <h2 class="tb-date" id="topbar-date"></h2>
-                </div>
-            </header>
-
-            <!-- CONTENT (trocado dinamicamente) -->
-            <main class="content" id="page-content">
-                <!-- Início é carregado via JS -->
-            </main>
-
-        </div>
-    </div><!-- /layout -->
-
-    <!-- ===== MODAL: NOVO AGENDAMENTO ===== -->
-    <div id="modalAgendar" class="fixed inset-0 hidden items-center justify-center bg-black/60 backdrop-blur-sm z-50">
-
-        <div class="w-full max-w-md rounded-2xl bg-[#0B0B0B] p-6 shadow-2xl animate-fade-in">
-
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-semibold text-white">
-                    Novo <span class="text-[#FFCC7F]">Agendamento</span>
-                </h2>
-
-                <button id="modalCancelar" class="text-gray-400 hover:text-red-500 text-xl font-bold">
-                    ✕
-                </button>
-            </div>
-
-            <!-- Form -->
-            <div class="space-y-3">
-
-                <select id="modalServico"
-                    class="w-full rounded-xl border border-[#F4AB3E]/30 px-4 py-2 text-sm bg-[#1E1E1D]/30">
-                    <option value="">Selecione um serviço</option>
-                </select>
-
-                <select id="modalProf"
-                    class="w-full rounded-xl border border-[#F4AB3E]/30 px-4 py-2 text-sm bg-[#1E1E1D]/30">
-                    <option value="">Selecione um profissional</option>
-                </select>
-
-                <input id="modalData" type="date"
-                    class="w-full rounded-xl border border-[#F4AB3E]/30 px-4 py-2 text-sm bg-[#1E1E1D]/30" />
-
-                <input id="modalHora" type="time"
-                    class="w-full rounded-xl border border-[#F4AB3E]/30 px-4 py-2 text-sm bg-[#1E1E1D]/30" />
-            </div>
-
-            <!-- Actions -->
-            <div class="flex gap-3 mt-6">
-
-                <button id="modalConfirmar"
-                    class="w-full rounded-xl bg-[#FFCC7F]/80 py-2 text-sm font-semibold text-white hover:bg-[#FFCC7F] transition">
-                    Confirmar
-                </button>
-
-            </div>
-
-        </div>
-    </div>
+<body>
 
 
-    <!-- Toast -->
-    <div id="toast"><i class="ti ti-check"></i> <span id="toast-msg">Ação realizada!</span></div>
+    <h1 class="header-section">
+        Scroll para animar a linha
+    </h1>
+    <svg class="svg-line" width="776" height="1559" viewBox="0 0 776 1559" fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+
+        <path id="stroke-path" d="M388 50 
+        C150 300 600 500 300 800
+        C100 1100 600 1300 388 1500" stroke="white" stroke-width="10" stroke-linecap="round" fill="none" />
+
+    </svg>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+
+
+    <script src="script.js"></script>
+
+
 </body>
 
 </html>
