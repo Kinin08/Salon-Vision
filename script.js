@@ -10,7 +10,7 @@ const title = document.querySelector("#title");
 const items = document.querySelectorAll(".item");
 const card = document.querySelector(".card")
 const hamburger = document.querySelector(".hamburger input");
-const menu = document.querySelector("menu-circle");
+const menu = document.querySelector("#menu-circle");
 const overlay = document.querySelector(".overlay");
 
 text.chars.forEach((char, index) => {
@@ -40,7 +40,7 @@ function liberarScroll() {
     document.body.style.position = "";
     document.body.style.top = "";
     document.body.style.width = "";
-    document.body.style.overflowY = ""; 
+    document.body.style.overflowY = "";
 
     window.scrollTo(0, scrollPosition);
 }
@@ -78,6 +78,15 @@ mainTl
         duration: .8,
         ease: "power3.out"
     })
+    .fromTo(".video-mask", {
+        scale: 0,
+        opacity: 0
+    }, {
+        opacity: 1,
+        scale: 0.3,
+        duration: .8,
+        ease: "back.out(1.7)"
+    }, "<")
     .fromTo(".menu-login",
         {
             x: 300,
@@ -90,6 +99,16 @@ mainTl
             ease: "back.out(1.7)"
         }, "<");
 
+mainTl.call(() => {
+    gsap.to(text.chars, {
+        y: -10,
+        duration: 0.8,
+        stagger: 0.05,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+    });
+});
 
 gsap.set(items, {
     x: -100,
@@ -289,16 +308,11 @@ gsap.to(path, {
     ease: "none",
 
     scrollTrigger: {
-
-        trigger: ".svg-line",
-
+        trigger: ".svg-section",
         start: "top center",
         end: "bottom center",
-
-        scrub: 1,
-
-        invalidateOnRefresh: true
-
+        scrub: true,
+        invalidateOnRefresh: true,
     }
 
 });
@@ -309,3 +323,52 @@ window.addEventListener("load", () => {
         ScrollTrigger.refresh();
     }, 500);
 });
+
+window.addEventListener("load", () => {
+    ScrollTrigger.refresh();
+});
+
+const video = document.querySelector(".video-mask video");
+let pausado = false;
+
+
+const videoScaleTl = gsap.timeline({
+    scrollTrigger: {
+        trigger: "#hero",
+        start: "top top",
+        end: "+=3000",
+        scrub: true,
+    }
+});
+videoScaleTl
+    .fromTo(".video-mask",
+        {
+            scale: 0.3,
+            clipPath: "inset(0% 35% 0% 35% round 100px)"
+        },
+        {
+            scale: 1,
+            clipPath: "inset(0% 0% 0% 0% round 0px)",
+            ease: "power2.out"
+        }
+    )
+    .to({}, { duration: 0.8 })
+    .to(".video-mask", {
+        clipPath: "inset(0% 35% 0% 35% round 100px)",
+        scale: 0,
+        ease: "power2.out",
+
+        onUpdate() {
+            const scale = gsap.getProperty(".video-mask", "scale");
+
+            if (scale <= 0.05 && !pausado) {
+                video.pause();
+                pausado = true;
+            }
+
+            if (scale > 0.05 && pausado) {
+                video.play();
+                pausado = false;
+            }
+        }
+    });
