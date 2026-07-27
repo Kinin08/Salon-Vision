@@ -82,17 +82,6 @@ body {
 }
 
 
-#coisas {
-    position: fixed;      /* ver ponto 2 */
-    inset: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 20px;
-    z-index: 20;
-    /* remover opacity:0 e transform daqui */
-}
 
 
 #coisas h1 {
@@ -277,49 +266,110 @@ body {
 #menu-circle {
     position: absolute;
     inset: 0;
+
     display: flex;
     flex-direction: column;
-    justify-content: center;
+
+    justify-content: flex-start;
     align-items: flex-start;
+
     gap: 15px;
+
     padding-left: 35px;
+    padding-top: 70px;
 }
 
 
 .item {
-    width: 10px;
+    perspective: 800px;
+    transform-style: preserve-3d;
+
+    width: max-content;
     position: relative;
+
     color: var(--itens);
     text-decoration: none;
     font-size: 1.2rem;
     font-weight: bold;
+
     display: flex;
     align-items: center;
+    gap: 8px;
+
+    overflow: visible;
 
     transform: translateX(-80px) scale(0);
     opacity: 0;
 
     pointer-events: auto;
-
-    transition: color .3s, text-shadow .3s;
-    gap: 8px;
 }
 
-.dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--branco);
-    box-shadow: 0 0 8px var(--branco);
-    transform: scale(0);
-    opacity: 0;
-    flex-shrink: 0;
+
+#coisas {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: flex-start;
+
+    padding-left: clamp(40px, 8vw, 140px);
+
+    gap: 20px;
+    z-index: 20;
 }
+
+#coisas h1 {
+    font-size: clamp(2rem, 5vw, 7rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    display: inline-block;
+    overflow: hidden;
+
+    color: var(--branco);
+
+    text-shadow:
+        0 0 15px rgba(255, 79, 154, .5),
+        0 0 35px rgba(255, 79, 154, .15);
+
+    margin-bottom: 20px;
+
+    position: relative;
+    cursor: pointer;
+}
+
 
 #menu-wrapper {
     position: relative;
     inset: 0;
 }
+
+.rede {
+    perspective: 800px;
+    transform-style: preserve-3d;
+
+    width: max-content;
+    position: relative;
+
+    color: var(--itens);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+
+    display: flex;
+    align-items: center;
+
+    overflow: visible;
+
+    opacity: 0;
+
+    transition: color .3s, text-shadow .3s;
+}
+
+
 
 .redes {
     position: absolute;
@@ -345,11 +395,271 @@ body {
     transition: .3s ease;
 }
 
+#coisas h1::after {
+    content: "";
 
-.redes a:hover {
-    color: var(--branco);
-    text-shadow: 0 0 15px var(--branco);
+    position: absolute;
+    left: 0;
+    bottom: -12px;
+
+    width: 150px;
+    height: 3px;
+
+    border-radius: 999px;
+
+    background: linear-gradient(90deg,
+            #FF4F9A,
+            transparent);
 }
+
+#coisas h1 span {
+    color: var(--branco);
+    text-shadow:
+        0 0 15px rgba(255, 79, 154, .5),
+        0 0 35px rgba(255, 79, 154, .15);
+    display: block;
+    transition: .5s ease;
+}
+
+#coisas .texto-1 {
+    opacity: 1;
+    filter: blur(0);
+}
+
+#coisas .texto-2 {
+    text-decoration: line-through;
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    opacity: 0;
+    filter: blur(12px);
+
+    transform: translateY(25px);
+}
+
+#coisas h1:hover .texto-1 {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(-25px);
+}
+
+#coisas h1:hover .texto-2 {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+}
+
+.buttons-login {
+    position: absolute;
+    right: 0;
+
+    width: 0;
+    overflow: hidden;
+
+    display: flex;
+    gap: 10px;
+
+    justify-content: flex-end;
+    align-items: center;
+
+    height: 60px;
+
+    background: rgba(255, 79, 154, .4);
+    border-radius: 40px;
+
+    padding-right: 70px;
+
+    transition: .6s ease;
+}
+
+
+.buttons-login button {
+
+    position: relative;
+
+    width: 100px;
+    height: 45px;
+
+    border: none;
+    border-radius: 20px;
+
+    cursor: pointer;
+
+    background: rgba(255, 255, 255, .1);
+    color: white;
+
+    font-weight: bold;
+
+    overflow: hidden;
+
+    transition:
+        background .5s ease,
+        box-shadow .5s ease,
+        transform .5s ease;
+}
+
+
+.buttons-login span {
+
+    display: block;
+
+    transition: .5s ease;
+
+}
+
+
+/* texto escondido */
+
+.buttons-login .texto-2 {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, 30px);
+
+    opacity: 0;
+
+    filter: blur(10px);
+
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+
+    color: var(--branco);
+
+    white-space: nowrap;
+
+    text-shadow:
+        0 0 8px var(--rosa);
+
+}
+
+
+
+/* texto normal */
+
+.buttons-login .texto-1 {
+
+    opacity: 1;
+
+    filter: blur(0);
+
+}
+
+
+
+/* hover */
+
+.buttons-login button:hover .texto-1 {
+
+    opacity: 0;
+
+    filter: blur(10px);
+
+    transform:
+        translateY(-25px);
+
+}
+
+
+
+.buttons-login button:hover .texto-2 {
+
+    opacity: 1;
+
+    filter: blur(0);
+
+    transform:
+        translate(-50%, -50%);
+
+}
+
+
+
+.buttons-login button:hover {
+
+    background: rgba(255, 79, 154, .25);
+
+    box-shadow:
+        0 0 20px rgba(255, 79, 154, .5);
+
+    transform: translateY(-3px);
+
+}
+
+.item .texto-1,
+.item .texto-2,
+.rede .texto-1,
+.rede .texto-2 {
+
+    display: block;
+
+    transition: .5s ease;
+
+    transform-origin: center;
+}
+
+/* texto escondido */
+.item .texto-2,
+.rede .texto-2 {
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+
+    text-shadow:
+        0 0 2px var(--branco);
+
+    color: var(--branco);
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    opacity: 0;
+
+    filter: blur(12px);
+
+    transform: translateY(25px);
+
+    white-space: nowrap;
+}
+
+.item .texto-1,
+.rede .texto-1 {
+
+    opacity: 1;
+
+    filter: blur(0);
+
+}
+
+
+.item:hover .texto-1,
+.rede:hover .texto-1 {
+
+    opacity: 0;
+
+    filter: blur(12px);
+
+    transform: translateY(-25px);
+
+}
+
+
+.item:hover .texto-2,
+.rede:hover .texto-2 {
+
+    opacity: 1;
+
+    filter: blur(0);
+
+    transform: translateY(0);
+
+}
+
 
 .menu-login {
     position: fixed;
@@ -402,53 +712,6 @@ body {
     user-select: none;
     transform-origin: center;
     will-change: transform;
-}
-
-.buttons-login {
-    position: absolute;
-    right: 0;
-    width: 0;
-    overflow: hidden;
-
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    align-items: center;
-
-    height: 60px;
-
-    background: rgba(255, 79, 154, .4);
-    border-radius: 40px;
-
-    padding-right: 70px;
-}
-
-.buttons-login button {
-    width: 100px;
-    height: 45px;
-    border: none;
-    border-radius: 20px;
-    right: 0;
-    cursor: pointer;
-
-    background: rgba(255, 255, 255, .1);
-    color: white;
-    font-weight: bold;
-
-    transition:
-        background .5s ease,
-        box-shadow .5s ease,
-        transform .5s ease;
-}
-
-.buttons-login button:hover {
-    background: rgba(255, 79, 154, 0.15);
-    box-shadow: 0 0 20px rgba(255, 79, 154, .4);
-    transform: scale(1.03);
-}
-
-.buttons-login button:active {
-    transform: scale(.95);
 }
 
 .painel {

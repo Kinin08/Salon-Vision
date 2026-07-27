@@ -6,21 +6,12 @@ window.onbeforeunload = function () {
     window.scrollTo(0, 0);
 };
 
-window.addEventListener("load", () => {
-
-    setTimeout(() => {
-        window.scrollTo(0, 0);
-        ScrollTrigger.refresh();
-    }, 50);
-
-});
-
 const text = new SplitType("#title", {
     types: "chars"
 });
 
 const title = document.querySelector("#title");
-const items = document.querySelectorAll(".item");
+const items = document.querySelectorAll("#menu-circle .item");
 const card = document.querySelector(".card")
 const hamburger = document.querySelector(".hamburger input");
 const menu = document.querySelector("#menu-circle");
@@ -120,7 +111,7 @@ gsap.set(items, {
     scale: 0,
     opacity: 0
 });
-gsap.set(".redes", {
+gsap.set(".rede", {
     y: 100,
     scale: 0,
     opacity: 0
@@ -150,11 +141,12 @@ menuTl
         stagger: .08,
         ease: "back.out(1.7)"
     })
-    .to(".redes", {
-        opacity: 1,
+    .to(".rede", {
         y: 0,
         scale: 1,
+        opacity: 1,
         duration: .5,
+        stagger: .1,
         ease: "back.out(2)"
     }, "-=.3");
 
@@ -195,57 +187,7 @@ document.addEventListener("click", (e) => {
     }
 
 });
-items.forEach(item => {
 
-    const dot = item.querySelector(".dot");
-
-    item.addEventListener("mouseenter", () => {
-
-        gsap.to(item, {
-            x: 10,
-            color: "var(--branco)",
-            textShadow: "0 0 10px var(--branco)",
-            duration: .3,
-            ease: "power2.out",
-            overwrite: "auto"
-        });
-
-
-        gsap.to(dot, {
-            scale: 1,
-            opacity: 1,
-            duration: .3,
-            ease: "back.out(3)",
-            overwrite: "auto"
-        });
-
-    });
-
-
-    item.addEventListener("mouseleave", () => {
-
-
-        gsap.to(item, {
-            x: 0,
-            color: "var(--itens)",
-            textShadow: "0 0 0 transparent",
-            duration: .3,
-            ease: "power2.out",
-            overwrite: "auto"
-        });
-
-
-        gsap.to(dot, {
-            scale: 0,
-            opacity: 0,
-            duration: .2,
-            ease: "power2.in",
-            overwrite: "auto"
-        });
-
-    });
-
-});
 const seta = document.querySelector("#open h2");
 const botao = document.querySelector("#open");
 
@@ -257,7 +199,7 @@ const tl = gsap.timeline({
 tl.to(seta, {
     rotate: 180,
     duration: .5,
-    ease: "power2.out"
+    ease: "power2.inOut"
 }, 0)
 
     .to(botao, {
@@ -270,8 +212,8 @@ tl.to(seta, {
     .to(".buttons-login", {
         width: 260,
         opacity: 1,
-        duration: 1,
-        ease: "power2.out"
+        duration: .8,
+        ease: "power2.in"
     }, 0);
 
 
@@ -291,47 +233,41 @@ botao.addEventListener("click", () => {
 
 });
 
-
 window.addEventListener("load", () => {
+
+    window.scrollTo(0, 0);
+
+    setTimeout(() => {
+        ScrollTrigger.refresh();
+    }, 50);
+
 
     const path = document.querySelector("#stroke-path");
 
-    if (!path) {
-        console.log("SVG não encontrado");
-        return;
+    if (path) {
+
+        const length = path.getTotalLength();
+
+        gsap.set(path, {
+            strokeDasharray: length,
+            strokeDashoffset: length
+        });
+
+
+        gsap.to(path, {
+            strokeDashoffset: 0,
+
+            scrollTrigger: {
+                trigger: ".svg-section",
+                start: "top top",
+                end: "bottom top",
+                scrub: 2,
+                markers:true
+            }
+
+        });
+
     }
-
-
-    const length = path.getTotalLength();
-
-    console.log("Tamanho da linha:", length);
-
-
-    gsap.set(path, {
-        strokeDasharray: length,
-        strokeDashoffset: length
-    });
-
-
-    gsap.to(path, {
-
-        strokeDashoffset: 0,
-
-        ease: "none",
-
-        scrollTrigger: {
-            trigger: ".svg-section",
-
-            start: "top center",
-            end: "bottom bottom",
-
-            scrub: 1,
-        }
-
-    });
-
-
-    ScrollTrigger.refresh();
 
 });
 
