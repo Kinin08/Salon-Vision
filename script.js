@@ -1,6 +1,19 @@
+gsap.registerPlugin(ScrollTrigger);
+
 history.scrollRestoration = "manual";
 
-window.scrollTo(0, 0);
+window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+};
+
+window.addEventListener("load", () => {
+
+    setTimeout(() => {
+        window.scrollTo(0, 0);
+        ScrollTrigger.refresh();
+    }, 50);
+
+});
 
 const text = new SplitType("#title", {
     types: "chars"
@@ -28,21 +41,12 @@ text.chars.forEach((char, index) => {
 let scrollPosition = 0;
 
 function travarScroll() {
-    scrollPosition = window.scrollY;
-
-    document.body.style.overflowY = "scroll";
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollPosition}px`;
-    document.body.style.width = "100%";
+    document.documentElement.style.overflow = "hidden";
 }
 
 function liberarScroll() {
-    document.body.style.position = "";
-    document.body.style.top = "";
-    document.body.style.width = "";
-    document.body.style.overflowY = "";
-
-    window.scrollTo(0, scrollPosition);
+    document.documentElement.style.overflow = "";
+    ScrollTrigger.refresh();
 }
 
 travarScroll();
@@ -50,6 +54,7 @@ travarScroll();
 const mainTl = gsap.timeline({
     onComplete: () => {
         liberarScroll();
+        ScrollTrigger.refresh()
     }
 });
 
@@ -286,60 +291,70 @@ botao.addEventListener("click", () => {
 
 });
 
-gsap.registerPlugin(ScrollTrigger);
 
+window.addEventListener("load", () => {
 
-const path = document.querySelector("#stroke-path");
+    const path = document.querySelector("#stroke-path");
 
-
-const length = path.getTotalLength();
-
-
-gsap.set(path, {
-    strokeDasharray: length,
-    strokeDashoffset: length
-});
-
-
-gsap.to(path, {
-
-    strokeDashoffset: 0,
-
-    ease: "none",
-
-    scrollTrigger: {
-        trigger: ".svg-section",
-        start: "top center",
-        end: "bottom center",
-        scrub: true,
-        invalidateOnRefresh: true,
+    if (!path) {
+        console.log("SVG não encontrado");
+        return;
     }
 
-});
-window.addEventListener("load", () => {
-    window.scrollTo(0, 0);
 
-    setTimeout(() => {
-        ScrollTrigger.refresh();
-    }, 500);
-});
+    const length = path.getTotalLength();
 
-window.addEventListener("load", () => {
+    console.log("Tamanho da linha:", length);
+
+
+    gsap.set(path, {
+        strokeDasharray: length,
+        strokeDashoffset: length
+    });
+
+
+    gsap.to(path, {
+
+        strokeDashoffset: 0,
+
+        ease: "none",
+
+        scrollTrigger: {
+            trigger: ".svg-section",
+
+            start: "top center",
+            end: "bottom bottom",
+
+            scrub: 1,
+        }
+
+    });
+
+
     ScrollTrigger.refresh();
+
 });
 
 const video = document.querySelector(".video-mask video");
 let pausado = false;
 
+gsap.set(".painel", {
+    opacity: 0,
+    y: 100,
+    scale: 0.8
+});
 
 const videoScaleTl = gsap.timeline({
     scrollTrigger: {
-        trigger: "#hero",
+        trigger: "#video-itens",
         start: "top top",
-        end: "+=3000",
+        end: "+=6000",
         scrub: true,
+
     }
 });
+
+
 videoScaleTl
     .fromTo(".video-mask",
         {
@@ -349,26 +364,80 @@ videoScaleTl
         {
             scale: 1,
             clipPath: "inset(0% 0% 0% 0% round 0px)",
-            ease: "power2.out"
+            ease: "power2.out",
+            duration: 2
         }
     )
+    .to("#coisas h1", {
+        opacity: 1,
+        y: 0,
+        stagger: 0.2,
+        duration: 1,
+        ease: "back.out(1.7)"
+    })
     .to({}, { duration: 0.8 })
+    .to("#coisas h1", {
+        opacity: 0,
+        y: -50,
+        stagger: 0.15,
+        duration: 1,
+        ease: "power2.in"
+    })
     .to(".video-mask", {
         clipPath: "inset(0% 35% 0% 35% round 100px)",
         scale: 0,
         ease: "power2.out",
+        duration: 2,
 
         onUpdate() {
             const scale = gsap.getProperty(".video-mask", "scale");
 
-            if (scale <= 0.05 && !pausado) {
+            if (scale <= 0.03 && !pausado) {
                 video.pause();
                 pausado = true;
+                gsap.set(".video-mask", {
+                    opacity: 0
+                });
             }
 
             if (scale > 0.05 && pausado) {
                 video.play();
                 pausado = false;
+                gsap.set(".video-mask", {
+                    opacity: 1
+                });
             }
         }
-    });
+    })
+    .fromTo(".painel",
+        {
+            opacity: 0,
+            y: 80,
+            scale: 0.8
+        },
+        {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 1,
+            ease: "power3.out"
+        },
+        "-=1"
+    );
+
+const novoItemTl = gsap.timeline({
+    scrollTrigger: {
+        trigger: ".novo-item",
+        start: "top top",
+        end: "+=2000",
+        scrub: 1,
+        pin: true,
+        anticipatePin: 1
+    }
+});
+
+
+novoItemTl.to(".novo-item", {
+    xPercent: -66.66,
+    ease: "none"
+});

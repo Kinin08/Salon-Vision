@@ -31,6 +31,12 @@
     border-radius: 10px;
 }
 
+.svg-section {
+    height: 3000px;
+    display: flex;
+    justify-content: center;
+}
+
 .svg-line {
     width: 1000px;
     height: 3000px;
@@ -62,14 +68,42 @@
 }
 
 
-body{
+body {
     background: var(--branco);
     font-family: Arial, Helvetica, sans-serif;
     height: 400vh;
     overflow-x: hidden;
 }
 
-.video-mask{
+#video-itens {
+    position: relative;
+    width: 100%;
+    height: 400vh;
+}
+
+
+#coisas {
+    position: fixed;      /* ver ponto 2 */
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 20;
+    /* remover opacity:0 e transform daqui */
+}
+
+
+#coisas h1 {
+    color: white;
+    font-size: 4rem;
+
+    opacity: 0;
+    transform: translateY(50px);
+}
+
+.video-mask {
     opacity: 0;
     position: fixed;
     inset: 0;
@@ -80,7 +114,7 @@ body{
     z-index: 10;
 }
 
-.video-mask video{
+.video-mask video {
     position: absolute;
 
     width: 100vw;
@@ -96,7 +130,7 @@ body{
 }
 
 #hero {
-    height: 100vh;
+    height: 400vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -415,4 +449,63 @@ body{
 
 .buttons-login button:active {
     transform: scale(.95);
+}
+
+.painel {
+    width: 100vw;
+    height: 100vh;
+
+    flex-shrink: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.novo-item {
+    height: 100vh;
+    width: 300vw;
+
+    display: flex;
+
+    position: relative;
+
+    z-index: 30;
+}
+
+.novo-item h1 {
+    font-size: clamp(3rem, 6vw, 6rem);
+    color: var(--branco);
+    text-shadow: 0 0 20px rgba(255, 79, 154, .5);
+    margin-bottom: 20px;
+}
+
+.novo-item p {
+    width: min(700px, 90%);
+    text-align: center;
+    color: #cfcfcf;
+    font-size: 1.2rem;
+    line-height: 1.7;
+}
+
+.novo-item button {
+    margin-top: 40px;
+    padding: 16px 42px;
+    border: none;
+    border-radius: 50px;
+
+    background: linear-gradient(90deg, #ff4f9a, #ff7bb4);
+    color: #fff;
+
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+.novo-item button:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 25px rgba(255, 79, 154, .6);
 }
