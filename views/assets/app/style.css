@@ -1,12 +1,254 @@
-.horizontal {
-    display: flex;
-    width: 300vw;
-}
-
-.page {
-    width: 100vw;
+.timeline-section {
+    position: relative;
     height: 100vh;
 }
-body{
-        overflow-x: hidden;
+
+
+.camera {
+    width: 100vw;
+    height: 100vh;
+    overflow: visible;
+}
+
+.track {
+    height: 9000px;
+    width: 7930px;
+    display: flex;
+    position: relative;
+}
+
+.timeline-svg {
+
+    position: absolute;
+
+    width: 7700px;
+    height: 7528px;
+
+    left: 0;
+    top: 0;
+
+}
+
+#timeline-horizontal,
+#timeline-vertical {
+    transform: translateY(100px);
+
+    fill: none;
+    stroke: #FF4F9A;
+    stroke-width: 50px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+}
+
+.point {
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 18px 26px;
+
+    min-width: 260px;
+
+    border-radius: 22px;
+
+    background: rgba(164, 2, 2, 0.1);
+    backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255, 255, 255, .15);
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, .15),
+        0 0 30px rgba(255, 79, 154, .15);
+
+    transition:
+        transform .4s ease,
+        box-shadow .4s ease;
+}
+
+.feitos .point::before {
+
+    content: "";
+
+    width: 22px;
+    height: 22px;
+
+    border-radius: 50%;
+
+    background: var(--rosa);
+
+    box-shadow:
+        0 0 0 8px rgba(255, 79, 154, .15),
+        0 0 25px rgba(255, 79, 154, .8);
+
+    flex-shrink: 0;
+}
+
+.feitos .point::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 11px;
+    top: 50%;
+
+    width: 55px;
+    height: 2px;
+
+    transform: translateX(-100%);
+
+    background: linear-gradient(90deg,
+            transparent,
+            var(--rosa));
+}
+
+.point h2 {
+
+    color: var(--itens);
+
+    font-size: 1.6rem;
+
+    font-weight: 700;
+
+    letter-spacing: .5px;
+
+    text-shadow:
+        0 0 10px rgba(255, 79, 154, .4);
+
+    margin: 0;
+}
+
+.point:hover {
+
+    transform: translateY(-8px) scale(1.04);
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, .2),
+        0 0 45px rgba(255, 79, 154, .35);
+}
+
+.point:hover::before {
+
+    transform: scale(1.3);
+
+    box-shadow:
+        0 0 0 12px rgba(255, 79, 154, .2),
+        0 0 40px rgba(255, 79, 154, 1);
+}
+
+.p1 {
+    left: 1180px;
+    top: 150px;
+}
+
+.p2 {
+    left: 3240px;
+    top: 150px;
+}
+
+.p3 {
+    left: 5500px;
+    top: 170px;
+}
+
+.point.active {
+
+    background: rgba(255, 79, 154, .12);
+
+    border-color: rgba(255, 79, 154, .6);
+
+    transform:
+        translateY(-8px) scale(1.05);
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, .25),
+        0 0 35px rgba(255, 79, 154, .7),
+        0 0 90px rgba(255, 79, 154, .35);
+
+    animation:
+        pulseCard 1.8s infinite alternate;
+
+}
+
+
+.point.active h2 {
+
+    color: #FF4F9A;
+
+    text-shadow:
+        0 0 10px rgba(255, 79, 154, .8),
+        0 0 25px rgba(255, 79, 154, .5);
+
+}
+.point h4 {
+
+    margin:8px 0 0;
+
+    color:#676767;
+
+    font-size:1.3rem;
+
+    font-weight:600;
+
+}
+
+
+.point.active::before {
+
+    background: #fff;
+
+    transform: scale(1.3);
+
+    box-shadow:
+
+        0 0 0 10px rgba(255, 79, 154, .2),
+        0 0 30px #FF4F9A,
+        0 0 70px #FF4F9A;
+
+    animation:
+        pulseDot 1s infinite;
+
+}
+
+
+.point.active::after {
+
+    background:
+        linear-gradient(90deg,
+            transparent,
+            #FF4F9A,
+            white);
+
+    box-shadow:
+        0 0 15px #FF4F9A;
+
+}
+
+.s1 {
+    right: 600px;
+    top: 850px;
+}
+.s2 {
+    right: 600px;
+    top: 980px;
+}
+
+.s3 {
+    right: 100px;
+    top: 1800px;
+}
+.s4 {
+    right: 100px;
+    top: 1900px;
+}
+.s5 {
+    right: 600px;
+    top: 3400px;
+}
+.s6 {
+    right: 600px;
+    top: 3500px;
 }

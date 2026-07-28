@@ -233,43 +233,7 @@ botao.addEventListener("click", () => {
 
 });
 
-window.addEventListener("load", () => {
 
-    window.scrollTo(0, 0);
-
-    setTimeout(() => {
-        ScrollTrigger.refresh();
-    }, 50);
-
-
-    const path = document.querySelector("#stroke-path");
-
-    if (path) {
-
-        const length = path.getTotalLength();
-
-        gsap.set(path, {
-            strokeDasharray: length,
-            strokeDashoffset: length
-        });
-
-
-        gsap.to(path, {
-            strokeDashoffset: 0,
-
-            scrollTrigger: {
-                trigger: ".svg-section",
-                start: "top top",
-                end: "bottom top",
-                scrub: 2,
-                markers:true
-            }
-
-        });
-
-    }
-
-});
 
 const video = document.querySelector(".video-mask video");
 let pausado = false;
@@ -285,7 +249,7 @@ const videoScaleTl = gsap.timeline({
         trigger: "#video-itens",
         start: "top top",
         end: "+=6000",
-        scrub: true,
+        scrub: 2,
 
     }
 });
@@ -358,22 +322,165 @@ videoScaleTl
             duration: 1,
             ease: "power3.out"
         },
-        "-=1"
+        "-=.8"
     );
 
 const novoItemTl = gsap.timeline({
     scrollTrigger: {
         trigger: ".novo-item",
         start: "top top",
-        end: "+=2000",
-        scrub: 1,
+        end: "+=8000",
+        scrub: 2,
         pin: true,
-        anticipatePin: 1
+        anticipatePin: 1,
+
     }
 });
 
 
 novoItemTl.to(".novo-item", {
-    xPercent: -66.66,
-    ease: "none"
+    xPercent: -75,
+    ease: "power2.inOut"
 });
+window.addEventListener("load", () => {
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const horizontal = document.querySelector("#timeline-horizontal");
+    const vertical = document.querySelector("#timeline-vertical");
+    const track = document.querySelector(".track");
+
+    const hLength = horizontal.getTotalLength();
+    const vLength = vertical.getTotalLength();
+
+    const points = [
+        {
+            el: document.querySelector(".p1"),
+            percent: 0.16
+        },
+        {
+            el: document.querySelector(".p2"),
+            percent: 0.43
+        },
+        {
+            el: document.querySelector(".p3"),
+            percent: 0.73
+        }
+    ];
+
+    gsap.set(horizontal, {
+        strokeDasharray: hLength,
+        strokeDashoffset: hLength
+    });
+
+    gsap.set(vertical, {
+        strokeDasharray: vLength,
+        strokeDashoffset: vLength
+    });
+
+
+    const horizontalDistance = 7965 - window.innerWidth;
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: ".timeline-section",
+            start: "top top",
+            end: `+=${horizontalDistance + 7528}`,
+            pin: true,
+            scrub: 2,
+            markers: true
+        }
+    });
+
+
+    tl.to(track, {
+        x: -horizontalDistance,
+        ease: "power1.inOut",
+        duration: horizontalDistance
+    });
+
+
+    tl.to(horizontal, {
+        strokeDashoffset: 0,
+        ease: "power1.inOut",
+
+        duration: horizontalDistance,
+
+        onUpdate() {
+
+            const offset = gsap.getProperty(
+                horizontal,
+                "strokeDashoffset"
+            );
+
+            const progress = 1 - (offset / hLength);
+
+
+            points.forEach(point => {
+
+                if (progress >= point.percent) {
+
+                    if (!point.el.classList.contains("active")) {
+
+                        point.el.classList.add("active");
+
+                        mostrarPonto(point.el);
+
+                    }
+
+                } else {
+
+                    if (point.el.classList.contains("active")) {
+
+                        point.el.classList.remove("active");
+
+                        esconderPonto(point.el);
+
+                    }
+
+                }
+
+            });
+
+        }
+
+    }, 0);
+
+
+    // espera chegar no final
+    tl.to({}, {
+        duration: 1
+    });
+
+    tl.to(vertical, {
+        strokeDashoffset: 0,
+        ease: "power1.inOut",
+
+        duration: 7528
+    })
+        .to(track, {
+            y: -7000,
+            ease: "power1.inOut",
+
+            duration: 7528
+        }, "<");
+
+});
+function mostrarPonto(elemento) {
+
+    gsap.to(elemento, {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: .8,
+        ease: "back.out(1.7)"
+    });
+
+    gsap.to(elemento, {
+        filter: "drop-shadow(0 0 25px #FF4F9A)",
+        duration: .5,
+        yoyo: true,
+        repeat: 1
+    });
+
+}
