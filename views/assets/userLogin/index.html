@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SVG Scroll</title>
+
+    <link rel="stylesheet" href="./style/style.css">
+
+</head>
+
+
+<body>
+
+    <div class="card">
+        <!-- From Uiverse.io by june7011 -->
+        <div class="glass-radio-group">
+            <input type="radio" name="plan" id="glass-silver" checked="" />
+            <label for="glass-silver">Login</label>
+
+            <input type="radio" name="plan" id="glass-gold" />
+            <label for="glass-gold">Cadastro</label>
+
+            <div class="glass-glider"></div>
+        </div>
+        <div class="night-overlay"></div>
+
+        <div class="sun"></div>
+        <div class="moon"></div>
+
+        <div class="login-box">
+            <form class="form-login">
+                <div class="user-box">
+                    <input type="text" required>
+                    <label>Username</label>
+                </div>
+
+                <div class="user-box">
+                    <input type="password" required>
+                    <label>Password</label>
+                </div>
+
+                <center>
+                    <a href="#">
+                        SEND
+                        <span></span>
+                    </a>
+                </center>
+            </form>
+
+
+            <form class="form-cadastro">
+                <div class="user-box">
+                    <input type="text" required>
+                    <label>Username</label>
+                </div>
+
+                <div class="user-box">
+                    <input type="email" required>
+                    <label>Email</label>
+                </div>
+
+                <div class="user-box">
+                    <input type="password" required>
+                    <label>Password</label>
+                </div>
+
+                <center>
+                    <a href="#">
+                        CADASTRAR
+                        <span></span>
+                    </a>
+                </center>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/MotionPathPlugin.min.js"></script>
+    <script src="./script/script.js"></script>
+
+
+</body>
+
+</html>

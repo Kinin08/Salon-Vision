@@ -1,3 +1,4 @@
+
 gsap.registerPlugin(ScrollTrigger);
 
 history.scrollRestoration = "manual";
@@ -126,7 +127,7 @@ menuTl
         width: "290px",
         height: "310px",
         duration: .8,
-        ease: "power4.out"
+        ease: "power4.out",
     })
     .to(".name", {
         bottom: 15,
@@ -147,13 +148,18 @@ menuTl
         opacity: 1,
         duration: .5,
         stagger: .1,
-        ease: "back.out(2)"
+        ease: "back.out(2)",
+        onComplete: () => {
+            liberarScroll()
+            ScrollTrigger.refresh()
+        }
     }, "-=.3");
 
 let menuOpen = false;
 
 hamburger.addEventListener("click", () => {
     if (!menuOpen) {
+        travarScroll()
 
         menuTl.timeScale(1);
         menuTl.play();
@@ -170,6 +176,8 @@ hamburger.addEventListener("click", () => {
         overlay.classList.remove("active");
 
         menuOpen = false;
+        liberarScroll()
+
     }
 
 });
@@ -232,8 +240,6 @@ botao.addEventListener("click", () => {
     }
 
 });
-
-
 
 const video = document.querySelector(".video-mask video");
 let pausado = false;
@@ -327,7 +333,7 @@ videoScaleTl
 
 const novoItemTl = gsap.timeline({
     scrollTrigger: {
-        trigger: ".novo-item",
+        trigger: ".sobre",
         start: "top top",
         end: "+=8000",
         scrub: 2,
@@ -338,10 +344,11 @@ const novoItemTl = gsap.timeline({
 });
 
 
-novoItemTl.to(".novo-item", {
+novoItemTl.to(".sobre", {
     xPercent: -75,
     ease: "power2.inOut"
 });
+
 window.addEventListener("load", () => {
 
     gsap.registerPlugin(ScrollTrigger);
@@ -381,7 +388,7 @@ window.addEventListener("load", () => {
 
     const horizontalDistance = 7965 - window.innerWidth;
 
-    const tl = gsap.timeline({
+    const scrolltl = gsap.timeline({
         scrollTrigger: {
             trigger: ".timeline-section",
             start: "top top",
@@ -393,14 +400,14 @@ window.addEventListener("load", () => {
     });
 
 
-    tl.to(track, {
+    scrolltl.to(track, {
         x: -horizontalDistance,
         ease: "power1.inOut",
         duration: horizontalDistance
     });
 
 
-    tl.to(horizontal, {
+    scrolltl.to(horizontal, {
         strokeDashoffset: 0,
         ease: "power1.inOut",
 
@@ -448,11 +455,11 @@ window.addEventListener("load", () => {
 
 
     // espera chegar no final
-    tl.to({}, {
+    scrolltl.to({}, {
         duration: 1
     });
 
-    tl.to(vertical, {
+    scrolltl.to(vertical, {
         strokeDashoffset: 0,
         ease: "power1.inOut",
 
@@ -464,6 +471,32 @@ window.addEventListener("load", () => {
 
             duration: 7528
         }, "<");
+
+});
+document.querySelectorAll(".point").forEach(point => {
+
+    point.addEventListener("mouseenter", () => {
+
+        gsap.to(point, {
+            y: -8,
+            scale: 1.04,
+            duration: .4,
+            ease: "power2.out"
+        });
+
+    });
+
+
+    point.addEventListener("mouseleave", () => {
+
+        gsap.to(point, {
+            y: 0,
+            scale: 1,
+            duration: .4,
+            ease: "power2.out"
+        });
+
+    });
 
 });
 function mostrarPonto(elemento) {
@@ -484,3 +517,9 @@ function mostrarPonto(elemento) {
     });
 
 }
+document.querySelector("#login").addEventListener("click", () => {
+    window.location.href = "views/assets/userLogin";
+});
+document.querySelector("#cadastro").addEventListener("click", () => {
+    window.location.href = "views/assets/userLogin";
+});
