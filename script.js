@@ -289,6 +289,9 @@ videoScaleTl
         duration: 1,
         ease: "power2.in"
     })
+    .to("#coisas", {
+        x: 10000
+    })
     .to(".video-mask", {
         clipPath: "inset(0% 35% 0% 35% round 100px)",
         scale: 0,
@@ -394,8 +397,7 @@ window.addEventListener("load", () => {
             start: "top top",
             end: `+=${horizontalDistance + 7528}`,
             pin: true,
-            scrub: 2,
-            markers: true
+            scrub: 2
         }
     });
 
@@ -472,6 +474,63 @@ window.addEventListener("load", () => {
             duration: 7528
         }, "<");
 
+    ScrollTrigger.refresh();
+
+    gsap.set("#agendarClass", {
+        y: -300,
+        x: 900
+    })
+
+    const agendaTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: ".timeline-section",
+            start: `+=${horizontalDistance - 6400}`,
+            end: `+=2500`,
+            scrub: true
+        }
+    });
+
+
+    agendaTl
+        .to("#agendarClass", {
+            opacity: 1,
+            y: 0,
+            x: 0,
+            scale: 1,
+            height: "250vh",
+            width: "100%",
+            ease: "power1.out"
+        })
+        .to({}, {
+            duration: 1
+        })
+        .to("#agendarClass", {
+            opacity: 0,
+            scale: 0.8,
+            y: -200,
+            duration: 1,
+            ease: "power2.in"
+        });
+    const footer = document.querySelector("#contatoClass");
+
+    gsap.fromTo(footer,
+        {
+            y: 200,
+            opacity: 0
+        },
+        {
+            y: 0,
+            opacity: 1,
+            ease: "none",
+
+            scrollTrigger: {
+                trigger: "#agendarClass",
+                start: "bottom bottom",
+                end: "bottom top",
+                scrub: 1,
+                markers: true
+            }
+        });
 });
 document.querySelectorAll(".point").forEach(point => {
 
@@ -498,6 +557,7 @@ document.querySelectorAll(".point").forEach(point => {
 
     });
 
+
 });
 function mostrarPonto(elemento) {
 
@@ -522,4 +582,4 @@ document.querySelector("#login").addEventListener("click", () => {
 });
 document.querySelector("#cadastro").addEventListener("click", () => {
     window.location.href = "views/assets/userLogin";
-});
+}); 

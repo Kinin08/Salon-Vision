@@ -195,7 +195,7 @@
                             <h2>Serviços</h2>
                         </div>
                     </div>
-                    <div class="servicos" id="servicos">
+                    <div class="servicos" id="servicosClass">
                         <div class="point s1">
                             <h2>Serviços</h2>
                             <h4>R$23,00</h4>
@@ -233,18 +233,169 @@
                 </div>
             </div>
         </section>
-        <section class="agendar">
+        <section id="agendarClass">
+
+            <div class="agendamentos-conteudo">
+
+                <span class="tag">Agendamento</span>
+
+                <h1>Agende seu horário</h1>
+
+                <p>
+                    Escolha um serviço, selecione a data e reserve o melhor horário
+                    para o seu atendimento.
+                </p>
+
+                <form class="form-agendamento">
+
+                    <!-- CARD: Serviço -->
+                    <div class="card-bloco">
+                        <div class="card-bloco-header">
+                            <span class="card-bloco-numero">1</span>
+                            <h2 class="card-bloco-titulo">Serviço</h2>
+                        </div>
+
+                        <a href="#servicosClass" class="servico-card" id="abrir-servicos">
+                            <div class="servico-card-texto">
+                                <h3>Escolher serviço</h3>
+                            </div>
+
+                            <svg class="servico-card-seta" width="20" height="20" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M9 6l6 6-6 6" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div class="card-bloco">
+                        <div class="card-bloco-header">
+                            <span class="card-bloco-numero">2</span>
+                            <h2 class="card-bloco-titulo">Data e horário</h2>
+                        </div>
+
+                        <div class="tabela-agenda">
+                            <div class="tabela-coluna">
+                                <span class="tabela-label">Data</span>
+                                <div class="datas" role="group" aria-label="Selecione a data">
+                                    <button type="button" class="pill-data" data-value="2026-08-01">
+                                        <span class="dia-semana">Sáb</span>
+                                        <span class="dia-numero">01</span>
+                                        <span class="mes">Ago</span>
+                                    </button>
+                                    <button type="button" class="pill-data" data-value="2026-08-03">
+                                        <span class="dia-semana">Seg</span>
+                                        <span class="dia-numero">03</span>
+                                        <span class="mes">Ago</span>
+                                    </button>
+                                    <button type="button" class="pill-data" data-value="2026-08-04">
+                                        <span class="dia-semana">Ter</span>
+                                        <span class="dia-numero">04</span>
+                                        <span class="mes">Ago</span>
+                                    </button>
+                                    <button type="button" class="pill-data" data-value="2026-08-05">
+                                        <span class="dia-semana">Qua</span>
+                                        <span class="dia-numero">05</span>
+                                        <span class="mes">Ago</span>
+                                    </button>
+                                    <button type="button" class="pill-data" data-value="2026-08-06">
+                                        <span class="dia-semana">Qui</span>
+                                        <span class="dia-numero">06</span>
+                                        <span class="mes">Ago</span>
+                                    </button>
+                                </div>
+                                <input type="hidden" name="data" id="data-selecionada" required>
+                            </div>
+
+                            <div class="tabela-divisor"></div>
+
+                            <div class="tabela-coluna">
+                                <span class="tabela-label">Horário</span>
+                                <div class="horarios" role="group" aria-label="Selecione o horário">
+                                    <button type="button" class="pill-horario" data-value="09:00">09:00</button>
+                                    <button type="button" class="pill-horario" data-value="10:30">10:30</button>
+                                    <button type="button" class="pill-horario" data-value="13:00">13:00</button>
+                                    <button type="button" class="pill-horario" data-value="14:30">14:30</button>
+                                    <button type="button" class="pill-horario" data-value="16:00"
+                                        disabled>16:00</button>
+                                    <button type="button" class="pill-horario" data-value="17:30">17:30</button>
+                                </div>
+                                <input type="hidden" name="horario" id="horario-selecionado" required>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="btn-agendar" href="./views/assets/userLogin/index.html">
+                        Criar Agendamento
+                    </a>
+
+                </form>
+
+            </div>
 
         </section>
-        <section id="sec"></section>
+
+        <footer id="contatoClass">
+            <div class="footer-conteudo">
+
+                <div class="footer-topo">
+                    <div class="footer-marca">
+                        <h2>Salon Vision</h2>
+                        <p>Gerencie seu salão de forma moderna, rápida e inteligente.</p>
+
+                        <div class="footer-redes">
+                            <a href="https://www.instagram.com/wely_mt/" target="_blank" aria-label="Instagram">
+                                <svg width="20" height="20" viewBox="0 0 24 24">
+                                    <path fill="currentColor"
+                                        d="M12 2c2.7 0 3.05.01 4.12.06 1.07.05 1.8.22 2.44.47.66.26 1.22.6 1.77 1.15.55.55.9 1.11 1.15 1.77.25.64.42 1.37.47 2.44.05 1.07.06 1.42.06 4.12s-.01 3.05-.06 4.12c-.05 1.07-.22 1.8-.47 2.44-.26.66-.6 1.22-1.15 1.77-.55.55-1.11.9-1.77 1.15-.64.25-1.37.42-2.44.47-1.07.05-1.42.06-4.12.06s-3.05-.01-4.12-.06c-1.07-.05-1.8-.22-2.44-.47-.66-.26-1.22-.6-1.77-1.15-.55-.55-.9-1.11-1.15-1.77-.25-.64-.42-1.37-.47-2.44C2.01 15.05 2 14.7 2 12s.01-3.05.06-4.12c.05-1.07.22-1.8.47-2.44.26-.66.6-1.22 1.15-1.77.55-.55 1.11-.9 1.77-1.15.64-.25 1.37-.42 2.44-.47C8.95 2.01 9.3 2 12 2m0 3.15a6.85 6.85 0 1 0 0 13.7 6.85 6.85 0 0 0 0-13.7m0 11.3a4.45 4.45 0 1 1 0-8.9 4.45 4.45 0 0 1 0 8.9m6.9-11.55a1.6 1.6 0 1 1-3.2 0 1.6 1.6 0 0 1 3.2 0" />
+                                </svg>
+                            </a>
+                            <a href="https://github.com/Kinin08" target="_blank" aria-label="GitHub">
+                                <svg width="20" height="20" viewBox="0 0 24 24">
+                                    <path fill="currentColor"
+                                        d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.09 2.93.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.93 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.55 9.55 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.83-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-coluna">
+                        <h3>Navegação</h3>
+                        <a href="#hero">Home</a>
+                        <a href="#sobreClass">Sobre</a>
+                        <a href="#servicosClass">Serviços</a>
+                        <a href="#agendarClass">Agendar</a>
+                    </div>
+
+                    <div class="footer-coluna">
+                        <h3>Contato</h3>
+                        <a href="mailto:contato@salonvision.com">contato@salonvision.com</a>
+                        <a href="tel:+5500000000000">(00) 00000-0000</a>
+                        <span class="footer-endereco">Rua Exemplo, 123 - Centro</span>
+                    </div>
+
+                    <div class="footer-coluna">
+                        <h3>Horário</h3>
+                        <span>Seg – Sex: 9h às 19h</span>
+                        <span>Sábado: 9h às 15h</span>
+                        <span>Domingo: Fechado</span>
+                    </div>
+                </div>
+
+                <div class="footer-linha"></div>
+
+                <div class="footer-base">
+                    <span>&copy; 2026 Salon Vision. Todos os direitos reservados.</span>
+                </div>
+
+            </div>
+        </footer>
     </div>
+
 
 
     <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
     <script src="https://unpkg.com/gsap@3/dist/TextPlugin.min.js"></script>
     <script src="https://unpkg.com/split-type"></script>
     <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
-
+    <script src="https://unpkg.com/gsap@3/dist/ScrollToPlugin.min.js"></script>
     <script src="script.js"></script>
 
 </body>
