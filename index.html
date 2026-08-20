@@ -1,6 +1,7 @@
 ﻿﻿<!DOCTYPE html>
 <html lang="pt-br" class="scroll-smooth">
 
+
 <head>
     <meta charset="UTF-8" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,6 +15,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet">
 </head>
+
 
 <body class="bg-black font-['Poppins']">
     <!-- LOGIN / CADASTRO -->
@@ -32,11 +34,13 @@
                 </button>
             </div>
 
+
             <div class="grid grid-cols-2 gap-2 p-2 bg-black/25">
                 <button type="button" data-auth-tab="login"
                     class="auth-switch rounded-xl w-full py-4 px-6 text-base font-semibold bg-[#FFCC7F] text-white/60 hover:text-white transition cursor-pointer">
                     Login
                 </button>
+
 
                 <button type="button" data-auth-tab="signup"
                     class="auth-switch rounded-xl w-full py-4 px-6 text-base font-semibold text-white/60 hover:text-white transition cursor-pointer">
@@ -51,23 +55,20 @@
                 </label>
                 <label class="block">
                     <span class="text-white/45 text-xs">Senha</span>
-                    <input id="senha" type="password" required placeholder="Sua senha"
+                    <input id="password" type="password" required placeholder="Sua senha"
                         class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
                 </label>
-                <div class="flex items-center justify-between text-xs">
-                    <button type="button" class="text-[#FFCC7F] hover:text-[#f2bd6d]">Esqueci a
-                        senha</button>
-                </div>
                 <button id="submit" type="submit"
                     class="w-full rounded-xl bg-[#FFCC7F] text-[#3B3B42] font-bold py-3 hover:bg-[#f2bd6d] transition cursor-pointer">
                     Entrar
                 </button>
             </form>
 
+
             <form id="signupForm" class="auth-form hidden p-6 space-y-4">
                 <label class="block">
                     <span class="text-white/45 text-xs">Nome</span>
-                    <input type="text" required placeholder="Seu nome"
+                    <input id="signupName" type="text" required placeholder="Seu nome"
                         class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
                 </label>
                 <label class="block">
@@ -77,61 +78,76 @@
                 </label>
                 <label class="block">
                     <span class="text-white/45 text-xs">Senha</span>
-                    <input type="password" required minlength="6" placeholder="Mínimo 6 caracteres"
+                    <input id="signupPassword" type="password" required minlength="6" placeholder="Mínimo 6 caracteres"
                         class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
                 </label>
-                <button type="submit"
+                <button id="submit" type="submit"
                     class="w-full rounded-xl bg-[#FFCC7F] text-[#3B3B42] font-bold py-3 hover:bg-[#f2bd6d] transition cursor-pointer">
                     Criar conta
-                </button>
+
+
             </form>
 
-            <p id="authFeedback"
-                class="hidden mx-6 mb-6 rounded-xl border border-green-400/20 bg-green-400/10 px-4 py-3 text-xs text-green-300">
+
+            <p id="authFeedback" class="hidden mx-6 mb-6 rounded-xl border px-4 py-3 text-xs">
             </p>
         </div>
     </div>
+
 
     <!-- HERO BG -->
     <div class="relative">
         <img src="views/assets/_common/img/bg.png"
             class="pointer-events-none select-none w-full h-screen object-cover object-top" alt="background de fundo">
 
+
         <!-- overlay gradiente -->
         <div class="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
+
 
         <!-- HEADER -->
         <header
             class="w-full fixed top-0 left-0 z-40 bg-black/20 backdrop-blur-sm border-b border-white/10 h-20 lg:h-24">
 
+
             <!-- Logo imagem -->
             <div
                 class="absolute top-3 left-3 sm:top-4 sm:left-4 lg:top-5 lg:left-6 flex items-center gap-3 lg:gap-4 animate-[slideLeft_0.8s_ease_forwards] opacity-0">
 
+
                 <!-- Ícone -->
                 <div class="flex items-center justify-center w-14 h-14 lg:w-20 lg:h-20 rounded-2xl">
+
 
                     <svg class="w-8 h-8 lg:w-12 lg:h-12 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="1.5">
                         <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
                     </svg>
 
+
                 </div>
+
 
                 <!-- Logo -->
                 <div
                     class="flex items-center font-yuji text-2xl sm:text-3xl lg:text-4xl text-white tracking-wide [text-shadow:0_0_20px_rgba(255,204,127,0.45)]">
 
+
                     <span class="text-[#CA9440]">S</span>
                     <span>alon</span>
+
 
                     <span class="ml-1 text-[#CA9440]">V</span>
                     <span>ision</span>
 
+
                 </div>
+
 
             </div>
 
+
+            </button>
             <!-- Nav links -->
             <div class="animate-[slideUp_0.6s_ease_forwards] opacity-0">
                 <div class="hidden xl:flex absolute top-6 left-1/2 -translate-x-1/2 items-center gap-8 text-white
@@ -166,6 +182,7 @@
                 <i class="ph ph-list text-xl"></i>
             </button>
 
+
             <div id="mobileMenu"
                 class="mobile-menu lg:hidden absolute top-[calc(100%+8px)] left-4 right-4 rounded-2xl border border-white/10 bg-[#101010]/95 backdrop-blur-md p-4 shadow-2xl">
                 <div class="grid gap-2 text-white">
@@ -193,22 +210,27 @@
             </div>
         </header>
 
+
         <!-- HERO CONTENT -->
         <nav class="absolute top-44 left-20 z-20 flex flex-col gap-6 p-4" id="home">
+
 
             <div class="font-['Cormorant_Garamond'] flex items-end gap-3 reveal">
                 <h1 class="text-7xl text-white font-light">Sua</h1>
                 <h1 class="text-7xl text-[#F4C0AD] font-light">beleza.</h1>
             </div>
 
+
             <div class="font-['Cormorant_Garamond'] flex items-end gap-3 reveal delay-1">
                 <h1 class="text-7xl text-white font-light">Seu</h1>
                 <h1 class="text-7xl text-white font-light">tempo.</h1>
             </div>
 
+
             <div class="font-['Cormorant_Garamond'] flex items-end gap-3 reveal delay-2">
                 <h1 class="text-7xl text-[#F4C0AD] italic font-light">Perfeito.</h1>
             </div>
+
 
             <div class="relative top-6 left-1 reveal delay-3">
                 <p class="text-white/70 text-lg max-w-md leading-relaxed">
@@ -216,6 +238,7 @@
                     e descubra uma experiência feita pra você.
                 </p>
             </div>
+
 
             <div class="flex gap-3 relative top-10 reveal delay-4">
                 <button data-scroll-target="#agendar" class="rounded-2xl text-[#3B3B42] hover:scale-105 cursor-pointer bg-[#F4C0AD]
@@ -232,6 +255,7 @@
                     <i class="ph ph-play-circle"></i>
                 </button>
             </div>
+
 
             <!-- Social proof -->
             <div class="flex items-center gap-4 relative top-12 reveal delay-4">
@@ -257,6 +281,7 @@
         </nav>
     </div>
 
+
     <!-- BRANDS -->
     <div class="bg-[#121212] py-8 px-20 border-b border-[#B07A56]/30 border-t">
         <p class="text-center text-[10px] tracking-[3px] uppercase text-white reveal opacity-0 [animation-delay:200ms]">
@@ -264,8 +289,10 @@
         </p>
     </div>
 
+
     <!-- MAIN -->
     <main class="bg-black" id="servicos">
+
 
         <!-- FEATURES -->
         <section class="bg-[#121212] py-20 px-20">
@@ -278,6 +305,7 @@
             <p class="text-base text-center text-[#AFAFB8] reveal delay-2">
                 com praticidade, segurança e uma experiência impecável.
             </p>
+
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-14
                         [&:has(.card-item:hover)_.card-item:not(:hover)]:opacity-40">
@@ -356,9 +384,11 @@
                         que preferir</p>
                 </div>
 
+
                 <div
                     class="bg-gradient-to-br from-[#FAF7F4] via-[#F5EFEA] to-[#ECE3DB] rounded-3xl shadow-xl p-6 sm:p-10 md:p-12">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+
 
                         <!-- Lado Esquerdo - Serviços -->
                         <div class="animate-[fadeLeft_0.6s_ease-out]">
@@ -371,6 +401,7 @@
                                 </svg>
                                 <h3 class="font-semibold text-gray-800 text-xl">Nossos Serviços</h3>
                             </div>
+
 
                             <div class="space-y-3">
                                 <!-- Serviço 1 -->
@@ -389,6 +420,7 @@
                                     </div>
                                 </div>
 
+
                                 <!-- Serviço 2 -->
                                 <div
                                     class="service-card bg-white rounded-xl p-4 border border-gray-100 hover:shadow-md transition-all duration-300 cursor-pointer reveal delay-[200ms]">
@@ -400,6 +432,7 @@
                                         <p class="font-bold text-[#C18057]">R$ 65,00</p>
                                     </div>
                                 </div>
+
 
                                 <!-- Serviço 3 -->
                                 <div
@@ -417,6 +450,7 @@
                                     </div>
                                 </div>
 
+
                                 <!-- Serviço 4 -->
                                 <div
                                     class="service-card bg-white rounded-xl p-4 border border-gray-100 hover:shadow-md transition-all duration-300 cursor-pointer reveal delay-[400ms]">
@@ -429,6 +463,7 @@
                                     </div>
                                 </div>
 
+
                                 <!-- Serviço 5 -->
                                 <div
                                     class="service-card bg-white rounded-xl p-4 border border-gray-100 hover:shadow-md transition-all duration-300 cursor-pointer reveal delay-[500ms]">
@@ -440,6 +475,7 @@
                                         <p class="font-bold text-[#C18057]">R$ 70,00</p>
                                     </div>
                                 </div>
+
 
                                 <!-- Serviço 6 -->
                                 <div
@@ -457,6 +493,7 @@
                                     </div>
                                 </div>
 
+
                                 <!-- Serviço 7 -->
                                 <div
                                     class="service-card bg-white rounded-xl p-4 border border-gray-100 hover:shadow-md transition-all duration-300 cursor-pointer reveal delay-[700ms]">
@@ -468,6 +505,7 @@
                                         <p class="font-bold text-[#C18057]">R$ 250,00</p>
                                     </div>
                                 </div>
+
 
                                 <!-- Serviço 8 -->
                                 <div
@@ -487,6 +525,7 @@
                             </div>
                         </div>
 
+
                         <!-- Lado Direito - Texto e Passos -->
                         <div class="animate-[fadeRight_0.6s_ease-out]">
                             <!-- Selo -->
@@ -497,16 +536,19 @@
                                 </span>
                             </div>
 
+
                             <h2
                                 class="font-cormorant text-4xl sm:text-5xl font-light text-gray-900 leading-tight mb-5 reveal delay-2">
                                 Reserve seu momento<br>com facilidade.
                             </h2>
+
 
                             <p
                                 class="text-gray-500 text-sm leading-relaxed mb-8 border-l-3 border-[#C18057] pl-4 reveal delay-3">
                                 Escolha o serviço, a profissional e o horário ideal para você.<br>
                                 Sem ligações, sem espera — apenas beleza, no seu tempo.
                             </p>
+
 
                             <!-- Passos -->
                             <div class="space-y-5 mb-8">
@@ -526,6 +568,7 @@
                                     </div>
                                 </div>
 
+
                                 <!-- Passo 2 -->
                                 <div
                                     class="group flex items-start gap-4 p-3 rounded-xl hover:bg-white/50 transition-all duration-300 reveal delay-1 cursor-pointer">
@@ -542,6 +585,7 @@
                                             19h. Escolha o melhor horário para você.</p>
                                     </div>
                                 </div>
+
 
                                 <!-- Passo 3 -->
                                 <div
@@ -560,6 +604,7 @@
                                 </div>
                             </div>
 
+
                             <!-- Horários de funcionamento -->
                             <div class="bg-[#C18057]/5 rounded-xl p-4 mb-6 reveal delay-1">
                                 <div class="flex items-center gap-2 mb-2">
@@ -575,6 +620,7 @@
                                 <p class="text-sm text-gray-400 mt-1 reveal delay-3">⛔ Domingo: Fechado</p>
                             </div>
 
+
                             <!-- Botão CTA -->
                             <button
                                 class="w-full bg-[#C18057] hover:bg-[#a56a45] text-white font-medium px-8 py-3.5 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.02] flex items-center justify-center gap-2 group cursor-pointer reveal delay-2">
@@ -586,7 +632,9 @@
                                 </svg>
                             </button>
 
+
                             <!-- Informação extra -->
+
 
                         </div>
                     </div>
@@ -594,11 +642,13 @@
             </div>
         </section>
 
+
         <!-- PARA SALÕES / DASHBOARD -->
         <section class="bg-[#111] px-6 sm:px-10 md:px-20 py-16 md:py-24 overflow-hidden" id="sobre">
             <div class="max-w-7xl mx-auto">
                 <!-- Grid principal -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+
 
                     <!-- Coluna Esquerda - Texto principal -->
                     <div>
@@ -614,6 +664,7 @@
                             que desejam crescer com organização e inteligência. Automatize processos,
                             encante clientes e tome decisões baseadas em dados reais.
                         </p>
+
 
                         <!-- Cards de benefícios melhorados -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-6 reveal delay-4 cursor-pointer">
@@ -634,6 +685,7 @@
                                 </div>
                             </div>
 
+
                             <div
                                 class="group bg-white/5 hover:bg-white/10 rounded-xl p-4 transition-all duration-300 cursor-pointer">
                                 <div class="flex gap-3">
@@ -651,6 +703,7 @@
                                     </div>
                                 </div>
                             </div>
+
 
                             <div
                                 class="group bg-white/5 hover:bg-white/10 rounded-xl p-4 transition-all duration-300 cursor-pointer">
@@ -670,6 +723,7 @@
                                     </div>
                                 </div>
                             </div>
+
 
                             <div
                                 class="group bg-white/5 hover:bg-white/10 rounded-xl p-4 transition-all duration-300 cursor-pointer">
@@ -691,6 +745,7 @@
                             </div>
                         </div>
                     </div>
+
 
                     <!-- Coluna Direita - Cards e Estatísticas -->
                     <div class="space-y-6">
@@ -718,6 +773,7 @@
                                 </div>
                             </div>
                         </div>
+
 
                         <!-- Depoimento -->
                         <div class="bg-white/5 rounded-2xl p-6">
@@ -769,6 +825,7 @@
                             </div>
                         </div>
 
+
                         <!-- Features extras -->
                         <div class="flex flex-wrap gap-3">
                             <span class="px-3 py-1.5 bg-white/5 rounded-full text-[#FFCC7F] text-xs reveal delay-1">✓
@@ -782,6 +839,7 @@
                             <span class="px-3 py-1.5 bg-white/5 rounded-full text-[#FFCC7F] text-xs reveal delay-1">✓
                                 Fidelização</span>
                         </div>
+
 
                         <!-- Botão CTA -->
                         <button
@@ -798,86 +856,54 @@
             </div>
         </section>
 
+
         <!-- DEPOIMENTOS -->
-        <section class="bg-[#1D1D1D] py-20 px-20">
-            <div class="text-center reveal delay-1">
-                <span
-                    class="text-[11px] tracking-[4px] uppercase text-[#ffd173] font-semibold bg-[#C18057]/10 px-4 py-2 rounded-full inline-block mb-4 reveal delay-1">Depoimentos</span>
-            </div>
-            <h2 class="font-['Cormorant_Garamond'] text-4xl font-light text-center text-white mb-4 reveal delay-1">
-                O que nossos clientes dizem
-            </h2>
+        <section class="bg-[#121212] py-20 px-6 sm:px-10 md:px-20" id="faq">
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12
-                        [&:has(.testi-card:hover)_.testi-card:not(:hover)]:opacity-50">
-                <div
-                    class="testi-card relative bg-white border border-gray-100 rounded-2xl p-7 shadow-sm
-                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer reveal delay-1">
-                    <span
-                        class="absolute top-2 right-5 font-['Cormorant_Garamond'] text-9xl text-gray-100 leading-none select-none">"</span>
-                    <div class="flex gap-1 mb-4 text-[#FFCC7F]">★★★★★</div>
-                    <p class="text-gray-500 text-sm leading-relaxed italic mb-6">
-                        "Agendar ficou muito mais fácil e rápido. Amo os lembretes e o atendimento dos salões
-                        parceiros!"
+
+            <div class="max-w-4xl mx-auto">
+
+
+                <div class="text-center mb-12">
+                    <span class="text-[11px] tracking-[4px] uppercase text-[#ffd173] font-semibold
+                bg-[#C18057]/10 px-4 py-2 rounded-full inline-block mb-4">
+                        Dúvidas frequentes
+                    </span>
+
+
+                    <h2 class="font-['Cormorant_Garamond'] text-4xl sm:text-5xl
+                font-light text-white">
+                        Perguntas frequentes
+                    </h2>
+
+
+                    <p class="text-white/50 text-sm mt-3">
+                        Encontre respostas para as dúvidas mais comuns.
                     </p>
-                    <div class="flex items-center gap-3">
-                        <img src="views/assets/_common/img/foto-icon-5.jpg"
-                            class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
-                        <div>
-                            <p class="text-sm font-semibold text-gray-800">Juliana M.</p>
-                            <p class="text-xs text-gray-400">Cliente</p>
-                        </div>
-                    </div>
                 </div>
 
-                <div
-                    class="testi-card relative bg-white border border-gray-100 rounded-2xl p-7 shadow-sm
-                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer reveal delay-2">
-                    <span
-                        class="absolute top-2 right-5 font-['Cormorant_Garamond'] text-9xl text-gray-100 leading-none select-none">"</span>
-                    <div class="flex gap-1 mb-4 text-[#FFCC7F]">★★★★★</div>
-                    <p class="text-gray-500 text-sm leading-relaxed italic mb-6">
-                        "Salon Vision otimizou totalmente nossa rotina. Mais organização, menos retrabalho e mais
-                        clientes!"
-                    </p>
-                    <div class="flex items-center gap-3">
-                        <img src="views/assets/_common/img/foto-icon-6.jpg"
-                            class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
-                        <div>
-                            <p class="text-sm font-semibold text-gray-800">Marcos A.</p>
-                            <p class="text-xs text-gray-400">Proprietário de salão</p>
+
+                <!-- Lista gerada pelo JavaScript -->
+                <div id="faqList" class="space-y-3">
+
+
+                    <!-- Loading -->
+                    <div class="text-center py-8">
+                        <div class="inline-flex items-center gap-3 text-white/40 text-sm">
+                            <i class="ph ph-spinner-gap animate-spin text-lg"></i>
+                            Carregando perguntas...
                         </div>
                     </div>
+
+
                 </div>
 
-                <div
-                    class="testi-card relative bg-white border border-gray-100 rounded-2xl p-7 shadow-sm
-                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer reveal delay-3">
-                    <span
-                        class="absolute top-2 right-5 font-['Cormorant_Garamond'] text-9xl text-gray-100 leading-none select-none">"</span>
-                    <div class="flex gap-1 mb-4 text-[#FFCC7F]">★★★★★</div>
-                    <p class="text-gray-500 text-sm leading-relaxed italic mb-6">
-                        "Meus clientes adoram a experiência e nós ganhamos eficiência todos os dias."
-                    </p>
-                    <div class="flex items-center gap-3">
-                        <img src="views/assets/_common/img/foto-icon-7.jpg"
-                            class="pointer-events-none select-none w-10 h-10 rounded-full object-cover" alt="">
-                        <div>
-                            <p class="text-sm font-semibold text-gray-800">Carla R.</p>
-                            <p class="text-xs text-gray-400">Gestora de salão</p>
-                        </div>
-                    </div>
-                </div>
+
             </div>
 
-            <!-- dots -->
-            <div class="flex justify-center gap-2 mt-8">
-                <div class="w-6 h-2 rounded-full bg-[#FFCC7F]"></div>
-                <div class="w-2 h-2 rounded-full bg-gray-200"></div>
-                <div class="w-2 h-2 rounded-full bg-gray-200"></div>
-                <div class="w-2 h-2 rounded-full bg-gray-200"></div>
-            </div>
+
         </section>
+
 
         <!-- CTA FINAL -->
         <section class="bg-black py-24 px-20 text-center relative overflow-hidden">
@@ -904,6 +930,7 @@
                 </button>
             </div>
         </section>
+
 
         <!-- FOOTER -->
         <footer class="bg-[#080808] border-t border-white/5 px-20 pt-14 pb-8" id="contato">
@@ -976,7 +1003,9 @@
             </div>
         </footer>
 
+
     </main>
+    <script type="module" src="views/assets/public/script/Faqs.js"></script>
     <script type="module" src="views/assets/public/script/entrada.js"></script>
     <script type="module" src="views/assets/_common/script/navigation.js"></script>
     <script>
@@ -984,9 +1013,9 @@
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
         }, { threshold: 0.12 });
 
+
         document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => io.observe(el));
+
 
     </script>
 </body>
-
-</html>
