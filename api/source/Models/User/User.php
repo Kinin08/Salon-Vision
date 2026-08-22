@@ -108,8 +108,13 @@ class User extends Model
     {
         return $this->userTypeId;
     }
-    public function getRegistrationDate():?string{
+    public function getRegistrationDate(): ?string
+    {
         return $this->registrationDate;
+    }
+    public function setRegistrationDate(?string $registrationDate): void
+    {
+        $this->registrationDate = $registrationDate;
     }
     public function getActive(): ?int
     {
@@ -210,6 +215,37 @@ class User extends Model
         }
         return true;
     }
+
+    public function updateRole(int $userId, int $roleId): bool
+    {
+        try {
+            $query = "UPDATE {$this->table}
+                  SET user_type_id = :roleId
+                  WHERE id = :id";
+
+            $stmt = Connect::getInstance()->prepare($query);
+
+            $stmt->bindValue(':roleId', $roleId, PDO::PARAM_INT);
+            $stmt->bindValue(':id', $userId, PDO::PARAM_INT);
+
+            // O que importa aqui é se a query executou com sucesso,
+            // não quantas linhas foram afetadas (pode ser 0 se o valor
+            // já era o mesmo, e isso não é um erro).
+            if (!$stmt->execute()) {
+                $this->errorMessage = "Não foi possível atualizar a role do usuário.";
+                return false;
+            }
+
+            return true;
+
+        } catch (PDOException $e) {
+            $this->errorMessage = $e->getMessage();
+            return false;
+        }
+    }
+
+
+
     /**
      * Verifica se o email já existe em outro usuário
      * @param int $excludeId ID do usuário a ser excluído da verificação

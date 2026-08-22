@@ -25,15 +25,6 @@ $route = new Router(url("api"),":");
 
 $route->namespace("Source\Controller");
 
-$route->group("/users");
-$route->post("/register","Users:register"); // Registrar usuário comum
-$route->post("/login","Users:auth"); // login de usuário comum
-$route->put("/update","Users:update"); // update de usuário comum
-$route->post("/register-admin","Users:registerAdmin"); // Registrar usuário admin NÃO IMPLEMENTADO
-$route->post("/login-admin","Users:authAdmin"); // login de usuário admin
-$route->put("/update-admin","Users:updateAdmin"); // update de usuário admin
-$route->group(null);
-
 $route->group("/products");
 $route->get("/list", "Products\\Products:productsList");
 $route->get("/list/{productId}", "Products\\Products:productById");
@@ -51,31 +42,52 @@ $route->group(null);
 $route->group("/faqs_categories");
 $route->get("/list", "Faqs\\FaqsCategories:listAll");
 $route->get("/list/{faqCategorieId}", "Faqs\\FaqsCategories:listById");
-$route->post("/", "Faqs\\FaqsCategories:create");
-$route->put("/{faqCategorieId}", "Faqs\\FaqsCategories:update");
-$route->delete("/{faqCategorieId}", "Faqs\\FaqsCategories:softDelete");
+$route->post("/create", "Faqs\\FaqsCategories:create");
+$route->put("/update/{faqCategorieId}", "Faqs\\FaqsCategories:update");
+$route->delete("/delete/{faqCategorieId}", "Faqs\\FaqsCategories:softDelete");
 $route->group(null);
 
 $route->group("/faqs");
 $route->get("/list", "Faqs\\Faqs:listAll");
-$route->get("/listFaq", "Faqs\\Faqs:selectFaq");
+$route->get("/listFaqAndCategories", "Faqs\\Faqs:listFaqAndCategories");
 $route->get("/list/{faq_id}", "Faqs\\Faqs:listById");
-$route->post("/", "Faqs\\Faqs:create");
-$route->put("/{faq_id}", "Faqs\\Faqs:update");
-$route->delete("/{faq_id}", "Faqs\\Faqs:softDelete");
+$route->post("/create", "Faqs\\Faqs:create");
+$route->put("/update/{faq_id}", "Faqs\\Faqs:update");
+$route->delete("/delete/{faq_id}", "Faqs\\Faqs:softDelete");
 $route->group(null);
 
 $route->group("/users");
+//$route->get("/senha", "Users\\Senha:generatePasswordHash");
 $route->get("/list", "Users\\Users:listAll");
+$route->get("/list/cliente", "Users\\Users:listClient");
+$route->get("/list/employee", "Users\\Users:listEmployee");
+$route->get("/list/admin", "Users\\Users:listAdmin");
 $route->post("/register", "Users\\Users:register");
-$route->post("/register/admin", "Users\\Users:registerAdmin");
-$route->post("/register/employee", "Users\\Users:registerEmployee");
 $route->post("/login", "Users\\Users:login");
 $route->post("/login/admin", "Users\\Users:loginAdmin");
 $route->post("/login/employee", "Users\\Users:loginEmployee");
-$route->put("/update", "Users\\Users:update");
-$route->put("/update/admin/{user_id}", "Users\\Users:updateAdmin");
-$route->put("/update/employee/{user_id}", "Users\\Users:updateEmployee");
+$route->put("/update/cliente", "Users\\Users:update");
+$route->put("/update/admin", "Users\\Users:updateAdmin");
+$route->put("/update/employee", "Users\\Users:updateEmployee");
+$route->put("/update/role/{userId}", "Users\\Users:updateRole");
+$route->delete("/delete/{userId}", "Users\\Users:softDelete");
+$route->group(null);
+
+$route->group("/appointments");
+$route->get("/history", "Appointments\\Appointments:history");
+$route->get("/listAll", "Appointments\\Appointments:listAll");
+$route->get("/list/{appointmentId}", "Appointments\\Appointments:listById");
+$route->post("/create", "Appointments\\Appointments:create");
+$route->put("/update/{appointmentId}", "Appointments\\Appointments:update");
+$route->delete("/delete/{appointmentId}", "Appointments\\Appointments:softDelete");
+$route->group(null);
+
+$route->group("/services");
+$route->get("/list", "Services\\Services:listAll");
+$route->get("/list/{serviceId}", "Services\\Services:listById");
+$route->post("/create", "Services\\Services:create");
+$route->put("/update/{serviceId}", "Services\\Services:update");
+$route->delete("/delete/{serviceId}", "Services\\Services:softDelete");
 $route->group(null);
 
 // Fim - Exercícios - Desafios

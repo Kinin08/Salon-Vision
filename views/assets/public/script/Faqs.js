@@ -1,5 +1,7 @@
 const faqList = document.querySelector("#faqList");
 
+import Users from "../../_common/classes/Users.js";
+
 async function carregarFaqs() {
 
     if (!faqList) {
@@ -9,9 +11,7 @@ async function carregarFaqs() {
 
     try {
 
-        const response = await fetch(
-            "http://localhost/Salon-Vision/api/faqs/list"
-        );
+        const response = await Users.listAll();
 
         if (!response.ok) {
             throw new Error(`Erro HTTP: ${response.status}`);

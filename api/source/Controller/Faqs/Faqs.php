@@ -19,16 +19,16 @@ class Faqs extends Api
             "success"
         )->back($faq->selectAll());
     }
-    public function selectFaq(array $data): void
+    public function listFaqAndCategories(array $data): void
     {
         $faq = new Faq();
 
         $this->call(
             200,
             "success",
-            "Lista de FAQs",
+            "Lista de FAQs e Categorias",
             "success"
-        )->back($faq->selectFaq());
+        )->back($faq->listFaqAndCategories());
     }
     public function listById(array $data): void
     {
