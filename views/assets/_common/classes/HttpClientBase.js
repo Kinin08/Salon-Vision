@@ -2,7 +2,7 @@ export default class HttpClientBase {
     #baseUrl;
     #defaultHeaders;
 
-    constructor(baseUrl = "http://localhost:8080/acme-3am/api") {
+    constructor(baseUrl = "http://localhost/Salon-Vision/api") {
         this.#baseUrl = baseUrl;
         this.#defaultHeaders = {
             "Content-Type": "application/json"

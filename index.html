@@ -68,7 +68,7 @@
             <form id="signupForm" class="auth-form hidden p-6 space-y-4">
                 <label class="block">
                     <span class="text-white/45 text-xs">Nome</span>
-                    <input id="signupName" type="text" required placeholder="Seu nome"
+                    <input id="name" type="text" required placeholder="Seu nome"
                         class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
                 </label>
                 <label class="block">
@@ -85,13 +85,13 @@
                     class="w-full rounded-xl bg-[#FFCC7F] text-[#3B3B42] font-bold py-3 hover:bg-[#f2bd6d] transition cursor-pointer">
                     Criar conta
 
-
+                </button>
             </form>
 
 
-            <p id="authFeedback" class="hidden mx-6 mb-6 rounded-xl border px-4 py-3 text-xs">
-            </p>
         </div>
+        <p id="authFeedback" class="hidden absolute top-4 right-4 z-[90] max-w-xs rounded-xl border px-4 py-3 text-xs">
+        </p>
     </div>
 
 
@@ -1005,9 +1005,10 @@
 
 
     </main>
-    <script type="module" src="views/assets/public/script/Faqs.js"></script>
-    <script type="module" src="views/assets/public/script/entrada.js"></script>
-    <script type="module" src="views/assets/_common/script/navigation.js"></script>
+    <script type="module" src="views/assets/public/script/ListFaqs.js"></script>
+    <script type="module" src="views/assets/public/script/AbrirTela.js"></script>
+    <script type="module" src="views/assets/public/script/Login.js"></script>
+    <script type="module" src="views/assets/_common/script/Feedback.js"></script>
     <script>
         const io = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });

@@ -1,6 +1,6 @@
 const faqList = document.querySelector("#faqList");
 
-import Users from "../../_common/classes/Users.js";
+import Faqs from "../../_common/classes/Faqs.js";
 
 async function carregarFaqs() {
 
@@ -11,13 +11,9 @@ async function carregarFaqs() {
 
     try {
 
-        const response = await Users.listAll();
+        const faqs = new Faqs();
 
-        if (!response.ok) {
-            throw new Error(`Erro HTTP: ${response.status}`);
-        }
-
-        const responseData = await response.json();
+        const responseData = await faqs.listAll();
 
         renderizarFaqs(responseData.data);
 

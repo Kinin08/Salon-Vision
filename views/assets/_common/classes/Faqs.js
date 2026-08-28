@@ -2,7 +2,7 @@ import HttpClientBase from './HttpClientBase.js';
 
 export default class Faqs extends HttpClientBase {
     async listAll() {
-        return this.get("/faqs/listAll");
+        return this.get("/faqs/list");
     }
     async listFaqAndCategories() {
         return this.get("/faqs/listFaqAndCategories");

@@ -46,6 +46,52 @@ class Users extends Api
         $this->listByRole(4);
     }
 
+    public function listById(array $data): void
+    {
+        $userId = (int) ($data["userId"] ?? 0);
+
+        if (!$userId) {
+            $this->call(
+                400,
+                "bad_request",
+                "Informe o usuário.",
+                "error"
+            )->back();
+
+            return;
+        }
+
+        $user = new User();
+
+        if (!$user->selectById($userId)) {
+            $this->call(
+                404,
+                "not_found",
+                "Usuário não encontrado.",
+                "error"
+            )->back();
+
+            return;
+        }
+
+        $response = [
+            "id" => $user->getId(),
+            "name" => $user->getName(),
+            "email" => $user->getEmail(),
+            "telephone" => $user->getTelephone(),
+            "photo" => $user->getPhoto(),
+            "userTypeId" => $user->getUserTypeId(),
+            "active" => $user->getActive()
+        ];
+
+        $this->call(
+            200,
+            "success",
+            "Usuário encontrado com sucesso.",
+            "success"
+        )->back($response);
+    }
+
     public function register(array $data): void
     {
         if (!isset($data['password']) || empty($data['password'])) {

@@ -25,6 +25,9 @@ export default class Users extends HttpClientBase {
     async listAll() {
         return this.get("/users/list");
     }
+    async listById(userId) {
+        return this.get(`/users/list/${userId}`);
+    }
     async listEmployee() {
         return this.get("/users/list/employee");
     }
