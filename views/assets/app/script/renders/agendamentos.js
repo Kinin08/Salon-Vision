@@ -1,6 +1,30 @@
-import { meusAgendamentos, STATUS_LABEL } from '../data.js';
 import { toast } from '../helpers.js';
 import { abrirModal } from '../modals.js';
+
+import Appointmants from '../../_common/classes/Appointmants.js';
+
+async function meusAgendamentos() {
+    try {
+
+        const appointmants = new Appointmants();
+
+        const responseData = await appointmants.my();
+
+        renderizarAgendamentos(responseData.data);
+
+    } catch (error) {
+
+        console.error("Erro ao carregar Agendamentos:", error);
+
+        faqList.innerHTML = `
+                <div class="text-center py-8">
+                    <p class="text-red-400 text-sm">
+                        Não foi possível carregar os agendamentos.
+                    </p>
+                </div>
+            `;
+    }
+}
 
 export function renderAgendamentos(c) {
     c.innerHTML = `

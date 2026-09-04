@@ -85,6 +85,9 @@ export default class HttpClientBase {
                 headers
             });
 
+            console.log("Status:", response.status);
+            console.log("Resposta:", await response.clone().text());
+
             const contentType = response.headers.get("content-type");
             if (contentType && contentType.includes("application/json")) {
                 return await response.json();

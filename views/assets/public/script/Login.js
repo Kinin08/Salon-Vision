@@ -55,6 +55,8 @@ signupForm.addEventListener("submit", async (event) => {
 
     const form = { name, email, password };
 
+    console.log("Enviando cadastro:", form);
+
     try {
         const user = new Users();
         const response = await user.register(form);

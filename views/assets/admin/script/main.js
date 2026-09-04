@@ -1,4 +1,3 @@
-import { CLIENTE, agendamentos } from './data.js';
 import { setActive, nav, toast, updateBadge } from './helpers.js';
 import { initModals } from './modals.js';
 import { renderDashboard } from './renders/dashboard.js';

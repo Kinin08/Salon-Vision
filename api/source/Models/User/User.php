@@ -144,19 +144,19 @@ class User extends Model
     {
         return $this->token;
     }
-    public function insert(): bool
+    public function insert (): bool
     {
         $query = "SELECT * FROM {$this->table} WHERE email = :email";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindParam(":email", $this->email);
         $stmt->execute();
-        if ($stmt->rowCount() > 0) {
+        if($stmt->rowCount() > 0){
             $this->errorMessage = "Email já cadastrado";
             return false;
         }
         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
 
-        if (!parent::insert()) {
+        if(!parent::insert()){
             $this->errorMessage = "Algo deu errado";
             return false;
         }
@@ -251,7 +251,7 @@ class User extends Model
      * @param int $excludeId ID do usuário a ser excluído da verificação
      * @return bool
      */
-    public function isEmailDuplicate(int $excludeId = null): bool
+    public function isEmailDuplicate(int $excludeId): bool
     {
         $query = "SELECT id FROM {$this->table} WHERE email = :email";
 

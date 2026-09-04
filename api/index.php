@@ -57,7 +57,7 @@ $route->delete("/delete/{faq_id}", "Faqs\\Faqs:softDelete");
 $route->group(null);
 
 $route->group("/users");
-$route->get("/senha", "Users\\Senha:generatePasswordHash");
+//$route->get("/senha", "Users\\Senha:generatePasswordHash");
 $route->get("/list", "Users\\Users:listAll");
 $route->get("/list/{userId}", "Users\\Users:listById");
 $route->get("/list/cliente", "Users\\Users:listClient");

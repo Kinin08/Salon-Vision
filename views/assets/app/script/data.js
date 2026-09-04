@@ -1,4 +1,3 @@
-
 // Dados do cliente logado
 export const CLIENTE = {
     nome: 'Ana Costa',
