@@ -8,7 +8,6 @@ import { renderProfissionais } from './renders/profissionais.js';
 import { renderFaqs } from './renders/faqs.js';
 import { renderPerfil } from './renders/perfil.js';
 
-// Configuração das rotas
 const rotas = {
     'nav-inicio': { fn: renderInicio, titulo: 'Olá, <em>Ana!</em>' },
     'nav-agendamentos': { fn: renderAgendamentos, titulo: 'Meus <em>Agendamentos</em>' },
@@ -19,7 +18,6 @@ const rotas = {
     'nav-perfil': { fn: renderPerfil, titulo: 'Meu <em>Perfil</em>' },
 };
 
-// Inicializar navegação
 function initNavigation() {
     document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', e => {
@@ -35,7 +33,6 @@ function initNavigation() {
     });
 }
 
-// Inicializar data no topbar
 function initTopbarDate() {
     const hoje = new Date();
     document.getElementById('topbar-date').textContent = hoje.toLocaleDateString('pt-BR', {
@@ -43,7 +40,6 @@ function initTopbarDate() {
     });
 }
 
-// Inicializar aplicação
 function init() {
     initTopbarDate();
     initNavigation();
@@ -51,7 +47,6 @@ function init() {
     navegarPara(renderInicio);
 }
 
-// Iniciar quando o DOM estiver pronto
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {

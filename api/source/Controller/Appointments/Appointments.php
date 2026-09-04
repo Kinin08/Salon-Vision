@@ -10,7 +10,7 @@ class Appointments extends Api
 {
     public function history(): void
     {
-        $userId = $this->authToken(4);
+        $userId = $this->authToken(3);
 
         if (!$userId) {
             $this->call(
@@ -366,6 +366,43 @@ class Appointments extends Api
             "appointment atualizado com sucesso",
             "success"
         )->back($response);
+    }
+    public function next(): void
+    {
+        $userId = $this->authToken(3);
+
+        if (!$userId) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+
+            return;
+        }
+
+        $appointment = new Appointment();
+
+        $nextAppointment = $appointment->nextAppointment($userId);
+
+        if (!$nextAppointment) {
+            $this->call(
+                404,
+                "not_found",
+                "Nenhum próximo agendamento encontrado",
+                "warning"
+            )->back();
+
+            return;
+        }
+
+        $this->call(
+            200,
+            "success",
+            "Próximo agendamento encontrado",
+            "success"
+        )->back($nextAppointment);
     }
     public function softDelete(array $data): void
     {

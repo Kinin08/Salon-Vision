@@ -1,190 +1,262 @@
-import Appointmants from '../../_common/classes/Appointmants.js';
-import { toast } from '../helpers.js';
 import { abrirModal } from '../modals.js';
+import { navegarPara } from '../helpers.js';
 
-export async function carregarMeusAgendamentos() {
-    try {
-        const appointments = new Appointmants();
+import { meusAgendamentos } from './agendamentos.js';
+import { myData } from '../perfil.js';
+import { renderServicos } from './servicos.js';
+import { renderProfissionais } from './profissionais.js';
+import { renderPerfil } from './perfil.js';
 
-        const responseData = await appointments.my();
+export async function renderInicio(container) {
 
-        const agendamentos = responseData.data;
+    const responseAgenda = await meusAgendamentos();
 
-        const container = document.getElementById('conteudo');
+    const responseUser = await myData();
+    console.log(responseUser)
+    console.log(responseAgenda)
 
-        renderAgendamentos(container, agendamentos);
+    const nome = responseUser?.data?.name ?? 'Usuário';
 
-    } catch (error) {
-
-        console.error("Erro ao carregar Agendamentos:", error);
-
-        const container = document.getElementById('conteudo');
-
-        if (container) {
-            container.innerHTML = `
-                <div class="text-center py-8">
-                    <p class="text-red-400 text-sm">
-                        Não foi possível carregar os agendamentos.
-                    </p>
-                </div>
-            `;
-        }
-    }
-}
-
-export function renderAgendamentos(container, agendamentos) {
 
     container.innerHTML = `
         <div class="panel fade-in">
 
             <div class="panel-header">
+                <div>
+                    <h1 class="panel-title">
+                        Olá, <em>${nome}!</em>
+                    </h1>
 
-                <h1 class="panel-title">
-                    Meus <em>Agendamentos</em>
-                </h1>
+                    <p style="
+                        color: var(--text-muted);
+                        font-size: 13px;
+                        margin-top: 6px;
+                    ">
+                        Seja bem-vinda de volta ao Salon Vision.
+                    </p>
+                </div>
 
-                <button class="btn btn-gold" id="btnNovoAptTabela">
+                <button class="btn btn-gold" id="btnNovoAgendamentoInicio">
                     <i class="ti ti-calendar-plus"></i>
                     Novo Agendamento
                 </button>
+            </div>
+
+            <!-- RESUMO -->
+            <div style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 14px;
+                margin-bottom: 24px;
+            ">
+
+                <div class="panel" style="margin: 0;">
+                    <div style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                    ">
+                        <div>
+                            <p style="
+                                color: var(--text-muted);
+                                font-size: 12px;
+                            ">
+                                Próximo agendamento
+                            </p>
+
+                            <h2 style="
+                                margin-top: 6px;
+                                font-size: 20px;
+                            ">
+                                Hoje
+                            </h2>
+                        </div>
+
+                        <i class="ti ti-calendar"
+                           style="font-size: 28px; color: var(--gold);">
+                        </i>
+                    </div>
+                </div>
+
+                <div class="panel" style="margin: 0;">
+                    <div style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                    ">
+                        <div>
+                            <p style="
+                                color: var(--text-muted);
+                                font-size: 12px;
+                            ">
+                                Agendamentos
+                            </p>
+
+                            <h2 style="
+                                margin-top: 6px;
+                                font-size: 20px;
+                            ">
+                                3
+                            </h2>
+                        </div>
+
+                        <i class="ti ti-calendar-event"
+                           style="font-size: 28px; color: var(--gold);">
+                        </i>
+                    </div>
+                </div>
+
+                <div class="panel" style="margin: 0;">
+                    <div style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                    ">
+                        <div>
+                            <p style="
+                                color: var(--text-muted);
+                                font-size: 12px;
+                            ">
+                                Atendimentos
+                            </p>
+
+                            <h2 style="
+                                margin-top: 6px;
+                                font-size: 20px;
+                            ">
+                                8
+                            </h2>
+                        </div>
+
+                        <i class="ti ti-scissors"
+                           style="font-size: 28px; color: var(--gold);">
+                        </i>
+                    </div>
+                </div>
 
             </div>
 
-            <div style="overflow-x:auto;">
+            <!-- PRÓXIMO AGENDAMENTO -->
+            <div class="panel" style="margin-bottom: 20px;">
 
-                <table class="apt-table" style="width:100%;">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        Próximo <em>Agendamento</em>
+                    </h2>
+                </div>
 
-                    <thead>
-                        <tr>
-                            <th>Serviço</th>
-                            <th>Profissional</th>
-                            <th>Data</th>
-                            <th>Hora</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="tbody-agendamentos"></tbody>
-
-                </table>
-
-            </div>
-
-            ${agendamentos.length === 0 ? `
-                <p style="
-                    text-align:center;
-                    color:var(--text-dim);
-                    padding:28px 0;
-                    font-size:13px;
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 20px;
+                    padding: 10px 0;
+                    flex-wrap: wrap;
                 ">
-                    Nenhum agendamento ativo.
-                </p>
-            ` : ''}
+
+                    <div>
+                        <p style="
+                            font-size: 16px;
+                            font-weight: 600;
+                        ">
+                            Corte + Escova
+                        </p>
+
+                        <p style="
+                            color: var(--text-muted);
+                            font-size: 12px;
+                            margin-top: 6px;
+                        ">
+                            Com Ana Silva
+                        </p>
+                    </div>
+
+                    <div style="text-align: right;">
+
+                        <p style="
+                            color: var(--gold);
+                            font-size: 16px;
+                            font-weight: 600;
+                        ">
+                            Hoje às 14:30
+                        </p>
+
+                        <p style="
+                            color: var(--text-muted);
+                            font-size: 12px;
+                            margin-top: 5px;
+                        ">
+                            Duração: 1h
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ACESSOS RÁPIDOS -->
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        Acessos <em>Rápidos</em>
+                    </h2>
+                </div>
+
+                <div style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                    gap: 12px;
+                ">
+
+                    <button
+                        class="btn btn-ghost"
+                        id="btnAgendamentosInicio"
+                        style="padding: 16px; text-align: left;"
+                    >
+                        <i class="ti ti-calendar-event"></i>
+                        Meus Agendamentos
+                    </button>
+
+                    <button
+                        class="btn btn-ghost"
+                        id="btnServicosInicio"
+                        style="padding: 16px; text-align: left;"
+                    >
+                        <i class="ti ti-scissors"></i>
+                        Ver Serviços
+                    </button>
+
+                    <button
+                        class="btn btn-ghost"
+                        id="btnProfissionaisInicio"
+                        style="padding: 16px; text-align: left;"
+                    >
+                        <i class="ti ti-users"></i>
+                        Profissionais
+                    </button>
+
+                    <button
+                        class="btn btn-ghost"
+                        id="btnPerfilInicio"
+                        style="padding: 16px; text-align: left;"
+                    >
+                        <i class="ti ti-user"></i>
+                        Meu Perfil
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
     `;
 
-    const tbody = document.getElementById('tbody-agendamentos');
-
-    agendamentos.forEach(a => {
-
-        const tr = document.createElement('tr');
-
-        tr.innerHTML = `
-            <td style="font-size:13px;font-weight:500;">
-                ${a.servico}
-            </td>
-
-            <td style="font-size:12px;color:var(--text-muted);">
-                ${a.profissional}
-            </td>
-
-            <td style="font-size:12px;color:var(--text-muted);">
-                ${a.data}
-            </td>
-
-            <td style="font-size:12px;color:var(--gold);font-weight:500;">
-                ${a.hora}
-            </td>
-
-            <td>
-                <span class="status-pill ${a.status}">
-                    <span class="status-dot"></span>
-                    ${a.status_label}
-                </span>
-            </td>
-
-            <td>
-                <div style="display:flex;gap:6px;">
-
-                    <button
-                        class="btn btn-ghost"
-                        style="padding:5px 10px;font-size:11px;"
-                        data-id="${a.id}"
-                        data-action="reagendar"
-                    >
-                        <i class="ti ti-edit"></i>
-                        Reagendar
-                    </button>
-
-                    <button
-                        class="btn btn-danger"
-                        style="padding:5px 10px;font-size:11px;"
-                        data-id="${a.id}"
-                        data-action="cancelar"
-                    >
-                        <i class="ti ti-x"></i>
-                        Cancelar
-                    </button>
-
-                </div>
-            </td>
-        `;
-
-        tbody.appendChild(tr);
-    });
-
-    tbody.addEventListener('click', e => {
-
-        const btn = e.target.closest('[data-action]');
-
-        if (!btn) return;
-
-        const id = parseInt(btn.dataset.id);
-        const action = btn.dataset.action;
-
-        if (action === 'cancelar') {
-
-            if (confirm('Deseja cancelar este agendamento?')) {
-
-                const apt = agendamentos.find(x => x.id === id);
-
-                if (apt) {
-                    apt.status = 'cancelled';
-                }
-
-                toast(
-                    'Agendamento cancelado.',
-                    'ti-x'
-                );
-
-                renderAgendamentos(container, agendamentos);
-            }
-        }
-
-        if (action === 'reagendar') {
-
-            abrirModal();
-
-            toast(
-                'Selecione a nova data e horário.',
-                'ti-calendar'
-            );
-        }
-    });
-
+    // Novo agendamento
     document
-        .getElementById('btnNovoAptTabela')
-        ?.addEventListener('click', () => abrirModal());
+        .getElementById('btnNovoAgendamentoInicio')
+        ?.addEventListener('click', () => {
+            abrirModal();
+        });
 }

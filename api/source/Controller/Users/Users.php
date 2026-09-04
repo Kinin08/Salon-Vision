@@ -38,12 +38,12 @@ class Users extends Api
 
     public function listEmployee(): void
     {
-        $this->listByRole(5);
+        $this->listByRole(4);
     }
 
     public function listAdmin(): void
     {
-        $this->listByRole(4);
+        $this->listByRole(5);
     }
 
     public function listById(array $data): void
@@ -92,6 +92,44 @@ class Users extends Api
         )->back($response);
     }
 
+
+    public function Me(): void
+    {
+        $userId = $this->authToken(3);
+
+        if (!$userId) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+
+            return;
+        }
+
+        $user = new User();
+
+        $userData = $user->findById($userId);
+
+        if (!$userData) {
+            $this->call(
+                404,
+                "not_found",
+                "Usuário não encontrado",
+                "error"
+            )->back();
+
+            return;
+        }
+
+        $this->call(
+            200,
+            "success",
+            "Usuário encontrado com sucesso.",
+            "success"
+        )->back($userData);
+    }
     public function register(array $data): void
     {
         if (!isset($data['password']) || empty($data['password'])) {
@@ -130,7 +168,7 @@ class Users extends Api
             $data['password'],
             $data['telephone'] ?? null,
             $data['photo'] ?? null,
-            4
+            3
         );
 
         if (!$user->insert()) {
@@ -173,12 +211,23 @@ class Users extends Api
             return;
         }
 
+        $token = $user->getToken();
+
+        setcookie(
+            'token',
+            $token,
+            [
+                'expires' => time() + 3600,
+                'path' => '/',
+                'secure' => false
+            ]
+        );
+
         $response = [
             "id" => $user->getId(),
             "name" => $user->getName(),
             "photo" => $user->getPhoto(),
-            "userType" => $user->getUserTypeName(),
-            "token" => $user->getToken(),
+            "userType" => $user->getUserTypeName()
         ];
 
         $this->call(
@@ -205,7 +254,7 @@ class Users extends Api
         }
 
         $user = new User();
-        if (!$user->login($data['email'], $data['password'], 3)) {
+        if (!$user->login($data['email'], $data['password'], 5)) {
             $this->call(
                 401,
                 "unauthorized",
@@ -246,7 +295,7 @@ class Users extends Api
         }
 
         $user = new User();
-        if (!$user->login($data['email'], $data['password'], 5)) {
+        if (!$user->login($data['email'], $data['password'], 4)) {
             $this->call(
                 401,
                 "unauthorized",
@@ -273,7 +322,7 @@ class Users extends Api
     }
     public function update(array $data): void
     {
-        $userId = $this->authToken(4);
+        $userId = $this->authToken(3);
 
         if (!$userId) {
             $this->call(
@@ -367,7 +416,7 @@ class Users extends Api
     }
     public function updateAdmin(array $data): void
     {
-        $userId = $this->authToken(3);
+        $userId = $this->authToken(5);
 
         if (!$userId) {
             $this->call(
@@ -460,7 +509,7 @@ class Users extends Api
     }
     public function updateEmployee(array $data): void
     {
-        $userId = $this->authToken(5);
+        $userId = $this->authToken(4);
 
         if (!$userId) {
             $this->call(
@@ -652,7 +701,7 @@ class Users extends Api
             return;
         }
 
-        $adminId = $this->authToken(3);
+        $adminId = $this->authToken(5);
 
         if (!$adminId) {
             $this->call(

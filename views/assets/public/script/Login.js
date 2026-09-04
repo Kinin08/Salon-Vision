@@ -27,22 +27,22 @@ loginForm.addEventListener("submit", async (event) => {
             const userTypeId = locationByRole.data.userTypeId;
 
             if (userTypeId === 3) {
-                window.location.href = "./views/assets/admin/index.html";
-            } else if (userTypeId === 4) {
                 window.location.href = "./views/assets/app/index.html";
-            } else if (userTypeId === 5) {
+            } else if (userTypeId === 4) {
                 window.location.href = "./views/assets/employee/index.html";
+            } else if (userTypeId === 5) {
+                window.location.href = "./views/assets/admin/index.html";
             } else {
                 mostrarFeedback("Tipo de usuário desconhecido.", "error");
             }
             console.log(locationByRole);
         } else {
-            mostrarFeedback("E-mail ou senha inválidos.", "error");
+            mostrarFeedback(response?.message || "E-mail ou senha inválidos.", "error");
         }
 
     } catch (error) {
         console.error("Erro ao fazer login:", error);
-        mostrarFeedback("Não foi possível fazer login. Tente novamente.", "error");
+        mostrarFeedback(error.message || "Não foi possível fazer login.", "error");
     }
 });
 
@@ -67,11 +67,11 @@ signupForm.addEventListener("submit", async (event) => {
             document.getElementById("password").value = "";
             mostrarFeedback("Cadastro realizado com sucesso!", "success");
         } else {
-            mostrarFeedback("Não foi possível concluir o cadastro.", "error");
+            mostrarFeedback(response?.message || "Não foi possível concluir o cadastro.", "error");
         }
 
     } catch (error) {
         console.error("Erro ao fazer cadastro:", error);
-        mostrarFeedback("Cadastro não realizado. Tente novamente.", "error");
+        mostrarFeedback(error?.message || "Cadastro não realizado. Tente novamente.", "error");
     }
 });

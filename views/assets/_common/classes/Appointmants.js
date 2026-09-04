@@ -2,7 +2,7 @@ import HttpClientBase from './HttpClientBase.js';
 
 export default class Appointmants extends HttpClientBase {
     async my() {
-        return this.get("/appointments/my");
+        return this.get("/appointments/history");
     }
     async listAll() {
         return this.get("/appointments/list");

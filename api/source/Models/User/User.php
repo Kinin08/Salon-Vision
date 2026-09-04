@@ -2,6 +2,7 @@
 
 namespace Source\Models\User;
 
+use PDOException;
 use PDO;
 use Source\Core\Connect;
 use Source\Core\Model;
@@ -144,26 +145,26 @@ class User extends Model
     {
         return $this->token;
     }
-    public function insert (): bool
+    public function insert(): bool
     {
         $query = "SELECT * FROM {$this->table} WHERE email = :email";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindParam(":email", $this->email);
         $stmt->execute();
-        if($stmt->rowCount() > 0){
+        if ($stmt->rowCount() > 0) {
             $this->errorMessage = "Email já cadastrado";
             return false;
         }
         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
 
-        if(!parent::insert()){
+        if (!parent::insert()) {
             $this->errorMessage = "Algo deu errado";
             return false;
         }
         return true;
     }
 
-    public function login(string $email, string $password, int $typeId = 4): bool
+    public function login(string $email, string $password, int $typeId = 3): bool
     {
         $query = "SELECT
             u.*,
@@ -203,17 +204,46 @@ class User extends Model
         return true;
     }
 
-    public function permissionVerify(string $email, $typeId): bool
+    public function permissionVerify(string $email, int $typeId): bool
     {
-        $query = "SELECT * FROM {$this->table} WHERE email = :email AND user_type_id = :userTypeId";
+        $query = "SELECT id
+              FROM {$this->table}
+              WHERE email = :email
+              AND user_type_id = :typeId
+              AND active = 1";
+
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":userTypeId", $typeId);
+
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':typeId', $typeId, PDO::PARAM_INT);
+
         $stmt->execute();
-        if ($stmt->rowCount() == 0) {
-            return false;
-        }
-        return true;
+
+        return $stmt->fetch() !== false;
+    }
+    public function findById(int $id): ?array
+    {
+        $query = "SELECT
+                id,
+                name,
+                email,
+                telephone,
+                photo,
+                user_type_id,
+                active
+              FROM {$this->table}
+              WHERE id = :id
+              AND active = 1";
+
+        $stmt = Connect::getInstance()->prepare($query);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $user ?: null;
     }
 
     public function updateRole(int $userId, int $roleId): bool

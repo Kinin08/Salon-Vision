@@ -1,14 +1,14 @@
 <?php
 
-const CONF_URL_BASE = "http://localhost:8080/Salon-Vision"; // URL base do site, geralmente localhost em desenvolvimento
-const CONF_URL_TEST = "http://localhost:8080/Salon-Vision"; // URL base do site, geralmente localhost em desenvolvimento
+const CONF_URL_BASE = "http://localhost/Salon-Vision"; // URL base do site, geralmente localhost em desenvolvimento
+const CONF_URL_TEST = "http://localhost/Salon-Vision"; // URL base do site, geralmente localhost em desenvolvimento
 
 
 const CONF_DB_HOST = "localhost";
 const CONF_DB_NAME = "Salon_Vision";
 const CONF_DB_USER= "root";
 const CONF_DB_PORT = 3306;
-const CONF_DB_PASS= "12345678";
+const CONF_DB_PASS= "";
 
 // Chave secreta para criação do token JWT, deve ser uma string complexa e única para cada aplicação
 // para gerar a sua acesse: https://jwtsecrets.com/

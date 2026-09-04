@@ -59,6 +59,7 @@ $route->group(null);
 $route->group("/users");
 //$route->get("/senha", "Users\\Senha:generatePasswordHash");
 $route->get("/list", "Users\\Users:listAll");
+$route->get("/me", "Users\\Users:Me");
 $route->get("/list/{userId}", "Users\\Users:listById");
 $route->get("/list/cliente", "Users\\Users:listClient");
 $route->get("/list/employee", "Users\\Users:listEmployee");
@@ -76,6 +77,7 @@ $route->group(null);
 
 $route->group("/appointments");
 $route->get("/history", "Appointments\\Appointments:history");
+$route->get("/next", "Appointments\\Appointments:next");
 $route->get("/listAll", "Appointments\\Appointments:listAll");
 $route->get("/list/{appointmentId}", "Appointments\\Appointments:listById");
 $route->post("/create", "Appointments\\Appointments:create");

@@ -1,6 +1,9 @@
 import HttpClientBase from './HttpClientBase.js';
 
 export default class Users extends HttpClientBase {
+    async me() {
+        return this.get("/users/me");
+    }
     async login(form) {
         return this.postForm("/users/login", form);
     }

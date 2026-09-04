@@ -1,43 +1,54 @@
-import { toast } from '../helpers.js';
+import { toast, navegarPara } from '../helpers.js';
 import { abrirModal } from '../modals.js';
 
-import Appointmants from '../../_common/classes/Appointmants.js';
+import Appointmants from "../../../_common/classes/Appointmants.js";
 
-async function meusAgendamentos() {
+
+export async function meusAgendamentos() {
     try {
 
-        const appointmants = new Appointmants();
+        const appointments = new Appointmants();
 
-        const responseData = await appointmants.my();
+        const responseData = await appointments.my();
 
-        renderizarAgendamentos(responseData.data);
+        return responseData.data ?? [];
 
     } catch (error) {
 
         console.error("Erro ao carregar Agendamentos:", error);
 
-        faqList.innerHTML = `
-                <div class="text-center py-8">
-                    <p class="text-red-400 text-sm">
-                        Não foi possível carregar os agendamentos.
-                    </p>
-                </div>
-            `;
+        return [];
     }
 }
 
-export function renderAgendamentos(c) {
+
+export async function renderAgendamentos(c) {
+
+    const agendamentos = await meusAgendamentos();
+
     c.innerHTML = `
         <div class="panel fade-in">
+
             <div class="panel-header">
-                <h1 class="panel-title">Meus <em>Agendamentos</em></h1>
-                <button class="btn btn-gold" id="btnNovoAptTabela">
-                    <i class="ti ti-calendar-plus"></i> Novo Agendamento
+
+                <h1 class="panel-title">
+                    Meus <em>Agendamentos</em>
+                </h1>
+
+                <button
+                    class="btn btn-gold"
+                    id="btnNovoAptTabela"
+                >
+                    <i class="ti ti-calendar-plus"></i>
+                    Novo Agendamento
                 </button>
+
             </div>
 
             <div style="overflow-x:auto;">
+
                 <table class="apt-table" style="width:100%;">
+
                     <thead>
                         <tr>
                             <th>Serviço</th>
@@ -48,59 +59,174 @@ export function renderAgendamentos(c) {
                             <th>Ações</th>
                         </tr>
                     </thead>
+
                     <tbody id="tbody-agendamentos"></tbody>
+
                 </table>
+
             </div>
 
-            ${meusAgendamentos.length === 0 ? `
-                <p style="text-align:center;color:var(--text-dim);padding:28px 0;font-size:13px;">
-                    Nenhum agendamento ativo.
-                </p>` : ''}
+            ${
+                agendamentos.length === 0
+                    ? `
+                        <p style="
+                            text-align:center;
+                            color:var(--text-dim);
+                            padding:28px 0;
+                            font-size:13px;
+                        ">
+                            Nenhum agendamento ativo.
+                        </p>
+                    `
+                    : ''
+            }
+
         </div>
     `;
 
+
     const tbody = document.getElementById('tbody-agendamentos');
-    meusAgendamentos.forEach(a => {
+
+
+    agendamentos.forEach(a => {
+
         const tr = document.createElement('tr');
+
         tr.innerHTML = `
-            <td style="font-size:13px;font-weight:500;">${a.servico}</td>
-            <td style="font-size:12px;color:var(--text-muted);">${a.profissional}</td>
-            <td style="font-size:12px;color:var(--text-muted);">${a.data}</td>
-            <td style="font-size:12px;color:var(--gold);font-weight:500;">${a.hora}</td>
-            <td><span class="status-pill ${a.status}"><span class="status-dot"></span>${STATUS_LABEL[a.status]}</span></td>
+
+            <td style="
+                font-size:13px;
+                font-weight:500;
+            ">
+                ${a.servico}
+            </td>
+
+            <td style="
+                font-size:12px;
+                color:var(--text-muted);
+            ">
+                ${a.profissional}
+            </td>
+
+            <td style="
+                font-size:12px;
+                color:var(--text-muted);
+            ">
+                ${a.data}
+            </td>
+
+            <td style="
+                font-size:12px;
+                color:var(--gold);
+                font-weight:500;
+            ">
+                ${a.hora}
+            </td>
+
             <td>
-                <div style="display:flex;gap:6px;">
-                    <button class="btn btn-ghost" style="padding:5px 10px;font-size:11px;" data-id="${a.id}" data-action="reagendar">
-                        <i class="ti ti-edit"></i> Reagendar
+
+                <span class="status-pill ${a.status}">
+                    <span class="status-dot"></span>
+                    ${a.status_label ?? a.status}
+                </span>
+
+            </td>
+
+            <td>
+
+                <div style="
+                    display:flex;
+                    gap:6px;
+                ">
+
+                    <button
+                        class="btn btn-ghost"
+                        style="
+                            padding:5px 10px;
+                            font-size:11px;
+                        "
+                        data-id="${a.id}"
+                        data-action="reagendar"
+                    >
+                        <i class="ti ti-edit"></i>
+                        Reagendar
                     </button>
-                    <button class="btn btn-danger" style="padding:5px 10px;font-size:11px;" data-id="${a.id}" data-action="cancelar">
-                        <i class="ti ti-x"></i> Cancelar
+
+                    <button
+                        class="btn btn-danger"
+                        style="
+                            padding:5px 10px;
+                            font-size:11px;
+                        "
+                        data-id="${a.id}"
+                        data-action="cancelar"
+                    >
+                        <i class="ti ti-x"></i>
+                        Cancelar
                     </button>
+
                 </div>
+
             </td>
         `;
+
         tbody.appendChild(tr);
+
     });
+
 
     tbody.addEventListener('click', e => {
+
         const btn = e.target.closest('[data-action]');
+
         if (!btn) return;
+
         const id = parseInt(btn.dataset.id);
+
         const action = btn.dataset.action;
 
+
         if (action === 'cancelar') {
-            if (confirm('Deseja cancelar este agendamento?')) {
-                const apt = meusAgendamentos.find(x => x.id === id);
-                if (apt) apt.status = 'cancelled';
-                toast('Agendamento cancelado.', 'ti-x');
-                navegarPara(renderAgendamentos);
+
+            if (!confirm('Deseja cancelar este agendamento?')) {
+                return;
             }
+
+            const apt = agendamentos.find(x => x.id === id);
+
+            if (apt) {
+                apt.status = 'cancelled';
+            }
+
+            toast(
+                'Agendamento cancelado.',
+                'ti-x'
+            );
+
+            renderAgendamentos(c);
+
         }
+
+
         if (action === 'reagendar') {
+
             abrirModal();
-            toast('Selecione a nova data e horário.', 'ti-calendar');
+
+            toast(
+                'Selecione a nova data e horário.',
+                'ti-calendar'
+            );
+
         }
+
     });
 
-    document.getElementById('btnNovoAptTabela')?.addEventListener('click', () => abrirModal());
+
+    document
+        .getElementById('btnNovoAptTabela')
+        ?.addEventListener(
+            'click',
+            () => abrirModal()
+        );
+
 }

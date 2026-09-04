@@ -158,26 +158,24 @@ class Appointment extends Model
     }
     public function historic(int $clientId): array
     {
-        $query = "
-            SELECT
-                a.id,
-                a.date_time,
-                a.rating,
-                a.status,
-                s.name AS service,
-                s.price,
-                e.name AS employee,
-                c.name AS client
-            FROM appointments a
-            INNER JOIN services s
-                ON s.id = a.service_id
-            INNER JOIN users e
-                ON e.id = a.employee_id
-            INNER JOIN users c
-                ON c.id = a.client_id
-            WHERE a.client_id = :clientId
-            ORDER BY a.date_time DESC
-        ";
+        $query = "SELECT
+            a.id,
+            a.date_time,
+            a.description,
+            a.notice,
+            a.comment,
+            a.status,
+            a.observation,
+            s.name AS service_name,
+            s.price,
+            u.name AS employee_name
+          FROM appointments a
+          INNER JOIN services s
+              ON s.id = a.service_id
+          INNER JOIN users u
+              ON u.id = a.employees_id
+          WHERE a.client_id = :clientId
+          ORDER BY a.date_time DESC";
 
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindValue(":clientId", $clientId, PDO::PARAM_INT);
@@ -215,5 +213,37 @@ class Appointment extends Model
         $stmt->execute();
 
         return $stmt->rowCount() > 0;
+    }
+    public function nextAppointment(int $clientId): ?array
+    {
+        $query = "
+        SELECT
+            a.id,
+            a.date_time,
+            a.status,
+            s.name AS service_name,
+            s.price
+        FROM appointments a
+        INNER JOIN services s
+            ON s.id = a.service_id
+        WHERE a.client_id = :clientId
+        AND a.active = 1
+        AND a.date_time >= NOW()
+        AND a.status IN ('scheduled', 'confirmed')
+        ORDER BY a.date_time ASC
+        LIMIT 1
+    ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+
+        $stmt->bindValue(
+            ':clientId',
+            $clientId,
+            PDO::PARAM_INT
+        );
+
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 }
