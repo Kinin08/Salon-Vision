@@ -10,7 +10,7 @@ class Appointments extends Api
 {
     public function history(): void
     {
-        $userId = $this->authToken(3);
+        $userId = $this->authToken(4);
 
         if (!$userId) {
             $this->call(
@@ -23,7 +23,7 @@ class Appointments extends Api
         }
 
         $appointment = new Appointment();
-        $history = $appointment->historic($userId);
+        $history = $appointment->history($userId);
 
         if (empty($history)) {
             $this->call(
@@ -181,7 +181,8 @@ class Appointments extends Api
 
         $exists = $appointment->selectAll([
             "employee_id = {$data['employeeId']}",
-            "date_time = '{$data['dateTime']}'"
+            "date_time = '{$data['dateTime']}'",
+            "active = 1"
         ]);
 
         if (!empty($exists)) {
@@ -369,7 +370,7 @@ class Appointments extends Api
     }
     public function next(): void
     {
-        $userId = $this->authToken(3);
+        $userId = $this->authToken(4);
 
         if (!$userId) {
             $this->call(
@@ -404,6 +405,43 @@ class Appointments extends Api
             "success"
         )->back($nextAppointment);
     }
+    public function myAttend(): void
+{
+    $userId = $this->authToken(4);
+
+    if (!$userId) {
+        $this->call(
+            401,
+            "unauthorized",
+            "Usuário não autenticado",
+            "error"
+        )->back();
+
+        return;
+    }
+
+    $appointment = new Appointment();
+
+    $myAttend = $appointment->getAtendimentos($userId);
+
+    if (empty($myAttend)) {
+        $this->call(
+            404,
+            "not_found",
+            "Nenhum atendimento encontrado",
+            "warning"
+        )->back();
+
+        return;
+    }
+
+    $this->call(
+        200,
+        "success",
+        "Atendimento encontrado",
+        "success"
+    )->back($myAttend);
+}
     public function softDelete(array $data): void
     {
         if (!filter_var($data["appointmentId"], FILTER_VALIDATE_INT)) {

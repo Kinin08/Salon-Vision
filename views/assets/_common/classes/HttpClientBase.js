@@ -7,6 +7,11 @@ export default class HttpClientBase {
         this.#defaultHeaders = {
             "Content-Type": "application/json"
         };
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            this.setAuthToken(token);
+        }
     }
 
     setAuthToken(token) {
@@ -82,7 +87,8 @@ export default class HttpClientBase {
 
             const response = await fetch(url, {
                 ...fetchConfig,
-                headers
+                headers,
+                credentials: "include"
             });
 
             const contentType = response.headers.get("content-type");

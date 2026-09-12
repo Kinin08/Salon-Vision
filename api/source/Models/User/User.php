@@ -164,7 +164,7 @@ class User extends Model
         return true;
     }
 
-    public function login(string $email, string $password, int $typeId = 3): bool
+    public function login(string $email, string $password): bool
     {
         $query = "SELECT
             u.*,
@@ -172,11 +172,9 @@ class User extends Model
           FROM users u
           INNER JOIN users_types ut
             ON ut.id = u.user_type_id
-          WHERE u.email = :email
-            AND u.user_type_id = :userTypeId";
+          WHERE u.email = :email";
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":userTypeId", $typeId);
         $stmt->execute();
         if ($stmt->rowCount() == 0) {
             $this->errorMessage = "Email não cadastrado";

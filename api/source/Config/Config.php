@@ -8,7 +8,7 @@ const CONF_DB_HOST = "localhost";
 const CONF_DB_NAME = "Salon_Vision";
 const CONF_DB_USER= "root";
 const CONF_DB_PORT = 3306;
-const CONF_DB_PASS= "";
+const CONF_DB_PASS= "12345678";
 
 // Chave secreta para criação do token JWT, deve ser uma string complexa e única para cada aplicação
 // para gerar a sua acesse: https://jwtsecrets.com/

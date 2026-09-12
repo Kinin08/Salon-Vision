@@ -21,6 +21,38 @@ export async function meusAgendamentos() {
     }
 }
 
+export async function nextAgendamentos() {
+    try {
+
+        const appointments = new Appointmants();
+
+        const responseData = await appointments.next();
+
+        return responseData.data ?? [];
+
+    } catch (error) {
+
+        console.error("Erro ao carregar Agendamentos:", error);
+
+        return [];
+    }
+}
+
+export async function meusAtendimentos(c) {
+    try {
+        const appointments = new Appointmants();
+
+        const responseData = await appointments.myAtend();
+
+        return responseData.data ?? [];
+
+    } catch (error) {
+        console.error("Erro ao carregar Atendimentos:", error);
+
+        return [];
+    }
+}
+
 
 export async function renderAgendamentos(c) {
 
@@ -66,9 +98,8 @@ export async function renderAgendamentos(c) {
 
             </div>
 
-            ${
-                agendamentos.length === 0
-                    ? `
+            ${agendamentos.length === 0
+            ? `
                         <p style="
                             text-align:center;
                             color:var(--text-dim);
@@ -78,8 +109,8 @@ export async function renderAgendamentos(c) {
                             Nenhum agendamento ativo.
                         </p>
                     `
-                    : ''
-            }
+            : ''
+        }
 
         </div>
     `;

@@ -18,6 +18,9 @@ loginForm.addEventListener("submit", async (event) => {
         const response = await user.login(form);
 
         if (response && (response.code === 200 || response.code === 201)) {
+
+            localStorage.setItem("token", response.data.token);
+
             document.getElementById("password").value = "";
 
             mostrarFeedback("Login realizado com sucesso!", "success");
@@ -26,11 +29,11 @@ loginForm.addEventListener("submit", async (event) => {
 
             const userTypeId = locationByRole.data.userTypeId;
 
-            if (userTypeId === 3) {
+            if (userTypeId === 4) {
                 window.location.href = "./views/assets/app/index.html";
-            } else if (userTypeId === 4) {
-                window.location.href = "./views/assets/employee/index.html";
             } else if (userTypeId === 5) {
+                window.location.href = "./views/assets/employee/index.html";
+            } else if (userTypeId === 3) {
                 window.location.href = "./views/assets/admin/index.html";
             } else {
                 mostrarFeedback("Tipo de usuário desconhecido.", "error");
@@ -54,8 +57,6 @@ signupForm.addEventListener("submit", async (event) => {
     const password = document.getElementById("signupPassword").value;
 
     const form = { name, email, password };
-
-    console.log("Enviando cadastro:", form);
 
     try {
         const user = new Users();

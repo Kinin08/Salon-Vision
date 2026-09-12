@@ -91,11 +91,9 @@ class Users extends Api
             "success"
         )->back($response);
     }
-
-
     public function Me(): void
     {
-        $userId = $this->authToken(3);
+        $userId = $this->authToken();
 
         if (!$userId) {
             $this->call(
@@ -168,7 +166,7 @@ class Users extends Api
             $data['password'],
             $data['telephone'] ?? null,
             $data['photo'] ?? null,
-            3
+            4
         );
 
         if (!$user->insert()) {
@@ -210,24 +208,12 @@ class Users extends Api
             )->back();
             return;
         }
-
-        $token = $user->getToken();
-
-        setcookie(
-            'token',
-            $token,
-            [
-                'expires' => time() + 3600,
-                'path' => '/',
-                'secure' => false
-            ]
-        );
-
         $response = [
             "id" => $user->getId(),
             "name" => $user->getName(),
             "photo" => $user->getPhoto(),
-            "userType" => $user->getUserTypeName()
+            "userType" => $user->getUserTypeName(),
+            "token" => $user->getToken(),
         ];
 
         $this->call(
@@ -322,7 +308,7 @@ class Users extends Api
     }
     public function update(array $data): void
     {
-        $userId = $this->authToken(3);
+        $userId = $this->authToken(4);
 
         if (!$userId) {
             $this->call(
@@ -416,7 +402,7 @@ class Users extends Api
     }
     public function updateAdmin(array $data): void
     {
-        $userId = $this->authToken(5);
+        $userId = $this->authToken(3);
 
         if (!$userId) {
             $this->call(
@@ -509,7 +495,7 @@ class Users extends Api
     }
     public function updateEmployee(array $data): void
     {
-        $userId = $this->authToken(4);
+        $userId = $this->authToken(5);
 
         if (!$userId) {
             $this->call(

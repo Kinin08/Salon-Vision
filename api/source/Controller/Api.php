@@ -7,31 +7,40 @@ use Source\Core\JWTToken;
 
 class Api
 {
-    public function authToken(int $typeId): ?int
+    public function authToken(?int $typeId = null): ?int
     {
-        $token = $_COOKIE['token'] ?? null;
+        $headers = getallheaders();
+
+$authorization = $headers['Authorization'] ?? null;
+
+if (!$authorization) {
+    return null;
+}
+
+$token = str_replace('Bearer ', '', $authorization);
 
         if (!$token) {
             return null;
         }
 
         $jwt = new JWTToken();
-
         $jwtToken = $jwt->decode($token);
 
         if (!$jwtToken) {
             return null;
         }
 
-        $user = new User();
+        if ($typeId !== null) {
+            $user = new User();
 
-        if (
-            !$user->permissionVerify(
-                $jwtToken->data->email,
-                $typeId
-            )
-        ) {
-            return null;
+            if (
+                !$user->permissionVerify(
+                    $jwtToken->data->email,
+                    $typeId
+                )
+            ) {
+                return null;
+            }
         }
 
         return (int) $jwtToken->data->id;

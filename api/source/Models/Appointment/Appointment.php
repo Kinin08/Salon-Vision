@@ -148,6 +148,7 @@ class Appointment extends Model
             INNER JOIN services s ON s.id = a.service_id
             INNER JOIN users    e ON e.id = a.employee_id
             INNER JOIN users    c ON c.id = a.client_id
+            WHERE a.active = 1
             ORDER BY a.date_time DESC
         ";
 
@@ -156,29 +157,35 @@ class Appointment extends Model
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function historic(int $clientId): array
+    public function history(int $clientId): array
     {
-        $query = "SELECT
+        $query = "
+        SELECT
             a.id,
             a.date_time,
-            a.description,
-            a.notice,
-            a.comment,
             a.status,
-            a.observation,
             s.name AS service_name,
             s.price,
             u.name AS employee_name
-          FROM appointments a
-          INNER JOIN services s
-              ON s.id = a.service_id
-          INNER JOIN users u
-              ON u.id = a.employees_id
-          WHERE a.client_id = :clientId
-          ORDER BY a.date_time DESC";
+        FROM appointments a
+        INNER JOIN services s
+            ON s.id = a.service_id
+        INNER JOIN users u
+            ON u.id = a.employee_id
+        WHERE a.client_id = :clientId
+        AND a.active = 1
+        AND a.status IN ('scheduled', 'confirmed')
+        ORDER BY a.date_time DESC
+    ";
 
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindValue(":clientId", $clientId, PDO::PARAM_INT);
+
+        $stmt->bindValue(
+            ":clientId",
+            $clientId,
+            PDO::PARAM_INT
+        );
+
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -196,20 +203,22 @@ class Appointment extends Model
     public function softDelete(int $id): bool
     {
         $query = "
-            UPDATE appointments
-            SET
-                status = 'canceled',
-                active = 0
-            WHERE id = :id
-            AND active = 1
-            AND (
-                status = 'scheduled'
-                OR status = 'confirmed'
-                )
-        ";
+        UPDATE appointments
+        SET
+            status = 'canceled',
+            active = 0
+        WHERE id = :id
+        AND active = 1
+        AND (
+            status = 'scheduled'
+            OR status = 'confirmed'
+        )
+    ";
 
         $stmt = Connect::getInstance()->prepare($query);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+
         $stmt->execute();
 
         return $stmt->rowCount() > 0;
@@ -245,5 +254,35 @@ class Appointment extends Model
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+    public function getAtendimentos(int $clientId): array
+    {
+        $query = "
+        SELECT
+            a.id,
+            a.date_time,
+            a.status,
+            s.name AS service_name,
+            s.price
+        FROM appointments a
+        INNER JOIN services s
+            ON s.id = a.service_id
+        WHERE a.client_id = :clientId
+        AND a.active = 1
+        AND a.status = 'completed'
+        ORDER BY a.date_time DESC
+    ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+
+        $stmt->bindValue(
+            ':clientId',
+            $clientId,
+            PDO::PARAM_INT
+        );
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

@@ -1,22 +1,33 @@
 import { abrirModal } from '../modals.js';
 import { navegarPara } from '../helpers.js';
 
-import { meusAgendamentos } from './agendamentos.js';
-import { myData } from '../perfil.js';
+import { meusAgendamentos, meusAtendimentos, nextAgendamentos } from './agendamentos.js';
+import Users from "../../../_common/classes/Users.js";
 import { renderServicos } from './servicos.js';
 import { renderProfissionais } from './profissionais.js';
 import { renderPerfil } from './perfil.js';
 
 export async function renderInicio(container) {
+    const user = new Users();
 
-    const responseAgenda = await meusAgendamentos();
+    const responseData = await user.me();
 
-    const responseUser = await myData();
-    console.log(responseUser)
-    console.log(responseAgenda)
+    const nome = responseData?.data?.name ?? 'Usuário';
 
-    const nome = responseUser?.data?.name ?? 'Usuário';
 
+    const agendamentos = await meusAgendamentos();
+    const atendimentos = await meusAtendimentos();
+    const proximo = await nextAgendamentos();
+
+console.log("AGENDAMENTOS:", agendamentos);
+console.log("QUANTIDADE:", agendamentos.length);
+
+console.log("ATENDIMENTOS:", atendimentos);
+console.log("QUANTIDADE ATENDIMENTOS:", atendimentos.length);
+
+console.log("PRÓXIMO:", proximo);
+
+    document.getElementById('user-name').textContent = nome;
 
     container.innerHTML = `
         <div class="panel fade-in">
@@ -68,7 +79,12 @@ export async function renderInicio(container) {
                                 margin-top: 6px;
                                 font-size: 20px;
                             ">
-                                Hoje
+                                ${proximo && !Array.isArray(proximo)
+            ? new Date(proximo.date_time).toLocaleString('pt-BR', {
+                dateStyle: 'short',
+                timeStyle: 'short'
+            })
+            : 'Nenhum'}
                             </h2>
                         </div>
 
@@ -96,7 +112,7 @@ export async function renderInicio(container) {
                                 margin-top: 6px;
                                 font-size: 20px;
                             ">
-                                3
+                                ${agendamentos.length}
                             </h2>
                         </div>
 
@@ -124,7 +140,7 @@ export async function renderInicio(container) {
                                 margin-top: 6px;
                                 font-size: 20px;
                             ">
-                                8
+                                ${atendimentos.length}
                             </h2>
                         </div>
 

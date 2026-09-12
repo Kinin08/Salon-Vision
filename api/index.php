@@ -77,6 +77,7 @@ $route->group(null);
 
 $route->group("/appointments");
 $route->get("/history", "Appointments\\Appointments:history");
+$route->get("/my-attend", "Appointments\\Appointments:myAttend");
 $route->get("/next", "Appointments\\Appointments:next");
 $route->get("/listAll", "Appointments\\Appointments:listAll");
 $route->get("/list/{appointmentId}", "Appointments\\Appointments:listById");
