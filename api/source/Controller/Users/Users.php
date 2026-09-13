@@ -33,17 +33,17 @@ class Users extends Api
 
     public function listClient(): void
     {
-        $this->listByRole(3);
+        $this->listByRole(4);
     }
 
     public function listEmployee(): void
     {
-        $this->listByRole(4);
+        $this->listByRole(5);
     }
 
     public function listAdmin(): void
     {
-        $this->listByRole(5);
+        $this->listByRole(3);
     }
 
     public function listById(array $data): void

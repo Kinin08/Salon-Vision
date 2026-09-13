@@ -94,6 +94,15 @@ $route->put("/update/{serviceId}", "Services\\Services:update");
 $route->delete("/delete/{serviceId}", "Services\\Services:softDelete");
 $route->group(null);
 
+$route->group("/services_employees");
+$route->get("/list", "ServicesEmployees\\ServicesEmployees:listAll");
+$route->get("/listEmployees/services/{serviceId}", "ServicesEmployees\\ServicesEmployees:listByService");
+$route->get("/list/{serviceEmployeeId}", "ServicesEmployees\\ServicesEmployees:listById");
+$route->post("/create", "ServicesEmployees\\ServicesEmployees:create");
+$route->put("/update/{serviceEmployeeId}", "ServicesEmployees\\ServicesEmployees:update");
+$route->delete("/delete/{serviceEmployeeId}", "ServicesEmployees\\ServicesEmployees:softDelete");
+$route->group(null);
+
 // Fim - Exercícios - Desafios
 
 $route->dispatch();

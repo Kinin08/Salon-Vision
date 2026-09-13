@@ -38,7 +38,6 @@ loginForm.addEventListener("submit", async (event) => {
             } else {
                 mostrarFeedback("Tipo de usuário desconhecido.", "error");
             }
-            console.log(locationByRole);
         } else {
             mostrarFeedback(response?.message || "E-mail ou senha inválidos.", "error");
         }

@@ -9,13 +9,36 @@ export function setNavActive(id) {
 
 /** Troca o conteúdo com fade */
 export function navegarPara(renderFn, containerId = 'page-content') {
+
     const c = document.getElementById(containerId);
+
     c.style.transition = 'opacity 0.25s ease';
     c.style.opacity = '0';
-    setTimeout(() => {
+
+    setTimeout(async () => {
+
         c.innerHTML = '';
-        renderFn(c);
-        c.style.opacity = '1';
+
+        try {
+
+            await renderFn(c);
+
+            c.style.opacity = '1';
+
+        } catch (error) {
+
+            console.error('ERRO AO RENDERIZAR:', error);
+
+            c.innerHTML = `
+                <div style="padding: 30px;">
+                    <h2>Erro ao carregar esta página</h2>
+                    <p>Veja o Console para mais detalhes.</p>
+                </div>
+            `;
+
+            c.style.opacity = '1';
+        }
+
     }, 250);
 }
 

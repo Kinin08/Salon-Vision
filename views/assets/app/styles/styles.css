@@ -852,7 +852,15 @@ body {
 .form-input::placeholder {
     color: var(--text-dim);
 }
+.form-input option {
+    background: #131009;
+    color: var(--text);
+}
 
+.form-input option:checked {
+    background: #1f1810;
+    color: var(--text);
+}
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

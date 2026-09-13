@@ -2,7 +2,7 @@ const faqList = document.querySelector("#faqList");
 
 import Faqs from "../../_common/classes/Faqs.js";
 
-async function carregarFaqs() {
+export async function carregarFaqs() {
 
     if (!faqList) {
         console.error("Elemento #faqList não encontrado.");
@@ -31,7 +31,7 @@ async function carregarFaqs() {
     }
 }
 
-function renderizarFaqs(faqs) {
+export function renderizarFaqs(faqs) {
     if (!Array.isArray(faqs) || faqs.length === 0) {
         faqList.innerHTML = `
             <div class="text-center py-8">
@@ -78,7 +78,7 @@ function renderizarFaqs(faqs) {
     configurarFaqs();
 }
 
-function configurarFaqs() {
+export function configurarFaqs() {
 
     const buttons = document.querySelectorAll(".faq-button");
 

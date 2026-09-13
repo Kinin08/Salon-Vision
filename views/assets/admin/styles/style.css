@@ -832,22 +832,6 @@ tr:hover td {
     letter-spacing: .04em;
 }
 
-.form-input {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 9px 12px;
-    font-size: 13px;
-    color: var(--text);
-    font-family: 'Poppins', sans-serif;
-    transition: border-color .18s;
-    outline: none;
-}
-
-.form-input:focus {
-    border-color: var(--gold-dark);
-}
 
 .form-grid {
     display: grid;

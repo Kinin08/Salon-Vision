@@ -1,20 +1,29 @@
-import { meusAgendamentos } from './data.js';
-import { toast, navegarPara } from './helpers.js';
-import { renderAgendamentos } from './renders/agendamentos.js';
+import { toast } from './helpers.js';
+import Appointmants from '../../_common/classes/Appointmants.js';
+import Users from '../../_common/classes/Users.js';
+import Services from '../../_common/classes/Services.js';
+import ServiceEmployee from '../../_common/classes/ServiceEmployee.js';
 
-// Funções para o modal de agendamento
-export function abrirModal(servicoPresel = null) {
+let appointmentIdEditando = null;
+
+export async function abrirModal(servicoPresel = null, appointmentId = null) {
+
     const modal = document.getElementById('modalAgendar');
+
     modal.classList.add('open');
+
+    appointmentIdEditando = appointmentId;
+
+    await carregarServicos();
+
     if (servicoPresel) {
-        const sel = document.getElementById('modalServico');
-        if (sel) {
-            for (let opt of sel.options) {
-                if (opt.value === servicoPresel) {
-                    sel.value = servicoPresel;
-                    break;
-                }
-            }
+
+        const select = document.getElementById('modalServico');
+
+        if (select) {
+            select.value = servicoPresel;
+
+            await carregarProfissionaisPorServico(servicoPresel);
         }
     }
 }
@@ -23,13 +32,83 @@ export function fecharModal() {
     document.getElementById('modalAgendar').classList.remove('open');
 }
 
-// Funções para o modal de FAQ
 export function abrirModalFaq() {
     document.getElementById('modalFaq').classList.add('open');
 }
 
 export function fecharModalFaq() {
     document.getElementById('modalFaq').classList.remove('open');
+}
+const serviceSelect = document.getElementById('modalServico');
+const employeeSelect = document.getElementById('modalProf');
+
+serviceSelect.addEventListener('change', async () => {
+
+    const serviceId = serviceSelect.value;
+
+    employeeSelect.innerHTML = `
+        <option value="">Carregando profissionais...</option>
+    `;
+
+    if (!serviceId) {
+        employeeSelect.innerHTML = `
+            <option value="">Selecione um profissional</option>
+        `;
+        return;
+    }
+
+    const serviceEmployee = new ServiceEmployee();
+
+    const response = await serviceEmployee.listByService(serviceId);
+
+    employeeSelect.innerHTML = `
+        <option value="">Selecione um profissional</option>
+    `;
+
+    (response.data ?? []).forEach(employee => {
+        employeeSelect.innerHTML += `
+            <option value="${employee.employee_id}">
+                ${employee.employee_name}
+            </option>
+        `;
+    });
+});
+async function carregarServicos() {
+    const services = new Services();
+    const response = await services.listAll();
+
+    const select = document.getElementById('modalServico');
+
+    select.innerHTML = `
+        <option value="">Selecione um serviço</option>
+    `;
+
+    (response.data ?? []).forEach(service => {
+        select.innerHTML += `
+            <option value="${service.id}">
+                ${service.name}
+            </option>
+        `;
+    });
+}
+
+async function carregarProfissionais() {
+    const users = new Users();
+    const response = await users.listEmployee();
+
+    const select = document.getElementById('modalProf');
+
+    select.innerHTML = `
+        <option value="">Selecione um profissional</option>
+    `;
+
+    (response.data ?? []).forEach(employee => {
+        select.innerHTML += `
+            <option value="${employee.id}">
+                ${employee.name}
+            </option>
+        `;
+    });
 }
 
 // Inicializar todos os modais
@@ -40,7 +119,7 @@ export function initModals() {
         if (e.target === document.getElementById('modalAgendar')) fecharModal();
     });
 
-    document.getElementById('modalConfirmar')?.addEventListener('click', () => {
+    document.getElementById('modalConfirmar')?.addEventListener('click', async () => {
         const servico = document.getElementById('modalServico').value;
         const prof = document.getElementById('modalProf').value;
         const data = document.getElementById('modalData').value;
@@ -51,20 +130,53 @@ export function initModals() {
             return;
         }
 
-        const [y, m, d] = data.split('-');
-        const dataFmt = `${d}/${m}/${y}`;
+        if (!hora) {
+            toast('Selecione um horário!', 'ti-alert-circle');
+            return;
+        }
 
-        meusAgendamentos.push({
-            id: Date.now(),
-            servico,
-            profissional: prof,
-            data: dataFmt,
-            hora,
-            status: 'pending'
-        });
+        const users = new Users();
 
-        fecharModal();
-        toast(`Agendamento de ${servico} confirmado!`);
+        const usuario = await users.me();
+
+        const dados = {
+            clientId: usuario.data.id,
+            employeeId: prof,
+            serviceId: servico,
+            dateTime: `${data} ${hora}:00`
+        };
+
+        const appointments = new Appointmants();
+
+        let response;
+
+        if (appointmentIdEditando !== null) {
+
+            response = await appointments.update(
+                appointmentIdEditando,
+                dados
+            );
+
+        } else {
+
+            response = await appointments.create(dados);
+        }
+
+        if (response.code === 201) {
+            fecharModal();
+
+            toast(
+                'Agendamento confirmado!',
+                'ti-calendar-check'
+            );
+
+            return;
+        }
+
+        toast(
+            response.message ?? 'Erro ao criar agendamento.',
+            'ti-alert-circle'
+        );
     });
 
     // Modal FAQ

@@ -182,7 +182,8 @@ class Appointments extends Api
         $exists = $appointment->selectAll([
             "employee_id = {$data['employeeId']}",
             "date_time = '{$data['dateTime']}'",
-            "active = 1"
+            "active = 1",
+            "status IN ('scheduled', 'confirmed', 'in_progress')"
         ]);
 
         if (!empty($exists)) {
@@ -406,42 +407,42 @@ class Appointments extends Api
         )->back($nextAppointment);
     }
     public function myAttend(): void
-{
-    $userId = $this->authToken(4);
+    {
+        $userId = $this->authToken(4);
 
-    if (!$userId) {
+        if (!$userId) {
+            $this->call(
+                401,
+                "unauthorized",
+                "Usuário não autenticado",
+                "error"
+            )->back();
+
+            return;
+        }
+
+        $appointment = new Appointment();
+
+        $myAttend = $appointment->getAtendimentos($userId);
+
+        if (empty($myAttend)) {
+            $this->call(
+                404,
+                "not_found",
+                "Nenhum atendimento encontrado",
+                "warning"
+            )->back();
+
+            return;
+        }
+
         $this->call(
-            401,
-            "unauthorized",
-            "Usuário não autenticado",
-            "error"
-        )->back();
-
-        return;
+            200,
+            "success",
+            "Atendimento encontrado",
+            "success"
+        )->back($myAttend);
     }
-
-    $appointment = new Appointment();
-
-    $myAttend = $appointment->getAtendimentos($userId);
-
-    if (empty($myAttend)) {
-        $this->call(
-            404,
-            "not_found",
-            "Nenhum atendimento encontrado",
-            "warning"
-        )->back();
-
-        return;
-    }
-
-    $this->call(
-        200,
-        "success",
-        "Atendimento encontrado",
-        "success"
-    )->back($myAttend);
-}
     public function softDelete(array $data): void
     {
         if (!filter_var($data["appointmentId"], FILTER_VALIDATE_INT)) {

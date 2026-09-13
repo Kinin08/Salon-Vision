@@ -138,6 +138,8 @@ class Appointment extends Model
         $query = "
             SELECT
                 a.id,
+                a.service_id,
+                a.employee_id,
                 a.date_time,
                 a.status,
                 a.rating,
@@ -231,10 +233,15 @@ class Appointment extends Model
             a.date_time,
             a.status,
             s.name AS service_name,
-            s.price
+            s.duration_minutes AS service_duration,
+            s.description,
+            s.price,
+            u.name AS employee_name
         FROM appointments a
         INNER JOIN services s
             ON s.id = a.service_id
+        INNER JOIN users u
+            ON u.id = a.employee_id
         WHERE a.client_id = :clientId
         AND a.active = 1
         AND a.date_time >= NOW()
@@ -263,10 +270,13 @@ class Appointment extends Model
             a.date_time,
             a.status,
             s.name AS service_name,
-            s.price
+            s.price,
+            u.name AS employee_name
         FROM appointments a
         INNER JOIN services s
             ON s.id = a.service_id
+        INNER JOIN users u
+            ON u.id = a.employee_id
         WHERE a.client_id = :clientId
         AND a.active = 1
         AND a.status = 'completed'

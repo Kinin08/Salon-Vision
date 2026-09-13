@@ -1,7 +1,7 @@
 import { abrirModal } from '../modals.js';
 import { navegarPara } from '../helpers.js';
 
-import { meusAgendamentos, meusAtendimentos, nextAgendamentos } from './agendamentos.js';
+import { meusAgendamentos, meusAtendimentos, nextAgendamentos, renderAgendamentos } from './agendamentos.js';
 import Users from "../../../_common/classes/Users.js";
 import { renderServicos } from './servicos.js';
 import { renderProfissionais } from './profissionais.js';
@@ -18,16 +18,6 @@ export async function renderInicio(container) {
     const agendamentos = await meusAgendamentos();
     const atendimentos = await meusAtendimentos();
     const proximo = await nextAgendamentos();
-
-console.log("AGENDAMENTOS:", agendamentos);
-console.log("QUANTIDADE:", agendamentos.length);
-
-console.log("ATENDIMENTOS:", atendimentos);
-console.log("QUANTIDADE ATENDIMENTOS:", atendimentos.length);
-
-console.log("PRÓXIMO:", proximo);
-
-    document.getElementById('user-name').textContent = nome;
 
     container.innerHTML = `
         <div class="panel fade-in">
@@ -133,7 +123,7 @@ console.log("PRÓXIMO:", proximo);
                                 color: var(--text-muted);
                                 font-size: 12px;
                             ">
-                                Atendimentos
+                                Atendimentos concluídos
                             </p>
 
                             <h2 style="
@@ -175,26 +165,43 @@ console.log("PRÓXIMO:", proximo);
                             font-size: 16px;
                             font-weight: 600;
                         ">
-                            Corte + Escova
+                            ${proximo && !Array.isArray(proximo)
+            ? proximo.service_name
+            : 'Nenhum agendamento futuro'
+        }
                         </p>
 
                         <p style="
                             color: var(--text-muted);
-                            font-size: 12px;
-                            margin-top: 6px;
+                            font-size: 13px;
+                            margin-top: 8px;
                         ">
-                            Com Ana Silva
+                            ${proximo && !Array.isArray(proximo)
+            ? `Com ${proximo.employee_name}`
+            : ''
+        }
                         </p>
                     </div>
 
                     <div style="text-align: right;">
-
+                        <p style="
+                            color: var(--text-muted);
+                            font-size: 13px;
+                            font-weight: 500;
+                        ">
+                        data e hora:
+                        </p>
                         <p style="
                             color: var(--gold);
                             font-size: 16px;
                             font-weight: 600;
                         ">
-                            Hoje às 14:30
+                        ${proximo && !Array.isArray(proximo)
+            ? new Date(proximo.date_time).toLocaleString('pt-BR', {
+                dateStyle: 'short', timeStyle: 'short'
+            })
+            : 'Nenhum agendamento futuro'
+        }
                         </p>
 
                         <p style="
@@ -202,7 +209,10 @@ console.log("PRÓXIMO:", proximo);
                             font-size: 12px;
                             margin-top: 5px;
                         ">
-                            Duração: 1h
+                            Duração: ${proximo && !Array.isArray(proximo)
+            ? `${proximo.service_duration} minutos`
+            : 'N/A'
+        }
                         </p>
 
                     </div>
@@ -269,10 +279,33 @@ console.log("PRÓXIMO:", proximo);
         </div>
     `;
 
-    // Novo agendamento
     document
         .getElementById('btnNovoAgendamentoInicio')
         ?.addEventListener('click', () => {
             abrirModal();
+        });
+
+    document
+        .getElementById('btnAgendamentosInicio')
+        ?.addEventListener('click', () => {
+            navegarPara(renderAgendamentos);
+        });
+
+    document
+        .getElementById('btnServicosInicio')
+        ?.addEventListener('click', () => {
+            renderServicos(container);
+        });
+
+    document
+        .getElementById('btnProfissionaisInicio')
+        ?.addEventListener('click', () => {
+            renderProfissionais(container);
+        });
+
+    document
+        .getElementById('btnPerfilInicio')
+        ?.addEventListener('click', () => {
+            renderPerfil(container);
         });
 }

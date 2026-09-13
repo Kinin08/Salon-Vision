@@ -7,9 +7,16 @@ import { renderServicos } from './renders/servicos.js';
 import { renderProfissionais } from './renders/profissionais.js';
 import { renderFaqs } from './renders/faqs.js';
 import { renderPerfil } from './renders/perfil.js';
+import Users from "../../_common/classes/Users.js";
+
+const user = new Users();
+
+const responseData = await user.me();
+
+const nome = responseData?.data?.name ?? 'Usuário';
 
 const rotas = {
-    'nav-inicio': { fn: renderInicio, titulo: 'Olá, <em>Ana!</em>' },
+    'nav-inicio': { fn: renderInicio, titulo: `Olá, <em>${nome}</em>` },
     'nav-agendamentos': { fn: renderAgendamentos, titulo: 'Meus <em>Agendamentos</em>' },
     'nav-historico': { fn: renderHistorico, titulo: 'Histórico de <em>Atendimentos</em>' },
     'nav-faqs': { fn: renderFaqs, titulo: 'Perguntas <em>Pendentes</em>' },
@@ -24,6 +31,7 @@ function initNavigation() {
             e.preventDefault();
             const id = item.id;
             const rota = rotas[id];
+
             if (!rota) return;
 
             setNavActive(id);
