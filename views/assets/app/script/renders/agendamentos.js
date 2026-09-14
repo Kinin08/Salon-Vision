@@ -9,6 +9,10 @@ export async function meusAgendamentos() {
         const appointments = new Appointmants();
 
         const responseData = await appointments.my();
+
+        console.log("RESPOSTA HISTORY:", responseData);
+        console.log("AGENDAMENTOS:", responseData.data);
+
         return responseData.data ?? [];
 
     } catch (error) {
@@ -36,7 +40,7 @@ export async function nextAgendamentos() {
     }
 }
 
-export async function meusAtendimentos(c) {
+export async function meusAtendimentos() {
     try {
         const appointments = new Appointmants();
 
@@ -112,8 +116,6 @@ export async function renderAgendamentos(c) {
         const tr = document.createElement('tr');
 
         const [data, hora] = a.date_time.split(' ');
-
-        console.log(data, "+", hora);
 
         tr.innerHTML = `
             <td style="
@@ -210,8 +212,6 @@ export async function renderAgendamentos(c) {
 
             try {
                 const response = await appointments.softDelete(id);
-
-                console.log('RESPOSTA CANCELAR:', response);
 
                 if (response.code === 200) {
 

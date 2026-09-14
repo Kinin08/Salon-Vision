@@ -176,7 +176,7 @@ class Appointment extends Model
             ON u.id = a.employee_id
         WHERE a.client_id = :clientId
         AND a.active = 1
-        AND a.status IN ('scheduled', 'confirmed')
+        AND a.status IN ('scheduled', 'confirmed', 'in_progress', 'completed', 'canceled')
         ORDER BY a.date_time DESC
     ";
 
@@ -245,7 +245,7 @@ class Appointment extends Model
         WHERE a.client_id = :clientId
         AND a.active = 1
         AND a.date_time >= NOW()
-        AND a.status IN ('scheduled', 'confirmed')
+        AND a.status IN ('scheduled', 'in_progress', 'confirmed')
         ORDER BY a.date_time ASC
         LIMIT 1
     ";
@@ -294,5 +294,38 @@ class Appointment extends Model
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function updateStatuses(): void
+    {
+        $query = "
+        UPDATE appointments a
+        INNER JOIN services s
+            ON s.id = a.service_id
+        SET a.status =
+            CASE
+                WHEN NOW() < a.date_time THEN 'scheduled'
+
+                WHEN NOW() >= a.date_time
+                     AND NOW() < DATE_ADD(
+                         a.date_time,
+                         INTERVAL s.duration_minutes MINUTE
+                     )
+                THEN 'in_progress'
+
+                WHEN NOW() >= DATE_ADD(
+                    a.date_time,
+                    INTERVAL s.duration_minutes MINUTE
+                )
+                THEN 'completed'
+
+                ELSE a.status
+            END
+        WHERE a.status != 'canceled'
+        AND a.active = 1
+    ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute();
     }
 }

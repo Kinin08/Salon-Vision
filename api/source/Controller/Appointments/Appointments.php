@@ -23,6 +23,7 @@ class Appointments extends Api
         }
 
         $appointment = new Appointment();
+        $appointment->updateStatuses();
         $history = $appointment->history($userId);
 
         if (empty($history)) {
@@ -45,6 +46,7 @@ class Appointments extends Api
     public function listAll(): void
     {
         $appointment = new Appointment();
+        $appointment->updateStatuses();
         $this->call(200, "success", "Lista de agendamentos", "success")
             ->back($appointment->listAll());
     }
@@ -65,6 +67,8 @@ class Appointments extends Api
         }
 
         $appointment = new Appointment();
+
+        $appointment->updateStatuses();
 
         if (!$appointment->selectById($data["appointmentId"])) {
             $this->call(
@@ -423,6 +427,8 @@ class Appointments extends Api
 
         $appointment = new Appointment();
 
+        $appointment->updateStatuses();
+
         $myAttend = $appointment->getAtendimentos($userId);
 
         if (empty($myAttend)) {
@@ -443,6 +449,8 @@ class Appointments extends Api
             "success"
         )->back($myAttend);
     }
+
+
     public function softDelete(array $data): void
     {
         if (!filter_var($data["appointmentId"], FILTER_VALIDATE_INT)) {
