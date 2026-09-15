@@ -83,4 +83,27 @@ class ServiceEmployee extends Model
 
         return $stmt->fetchAll();
     }
+
+    public function listByEmployee(int $employeeId): array
+    {
+        $query = "
+        SELECT
+            se.id,
+            se.service_id,
+            se.employee_id,
+            u.name AS employee_name,
+            s.name AS service_name
+        FROM service_employees se
+        INNER JOIN services s
+            ON se.service_id = s.id
+        INNER JOIN users u
+            ON se.employee_id = u.id
+        WHERE se.employee_id = {$employeeId}
+          AND se.active = 1
+    ";
+
+        $stmt = Connect::getInstance()->query($query);
+
+        return $stmt->fetchAll();
+    }
 }

@@ -91,26 +91,6 @@ async function carregarServicos() {
         `;
     });
 }
-
-async function carregarProfissionais() {
-    const users = new Users();
-    const response = await users.listEmployee();
-
-    const select = document.getElementById('modalProf');
-
-    select.innerHTML = `
-        <option value="">Selecione um profissional</option>
-    `;
-
-    (response.data ?? []).forEach(employee => {
-        select.innerHTML += `
-            <option value="${employee.id}">
-                ${employee.name}
-            </option>
-        `;
-    });
-}
-
 // Inicializar todos os modais
 export function initModals() {
     // Modal Agendamento
@@ -124,6 +104,7 @@ export function initModals() {
         const prof = document.getElementById('modalProf').value;
         const data = document.getElementById('modalData').value;
         const hora = document.getElementById('modalHora').value;
+        const comentario = document.getElementById('modalComentario').value;
 
         if (!data) {
             toast('Selecione uma data!', 'ti-alert-circle');
@@ -143,7 +124,8 @@ export function initModals() {
             clientId: usuario.data.id,
             employeeId: prof,
             serviceId: servico,
-            dateTime: `${data} ${hora}:00`
+            dateTime: `${data} ${hora}:00`,
+            comment: comentario
         };
 
         const appointments = new Appointmants();

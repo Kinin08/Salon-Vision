@@ -166,14 +166,6 @@ export async function renderFaqs(c) {
 
                     </div>
 
-                    <span style="
-                        font-size:11px;
-                        color:var(--text-dim);
-                        white-space:nowrap;
-                    ">
-                        ${faq.created_at}
-                    </span>
-
                 </div>
             `;
 

@@ -17,7 +17,7 @@ export default class Users extends HttpClientBase {
         return this.postForm("/users/register", data);
     }
     async update(data) {
-        return this.putForm("/users/update", data);
+        return this.putForm("/users/update/cliente", data);
     }
     async updateEmployee(data) {
         return this.putForm("/users/update/employee", data);
@@ -31,10 +31,10 @@ export default class Users extends HttpClientBase {
     async listById(userId) {
         return this.get(`/users/list/${userId}`);
     }
-    async listEmployee() {
+    async listEmployees() {
         return this.get("/users/list/employee");
     }
-    async listAdmin() {
+    async listAdmins() {
         return this.get("/users/list/admin");
     }
     async softDelete(userId) {

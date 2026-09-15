@@ -1,8 +1,12 @@
 import { meusAgendamentos } from '../data.js';
-import { toast, navegarPara } from '../helpers.js';
+import { toast } from '../helpers.js';
 import { CLIENTE } from '../data.js';
-export function renderPerfil(c) {
-            c.innerHTML = `
+
+import { userMe, update } from './../../../_common/Api/user.js';
+
+export async function renderPerfil(c) {
+    const me = await userMe();
+    c.innerHTML = `
         <div class="grid-2-1 fade-in">
 
             <!-- Formulário -->
@@ -14,31 +18,31 @@ export function renderPerfil(c) {
                 <!-- Avatar -->
                 <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
                     <div class="profile-avatar-wrap">
-                        <img src="${CLIENTE.foto}" class="profile-avatar" id="perfil-foto" alt="${CLIENTE.nome}" />
+                        <img src="${me.photo}" class="profile-avatar" id="perfil-foto" alt="${me.name}" />
                         <div class="profile-avatar-edit" onclick="toast('Upload de foto em breve!','ti-camera')">
                             <i class="ti ti-camera"></i>
                         </div>
                     </div>
                     <div>
-                        <p style="font-size:15px;font-weight:600;color:var(--text);">${CLIENTE.nome}</p>
-                        <p style="font-size:11px;color:var(--text-dim);">${CLIENTE.email}</p>
+                        <p style="font-size:15px;font-weight:600;color:var(--text);">${me.name}</p>
+                        <p style="font-size:11px;color:var(--text-dim);">${me.email}</p>
                     </div>
                 </div>
 
                 <div class="form-grid">
                     <div class="form-group">
                         <label class="form-label">Nome</label>
-                        <input type="text" class="form-input" id="input-nome" value="${CLIENTE.nome}" />
+                        <input type="text" class="form-input" id="input-nome" value="${me.name}" />
                     </div>
                     <div class="form-group">
                         <label class="form-label">Telefone</label>
-                        <input type="text" class="form-input" id="input-tel" value="${CLIENTE.telefone}" />
+                        <input type="text" class="form-input" id="input-tel" value="${me.telephone}" />
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">E-mail</label>
-                    <input type="email" class="form-input" id="input-email" value="${CLIENTE.email}" />
+                    <input type="email" class="form-input" id="input-email" value="${me.email}" />
                 </div>
 
                 <div style="border-top:1px solid var(--border);margin:20px 0;padding-top:20px;">
@@ -84,24 +88,30 @@ export function renderPerfil(c) {
                         </div>
                     </div>
                 </div>
-
-                <div class="panel fade-in delay-2">
-                    <div class="panel-header" style="margin-bottom:12px;">
-                        <h1 class="panel-title">Serviços <em>favoritos</em></h1>
-                    </div>
-                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                        ${CLIENTE.favoritos.map(f => `<span class="fav-chip"><i class="ti ti-heart-filled" style="font-size:10px;"></i> ${f}</span>`).join('')}
-                    </div>
-                </div>
             </div>
 
         </div>
         `;
 
-            document.getElementById('btn-salvar')?.addEventListener('click', () => {
-                CLIENTE.nome = document.getElementById('input-nome').value;
-                CLIENTE.email = document.getElementById('input-email').value;
-                CLIENTE.telefone = document.getElementById('input-tel').value;
-                toast('Perfil atualizado com sucesso!', 'ti-check');
-            });
-        }
+    document.getElementById('btn-salvar')?.addEventListener('click', async () => {
+        const btn = document.getElementById('btn-salvar');
+
+        const nome = document.getElementById('input-nome').value;
+        const email = document.getElementById('input-email').value;
+        const telephone = document.getElementById('input-tel').value;
+
+        btn.disabled = true;
+        btn.innerHTML = `<i class="ti ti-loader-2"></i> Salvando...`;
+
+        const updated = await update({
+            name: nome,
+            email: email,
+            telephone: telephone,
+        });
+
+        btn.disabled = false;
+        btn.innerHTML = `<i class="ti ti-device-floppy"></i> Salvar Alterações`;
+
+       console.log("RESPOSTA UPDATE COMPLETA:", updated); const response = updated?.data ?? updated; if (response.code === 200) { toast( response.message, 'ti-check' ); } else { toast( response.message ?? 'Erro ao atualizar perfil.', 'ti-alert-triangle' ); }
+    });
+}

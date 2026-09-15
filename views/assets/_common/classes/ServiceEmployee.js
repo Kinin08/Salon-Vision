@@ -10,6 +10,9 @@ export default class ServiceEmployee extends HttpClientBase {
     async listByService(serviceId) {
         return this.get(`/services_employees/listEmployees/services/${serviceId}`);
     }
+    async listByEmployee(employeeId) {
+        return this.get(`/services_employees/listEmployees/employee/${employeeId}`);
+    }
     async create(data) {
         return this.postForm("/services_employees/create", data);
     }

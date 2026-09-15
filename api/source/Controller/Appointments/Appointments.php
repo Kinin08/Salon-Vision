@@ -343,7 +343,7 @@ class Appointments extends Api
             return;
         }
 
-        $appointmentAtualizado = new appointment();
+        $appointmentAtualizado = new Appointment();
 
         if (!$appointmentAtualizado->selectById($data["appointmentId"])) {
             $this->call(

@@ -38,6 +38,35 @@ class ServicesEmployees extends Api
             "success"
         )->back($employees);
     }
+        public function listByEmployee(array $data): void
+    {
+        if (
+            !isset($data["employeeId"]) ||
+            !filter_var($data["employeeId"], FILTER_VALIDATE_INT)
+        ) {
+            $this->call(
+                400,
+                "bad_request",
+                "employeeId é obrigatório",
+                "error"
+            )->back();
+
+            return;
+        }
+
+        $serEm = new ServiceEmployee();
+
+        $employees = $serEm->listByEmployee(
+            (int) $data["employeeId"]
+        );
+
+        $this->call(
+            200,
+            "success",
+            "Funcionários do serviço",
+            "success"
+        )->back($employees);
+    }
     public function listAll(): void
     {
         $serEm = new ServiceEmployee();

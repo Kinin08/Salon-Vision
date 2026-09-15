@@ -11,22 +11,29 @@ class Api
     {
         $headers = getallheaders();
 
-$authorization = $headers['Authorization'] ?? null;
+        $authorization = $headers['Authorization'] ?? null;
 
-if (!$authorization) {
-    return null;
-}
+        if (!$authorization) {
+            return null;
+        }
 
-$token = str_replace('Bearer ', '', $authorization);
+        $token = str_replace('Bearer ', '', $authorization);
 
         if (!$token) {
             return null;
         }
 
         $jwt = new JWTToken();
+
         $jwtToken = $jwt->decode($token);
 
         if (!$jwtToken) {
+            return null;
+        }
+
+        $userId = (int) $jwtToken->data->id;
+
+        if (!$userId) {
             return null;
         }
 
@@ -35,7 +42,7 @@ $token = str_replace('Bearer ', '', $authorization);
 
             if (
                 !$user->permissionVerify(
-                    $jwtToken->data->email,
+                    $userId,
                     $typeId
                 )
             ) {

@@ -166,6 +166,8 @@ class Appointment extends Model
             a.id,
             a.date_time,
             a.status,
+            a.rating,
+            a.comment,
             s.name AS service_name,
             s.price,
             u.name AS employee_name
@@ -232,6 +234,8 @@ class Appointment extends Model
             a.id,
             a.date_time,
             a.status,
+            a.rating,
+            a.comment,
             s.name AS service_name,
             s.duration_minutes AS service_duration,
             s.description,
@@ -269,6 +273,8 @@ class Appointment extends Model
             a.id,
             a.date_time,
             a.status,
+            a.rating,
+            a.comment,
             s.name AS service_name,
             s.price,
             u.name AS employee_name

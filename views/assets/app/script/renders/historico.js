@@ -1,10 +1,9 @@
 import { historico } from '../data.js';
 import { estrelas } from '../helpers.js';
-import { meusAtendimentos } from './agendamentos.js';
+import { meusAtendimentos } from '../../../_common/Api/appointmants.js';
 
 export async function renderHistorico(c) {
     const atendimentos = await meusAtendimentos();
-    console.log(atendimentos);
     c.innerHTML = `
         <div class="panel fade-in">
             <div class="panel-header">

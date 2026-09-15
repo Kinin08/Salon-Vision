@@ -202,17 +202,17 @@ class User extends Model
         return true;
     }
 
-    public function permissionVerify(string $email, int $typeId): bool
+    public function permissionVerify(int $userId, int $typeId): bool
     {
         $query = "SELECT id
               FROM {$this->table}
-              WHERE email = :email
+              WHERE id = :id
               AND user_type_id = :typeId
               AND active = 1";
 
         $stmt = Connect::getInstance()->prepare($query);
 
-        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $userId, PDO::PARAM_STR);
         $stmt->bindValue(':typeId', $typeId, PDO::PARAM_INT);
 
         $stmt->execute();
