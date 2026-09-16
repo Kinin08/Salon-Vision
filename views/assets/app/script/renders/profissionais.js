@@ -6,8 +6,6 @@ export async function renderProfissionais(c) {
 
     const employees = await listEmployees();
 
-    console.log("Employees:", employees);
-
     c.innerHTML = `
         <div style="margin-bottom:16px;" class="fade-in">
 
@@ -300,7 +298,6 @@ export async function renderProfissionais(c) {
 
         const serviceEmployees =
             await listServiceEmployeesById(employee.id);
-            console.log("Service Employees:", serviceEmployees);
 
         modalContent.innerHTML = `
 

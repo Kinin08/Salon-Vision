@@ -193,7 +193,6 @@ class User extends Model
         $this->photo = $user->photo;
         $this->userTypeId = $user->user_type_id;
         $jwt = new JWTToken();
-        // definir quais informações irão par o payload do token
         $this->token = $jwt->encode([
             "id" => $user->id,
             "name" => $user->name,
@@ -270,6 +269,21 @@ class User extends Model
             $this->errorMessage = $e->getMessage();
             return false;
         }
+    }
+
+    public function verifyPassword(int $userId, string $password): bool
+    {
+        $query = "SELECT password FROM {$this->table} WHERE id = :id";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            return false;
+        }
+
+        return password_verify($password, $user['password']);
     }
 
 

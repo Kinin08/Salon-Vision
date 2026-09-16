@@ -240,7 +240,7 @@ class Users extends Api
         }
 
         $user = new User();
-        if (!$user->login($data['email'], $data['password'], 5)) {
+        if (!$user->login($data['email'], $data['password'])) {
             $this->call(
                 401,
                 "unauthorized",
@@ -281,7 +281,7 @@ class Users extends Api
         }
 
         $user = new User();
-        if (!$user->login($data['email'], $data['password'], 4)) {
+        if (!$user->login($data['email'], $data['password'])) {
             $this->call(
                 401,
                 "unauthorized",
@@ -321,20 +321,22 @@ class Users extends Api
             return;
         }
 
-        if (empty($data["name"]) || empty($data["email"])) {
+        if (
+            empty($data["name"]) ||
+            empty($data["email"]) ||
+            !filter_var($data["email"], FILTER_VALIDATE_EMAIL)
+        ) {
             $this->call(
                 400,
                 "bad_request",
-                "Os campos name e email são obrigatórios",
+                "Nome e e-mail são obrigatórios. O e-mail deve ser válido.",
                 "error"
             )->back();
-
             return;
         }
 
         $user = new User();
 
-        // Busca o usuário
         if (!$user->selectById($userId)) {
             $this->call(
                 404,
@@ -346,12 +348,37 @@ class Users extends Api
             return;
         }
 
+        $currentPassword = $data["currentPassword"] ?? null;
+        $newPassword = $data["password"] ?? null;
+
+        if ($newPassword !== null && !empty($newPassword)) {
+            if (empty($currentPassword)) {
+                $this->call(
+                    400,
+                    "bad_request",
+                    "Digite sua senha atual.",
+                    "error"
+                )->back();
+                return;
+            }
+
+            if (!$user->verifyPassword($userId, $currentPassword)) {
+                $this->call(
+                    400,
+                    "invalid_password",
+                    "A senha atual está incorreta.",
+                    "error"
+                )->back();
+                return;
+            }
+
+            $user->setPassword(
+                password_hash($newPassword, PASSWORD_DEFAULT)
+            );
+        }
+
         $user->setName($data["name"]);
         $user->setEmail($data["email"]);
-
-        if (isset($data["password"]) && !empty($data["password"])) {
-            $user->setPassword($data["password"]);
-        }
 
         if (isset($data["telephone"])) {
             $user->setTelephone($data["telephone"]);
@@ -360,12 +387,40 @@ class Users extends Api
         if (isset($data["photo"])) {
             $user->setPhoto($data["photo"]);
         }
+        $telephone = $data["telephone"] ?? null;
+
+        if ($telephone !== null && !preg_match('/^\d{10,11}$/', $telephone)) {
+            $this->call(
+                400,
+                "bad_request",
+                "O telefone deve conter apenas números e ter 10 ou 11 dígitos.",
+                "error"
+            )->back();
+            return;
+        }
 
         if (!$user->updateById($userId)) {
+            $errorMessage = $user->getErrorMessage();
+
+            if (
+                str_contains($errorMessage, "Duplicate entry") &&
+                str_contains($errorMessage, "users.email")
+            ) {
+
+                $this->call(
+                    400,
+                    "email_already_exists",
+                    "Este e-mail já está cadastrado.",
+                    "error"
+                )->back();
+
+                return;
+            }
+
             $this->call(
                 500,
                 "internal_server_error",
-                $user->getErrorMessage(),
+                "Não foi possível atualizar o usuário.",
                 "error"
             )->back();
 

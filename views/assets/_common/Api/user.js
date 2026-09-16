@@ -23,7 +23,6 @@ export async function update(userData) {
         const users = new Users();
 
         const responseData = await users.update(userData);
-        console.log("RESPOSTA UPDATE:", responseData);
 
         return responseData;
 

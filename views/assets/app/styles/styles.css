@@ -557,13 +557,35 @@ body {
 .btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
     font-size: 12px;
-    font-weight: 500;
     padding: 8px 16px;
     border-radius: var(--radius-sm);
     border: none;
+    cursor: pointer;
     transition: all 0.2s;
+}
+
+.btn-senha {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.btn-senha:hover {
+    background: var(--surface-hover);
+    border-color: var(--gold-dark);
+}
+
+.btn-delet {
+    background: #8f2d2d;
+    color: #fff;
+}
+
+.btn-delet:hover {
+    background: #b33a3a;
+    transform: translateY(-1px);
 }
 
 .btn-gold {
@@ -791,7 +813,9 @@ body {
 /* ===== PERFIL ===== */
 .profile-avatar-wrap {
     position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .profile-avatar {
