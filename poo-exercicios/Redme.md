@@ -329,7 +329,7 @@ Crie um objeto `user` (usuário) com:
 Clone usando `JSON.parse(JSON.stringify())` e identifique o que foi perdido.
 
 **3. Tabela comparativa**  
-Implemente os 3 métodos de clonagem (spread, structuredClone, JSON) em objetos com diferentes características (aninhados, com funções, com Dates). Monte uma tabela mostrando o que cada técnica preserva.
+Implemente os 3 métodos de clonagem (spread, structuredClone, JSON) em objetos com diferentes características (alinhados, com funções, com Dates). Monte uma tabela mostrando o que cada técnica preserva.
 
 **4. Clonagem seletiva**  
 Crie uma função `cloneWithoutSensitive(object)` (clonar sem dados sensíveis - objeto) que faça deep copy de um objeto, mas **remove** propriedades como `password` (senha), `ssn` (cpf), `creditCard` (cartão de crédito) antes de retornar a cópia.
