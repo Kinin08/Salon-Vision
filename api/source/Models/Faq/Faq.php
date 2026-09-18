@@ -13,9 +13,8 @@ class Faq extends Model
     private ?string $answer;
     private ?int $active;
     private ?string $createdAt;
-    private ?string $userId;
 
-    public function __construct(?int $id = null, ?int $faqsCategoryId = null, ?string $question = null, ?string $answer = null, ?int $active = 1, ?string $createdAt = null, ?string $userId = null)
+    public function __construct(?int $id = null, ?int $faqsCategoryId = null, ?string $question = null, ?string $answer = null, ?int $active = 1, ?string $createdAt = null)
     {
         $this->id = $id;
         $this->faqsCategoryId = $faqsCategoryId;
@@ -23,11 +22,10 @@ class Faq extends Model
         $this->answer = $answer;
         $this->active = $active;
         $this->createdAt = $createdAt;
-        $this->userId = $userId;
         
         $this->table = 'faqs'; // nome da tabela do banco
         $this->primaryKey = 'id'; // nome da chave primária da tabela
-        $this->fillable = ['faqsCategoryId', 'question', 'answer', 'active', 'createdAt', 'userId']; // camelCase
+        $this->fillable = ['faqsCategoryId', 'question', 'answer', 'active', 'createdAt',]; // camelCase
     }
 
     public function getId(): ?int
