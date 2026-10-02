@@ -5,21 +5,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Salon Vision | Painel Admin</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@300;400;500;600;700&family=Yuji+Syuku&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
-    <link rel="stylesheet" href="./styles/styles.css" />
-    <link rel="stylesheet" href="./styles/style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="module" src="./script/main.js"></script>
-    <style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <link rel="stylesheet" href="./styles/style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet">
+    <script type="module" src="./script/main.js" defer></script>
 
-    </style>
 </head>
 
-<body>
+<body class="bg-black font-['Poppins']">
 
     <div class="aurora-wrap">
         <div class="aurora-1"></div>
@@ -27,13 +33,16 @@
     </div>
 
     <div class="layout">
+
         <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="sidebar-logo">
-                <svg class="w-8 h-8 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="1.5">
-                    <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
-                </svg>
+                <a href="./../../../index.html">
+                    <svg class="w-8 h-8 text-[#FFCC7F]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" />
+                    </svg>
+                </a>
                 <div>
                     <div class="font-yuji text-xl text-white [text-shadow:0_0_10px_rgba(255,204,127,0.8)]">
                         <span class="text-[#CA9440]">S</span><span>alon</span>
@@ -43,191 +52,76 @@
                 </div>
             </div>
 
-            <nav>
-                <div class="nav-section-label">Menu</div>
-                <a id="nav-dashboard" class="nav-item active">
-                    <i class="ti ti-home"></i> Inicio
+            <nav class="nav-section">
+                <h2 class="nav-label">Principal</h2>
+                <a id="dashboard" class="nav-item active cursor-pointer" href="#">
+                    <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+                    <h1> Dashboard </h1>
                 </a>
-                <a id="nav-agendamentos" class="nav-item">
-                    <i class="ti ti-calendar"></i> Agendamentos
+                <a id="agendamentos" class="nav-item cursor-pointer" href="#">
+                    <i class="ti ti-calendar" aria-hidden="true"></i>
+                    <h1> Agendamentos </h1>
                 </a>
-                <a id="nav-avaliacoes" class="nav-item">
-                    <i class="ti ti-star"></i> Avaliações
+                <a id="servicos" class="nav-item cursor-pointer" href="#">
+                    <i class="ti ti-cut" aria-hidden="true"></i>
+                    <h1> Serviços </h1>
                 </a>
-                <a id="nav-faqs" class="nav-item">
-                    <i class="ti ti-home-question"></i> Perguntas Frequentes
+                <a id="avaliacoes" class="nav-item cursor-pointer" href="#">
+                    <i class="ti ti-star" aria-hidden="true"></i>
+                    <h1> Avaliações </h1>
                 </a>
-                <div class="nav-section-label">Gestão</div>
-                <a id="nav-clientes" class="nav-item">
-                    <i class="ti ti-users"></i> Clientes
+                <div class="nav-label" style="margin-top: 8px;">
+                    <h1> Pessoas </h1>
+                </div>
+                <a id="professionais" class="nav-item cursor-pointer" href="#">
+                    <i class="ti ti-user-check" aria-hidden="true"></i>
+                    <h1> Profissionais </h1>
                 </a>
-                <a id="nav-profissionais" class="nav-item">
-                    <i class="ti ti-user-star"></i> Profissionais
-                </a>
-                <a id="nav-servicos" class="nav-item">
-                    <i class="ti ti-cut"></i> Serviços
-                </a>
-                <h2 class="nav-label" style="margin-top:10px;">Conta</h2>
 
-                <a id="nav-perfil" class="nav-item cursor-pointer" href="#">
-                    <i class="ti ti-user-circle"></i>
-                    <h1>Meu Perfil</h1>
+                <a id="clientes" class="nav-item cursor-pointer" href="#">
+                    <i class="ti ti-users" aria-hidden="true"></i>
+                    <h1> Clientes </h1>
                 </a>
             </nav>
 
             <div class="sidebar-bottom">
-                <div class="admin-card">
-                    <img src="https://i.pravatar.cc/80?img=12" class="admin-avatar" />
-                    <div class="admin-info">
-                        <p>Marcos Silva</p>
-                        <span>Administrador</span>
+                <div class="user-card">
+                    <img src="https://i.pravatar.cc/80?img=47" class="user-avatar" alt="Admin" />
+                    <div class="user-info">
+                        <p>Ana Costa</p>
+                        <span>Gerente geral</span>
                     </div>
-                    <i class="ti ti-dots-vertical" style="margin-left:auto;color:var(--text-dim);font-size:13px;"></i>
+                    <i class="ti ti-dots-vertical"
+                        style="margin-left: auto; color: var(--text-dim); font-size: 14px;"></i>
                 </div>
             </div>
         </aside>
 
         <!-- MAIN -->
         <div class="main">
+
+            <!-- TOPBAR -->
             <header class="topbar">
                 <div>
-                    <h1 class="topbar-title" id="topbar-title">Dashboard <em>Geral</em></h1>
-                    <p class="topbar-date" id="topbar-date"></p>
+                    <h1 class="topbar-title" id="topbar-title">
+                        Visão <em>geral</em>
+                    </h1>
+                    <h2 class="tb-date" id="topbar-date"></h2>
                 </div>
                 <div class="topbar-right">
-                    <div class="topbar-icon-btn" onclick="toast('Sem novas notificações.')">
-                        <i class="ti ti-bell"></i>
-                        <span class="notif-dot"></span>
-                    </div>
-                    <div class="topbar-icon-btn" onclick="toast('Busca global em breve!')">
-                        <i class="ti ti-search"></i>
-                    </div>
-                    <img src="https://i.pravatar.cc/80?img=12"
-                        style="width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid var(--border-strong);" />
+                    <img src="https://i.pravatar.cc/80?img=47"
+                        style="width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid var(--border-strong);cursor:pointer;"
+                        alt="Admin" />
                 </div>
             </header>
 
-            <main class="content" id="page-content"></main>
+            <!-- CONTENT -->
+             <main class="content" id="page-content">
+
+
+            </main>
         </div>
     </div>
-
-    <!-- MODAL: NOVO AGENDAMENTO -->
-    <div class="modal-overlay" id="modalAgendar">
-        <div class="modal-box">
-            <h2 class="modal-title">Novo <em>Agendamento</em></h2>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label">Cliente</label>
-                    <input type="text" class="form-input" id="m-cliente" placeholder="Nome do cliente" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Serviço</label>
-                    <select class="form-input" id="m-servico">
-                        <option>Coloração</option>
-                        <option>Corte Feminino</option>
-                        <option>Escova & Tratamento</option>
-                        <option>Manicure</option>
-                        <option>Hidratação Profunda</option>
-                        <option>Sobrancelha</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Profissional</label>
-                <select class="form-input" id="m-prof">
-                    <option>Camila R.</option>
-                    <option>Priya A.</option>
-                    <option>Lucas T.</option>
-                    <option>Aline F.</option>
-                    <option>Renata M.</option>
-                </select>
-            </div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label">Data</label>
-                    <input type="date" class="form-input" id="m-data" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Horário</label>
-                    <select class="form-input" id="m-hora">
-                        <option>09:00</option>
-                        <option>09:30</option>
-                        <option>10:00</option>
-                        <option>10:30</option>
-                        <option>11:00</option>
-                        <option>14:00</option>
-                        <option>14:30</option>
-                        <option>15:00</option>
-                        <option>15:30</option>
-                        <option>16:00</option>
-                    </select>
-                </div>
-            </div>
-            <div style="display:flex;gap:10px;margin-top:4px;">
-                <button class="btn btn-gold" style="flex:1" id="m-confirmar"><i class="ti ti-check"></i>
-                    Confirmar</button>
-                <button class="btn btn-ghost" id="m-cancelar"><i class="ti ti-x"></i> Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: NOVO SERVIÇO -->
-    <div class="modal-overlay" id="modalServico">
-        <div class="modal-box">
-            <h2 class="modal-title">Novo <em>Serviço</em></h2>
-            <div class="form-group">
-                <label class="form-label">Nome do serviço</label>
-                <input type="text" class="form-input" id="ms-nome" placeholder="Ex: Progressiva" />
-            </div>
-            <div class="form-group">
-                <label class="form-label">Descrição</label>
-                <textarea class="form-input" id="ms-desc" rows="3" placeholder="Descreva o serviço..."></textarea>
-            </div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label">Duração</label>
-                    <input type="text" class="form-input" id="ms-dur" placeholder="Ex: 1h30" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Valor</label>
-                    <input type="text" class="form-input" id="ms-valor" placeholder="Ex: R$ 150" />
-                </div>
-            </div>
-            <div style="display:flex;gap:10px;">
-                <button class="btn btn-gold" style="flex:1" id="ms-confirmar"><i class="ti ti-check"></i>
-                    Salvar</button>
-                <button class="btn btn-ghost" id="ms-cancelar"><i class="ti ti-x"></i> Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: NOVO PROFISSIONAL -->
-    <div class="modal-overlay" id="modalProf">
-        <div class="modal-box">
-            <h2 class="modal-title">Novo <em>Profissional</em></h2>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label">Nome</label>
-                    <input type="text" class="form-input" id="mp-nome" placeholder="Nome completo" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Especialidade</label>
-                    <input type="text" class="form-input" id="mp-role" placeholder="Ex: Colorista" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Telefone</label>
-                <input type="text" class="form-input" id="mp-tel" placeholder="(51) 99000-0000" />
-            </div>
-            <div style="display:flex;gap:10px;">
-                <button class="btn btn-gold" style="flex:1" id="mp-confirmar"><i class="ti ti-check"></i>
-                    Cadastrar</button>
-                <button class="btn btn-ghost" id="mp-cancelar"><i class="ti ti-x"></i> Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="toast"></div>
 </body>
 
 </html>

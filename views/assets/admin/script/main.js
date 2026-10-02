@@ -1,5 +1,6 @@
 import { setActive, nav } from './helpers.js';
 import { initModals } from './modals.js';
+
 import { renderDashboard } from './renders/dashboard.js';
 import { renderAgendamentos } from './renders/agendamento.js';
 import { renderClientes } from './renders/clientes.js';
@@ -9,52 +10,126 @@ import { renderAvaliacoes } from './renders/avaliacoes.js';
 import { renderFaqs } from './renders/faqs.js';
 import { renderPerfil } from './renders/perfil.js';
 
-// Configuração de rotas
+
+/* ==================== ROTAS ==================== */
+
 const rotas = {
-    'nav-dashboard': { fn: renderDashboard, titulo: 'Dashboard <em>Geral</em>' },
-    'nav-agendamentos': { fn: renderAgendamentos, titulo: 'Gestão de <em>Agendamentos</em>' },
-    'nav-clientes': { fn: renderClientes, titulo: 'Gestão de <em>Clientes</em>' },
-    'nav-profissionais': { fn: renderProfissionais, titulo: 'Nossa <em>Equipe</em>' },
-    'nav-faqs': { fn: renderFaqs, titulo: 'Perguntas mais <em>Frequentes</em>' },
-    'nav-servicos': { fn: renderServicos, titulo: 'Catálogo de <em>Serviços</em>' },
-    'nav-avaliacoes': { fn: renderAvaliacoes, titulo: 'Central de <em>Avaliações</em>' },
-    'nav-perfil': { fn: renderPerfil, titulo: '<em>Perfil</em>' },
+
+    dashboard: {
+        fn: renderDashboard,
+        titulo: 'Dashboard <em>Geral</em>'
+    },
+
+    agendamentos: {
+        fn: renderAgendamentos,
+        titulo: 'Gestão de <em>Agendamentos</em>'
+    },
+
+    clientes: {
+        fn: renderClientes,
+        titulo: 'Gestão de <em>Clientes</em>'
+    },
+
+    profissionais: {
+        fn: renderProfissionais,
+        titulo: 'Nossa <em>Equipe</em>'
+    },
+
+    faqs: {
+        fn: renderFaqs,
+        titulo: 'Perguntas mais <em>Frequentes</em>'
+    },
+
+    servicos: {
+        fn: renderServicos,
+        titulo: 'Catálogo de <em>Serviços</em>'
+    },
+
+    avaliacoes: {
+        fn: renderAvaliacoes,
+        titulo: 'Central de <em>Avaliações</em>'
+    },
+
+    perfil: {
+        fn: renderPerfil,
+        titulo: '<em>Perfil</em>'
+    }
+
 };
 
-// Inicializar navegação
+
+/* ==================== NAVEGAÇÃO ==================== */
+
 function initNavigation() {
+
     document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', e => {
-            e.preventDefault();
+
+        item.addEventListener('click', event => {
+
+            event.preventDefault();
+
             const rota = rotas[item.id];
+
             if (!rota) return;
+
             setActive(item.id);
+
             nav(rota.fn, rota.titulo);
+
         });
+
     });
+
 }
 
-// Inicializar data/hora do topbar
+
+/* ==================== DATA DO TOPBAR ==================== */
+
 function initTopbarDate() {
+
     const topbarDate = document.getElementById('topbar-date');
-    if (topbarDate) {
-        topbarDate.textContent = new Date().toLocaleDateString('pt-BR', {
-            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-        });
-    }
+
+    if (!topbarDate) return;
+
+    topbarDate.textContent = new Date().toLocaleDateString(
+        'pt-BR',
+        {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        }
+    );
+
 }
 
-// Inicializar aplicação
+
+/* ==================== INICIALIZAÇÃO ==================== */
+
 function init() {
+
     initTopbarDate();
+
     initNavigation();
+
     initModals();
-    nav(renderDashboard, 'Dashboard <em>Geral</em>');
+
+    nav(
+        renderDashboard,
+        'Dashboard <em>Geral</em>'
+    );
+
 }
 
-// Iniciar quando o DOM estiver pronto
+
+/* ==================== INICIAR ==================== */
+
 if (document.readyState === 'loading') {
+
     document.addEventListener('DOMContentLoaded', init);
+
 } else {
+
     init();
+
 }

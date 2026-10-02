@@ -196,7 +196,9 @@ class User extends Model
         $this->token = $jwt->encode([
             "id" => $user->id,
             "name" => $user->name,
-            "email" => $user->email
+            "email" => $user->email,
+            "userTypeId" => $user->user_type_id,
+            "userTypeName" => $user->user_type
         ]);
         return true;
     }

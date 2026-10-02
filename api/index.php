@@ -65,6 +65,7 @@ $route->get("/list/cliente", "Users\\Users:listClient");
 $route->get("/list/employee", "Users\\Users:listEmployee");
 $route->get("/list/admin", "Users\\Users:listAdmin");
 $route->post("/register", "Users\\Users:register");
+$route->post("/registerAdmin", "Users\\Users:registerAdmin");
 $route->post("/login", "Users\\Users:login");
 $route->post("/login/admin", "Users\\Users:loginAdmin");
 $route->post("/login/employee", "Users\\Users:loginEmployee");

@@ -5,7 +5,6 @@ export function renderAgendamentos(c) {
     <div class="panel fade-in">
         <div class="panel-header">
             <h1 class="panel-title">Todos os <em>Agendamentos</em></h1>
-            <button class="btn btn-gold" id="btn-novo-apt"><i class="ti ti-calendar-plus"></i> Novo Agendamento</button>
         </div>
         <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
             ${['Todos', 'Confirmado', 'Pendente', 'Concluído', 'Cancelado'].map((l, i) => `

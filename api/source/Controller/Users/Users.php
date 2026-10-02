@@ -182,6 +182,75 @@ class Users extends Api
 
         $this->call(201, "success", "Usuário inserido com sucesso", "created")->back($response);
     }
+    public function registerAdmin(array $data): void
+    {
+        if (!isset($data['password']) || empty($data['password'])) {
+            $this->call(
+                400,
+                "bad_request",
+                "A senha é obrigatória.",
+                "error"
+            )->back();
+
+            return;
+        }
+
+        if (!$this->validateNameEmail($data)) {
+            $this->call(
+                400,
+                "bad_request",
+                "Nome e e-mail são obrigatórios. O e-mail deve ser válido.",
+                "error"
+            )->back();
+
+            return;
+        }
+
+        if (strlen($data["password"]) < 6 || strlen($data["password"]) > 20) {
+            $this->call(
+                400,
+                "error",
+                "Senha deve ter entre 6 e 20 caracteres.",
+                "error"
+            )->back();
+
+            return;
+        }
+
+        $user = new User(
+            null,
+            $data['name'],
+            $data['email'],
+            $data['password'],
+            $data['telephone'] ?? null,
+            $data['photo'] ?? null,
+            3
+        );
+
+        if (!$user->insert()) {
+            $this->call(
+                500,
+                "internal_server_error",
+                $user->getErrorMessage(),
+                "error"
+            )->back();
+
+            return;
+        }
+
+        $response = [
+            "id" => $user->getId(),
+            "name" => $user->getName(),
+            "email" => $user->getEmail()
+        ];
+
+        $this->call(
+            201,
+            "success",
+            "Usuário administrador inserido com sucesso",
+            "created"
+        )->back($response);
+    }
     public function login(array $data): void
     {
         if (
@@ -249,6 +318,16 @@ class Users extends Api
             )->back();
             return;
         }
+        if ($user->getUserTypeId() !== 3) {
+            $this->call(
+                403,
+                "forbidden",
+                "Este usuário não é um administrador.",
+                "error"
+            )->back();
+
+            return;
+        }
 
         $response = [
             "id" => $user->getId(),
@@ -288,6 +367,16 @@ class Users extends Api
                 $user->getErrorMessage(),
                 "error"
             )->back();
+            return;
+        }
+        if ($user->getUserTypeId() !== 5) {
+            $this->call(
+                403,
+                "forbidden",
+                "Este usuário não é um administrador.",
+                "error"
+            )->back();
+
             return;
         }
 

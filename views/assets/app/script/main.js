@@ -19,18 +19,34 @@ import Users from "../../_common/classes/Users.js";
 
 const user = new Users();
 
-const responseData = await user.me();
+const response = await user.me();
 
-const nome = responseData?.data?.name ?? 'Usuário';
+if (response.code !== 200) {
+    window.location.href = "../login/index.html";
+} else {
 
-const avatar = responseData?.data?.photo ?? '';
+    const userTypeId = Number(response.data.user_type_id);
+
+    if (userTypeId !== 4) {
+        if (userTypeId === 3) {
+            window.location.href = "../admin/index.html";
+        } else if (userTypeId === 5) {
+            window.location.href = "../employee/index.html";
+        } else {
+            window.location.href = "../login/index.html";
+        }
+    }
+}
+
+const nome = response.data.name ?? 'Usuário';
+const avatar = response.data.photo ?? '';
 
 
 const rotas = {
 
     'nav-inicio': {
         fn: renderInicio,
-        titulo: `Olá, <em>${nome}</em>`
+        titulo: `Visão <em>geral</em>`
     },
 
     'nav-agendamentos': {
