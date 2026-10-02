@@ -1,6 +1,7 @@
 import HttpClientBase from './HttpClientBase.js';
 
 export default class Services extends HttpClientBase {
+
     #id;
     #name;
     #description;
@@ -10,18 +11,19 @@ export default class Services extends HttpClientBase {
 
     constructor({
         id = null,
-        name = "",
-        description = "",
+        name = null,
+        description = null,
         price = 0,
-        durationMinutes = "",
+        duration = 0,
         active = 1
     } = {}) {
+        super();
 
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.durationMinutes = durationMinutes;
+        this.duration = duration;
         this.active = active;
     }
 
@@ -49,10 +51,16 @@ export default class Services extends HttpClientBase {
     }
 
     set name(value) {
-        if (typeof value !== "string" || value.trim() === "") {
-            throw new TypeError("O nome é obrigatório");
+        if (value === null || value === "") {
+            this.#name = value;
+            return;
         }
-        this.#name = value.trim();
+
+        if (typeof value !== "string" || value.trim() === "") {
+            throw new Error("O nome é obrigatório");
+        }
+
+        this.#name = value;
     }
 
     get description() {
@@ -60,16 +68,17 @@ export default class Services extends HttpClientBase {
     }
 
     set description(value) {
-
-        if (
-            typeof value !== "string" ||
-            value.trim() === ""
-        ) {
-            throw new TypeError("A Descrição é obrigatória");
-        }
-
-        this.#description = value.trim();
+    if (value === null || value === "") {
+        this.#description = value;
+        return;
     }
+
+    if (typeof value !== "string" || value.trim() === "") {
+        throw new Error("A Descrição é obrigatória");
+    }
+
+    this.#description = value;
+}
 
     get price() {
         return this.#price;

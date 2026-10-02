@@ -15,7 +15,6 @@ export async function renderInicio(container) {
 
     const nome = responseData?.data?.name ?? 'Usuário';
 
-
     const agendamentos = await meusAgendamentos();
     const atendimentos = await meusAtendimentos();
     const proximo = await nextAgendamentos();

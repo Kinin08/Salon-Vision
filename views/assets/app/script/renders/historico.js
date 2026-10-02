@@ -1,5 +1,3 @@
-import { historico } from '../data.js';
-import { estrelas } from '../helpers.js';
 import { meusAtendimentos } from '../../../_common/Api/appointmants.js';
 
 export async function renderHistorico(c) {

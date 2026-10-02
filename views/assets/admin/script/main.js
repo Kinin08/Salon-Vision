@@ -1,4 +1,4 @@
-import { setActive, nav, toast, updateBadge } from './helpers.js';
+import { setActive, nav } from './helpers.js';
 import { initModals } from './modals.js';
 import { renderDashboard } from './renders/dashboard.js';
 import { renderAgendamentos } from './renders/agendamento.js';

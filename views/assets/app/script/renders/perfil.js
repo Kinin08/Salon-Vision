@@ -1,5 +1,5 @@
 import { meusAgendamentos } from '../data.js';
-import { toast } from '../helpers.js';
+import { mostrarFeedback } from '../../../_common/script/Feedback.js';
 import { CLIENTE } from '../data.js';
 
 import { userMe, update } from './../../../_common/Api/user.js';
@@ -267,7 +267,7 @@ export async function renderPerfil(c) {
                             alt="${me.name}"
                         />
 
-                        <div class="profile-avatar-edit" onclick="toast('Upload de foto em breve!','ti-camera')">
+                        <div class="profile-avatar-edit" onclick="mostrarFeedback('Upload de foto em breve!','warning')">
                             <i class="ti ti-camera"></i>
                         </div>
                     </div>
@@ -558,9 +558,9 @@ export async function renderPerfil(c) {
         btn.innerHTML = `<i class="ti ti-device-floppy"></i> Salvar Alterações`;
 
         if (updated.code === 200) {
-            toast(updated.message, 'ti-check');
+            mostrarFeedback(updated.message, 'success');
         } else {
-            toast(updated.message ?? 'Erro ao atualizar perfil.', 'ti-alert-triangle');
+            mostrarFeedback(updated.message ?? 'Erro ao atualizar perfil.', 'error');
         }
     });
 }

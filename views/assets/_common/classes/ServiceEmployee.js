@@ -13,6 +13,7 @@ export default class ServiceEmployee extends HttpClientBase {
         employeeId = null,
         active = 1,
     } = {}) {
+        super();
 
         this.id = id;
         this.serviceId = serviceId;

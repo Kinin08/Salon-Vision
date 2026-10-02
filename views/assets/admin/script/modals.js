@@ -5,6 +5,7 @@ import { renderServicos } from './renders/servicos.js';
 import { renderProfissionais } from './renders/profissionais.js';
 
 export function initModals() {
+    
     // Modal Agendamento
     document.getElementById('m-cancelar')?.addEventListener('click', () => closeModal('modalAgendar'));
     document.getElementById('modalAgendar')?.addEventListener('click', e => {

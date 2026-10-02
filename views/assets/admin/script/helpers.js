@@ -16,7 +16,7 @@ export function nav(renderFn, title) {
 }
 export function toast(msg, icon = 'ti-check') {
     const t = document.getElementById('toast');
-    document.getElementById('toast-msg').textContent = msg;
+    document.getElementById('toast').textContent = msg;
     t.querySelector('i').className = `ti ${icon}`;
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);

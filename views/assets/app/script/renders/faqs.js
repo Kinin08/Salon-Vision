@@ -28,18 +28,6 @@ export async function renderFaqs(c) {
                     "
                 />
 
-                <button id="faq-create-btn"
-                    style="
-                        padding:10px 14px;
-                        border-radius:10px;
-                        border:1px solid var(--gold);
-                        background:rgba(255,204,127,0.15);
-                        color:var(--gold);
-                        cursor:pointer;
-                        white-space:nowrap;
-                    ">
-                    Criar pergunta
-                </button>
             </div>
 
             <div id="faq-create"></div>

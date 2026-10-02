@@ -12,11 +12,13 @@ export default class Faqs extends HttpClientBase {
     constructor({
         id = null,
         faqCategoryId = null,
-        question = "",
+        question = null,
         active = 1,
-        answer = "",
+        answer = null,
         createIn = ""
     } = {}) {
+
+        super();
 
         this.id = id;
         this.faqCategoryId = faqCategoryId;
@@ -74,11 +76,21 @@ export default class Faqs extends HttpClientBase {
 
     set question(value) {
 
-        if (
-            typeof value !== "string" ||
-            value.trim() === ""
-        ) {
-            throw new TypeError("A pergunta é obrigatória");
+        if (value === null || value === "") {
+            this.#question = null;
+            return;
+        }
+
+        if (typeof value !== "string") {
+            throw new TypeError(
+                "A pergunta deve ser um texto"
+            );
+        }
+
+        if (value.trim() === "") {
+            throw new TypeError(
+                "A pergunta é obrigatória"
+            );
         }
 
         this.#question = value.trim();
@@ -90,11 +102,21 @@ export default class Faqs extends HttpClientBase {
 
     set answer(value) {
 
-        if (
-            typeof value !== "string" ||
-            value.trim() === ""
-        ) {
-            throw new TypeError("A resposta é obrigatória");
+        if (value === null || value === "") {
+            this.#answer = null;
+            return;
+        }
+
+        if (typeof value !== "string") {
+            throw new TypeError(
+                "A resposta deve ser um texto"
+            );
+        }
+
+        if (value.trim() === "") {
+            throw new TypeError(
+                "A resposta é obrigatória"
+            );
         }
 
         this.#answer = value.trim();
@@ -109,7 +131,9 @@ export default class Faqs extends HttpClientBase {
         const number = Number(value);
 
         if (number !== 0 && number !== 1) {
-            throw new RangeError("Active deve ser 0 ou 1");
+            throw new RangeError(
+                "Active deve ser 0 ou 1"
+            );
         }
 
         this.#active = number;

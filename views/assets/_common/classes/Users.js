@@ -14,15 +14,16 @@ export default class Users extends HttpClientBase {
 
     constructor({
         id = null,
-        name = "",
-        email = "",
-        password = "",
-        telephone = "",
+        name = null,
+        email = null,
+        password = null,
+        telephone = null,
         photo = null,
         userTypeId = null,
         registrationDate = "",
         active = 1
     } = {}) {
+        super();
 
         this.id = id;
         this.name = name;
@@ -40,7 +41,6 @@ export default class Users extends HttpClientBase {
     }
 
     set id(value) {
-
         if (value === null) {
             this.#id = null;
             return;
@@ -60,11 +60,12 @@ export default class Users extends HttpClientBase {
     }
 
     set name(value) {
+        if (value === null || value === "") {
+            this.#name = null;
+            return;
+        }
 
-        if (
-            typeof value !== "string" ||
-            value.trim() === ""
-        ) {
+        if (typeof value !== "string" || value.trim() === "") {
             throw new TypeError("O nome é obrigatório");
         }
 
@@ -76,11 +77,12 @@ export default class Users extends HttpClientBase {
     }
 
     set email(value) {
+        if (value === null || value === "") {
+            this.#email = null;
+            return;
+        }
 
-        if (
-            typeof value !== "string" ||
-            value.trim() === ""
-        ) {
+        if (typeof value !== "string" || value.trim() === "") {
             throw new TypeError("O email é obrigatório");
         }
 
@@ -98,11 +100,12 @@ export default class Users extends HttpClientBase {
     }
 
     set password(value) {
+        if (value === null || value === "") {
+            this.#password = null;
+            return;
+        }
 
-        if (
-            typeof value !== "string" ||
-            value.trim() === ""
-        ) {
+        if (typeof value !== "string" || value.trim() === "") {
             throw new TypeError("A senha é obrigatória");
         }
 
@@ -114,7 +117,6 @@ export default class Users extends HttpClientBase {
     }
 
     set telephone(value) {
-
         if (value === null || value === "") {
             this.#telephone = null;
             return;
@@ -132,7 +134,6 @@ export default class Users extends HttpClientBase {
     }
 
     set photo(value) {
-
         if (value === null || value === "") {
             this.#photo = null;
             return;
@@ -150,7 +151,6 @@ export default class Users extends HttpClientBase {
     }
 
     set userTypeId(value) {
-
         if (value === null) {
             this.#userTypeId = null;
             return;
@@ -176,7 +176,6 @@ export default class Users extends HttpClientBase {
     }
 
     set active(value) {
-
         const number = Number(value);
 
         if (number !== 0 && number !== 1) {
@@ -187,7 +186,6 @@ export default class Users extends HttpClientBase {
     }
 
     toJSON() {
-
         return {
             id: this.id,
             name: this.name,

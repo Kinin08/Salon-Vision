@@ -1,6 +1,7 @@
-import { toast } from '../helpers.js';
+import { mostrarFeedback } from '../../../_common/script/Feedback.js';
 import { abrirModal } from '../modals.js';
 import { meusAgendamentos } from '../../../_common/Api/appointmants.js';
+import Appointmants from '../../../_common/classes/Appointmants.js';
 
 export async function renderAgendamentos(c) {
 
@@ -117,7 +118,7 @@ export async function renderAgendamentos(c) {
                 </span>
             </td>
 
-            < td style = "
+            <td style = "
                 font-size: 12px;
                 color: var(--text-muted);
                 max-width: 220px;
@@ -125,12 +126,11 @@ export async function renderAgendamentos(c) {
                 overflow-wrap: break-word;
                 word-break: break-word;
             ">
-            ${
-                a.comment
-                    ? `<span title="${a.comment}">
+            ${a.comment
+                ? `<span title="${a.comment}">
                     ${a.comment}
                 </span>`
-                    : `<span style="
+                : `<span style="
                     color: var(--text-dim);
                     font-style: italic;
                 ">
@@ -207,18 +207,18 @@ export async function renderAgendamentos(c) {
 
                 if (response.code === 200) {
 
-                    toast(
+                    mostrarFeedback(
                         'Agendamento cancelado.',
-                        'ti-x'
+                        'success'
                     );
 
                     await renderAgendamentos(c);
 
                 } else {
 
-                    toast(
+                    mostrarFeedback(
                         response.message ?? 'Erro ao cancelar agendamento.',
-                        'ti-x'
+                        'error'
                     );
 
                 }
@@ -227,9 +227,9 @@ export async function renderAgendamentos(c) {
 
                 console.error('Erro ao cancelar:', error);
 
-                toast(
+                mostrarFeedback(
                     'Erro ao cancelar agendamento.',
-                    'ti-x'
+                    'error'
                 );
             }
 
@@ -241,9 +241,9 @@ export async function renderAgendamentos(c) {
 
             abrirModal(null, id);
 
-            toast(
-                'Selecione a nova data e horário.',
-                'ti-calendar'
+            mostrarFeedback(
+                'Selecione a nova data, horário e serviço.',
+                'warning'
             );
 
             return;
