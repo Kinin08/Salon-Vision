@@ -1,5 +1,5 @@
 const studentPrototype = {
-    grade: 8,
+    grade: 7,
 
     calculateAverage() {
         return this.grade;
@@ -8,14 +8,9 @@ const studentPrototype = {
 
 const student = Object.create(studentPrototype);
 
-student.grade = 10;
-
-console.log(student.grade);
+student.grade = 9;
 
 console.log(student.calculateAverage());
 
 console.log(student.hasOwnProperty("grade"));
-
 console.log(studentPrototype.hasOwnProperty("grade"));
-
-console.log(student.hasOwnProperty("calculateAverage"));

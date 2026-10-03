@@ -134,7 +134,7 @@ Crie um objeto `person` (pessoa) com propriedades `name` (nome) e `age` (idade),
 **2. Cadeia de protótipos**  
 Crie uma cadeia de herança: `Vehicle` (veículo) → `Car` (carro) → `myCar` (meu carro). Cada nível deve adicionar propriedades ou métodos. Use `Object.getPrototypeOf()` para verificar a cadeia.
 
-**3. Property shadowing (sombreamento)**  
+**3. Property shadowing (sombreamento)**  ;
 Crie um objeto `student` (aluno) com protótipo contendo método `calculateAverage()` (calcular média). No objeto filho, adicione uma propriedade `grade` (nota) que sombreie uma possível `grade` do protótipo. Use `hasOwnProperty()` para comprovar.
 
 **4. Modificação em runtime**  
