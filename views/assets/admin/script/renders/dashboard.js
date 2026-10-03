@@ -1,4 +1,11 @@
-export function renderDashboard(c) {
+import { listAllAgendamentos, receitaMensal } from '../../../_common/Api/appointmants.js';
+import { listClients } from '../../../_common/Api/user.js';
+export async function renderDashboard(c) {
+
+    const appointmants = await listAllAgendamentos();
+    const receita = await receitaMensal();
+
+    const clients = await listClients();
 
     c.innerHTML = `
 
@@ -14,7 +21,7 @@ export function renderDashboard(c) {
                     </div>
                 </div>
 
-                <h1 class="metric-value">47</h1>
+                <h1 class="metric-value">${appointmants.length}</h1>
                 <h2 class="metric-label">
                     Agendamentos hoje
                 </h2>
@@ -31,11 +38,11 @@ export function renderDashboard(c) {
                 </div>
 
                 <h1 class="metric-value">
-                    R$ 3.840
+                    R$ ${receita.revenue}
                 </h1>
 
                 <h2 class="metric-label">
-                    Faturamento hoje
+                    Faturamento do mês
                 </h2>
 
             </div>
@@ -50,30 +57,11 @@ export function renderDashboard(c) {
                 </div>
 
                 <h1 class="metric-value">
-                    1.284
+                    ${clients.length}
                 </h1>
 
                 <h2 class="metric-label">
                     Cadastro de clientes
-                </h2>
-
-            </div>
-
-
-            <div class="metric-card fade-in delay-3 cursor-pointer">
-
-                <div class="metric-top">
-                    <div class="metric-icon blue">
-                        <i class="ti ti-star"></i>
-                    </div>
-                </div>
-
-                <h1 class="metric-value">
-                    4.87
-                </h1>
-
-                <h2 class="metric-label">
-                    Avaliação média
                 </h2>
 
             </div>

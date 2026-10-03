@@ -480,4 +480,13 @@ class Appointments extends Api
 
         $this->call(200, "success", "appointment removido com sucesso", "success")->back(null);
     }
+
+    public function getReceitaMensal(): void
+    {
+
+        $appointment = new Appointment();
+        $receita = $appointment->getReceitaMensal();
+        $this->call(200, "success", "Receita mensal", "success")
+            ->back($receita);
+    }
 }

@@ -334,4 +334,23 @@ class Appointment extends Model
         $stmt = Connect::getInstance()->prepare($query);
         $stmt->execute();
     }
+    public function getReceitaMensal(): array
+    {
+        $query = "
+        SELECT
+            COALESCE(SUM(s.price), 0) AS revenue
+        FROM appointments a
+        INNER JOIN services s
+            ON s.id = a.service_id
+        WHERE MONTH(a.date_time) = MONTH(CURRENT_DATE())
+        AND YEAR(a.date_time) = YEAR(CURRENT_DATE())
+        AND a.status = 'completed'
+        AND a.active = 1
+    ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
