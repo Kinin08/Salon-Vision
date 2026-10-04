@@ -6,7 +6,6 @@ export async function meusAgendamentos() {
         const appointments = new Appointmants();
 
         const responseData = await appointments.my();
-        console.log(responseData);
 
         return responseData.data ?? [];
 
@@ -24,7 +23,6 @@ export async function nextAgendamentos() {
         const appointments = new Appointmants();
 
         const responseData = await appointments.next();
-        console.log(responseData);
 
         return responseData.data ?? [];
 
@@ -41,7 +39,6 @@ export async function meusAtendimentos() {
         const appointments = new Appointmants();
 
         const responseData = await appointments.myAtend();
-        console.log(responseData);
 
         return responseData.data ?? [];
 
@@ -52,12 +49,11 @@ export async function meusAtendimentos() {
     }
 }
 
-export async function listAllAgendamentos() {
+export async function listAll() {
     try {
         const appointments = new Appointmants();
 
         const responseData = await appointments.listAll();
-        console.log(responseData);
 
         return responseData.data ?? [];
 
@@ -73,7 +69,20 @@ export async function receitaMensal() {
         const appointments = new Appointmants();
 
         const responseData = await appointments.receitaMensal();
-        console.log(responseData);
+
+        return responseData.data ?? [];
+
+    } catch (error) {
+        console.error("Erro ao carregar receita mensal:", error);
+
+        return [];
+    }
+}
+export async function appointmentsByPeriod(period) {
+    try {
+        const appointments = new Appointmants();
+
+        const responseData = await appointments.appointmentsByPeriod(period);
 
         return responseData.data ?? [];
 

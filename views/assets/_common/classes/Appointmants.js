@@ -236,9 +236,12 @@ export default class Appointmants extends HttpClientBase {
     async listById(appointmentId) {
         return this.get(`/appointments/list/${appointmentId}`);
     }
+    async appointmentsByPeriod(period) {
+        return this.get(`/appointments/getAppointments/${period}`);
+    }
 
     async receitaMensal() {
-        return this.get("/appointments/listMensal");
+        return this.get("/appointments/getReceitaMensal");
     }
 
     async create(data) {

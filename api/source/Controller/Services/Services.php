@@ -205,4 +205,12 @@ class Services extends Api
 
         $this->call(200, "success", "service removido com sucesso", "success")->back(null);
     }
+
+    public function porcentageOfServices(): void
+    {
+        $service = new Service();
+        $service = $service->porcentageOfServices();
+        $this->call(200, "success", "Porcentagem de serviços", "success")
+            ->back($service);
+    }
 }

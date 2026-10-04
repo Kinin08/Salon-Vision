@@ -2451,13 +2451,13 @@ body {
 
 /* SERVICE BARS */
 .service-item {
-    margin-bottom: 16px;
+    margin-bottom: 40px;
 }
 
 .service-header {
     display: flex;
     justify-content: space-between;
-    font-size: 12px;
+    font-size: 15px;
     margin-bottom: 5px;
 }
 
@@ -2467,7 +2467,7 @@ body {
 
 .service-pct {
     color: var(--text);
-    font-weight: 500;
+    font-weight: 300;
 }
 
 .bar-track {
@@ -2487,7 +2487,7 @@ body {
 .staff-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 10px;
+    gap: 15px;
 }
 
 .staff-card {

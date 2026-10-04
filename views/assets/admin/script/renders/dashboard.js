@@ -1,12 +1,16 @@
-import { listAllAgendamentos, receitaMensal } from '../../../_common/Api/appointmants.js';
+import { listAll, receitaMensal, appointmentsByPeriod } from '../../../_common/Api/appointmants.js';
 import { listClients } from '../../../_common/Api/user.js';
+import { porcentageOfServices } from '../../../_common/Api/services.js';
+
 export async function renderDashboard(c) {
 
-    const appointmants = await listAllAgendamentos();
     const receita = await receitaMensal();
+    const appointmentsByPeriodData = await appointmentsByPeriod('week');
+    console.log('appointmentsByPeriodData:', appointmentsByPeriodData);
 
     const clients = await listClients();
 
+    const servicesPorcentage = await porcentageOfServices();
     c.innerHTML = `
 
         <!-- METRICS -->
@@ -21,9 +25,9 @@ export async function renderDashboard(c) {
                     </div>
                 </div>
 
-                <h1 class="metric-value">${appointmants.length}</h1>
+                <h1 class="metric-value">${appointmentsByPeriodData.length}</h1>
                 <h2 class="metric-label">
-                    Agendamentos hoje
+                    Agendamentos esta semana
                 </h2>
 
             </div>
@@ -93,7 +97,7 @@ export async function renderDashboard(c) {
                 <div class="panel-header">
 
                     <h1 class="panel-title">
-                        Agendamentos <em>de hoje</em>
+                        Agendamentos <em>desta semana</em>
                     </h1>
 
                     <button class="panel-action cursor-pointer">
@@ -205,7 +209,7 @@ export async function renderDashboard(c) {
 
         <!-- PROFISSIONAIS + PRÓXIMOS -->
 
-        <div class="grid-2 fade-in delay-4">
+        <div class="fade-in delay-4">
 
             <div class="panel">
 
@@ -226,21 +230,6 @@ export async function renderDashboard(c) {
                     class="staff-grid"
                     id="staff-grid"
                 ></div>
-
-            </div>
-
-
-            <div class="panel">
-
-                <div class="panel-header">
-
-                    <h2 class="panel-title">
-                        Próximos <em>horários</em>
-                    </h2>
-
-                </div>
-
-                <div id="upcoming-list"></div>
 
             </div>
 
@@ -266,187 +255,105 @@ export async function renderDashboard(c) {
     }
 
 
-    /* ==================== SERVIÇOS TOP ==================== */
-
-    const services = [
-        {
-            name: 'Coloração',
-            pct: 82,
-            color: '#FFCC7F'
-        },
-        {
-            name: 'Corte feminino',
-            pct: 74,
-            color: '#F4C0AD'
-        },
-        {
-            name: 'Escova & Tratamento',
-            pct: 61,
-            color: '#CA9440'
-        },
-        {
-            name: 'Manicure',
-            pct: 48,
-            color: '#e8ae92'
-        },
-        {
-            name: 'Sobrancelha',
-            pct: 35,
-            color: '#FFCC7F'
-        }
-    ];
-
     const servicesBars = document.getElementById('services-bars');
 
     if (servicesBars) {
-
         servicesBars.innerHTML = '';
 
-        services.forEach(service => {
+        const servicesToShow = servicesPorcentage.slice(0, 5);
+
+        servicesToShow.forEach((service, index) => {
+
+            const percentage = Number(service.percentage);
 
             servicesBars.innerHTML += `
-                <div class="service-item">
+            <div class="service-item">
 
-                    <div class="service-header">
+                <div class="service-header">
+                    <span class="service-name">
+                        ${service.service_name}
+                    </span>
 
-                        <span class="service-name">
-                            ${service.name}
-                        </span>
-
-                        <span class="service-pct">
-                            ${service.pct}%
-                        </span>
-
-                    </div>
-
-                    <div class="bar-track">
-
-                        <div
-                            class="bar-fill"
-                            style="
-                                width: ${service.pct}%;
-                                background: ${service.color};
-                            "
-                        ></div>
-
-                    </div>
-
+                    <span class="service-pct">
+                        ${percentage.toFixed(0)}%
+                    </span>
                 </div>
-            `;
 
+                <div
+                    class="bar-track"
+                    style="
+                        width: 100%;
+                        height: 10px;
+                        background: #2a2a2a;
+                        overflow: hidden;
+                        border-radius: 10px;
+                    "
+                >
+                    <div
+                        class="bar-fill"
+                        style="
+                            width: ${percentage}%;
+                            height: 100%;
+                            background: #FFCC7F;
+                            border-radius: 10px;
+                        "
+                    ></div>
+                </div>
+
+            </div>
+        `;
         });
-
     }
 
 
     /* ==================== AGENDAMENTOS ==================== */
 
-    const apts = [
-        {
-            name: 'Mariana S.',
-            img: 'https://randomuser.me/api/portraits/women/68.jpg',
-            service: 'Coloração',
-            hora: '09:00',
-            status: 'confirmed'
-        },
-        {
-            name: 'Bruna L.',
-            img: 'https://randomuser.me/api/portraits/women/44.jpg',
-            service: 'Corte + Escova',
-            hora: '10:30',
-            status: 'confirmed'
-        },
-        {
-            name: 'Carlos M.',
-            img: 'https://randomuser.me/api/portraits/men/32.jpg',
-            service: 'Barba',
-            hora: '11:00',
-            status: 'pending'
-        },
-        {
-            name: 'Jéssica O.',
-            img: 'https://randomuser.me/api/portraits/women/12.jpg',
-            service: 'Manicure',
-            hora: '13:00',
-            status: 'done'
-        },
-        {
-            name: 'Fernanda R.',
-            img: 'https://randomuser.me/api/portraits/women/65.jpg',
-            service: 'Hidratação',
-            hora: '14:30',
-            status: 'cancelled'
-        },
-        {
-            name: 'Tatiane V.',
-            img: 'https://randomuser.me/api/portraits/women/30.jpg',
-            service: 'Sobrancelha',
-            hora: '15:00',
-            status: 'confirmed'
-        }
-    ];
-
-    const statusLabel = {
-        confirmed: 'Confirmado',
-        pending: 'Pendente',
-        cancelled: 'Cancelado',
-        done: 'Concluído'
-    };
-
+    /* ==================== AGENDAMENTOS ==================== */
     const tbody = document.getElementById('apt-tbody');
 
     if (tbody) {
-
         tbody.innerHTML = '';
 
-        apts.forEach(appointment => {
+        appointmentsByPeriodData.forEach(appointment => {
+            const date = new Date(appointment.date_time);
+
+            const hora = date.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
 
             tbody.innerHTML += `
-                <tr>
-
-                    <td>
-
-                        <div class="client-cell">
-
-                            <img
-                                src="${appointment.img}"
+            <tr>
+                <td>
+                    <div class="client-cell">
+                    <img
+                                src="${appointment.client_name}"
                                 class="client-avatar"
-                                alt="${appointment.name}"
+                                alt="${appointment.client_photo}"
                             />
-
-                            <span class="client-name">
-                                ${appointment.name}
-                            </span>
-
-                        </div>
-
-                    </td>
-
-                    <td style="font-size:12px;color:var(--text-muted);">
-                        ${appointment.service}
-                    </td>
-
-                    <td style="font-size:12px;color:var(--gold);font-weight:500;">
-                        ${appointment.hora}
-                    </td>
-
-                    <td>
-
-                        <span class="status-pill ${appointment.status}">
-
-                            <span class="status-dot"></span>
-
-                            ${statusLabel[appointment.status]}
-
+                        <span class="client-name">
+                            ${appointment.client_name}
                         </span>
+                    </div>
+                </td>
 
-                    </td>
+                <td style="font-size:12px;color:var(--text-muted);">
+                    ${appointment.service_name}
+                </td>
 
-                </tr>
-            `;
+                <td style="font-size:12px;color:var(--gold);font-weight:500;">
+                    ${hora}
+                </td>
 
+                <td>
+                    <span class="status-pill ${appointment.status}">
+                        <span class="status-dot"></span>
+                        ${appointment.status}
+                    </span>
+                </td>
+            </tr>
+        `;
         });
-
     }
 
 
@@ -608,91 +515,6 @@ export async function renderDashboard(c) {
                     <h1 class="staff-lbl">
                         hoje
                     </h1>
-
-                </div>
-            `;
-
-        });
-
-    }
-
-
-    /* ==================== PRÓXIMOS HORÁRIOS ==================== */
-
-    const upcoming = [
-        {
-            hour: '15',
-            min: '00',
-            period: 'PM',
-            service: 'Coloração — Tatiane V.',
-            prof: 'Camila R.'
-        },
-        {
-            hour: '15',
-            min: '30',
-            period: 'PM',
-            service: 'Corte masculino — Paulo M.',
-            prof: 'Lucas T.'
-        },
-        {
-            hour: '16',
-            min: '00',
-            period: 'PM',
-            service: 'Hidratação profunda',
-            prof: 'Priya A.'
-        },
-        {
-            hour: '16',
-            min: '30',
-            period: 'PM',
-            service: 'Manicure & Pedicure',
-            prof: 'Aline F.'
-        },
-        {
-            hour: '17',
-            min: '00',
-            period: 'PM',
-            service: 'Escova modeladora',
-            prof: 'Camila R.'
-        }
-    ];
-
-    const upcomingList = document.getElementById('upcoming-list');
-
-    if (upcomingList) {
-
-        upcomingList.innerHTML = '';
-
-        upcoming.forEach(item => {
-
-            upcomingList.innerHTML += `
-                <div class="upcoming-item">
-
-                    <h1 class="upcoming-time">
-
-                        <div class="hour">
-                            ${item.hour}:${item.min}
-                        </div>
-
-                        <div class="period">
-                            ${item.period}
-                        </div>
-
-                    </h1>
-
-                    <div class="upcoming-dot"></div>
-
-                    <div class="upcoming-info">
-
-                        <p>
-                            ${item.service}
-                        </p>
-
-                        <span>
-                            com ${item.prof}
-                        </span>
-
-                    </div>
 
                 </div>
             `;

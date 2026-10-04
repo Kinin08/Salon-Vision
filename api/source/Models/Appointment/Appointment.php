@@ -266,37 +266,60 @@ class Appointment extends Model
 
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
-    public function getAtendimentos(int $clientId): array
+    public function getAppointments(string $period = "today"): array
     {
         $query = "
         SELECT
             a.id,
             a.date_time,
             a.status,
-            a.rating,
-            a.comment,
-            s.name AS service_name,
-            s.price,
-            u.name AS employee_name
+
+            u.name AS client_name,
+            u.photo AS client_photo,
+
+            s.name AS service_name
+
         FROM appointments a
+
+        INNER JOIN users u
+            ON u.id = a.client_id
+
         INNER JOIN services s
             ON s.id = a.service_id
-        INNER JOIN users u
-            ON u.id = a.employee_id
-        WHERE a.client_id = :clientId
-        AND a.active = 1
-        AND a.status = 'completed'
-        ORDER BY a.date_time DESC
+
+        WHERE a.active = 1
+        AND a.status IN ('scheduled', 'confirmed', 'in_progress')
+    ";
+
+        if ($period === "today") {
+
+            $query .= "
+            AND DATE(a.date_time) = CURDATE()
+        ";
+
+        } elseif ($period === "week") {
+
+            $query .= "
+            AND a.date_time >= CURDATE()
+            AND a.date_time < DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+        ";
+
+        } elseif ($period === "month") {
+
+            $query .= "
+            AND a.date_time >= CURDATE()
+            AND a.date_time < DATE_ADD(CURDATE(), INTERVAL 30 DAY)
+        ";
+
+        } else {
+            return [];
+        }
+
+        $query .= "
+        ORDER BY a.date_time ASC
     ";
 
         $stmt = Connect::getInstance()->prepare($query);
-
-        $stmt->bindValue(
-            ':clientId',
-            $clientId,
-            PDO::PARAM_INT
-        );
-
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -88,4 +88,73 @@ class Service extends Model
     {
         $this->active = $active;
     }
+
+    public function servicesByAppointmentCount(?int $serviceId = null): array
+    {
+        $query = "
+        SELECT
+            s.id AS service_id,
+            s.name AS service_name,
+            COUNT(a.id) AS total_appointments
+        FROM services s
+        INNER JOIN appointments a
+            ON a.service_id = s.id
+        WHERE a.status = 'completed'
+        AND a.active = 1
+    ";
+
+        if ($serviceId !== null) {
+            $query .= " AND s.id = :serviceId";
+        }
+
+        $query .= "
+        GROUP BY s.id, s.name
+        ORDER BY total_appointments DESC
+    ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+
+        if ($serviceId !== null) {
+            $stmt->bindValue(
+                ':serviceId',
+                $serviceId,
+                PDO::PARAM_INT
+            );
+        }
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function porcentageOfServices(): array
+    {
+        $query = "
+        SELECT
+            s.id AS service_id,
+            s.name AS service_name,
+            COUNT(a.id) AS total_appointments,
+            (
+                COUNT(a.id) * 100.0 /
+                (
+                    SELECT COUNT(*)
+                    FROM appointments
+                    WHERE status = 'completed'
+                    AND active = 1
+                )
+            ) AS percentage
+        FROM services s
+        INNER JOIN appointments a
+            ON a.service_id = s.id
+        WHERE a.status = 'completed'
+        AND a.active = 1
+        GROUP BY s.id, s.name
+        ORDER BY percentage DESC
+    ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

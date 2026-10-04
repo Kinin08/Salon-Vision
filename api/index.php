@@ -78,7 +78,8 @@ $route->group(null);
 
 $route->group("/appointments");
 $route->get("/history", "Appointments\\Appointments:history");
-$route->get("/listMensal", "Appointments\\Appointments:getReceitaMensal");
+$route->get("/getAppointments/{period}", "Appointments\\Appointments:getAppointments");
+$route->get("/getReceitaMensal", "Appointments\\Appointments:getReceitaMensal");
 $route->get("/my-attend", "Appointments\\Appointments:myAttend");
 $route->get("/next", "Appointments\\Appointments:next");
 $route->get("/listAll", "Appointments\\Appointments:listAll");
@@ -89,6 +90,7 @@ $route->delete("/delete/{appointmentId}", "Appointments\\Appointments:softDelete
 $route->group(null);
 
 $route->group("/services");
+$route->get("/porcentage", "Services\\Services:porcentageOfServices");
 $route->get("/list", "Services\\Services:listAll");
 $route->get("/list/{serviceId}", "Services\\Services:listById");
 $route->post("/create", "Services\\Services:create");

@@ -68,17 +68,17 @@ export default class Services extends HttpClientBase {
     }
 
     set description(value) {
-    if (value === null || value === "") {
+        if (value === null || value === "") {
+            this.#description = value;
+            return;
+        }
+
+        if (typeof value !== "string" || value.trim() === "") {
+            throw new Error("A Descrição é obrigatória");
+        }
+
         this.#description = value;
-        return;
     }
-
-    if (typeof value !== "string" || value.trim() === "") {
-        throw new Error("A Descrição é obrigatória");
-    }
-
-    this.#description = value;
-}
 
     get price() {
         return this.#price;
@@ -149,5 +149,8 @@ export default class Services extends HttpClientBase {
     }
     async softDelete(serviceId) {
         return this.delete(`/services/delete/${serviceId}`);
+    }
+    async porcentageOfServices() {
+        return this.get(`/services/porcentage`);
     }
 }

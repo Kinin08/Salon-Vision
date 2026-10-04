@@ -489,4 +489,43 @@ class Appointments extends Api
         $this->call(200, "success", "Receita mensal", "success")
             ->back($receita);
     }
+    public function getAppointments(array $data): void
+    {
+        $period = $data["period"] ?? "today";
+
+        if (!in_array($period, ["today", "week", "month"], true)) {
+            $this->call(
+                400,
+                "bad_request",
+                "Período inválido. Use 'today', 'week' ou 'month'.",
+                "error"
+            )->back();
+
+            return;
+        }
+
+        $appointment = new Appointment();
+
+        $appointment->updateStatuses();
+
+        $appointments = $appointment->getAppointments($period);
+
+        if (empty($appointments)) {
+            $this->call(
+                404,
+                "not_found",
+                "Nenhum agendamento encontrado",
+                "warning"
+            )->back([]);
+
+            return;
+        }
+
+        $this->call(
+            200,
+            "success",
+            "Lista de agendamentos",
+            "success"
+        )->back($appointments);
+    }
 }
