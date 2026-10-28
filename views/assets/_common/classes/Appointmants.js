@@ -233,6 +233,10 @@ export default class Appointmants extends HttpClientBase {
         return this.get("/appointments/listAll");
     }
 
+    async listIncomplete() {
+        return this.get("/appointments/listIncomplete");
+    }
+
     async listById(appointmentId) {
         return this.get(`/appointments/list/${appointmentId}`);
     }

@@ -55,8 +55,14 @@
                 </label>
                 <label class="block">
                     <span class="text-white/45 text-xs">Senha</span>
-                    <input id="password" type="password" required placeholder="Sua senha"
-                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
+                    <div class="relative mt-2">
+                        <input id="password" type="password" required placeholder="Sua senha"
+                            class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 pr-11 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
+                        <button type="button" data-toggle-password="password" aria-label="Mostrar senha"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-[#FFCC7F] transition cursor-pointer">
+                            <i class="ph ph-eye text-lg"></i>
+                        </button>
+                    </div>
                 </label>
                 <button id="submit" type="submit"
                     class="w-full rounded-xl bg-[#FFCC7F] text-[#3B3B42] font-bold py-3 hover:bg-[#f2bd6d] transition cursor-pointer">
@@ -78,8 +84,15 @@
                 </label>
                 <label class="block">
                     <span class="text-white/45 text-xs">Senha</span>
-                    <input id="signupPassword" type="password" required minlength="6" placeholder="Mínimo 6 caracteres"
-                        class="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
+                    <div class="relative mt-2">
+                        <input id="signupPassword" type="password" required minlength="6"
+                            placeholder="Mínimo 6 caracteres"
+                            class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 pr-11 text-sm text-white placeholder:text-white/25 outline-none focus:border-[#FFCC7F]">
+                        <button type="button" data-toggle-password="signupPassword" aria-label="Mostrar senha"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-[#FFCC7F] transition cursor-pointer">
+                            <i class="ph ph-eye text-lg"></i>
+                        </button>
+                    </div>
                 </label>
                 <button id="submit" type="submit"
                     class="w-full rounded-xl bg-[#FFCC7F] text-[#3B3B42] font-bold py-3 hover:bg-[#f2bd6d] transition cursor-pointer">
@@ -1017,6 +1030,16 @@
 
         document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => io.observe(el));
 
+        document.querySelectorAll('[data-toggle-password]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const input = document.getElementById(btn.dataset.togglePassword);
+                const icone = btn.querySelector('i');
+                const estavaOculta = input.type === 'password';
 
+                input.type = estavaOculta ? 'text' : 'password';
+                icone.classList.toggle('ph-eye', !estavaOculta);
+                icone.classList.toggle('ph-eye-slash', estavaOculta);
+            });
+        });
     </script>
 </body>

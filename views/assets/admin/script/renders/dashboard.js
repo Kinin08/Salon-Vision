@@ -1,16 +1,34 @@
-import { listAll, receitaMensal, appointmentsByPeriod } from '../../../_common/Api/appointmants.js';
+import { listEmployees } from '../../../_common/Api/user.js';
+import { receitaMensal, appointmentsByPeriod } from '../../../_common/Api/appointmants.js';
 import { listClients } from '../../../_common/Api/user.js';
+import { abrirPainelPessoas } from '../../../_common/script/PainelPessoas.js';
+import { FOTO_PADRAO } from '../../../_common/script/Default.js';
 import { porcentageOfServices } from '../../../_common/Api/services.js';
+import { montarCalendario } from '../../../_common/script/Calendario.js';
 
 export async function renderDashboard(c) {
 
     const receita = await receitaMensal();
     const appointmentsByPeriodData = await appointmentsByPeriod('week');
-    console.log('appointmentsByPeriodData:', appointmentsByPeriodData);
+
+    let doMes = [];
+    try {
+        const resposta = await appointmentsByPeriod('month');
+        if (Array.isArray(resposta)) doMes = resposta;
+    } catch { }
+
+    const unicos = new Map();
+    [...appointmentsByPeriodData, ...doMes].forEach((a) => {
+        unicos.set(a.id ?? JSON.stringify(a), a);
+    });
+    const agendamentosDoMes = [...unicos.values()];
 
     const clients = await listClients();
 
     const servicesPorcentage = await porcentageOfServices();
+
+    const listEmployee = await listEmployees();
+
     c.innerHTML = `
 
         <!-- METRICS -->
@@ -52,7 +70,7 @@ export async function renderDashboard(c) {
             </div>
 
 
-            <div class="metric-card fade-in delay-2 cursor-pointer">
+            <div class="metric-card fade-in delay-2 cursor-pointer" id="card-clientes">
 
                 <div class="metric-top">
                     <div class="metric-icon green">
@@ -100,7 +118,7 @@ export async function renderDashboard(c) {
                         Agendamentos <em>desta semana</em>
                     </h1>
 
-                    <button class="panel-action cursor-pointer">
+                    <button class="panel-action cursor-pointer" id="btn-ver-client">
                         Ver todos
                         <i class="ti ti-arrow-right"></i>
                     </button>
@@ -135,26 +153,17 @@ export async function renderDashboard(c) {
         <div class="grid-2 fade-in delay-3">
 
             <div class="panel">
-
                 <div class="panel-header">
-
-                    <h1 class="panel-title">
-                        Junho <em>2025</em>
-                    </h1>
-
-                    <div style="display:flex;gap:6px;">
-
-                        <span class="panel-action">
-                            <i class="ti ti-chevron-left"></i>
-                        </span>
-
-                        <span class="panel-action">
-                            <i class="ti ti-chevron-right"></i>
-                        </span>
-
-                    </div>
-
-                </div>
+                   <h1 class="panel-title" id="cal-title"></h1>
+                   <div style="display:flex;gap:6px;">
+                       <button type="button" class="panel-action cursor-pointer" id="cal-prev">
+                           <i class="ti ti-chevron-left"></i>
+                       </button>
+                       <button type="button" class="panel-action cursor-pointer" id="cal-next">
+                           <i class="ti ti-chevron-right"></i>
+                       </button>
+                   </div>
+               </div>
 
                 <div
                     id="cal-grid"
@@ -219,10 +228,10 @@ export async function renderDashboard(c) {
                         Profissionais <em>em serviço</em>
                     </h1>
 
-                    <span class="panel-action">
-                        Gerenciar
+                    <button type="button" class="panel-action cursor-pointer" id="btn-ver-prof">
+                        Ver todos
                         <i class="ti ti-arrow-right"></i>
-                    </span>
+                    </button>
 
                 </div>
 
@@ -307,8 +316,6 @@ export async function renderDashboard(c) {
 
 
     /* ==================== AGENDAMENTOS ==================== */
-
-    /* ==================== AGENDAMENTOS ==================== */
     const tbody = document.getElementById('apt-tbody');
 
     if (tbody) {
@@ -326,11 +333,12 @@ export async function renderDashboard(c) {
             <tr>
                 <td>
                     <div class="client-cell">
-                    <img
-                                src="${appointment.client_name}"
-                                class="client-avatar"
-                                alt="${appointment.client_photo}"
-                            />
+                   <img
+                        src="${appointment.client_photo || FOTO_PADRAO}"
+                        onerror="this.onerror=null;this.src='${FOTO_PADRAO}'"
+                        class="client-avatar"
+                        alt="Foto de ${appointment.client_name}"
+                    />
                         <span class="client-name">
                             ${appointment.client_name}
                         </span>
@@ -359,168 +367,54 @@ export async function renderDashboard(c) {
 
     /* ==================== CALENDÁRIO ==================== */
 
-    const calGrid = document.getElementById('cal-grid');
 
-    if (calGrid) {
-
-        calGrid.innerHTML = '';
-
-        const weekDays = [
-            'Dom',
-            'Seg',
-            'Ter',
-            'Qua',
-            'Qui',
-            'Sex',
-            'Sáb'
-        ];
-
-        weekDays.forEach(day => {
-
-            calGrid.innerHTML += `
-                <div class="cal-day-label">
-                    ${day}
-                </div>
-            `;
-
-        });
-
-        const startDay = 0;
-        const daysInMonth = 30;
-        const today = 31;
-
-        const withApt = [
-            2,
-            5,
-            8,
-            10,
-            13,
-            15,
-            18,
-            20,
-            22,
-            25,
-            27,
-            28
-        ];
-
-        for (let i = 0; i < startDay; i++) {
-
-            calGrid.innerHTML += `
-                <div class="cal-day other">
-                    —
-                </div>
-            `;
-
-        }
-
-        for (let day = 1; day <= daysInMonth; day++) {
-
-            const isToday = day === today;
-            const hasApt = withApt.includes(day);
-
-            let className = 'cal-day';
-
-            if (isToday) {
-
-                className += ' today';
-
-            } else if (hasApt) {
-
-                className += ' has-apt';
-
-            }
-
-            calGrid.innerHTML += `
-                <div class="${className}">
-                    ${day}
-                </div>
-            `;
-
-        }
-
-    }
-
+    montarCalendario({
+        grid: document.getElementById('cal-grid'),
+        titulo: document.getElementById('cal-title'),
+        anterior: document.getElementById('cal-prev'),
+        proximo: document.getElementById('cal-next'),
+        agendamentos: agendamentosDoMes
+    });
 
     /* ==================== PROFISSIONAIS ==================== */
-
-    const staff = [
-        {
-            name: 'Camila R.',
-            role: 'Colorista',
-            img: 'https://randomuser.me/api/portraits/women/21.jpg',
-            count: 8
-        },
-        {
-            name: 'Priya A.',
-            role: 'Cabeleireira',
-            img: 'https://randomuser.me/api/portraits/women/33.jpg',
-            count: 6
-        },
-        {
-            name: 'Lucas T.',
-            role: 'Barbeiro',
-            img: 'https://randomuser.me/api/portraits/men/45.jpg',
-            count: 5
-        },
-        {
-            name: 'Aline F.',
-            role: 'Manicure',
-            img: 'https://randomuser.me/api/portraits/women/57.jpg',
-            count: 7
-        },
-        {
-            name: 'Renata M.',
-            role: 'Estética',
-            img: 'https://randomuser.me/api/portraits/women/10.jpg',
-            count: 4
-        },
-        {
-            name: 'Diego P.',
-            role: 'Cabeleireiro',
-            img: 'https://randomuser.me/api/portraits/men/22.jpg',
-            count: 6
-        }
-    ];
 
     const staffGrid = document.getElementById('staff-grid');
 
     if (staffGrid) {
-
         staffGrid.innerHTML = '';
 
-        staff.forEach(professional => {
-
+        listEmployee.forEach(professional => {
             staffGrid.innerHTML += `
-                <div class="staff-card">
+            <div class="staff-card">
+                <img
+                    src="${professional.photo || FOTO_PADRAO}"
+                    onerror="this.onerror=null;this.src='${FOTO_PADRAO}'"
+                    class="staff-avatar"
+                    alt="Foto de ${professional.name}"
+                />
 
-                    <img
-                        src="${professional.img}"
-                        class="staff-avatar"
-                        alt="${professional.name}"
-                    />
-
-                    <h1 class="staff-name">
-                        ${professional.name}
-                    </h1>
-
-                    <h1 class="staff-role">
-                        ${professional.role}
-                    </h1>
-
-                    <h1 class="staff-count">
-                        ${professional.count}
-                    </h1>
-
-                    <h1 class="staff-lbl">
-                        hoje
-                    </h1>
-
-                </div>
-            `;
-
+                <h2 class="staff-name">
+                    ${professional.name}
+                </h2>
+            </div>
+        `;
         });
-
     }
 
+    document.getElementById('btn-ver-client')?.addEventListener('click', () => {
+        console.log('agendamentos do painel:', agendamentosDoMes);
+        abrirPainelPessoas({
+            agendamentos: agendamentosDoMes,
+            profissionais: listEmployee,
+            abaInicial: 'agendamentos'
+        });
+    });
+
+    document.getElementById('btn-ver-prof')?.addEventListener('click', () => {
+        abrirPainelPessoas({
+            agendamentos: agendamentosDoMes,
+            profissionais: listEmployee,
+            abaInicial: 'profissionais'
+        });
+    });
 }

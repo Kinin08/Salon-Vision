@@ -1,6 +1,5 @@
 import { abrirModal } from '../modals.js';
 import { navegarPara } from '../helpers.js';
-
 import { meusAgendamentos, meusAtendimentos, nextAgendamentos } from '../../../_common/Api/appointmants.js';
 import { renderAgendamentos } from './agendamentos.js';
 import Users from "../../../_common/classes/Users.js";

@@ -83,6 +83,7 @@ $route->get("/getReceitaMensal", "Appointments\\Appointments:getReceitaMensal");
 $route->get("/my-attend", "Appointments\\Appointments:myAttend");
 $route->get("/next", "Appointments\\Appointments:next");
 $route->get("/listAll", "Appointments\\Appointments:listAll");
+$route->get("/listIncomplete", "Appointments\\Appointments:listIncomplete");
 $route->get("/list/{appointmentId}", "Appointments\\Appointments:listById");
 $route->post("/create", "Appointments\\Appointments:create");
 $route->put("/update/{appointmentId}", "Appointments\\Appointments:update");

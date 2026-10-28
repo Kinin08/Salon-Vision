@@ -145,12 +145,40 @@ class Appointment extends Model
                 a.rating,
                 s.name AS service,
                 e.name AS employee,
+                c.name AS client,
+                c.photo AS photo
+            FROM appointments a
+            INNER JOIN services s ON s.id = a.service_id
+            INNER JOIN users    e ON e.id = a.employee_id
+            INNER JOIN users    c ON c.id = a.client_id
+            WHERE a.active = 1
+            ORDER BY a.date_time DESC
+        ";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function listIncomplete(): array
+    {
+        $query = "
+            SELECT
+                a.id,
+                a.service_id,
+                a.employee_id,
+                a.date_time,
+                a.status,
+                a.rating,
+                s.name AS service,
+                e.name AS employee,
                 c.name AS client
             FROM appointments a
             INNER JOIN services s ON s.id = a.service_id
             INNER JOIN users    e ON e.id = a.employee_id
             INNER JOIN users    c ON c.id = a.client_id
             WHERE a.active = 1
+            AND a.status IN ('scheduled', 'confirmed', 'in_progress')
             ORDER BY a.date_time DESC
         ";
 

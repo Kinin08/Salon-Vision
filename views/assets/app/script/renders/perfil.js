@@ -1,11 +1,14 @@
-import { meusAgendamentos } from '../data.js';
-import { mostrarFeedback } from '../../../_common/script/Feedback.js';
-import { CLIENTE } from '../data.js';
-
+import { mostrarFeedback, FOTO_PADRAO } from '../../../_common/script/Feedback.js';
+import { meusAgendamentos, meusAtendimentos, nextAgendamentos } from '../../../_common/Api/appointmants.js';
 import { userMe, update } from './../../../_common/Api/user.js';
 
 export async function renderPerfil(c) {
+    
     const me = await userMe();
+    const proximo = await nextAgendamentos();
+    const agendamentos = await meusAgendamentos()
+    const atendimentos = await meusAtendimentos();
+
     c.innerHTML = `
         <style>
         .modal-overlay {
@@ -136,6 +139,37 @@ export async function renderPerfil(c) {
             font-size: 16px;
             line-height: 1;
         }
+        .form-foto-perfil {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .form-foto-perfil .profile-avatar-wrap {
+            position: relative;
+        }
+
+        .form-foto-perfil .profile-avatar-edit {
+            cursor: pointer;
+        }
+
+        .form-foto-perfil .nome-perfil {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .form-foto-perfil .email-perfil {
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        #btn-salvar-foto {
+            width: 100%;
+            justify-content: center;
+        }
         
         .password-toggle:hover {
             color: var(--gold);
@@ -257,32 +291,35 @@ export async function renderPerfil(c) {
                 </div>
 
                 <!-- Avatar -->
-                <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:24px;">
-
+                
+                <!-- Formulário exclusivo da foto -->
+                <form id="form-foto-perfil" class="form-foto-perfil">
                     <div class="profile-avatar-wrap">
                         <img
-                            src="${me.photo}"
+                            src="${me.photo || FOTO_PADRAO}"
+                            onerror="this.onerror=null;this.src='${FOTO_PADRAO}'"
                             class="profile-avatar"
                             id="perfil-foto"
-                            alt="${me.name}"
+                            alt="Foto de perfil"
                         />
 
-                        <div class="profile-avatar-edit" onclick="mostrarFeedback('Upload de foto em breve!','warning')">
+                        <label
+                            for="input-foto"
+                            class="profile-avatar-edit"
+                            title="Alterar foto"
+                        >
                             <i class="ti ti-camera"></i>
-                        </div>
+                        </label>
                     </div>
-
-                    <div style="text-align:center;margin-top:12px;">
-                        <p style="font-size:15px;font-weight:600;color:var(--text);">
-                            ${me.name}
-                        </p>
-
-                        <p style="font-size:11px;color:var(--text-dim);">
-                            ${me.email}
-                        </p>
-                    </div>
-
-                </div>
+                
+                    <input
+                        type="file"
+                        id="input-foto"
+                        name="photo"
+                        accept="image/png,image/jpeg,image/webp"
+                        hidden
+                    />
+                </form>
 
                 <div class="form-grid">
                     <div class="form-group">
@@ -370,7 +407,6 @@ export async function renderPerfil(c) {
                 </button>
             </div>
 
-            <!-- Resumo -->
             <div class="gap-y perfil-resumo">
                 <div class="panel fade-in delay-1">
                     <div class="panel-header" style="margin-bottom:12px;">
@@ -378,16 +414,21 @@ export async function renderPerfil(c) {
                     </div>
                     <div style="display:flex;flex-direction:column;gap:12px;">
                         <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <span style="font-size:12px;color:var(--text-dim);">Agendamentos realizados</span>
-                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${CLIENTE.totalAgendamentos}</span>
+                            <span style="font-size:12px;color:var(--text-dim);">Agendamentos</span>
+                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${agendamentos.length}</span>
                         </div>
                         <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <span style="font-size:12px;color:var(--text-dim);">Avaliações feitas</span>
-                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${CLIENTE.avaliacoesFeitas}</span>
+                            <span style="font-size:12px;color:var(--text-dim);">Próximo agendamentos</span>
+                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${atendimentos.length}</span>
                         </div>
                         <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <span style="font-size:12px;color:var(--text-dim);">Próximos agendamentos</span>
-                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${meusAgendamentos.filter(a => a.status !== 'cancelled').length}</span>
+                            <span style="font-size:12px;color:var(--text-dim);">Data do Próximo agendamento</span>
+                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${proximo && !Array.isArray(proximo)
+            ? new Date(proximo.date_time).toLocaleString('pt-BR', {
+                dateStyle: 'short',
+                timeStyle: 'short'
+            })
+            : 'Nenhum'}</span>
                         </div>
                     </div>
                 </div>
@@ -395,6 +436,135 @@ export async function renderPerfil(c) {
 
         </div>
         `;
+
+
+    const formularioFoto = c.querySelector('#form-foto-perfil');
+    const inputFoto = c.querySelector('#input-foto');
+    const imagemPerfil = c.querySelector('#perfil-foto');
+
+    // Foto escolhida, mas ainda não enviada (vai junto com "Salvar Alterações")
+    let fotoSelecionada = null;
+
+    // Não deixa o form recarregar a página
+    formularioFoto?.addEventListener('submit', (event) => event.preventDefault());
+
+    inputFoto?.addEventListener('change', () => {
+        const arquivo = inputFoto.files[0];
+        if (!arquivo) return;
+
+        if (!['image/jpeg', 'image/png', 'image/webp'].includes(arquivo.type)) {
+            mostrarFeedback('Formato de imagem não permitido.', 'error');
+            inputFoto.value = '';
+            return;
+        }
+
+        if (arquivo.size > 2 * 1024 * 1024) {
+            mostrarFeedback('A imagem deve ter no máximo 2 MB.', 'error');
+            inputFoto.value = '';
+            return;
+        }
+
+        fotoSelecionada = arquivo;
+        imagemPerfil.src = URL.createObjectURL(arquivo); // preview
+    });
+
+    async function enviarFoto(arquivo) {
+        const dados = new FormData();
+        dados.append('arquivo', arquivo);
+
+        const resposta = await fetch(
+            'http://localhost/Salon-Vision/Api/source/controller/uploader-main/upload.php',
+            { method: 'POST', body: dados }
+        );
+        const texto = await resposta.text();
+        let resultado;
+
+        try {
+            resultado = JSON.parse(texto);
+        } catch {
+            console.error('Resposta do upload.php (HTTP ' + resposta.status + '):', texto);
+            throw new Error('O servidor não devolveu JSON (HTTP ' + resposta.status + '). Veja o console (F12).');
+        }
+
+        if (!resposta.ok || !resultado.success) {
+            throw new Error(resultado.error || 'Erro no upload da foto.');
+        }
+
+        return resultado.url;
+    }
+
+
+    // ============================================================
+    // BLOCO 2
+    // Substitua o handler do botão #btn-salvar (o último do arquivo) por este.
+    // ============================================================
+
+    document.getElementById('btn-salvar')?.addEventListener('click', async () => {
+        const btn = document.getElementById('btn-salvar');
+
+        const nome = document.getElementById('input-nome').value;
+        const email = document.getElementById('input-email').value;
+        const telephone = document
+            .getElementById('input-tel')
+            .value
+            .replace(/\D/g, '');
+
+        const currentPassword = document.getElementById('senha-atual').value;
+        const newPassword = document.getElementById('nova-senha').value;
+
+        btn.disabled = true;
+        btn.innerHTML = `<i class="ti ti-loader-2"></i> Salvando...`;
+
+        const restaurarBotao = () => {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="ti ti-device-floppy"></i> Salvar Alterações`;
+        };
+
+        // Se escolheu foto nova, envia primeiro; senão mantém a atual
+        let photo = me.photo;
+
+        if (fotoSelecionada) {
+            try {
+                photo = await enviarFoto(fotoSelecionada);
+            } catch (erro) {
+                mostrarFeedback(erro.message || 'Não foi possível enviar a foto.', 'error');
+                imagemPerfil.src = me.photo; // volta para a foto anterior
+                fotoSelecionada = null;
+                inputFoto.value = '';
+                restaurarBotao();
+                return;
+            }
+        }
+
+        const updated = await update({
+            name: nome,
+            email: email,
+            telephone: telephone,
+            photo: photo,
+            currentPassword: currentPassword,
+            password: newPassword
+        });
+
+        restaurarBotao();
+
+        if (updated.code === 200) {
+            // Atualiza a foto em todos os lugares da tela (?t= evita cache)
+            if (fotoSelecionada) {
+                const novaSrc = photo + '?t=' + Date.now();
+                me.photo = photo;
+                imagemPerfil.src = novaSrc;
+                document.getElementById('user-photo')?.setAttribute('src', novaSrc);
+                document.getElementById('user-avatar')?.setAttribute('src', novaSrc);
+
+                fotoSelecionada = null;
+                inputFoto.value = '';
+            }
+
+            mostrarFeedback(updated.message, 'success');
+        } else {
+            mostrarFeedback(updated.message ?? 'Erro ao atualizar perfil.', 'error');
+        }
+    });
 
     function formatarTelefone(valor) {
         let input = valor.replace(/\D/g, '').slice(0, 11);
@@ -450,7 +620,7 @@ export async function renderPerfil(c) {
 
     configurarToggleSenha('btn-visualizar-senha-atual', 'senha-atual');
     configurarToggleSenha('btn-visualizar-senha', 'nova-senha');
-    configurarToggleSenha('btn-visualizar-senha-delete','senha-delete');
+    configurarToggleSenha('btn-visualizar-senha-delete', 'senha-delete');
 
     document.getElementById('btn-alterar-senha')?.addEventListener('click', () => {
         const formSenha = document.getElementById('form-alterar-senha');
@@ -529,38 +699,4 @@ export async function renderPerfil(c) {
         'click',
         fecharModalDeletar
     );
-
-    document.getElementById('btn-salvar')?.addEventListener('click', async () => {
-        const btn = document.getElementById('btn-salvar');
-
-        const nome = document.getElementById('input-nome').value;
-        const email = document.getElementById('input-email').value;
-        const telephone = document
-            .getElementById('input-tel')
-            .value
-            .replace(/\D/g, '');
-
-        const currentPassword = document.getElementById('senha-atual').value;
-        const newPassword = document.getElementById('nova-senha').value;
-
-        btn.disabled = true;
-        btn.innerHTML = `<i class="ti ti-loader-2"></i> Salvando...`;
-
-        const updated = await update({
-            name: nome,
-            email: email,
-            telephone: telephone,
-            currentPassword: currentPassword,
-            password: newPassword
-        });
-
-        btn.disabled = false;
-        btn.innerHTML = `<i class="ti ti-device-floppy"></i> Salvar Alterações`;
-
-        if (updated.code === 200) {
-            mostrarFeedback(updated.message, 'success');
-        } else {
-            mostrarFeedback(updated.message ?? 'Erro ao atualizar perfil.', 'error');
-        }
-    });
 }

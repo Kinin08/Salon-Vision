@@ -28,11 +28,11 @@ class Appointments extends Api
 
         if (empty($history)) {
             $this->call(
-                404,
-                "not_found",
+                200,
+                "success",
                 "Usuário sem agendamentos",
-                "warning"
-            )->back();
+                "success"
+            )->back([]);
             return;
         }
 
@@ -49,6 +49,13 @@ class Appointments extends Api
         $appointment->updateStatuses();
         $this->call(200, "success", "Lista de agendamentos", "success")
             ->back($appointment->listAll());
+    }
+    public function listIncomplete(): void
+    {
+        $appointment = new Appointment();
+        $appointment->updateStatuses();
+        $this->call(200, "success", "Lista de agendamentos incompletos", "success")
+            ->back($appointment->listIncomplete());
     }
 
     public function listById(array $data): void
@@ -394,11 +401,11 @@ class Appointments extends Api
 
         if (!$nextAppointment) {
             $this->call(
-                404,
-                "not_found",
+                200,
+                "success",
                 "Nenhum próximo agendamento encontrado",
-                "warning"
-            )->back();
+                "success"
+            )->back([]);
 
             return;
         }

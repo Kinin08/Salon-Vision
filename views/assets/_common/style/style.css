@@ -5,47 +5,47 @@
 }
 
 #toast {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 200;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 200;
 
-    padding: 10px 14px;
-    border-radius: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
 
-    font-size: 12px;
+  font-size: 12px;
 
-    display: flex;
-    align-items: center;
-    gap: 7px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
 
-    width: max-content;
-    max-width: 320px;
+  width: max-content;
+  max-width: 320px;
 
-    border: 1px solid var(--border-strong);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
 
-    transform: translateY(15px);
-    opacity: 0;
+  transform: translateY(15px);
+  opacity: 0;
 
-    transition: opacity .25s ease, transform .25s ease;
+  transition: opacity .25s ease, transform .25s ease;
 
-    pointer-events: none;
+  pointer-events: none;
 }
 
 #toast.show {
-    transform: translateY(0);
-    opacity: 1;
+  transform: translateY(0);
+  opacity: 1;
 }
 
 #toast i {
-    color: var(--gold);
-    font-size: 15px;
-    flex-shrink: 0;
+  color: var(--gold);
+  font-size: 15px;
+  flex-shrink: 0;
 }
 
 #toast span {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 .reveal.visible {
@@ -256,6 +256,34 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+
+.password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 26px;
+  height: 26px;
+  padding: 0;
+
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  color: var(--text-dim);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.password-toggle:hover {
+  color: var(--gold);
 }
 
 .primary-btn,

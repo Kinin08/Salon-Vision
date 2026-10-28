@@ -2,17 +2,15 @@ import Appointmants from "../classes/Appointmants.js";
 
 export async function meusAgendamentos() {
     try {
-
         const appointments = new Appointmants();
-
         const responseData = await appointments.my();
 
-        return responseData.data ?? [];
+        return Array.isArray(responseData?.data)
+            ? responseData.data
+            : [];
 
     } catch (error) {
-
-        console.error("Erro ao carregar Agendamentos:", error);
-
+        console.error("Erro ao carregar agendamentos:", error);
         return [];
     }
 }
@@ -83,6 +81,20 @@ export async function appointmentsByPeriod(period) {
         const appointments = new Appointmants();
 
         const responseData = await appointments.appointmentsByPeriod(period);
+
+        return responseData.data ?? [];
+
+    } catch (error) {
+        console.error("Erro ao carregar receita mensal:", error);
+
+        return [];
+    }
+}
+export async function listIncomplete() {
+    try {
+        const appointments = new Appointmants();
+
+        const responseData = await appointments.listIncomplete();
 
         return responseData.data ?? [];
 

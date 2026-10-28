@@ -1,4 +1,4 @@
-
+import { FOTO_PADRAO } from '../../../_common/script/Feedback.js';
 import { listEmployees } from '../../../_common/Api/user.js';
 import { listServiceEmployeesById } from '../../../_common/Api/serviceEmployee.js';
 
@@ -309,7 +309,8 @@ export async function renderProfissionais(c) {
             </button>
 
             <img
-                src="${employee.photo}"
+                src="${employee.photo || FOTO_PADRAO}"
+                onerror="this.onerror=null;this.src='${FOTO_PADRAO}'"
                 class="prof-modal-avatar"
                 alt="${employee.name}"
             />
@@ -438,7 +439,8 @@ export async function renderProfissionais(c) {
         div.innerHTML = `
 
             <img
-                src="${p.photo}"
+                src="${p.photo || FOTO_PADRAO}"
+                onerror="this.onerror=null;this.src='${FOTO_PADRAO}'"
                 class="prof-avatar"
                 alt="${p.name}"
             />

@@ -45,7 +45,6 @@ export async function abrirModal(servicoPresel = null, appointmentId = null) {
         try {
             const response = await appointments.listById(appointmentId);
 
-            console.log('Agendamento para edição:', response);
 
             if (!response?.data) {
                 mostrarFeedback(
@@ -341,12 +340,6 @@ export function initModals() {
                     response = await appointments.create(dados);
 
                 }
-
-
-                console.log(
-                    'Resposta da API:',
-                    response
-                );
 
 
                 if (

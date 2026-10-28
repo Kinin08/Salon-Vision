@@ -6,7 +6,7 @@ import {
 } from './helpers.js';
 
 import { initModals } from './modals.js';
-
+import { FOTO_PADRAO } from '../../_common/script/Default.js';
 import { renderInicio } from './renders/inicio.js';
 import { renderAgendamentos } from './renders/agendamentos.js';
 import { renderHistorico } from './renders/historico.js';
@@ -39,8 +39,6 @@ if (response.code !== 200) {
 }
 
 const nome = response.data.name ?? 'Usuário';
-const avatar = response.data.photo ?? '';
-
 
 const rotas = {
 
@@ -126,26 +124,26 @@ function initTopbarDate() {
 
 
 function initTopbarUser() {
-
     const userName = document.getElementById('user-name');
-
-    const userAvatar = document.getElementById('user-avatar');
+    const foto = response.data.photo || FOTO_PADRAO;
 
     if (userName) {
-
         userName.textContent = nome;
-
     }
 
-    if (userAvatar && avatar) {
+    for (const id of ['user-photo', 'user-avatar']) {
+        const img = document.getElementById(id);
+        if (!img) continue;
 
-        userAvatar.src = avatar;
-
-        userAvatar.alt = nome;
-
+        img.onerror = () => {
+            img.onerror = null;
+            img.src = FOTO_PADRAO;
+        };
+        img.src = foto;
+        img.alt = `Foto de ${nome}`;
     }
-
 }
+
 
 function init() {
 
