@@ -1,13 +1,13 @@
-import { mostrarFeedback, FOTO_PADRAO } from '../../../_common/script/Feedback.js';
-import { meusAgendamentos, meusAtendimentos, nextAgendamentos } from '../../../_common/Api/appointmants.js';
-import { userMe, update } from './../../../_common/Api/user.js';
+import { mostrarFeedback } from '../../../_common/script/Feedback.js';
+import { FOTO_PADRAO } from '../../../_common/script/Default.js';
+import { meusAgendamentos, nextAgendamentos } from '../../../_common/Api/appointmants.js';
+import { userMe, update, deletarUsuario } from './../../../_common/Api/user.js';
 
 export async function renderPerfil(c) {
-    
+
     const me = await userMe();
     const proximo = await nextAgendamentos();
-    const agendamentos = await meusAgendamentos()
-    const atendimentos = await meusAtendimentos();
+    const agendamentos = await meusAgendamentos();
 
     c.innerHTML = `
         <style>
@@ -418,10 +418,6 @@ export async function renderPerfil(c) {
                             <span style="font-size:14px;font-weight:600;color:var(--gold);">${agendamentos.length}</span>
                         </div>
                         <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <span style="font-size:12px;color:var(--text-dim);">Próximo agendamentos</span>
-                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${atendimentos.length}</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
                             <span style="font-size:12px;color:var(--text-dim);">Data do Próximo agendamento</span>
                             <span style="font-size:14px;font-weight:600;color:var(--gold);">${proximo && !Array.isArray(proximo)
             ? new Date(proximo.date_time).toLocaleString('pt-BR', {
@@ -641,6 +637,10 @@ export async function renderPerfil(c) {
 
     const modalDeletar = document.getElementById('modal-deletar');
 
+    
+    const buttonsToDelete = document.querySelector('.buttonsToDelete');
+    const senhaToDelete = document.querySelector('.senhaToDelete');
+    
     function abrirModalDeletar() {
         modalDeletar.classList.add('is-open');
 
@@ -682,8 +682,6 @@ export async function renderPerfil(c) {
         }
     });
 
-    const buttonsToDelete = document.querySelector('.buttonsToDelete');
-    const senhaToDelete = document.querySelector('.senhaToDelete');
 
     const btnConfirmarDelete = document.getElementById('btn-confirmar-delete');
     const btnCancelarDeleteSenha = document.getElementById('btn-cancelar-delete-senha');
@@ -699,4 +697,33 @@ export async function renderPerfil(c) {
         'click',
         fecharModalDeletar
     );
+    document.getElementById('btn-excluir-conta')
+        ?.addEventListener('click', async (event) => {
+            const botao = event.currentTarget;
+            const senha = document.getElementById('senha-delete').value;
+
+            if (!senha) {
+                mostrarFeedback('Digite sua senha para excluir a conta.', 'error');
+                return;
+            }
+
+            botao.disabled = true;
+
+            try {
+
+                const resultado = await deletarUsuario(me.id, senha);
+
+                if (resultado?.code === 200) {
+                    localStorage.removeItem('token');
+                    window.location.href = '/Salon-Vision/';
+                } else {
+                    mostrarFeedback(resultado?.message || 'Erro ao excluir conta.', 'error');
+                }
+            } catch (erro) {
+                console.error(erro);
+                mostrarFeedback('Erro ao excluir conta.', 'error');
+            } finally {
+                botao.disabled = false;
+            }
+        });
 }

@@ -1,4 +1,4 @@
-import { FOTO_PADRAO } from '../../../_common/script/Feedback.js';
+import { FOTO_PADRAO } from '../../../_common/script/Default.js';
 import { listEmployees } from '../../../_common/Api/user.js';
 import { listServiceEmployeesById } from '../../../_common/Api/serviceEmployee.js';
 

@@ -17,18 +17,14 @@ export async function meusAgendamentos() {
 
 export async function nextAgendamentos() {
     try {
-
         const appointments = new Appointmants();
-
         const responseData = await appointments.next();
 
-        return responseData.data ?? [];
+        return responseData.data ?? null;
 
     } catch (error) {
-
         console.error("Erro ao carregar Agendamentos:", error);
-
-        return [];
+        return null;
     }
 }
 

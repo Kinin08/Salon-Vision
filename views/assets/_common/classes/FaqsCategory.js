@@ -84,21 +84,18 @@ export default class FaqsCategory extends HttpClientBase {
     }
 
     async listAll() {
-        return this.get("/faqs/categories/list");
-    }
-    async listFaqAndCategories() {
-        return this.get("/faqs/listFaqAndCategories");
+        return this.get("/faqs_categories/list");
     }
     async listById(faqId) {
-        return this.get(`/faqs/list/${faqId}`);
+        return this.get(`/faqs_categories/${faqId}`);
     }
     async create(data) {
-        return this.postForm("/faqs/create", data);
+        return this.postForm("/faqs_categories/create", data);
     }
     async update(faqId, data) {
-        return this.putForm(`/faqs/update/${faqId}`, data);
+        return this.putForm(`/faqs_categories/update/${faqId}`, data);
     }
     async softDelete(faqId) {
-        return this.delete(`/faqs/delete/${faqId}`);
+        return this.delete(`/faqs_categories/delete/${faqId}`);
     }
 }

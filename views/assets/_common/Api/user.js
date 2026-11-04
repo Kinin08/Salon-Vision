@@ -84,3 +84,16 @@ export async function listAdmins() {
         return [];
     }
 }
+export async function deletarUsuario(userId) {
+    try {
+        const user = new Users();
+
+        const response = await user.softDelete(userId);
+
+        return response;
+
+    } catch (error) {
+        console.error("Erro ao deletar usuário:", error);
+        return null;
+    }
+}

@@ -831,19 +831,6 @@ class Users extends Api
             return;
         }
 
-        $adminId = $this->authToken(5);
-
-        if (!$adminId) {
-            $this->call(
-                401,
-                "unauthorized",
-                "Usuário não está autenticado.",
-                "error"
-            )->back();
-
-            return;
-        }
-
         $user = new User();
 
         if (!$user->selectById($userId)) {

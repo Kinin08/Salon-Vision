@@ -88,6 +88,14 @@ class Service extends Model
     {
         $this->active = $active;
     }
+    public function list(): array
+    {
+        $query = "SELECT * FROM services WHERE active = 1 ORDER BY id DESC";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     public function porcentageOfServices(): array
     {

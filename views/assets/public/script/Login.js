@@ -19,15 +19,31 @@ loginForm.addEventListener("submit", async (event) => {
 
         if (response && (response.code === 200 || response.code === 201)) {
 
+            // Busca os dados completos do usuário
+            const userData = await user.listById(response.data.id);
+
+            if (!userData || userData.code !== 200) {
+                mostrarFeedback("Não foi possível verificar sua conta.", "error");
+                return;
+            }
+
+            // Verifica se a conta está inativa
+            if (Number(userData.data.active) === 0) {
+                mostrarFeedback(
+                    "Sua conta está desativada.",
+                    "error"
+                );
+                return;
+            }
+
+            // Somente contas ativas recebem o token
             localStorage.setItem("token", response.data.token);
 
             document.getElementById("password").value = "";
 
             mostrarFeedback("Login realizado com sucesso!", "success");
 
-            const locationByRole = await user.listById(response.data.id);
-
-            const userTypeId = locationByRole.data.userTypeId;
+            const userTypeId = Number(userData.data.userTypeId);
 
             if (userTypeId === 4) {
                 window.location.href = "./views/assets/app/index.html";
@@ -36,10 +52,15 @@ loginForm.addEventListener("submit", async (event) => {
             } else if (userTypeId === 3) {
                 window.location.href = "./views/assets/admin/index.html";
             } else {
+                localStorage.removeItem("token");
                 mostrarFeedback("Tipo de usuário desconhecido.", "error");
             }
+
         } else {
-            mostrarFeedback(response?.message || "E-mail ou senha inválidos.", "error");
+            mostrarFeedback(
+                response?.message || "E-mail ou senha inválidos.",
+                "error"
+            );
         }
 
     } catch (error) {
@@ -65,13 +86,20 @@ signupForm.addEventListener("submit", async (event) => {
             setAuthMode("login");
             document.getElementById("email").value = email;
             document.getElementById("password").value = "";
+
             mostrarFeedback("Cadastro realizado com sucesso!", "success");
         } else {
-            mostrarFeedback(response?.message || "Não foi possível concluir o cadastro.", "error");
+            mostrarFeedback(
+                response?.message || "Não foi possível concluir o cadastro.",
+                "error"
+            );
         }
 
     } catch (error) {
         console.error("Erro ao fazer cadastro:", error);
-        mostrarFeedback(error?.message || "Cadastro não realizado. Tente novamente.", "error");
+        mostrarFeedback(
+            error?.message || "Cadastro não realizado. Tente novamente.",
+            "error"
+        );
     }
 });

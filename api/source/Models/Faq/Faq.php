@@ -82,13 +82,12 @@ class Faq extends Model
     {
         $this->createdAt = $createdAt;
     }
-    public function getUserId(): ?string
+    public function list(): array
     {
-        return $this->userId;
-    }
-    public function setUserId(string $userId): void
-    {
-        $this->userId = $userId;
+        $query = "SELECT * FROM faqs WHERE active = 1 ORDER BY id DESC";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function listFaqAndCategories(): array
     {
@@ -96,6 +95,7 @@ class Faq extends Model
             $query = "
             SELECT 
                 f.id,
+                f.faqs_category_id AS category_id,
                 f.question,
                 f.answer,
                 f.created_at,
@@ -104,6 +104,7 @@ class Faq extends Model
             FROM faqs f
             JOIN faqs_categories c ON c.id = f.faqs_category_id
             LEFT JOIN users u ON u.id = f.user_id
+            WHERE f.active = 1
             ORDER BY f.id DESC;
         ";
 

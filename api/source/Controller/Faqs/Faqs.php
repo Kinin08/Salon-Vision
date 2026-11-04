@@ -17,7 +17,7 @@ class Faqs extends Api
             "success",
             "Lista de FAQs",
             "success"
-        )->back($faq->selectAll());
+        )->back($faq->list());
     }
     public function listFaqAndCategories(array $data): void
     {
@@ -66,7 +66,8 @@ class Faqs extends Api
     }
     public function create(array $data): void
     {
-        $data = json_decode(file_get_contents("php://input"), true) ?? [];
+        $json = json_decode(file_get_contents("php://input"), true);
+        $data = is_array($json) ? $json : $_POST;
 
         if (!$this->validate($data)) {
             $this->call(
@@ -118,6 +119,11 @@ class Faqs extends Api
     }
     public function update(array $data): void
     {
+        $json = json_decode(file_get_contents("php://input"), true);
+        if (is_array($json)) {
+            $data = array_merge($data, $json);
+        }
+
         if (!filter_var($data["faq_id"], FILTER_VALIDATE_INT)) {
             $this->call(
                 400,

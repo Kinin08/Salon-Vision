@@ -1,28 +1,11 @@
 import { LABEL } from '../data.js';
-import { toast, updateBadge, openModal } from '../helpers.js';
-import { listIncomplete, listAll } from '../../../_common/Api/appointmants.js';
+import { mostrarFeedback, mostrarRespostaAPI } from '../../../_common/script/Feedback.js';
+import Appointmants from '../../../_common/classes/Appointmants.js';
 import { FOTO_PADRAO } from '../../../_common/script/Default.js';
 
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 }[c]));
-
-function pegar(obj, caminhos) {
-    for (const caminho of caminhos) {
-        const valor = caminho.split('.').reduce((acc, k) => acc?.[k], obj);
-
-        if (valor === undefined || valor === null || valor === '') continue;
-
-        if (typeof valor === 'object') {
-            const nome = valor.name ?? valor.nome;
-            if (nome) return nome;
-            continue;
-        }
-
-        return valor;
-    }
-    return null;
-}
 
 function dataHora(a) {
     const d = new Date(String(a.date_time ?? '').replace(' ', 'T'));
@@ -49,11 +32,11 @@ export async function renderAgendamentos(c) {
             </div>
 
             <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
-                ${['Todos', 'Confirmado', 'Pendente', 'Concluído', 'Cancelado', 'agendados']
+                ${['Todos', 'Pendente', 'Concluído', 'Cancelado', 'Agendados']
             .map((label, i) => `
                         <button
                             class="btn btn-ghost btn-sm filter-btn"
-                            data-filter="${['all', 'confirmed', 'in_progress', 'completed', 'canceled', 'scheduled'][i]}"
+                            data-filter="${['all', 'in_progress', 'completed', 'canceled', 'scheduled'][i]}"
                             style="${i === 0
                     ? 'background:var(--surface-2);color:var(--text);border-color:var(--border-strong);'
                     : ''}"
@@ -85,48 +68,42 @@ export async function renderAgendamentos(c) {
     const tbody = c.querySelector('#tbody-apt');
     const filterButtons = c.querySelectorAll('.filter-btn');
 
+    // Tenta listAll; se falhar ou vier vazio, tenta listIncomplete
+
+    const api = new Appointmants();
     let appointments = [];
     let currentFilter = 'all';
 
-    // Tenta listAll; se falhar ou vier vazio, tenta listIncomplete
-    let carregou = false;
-
-    for (const buscar of [listAll, listIncomplete]) {
-        try {
-            const response = await buscar();
-            const lista = Array.isArray(response)
-                ? response
-                : response?.data ?? response?.appointments ?? [];
-
-            carregou = true;
-
-            if (Array.isArray(lista) && lista.length > 0) {
-                appointments = lista;
-                break;
-            }
-        } catch (error) {
-            console.error('Erro ao carregar agendamentos:', error);
-        }
+    async function loadAppointments() {
+        const response = await api.listAll();
+        const lista = Array.isArray(response)
+            ? response
+            : response?.data ?? response?.appointments ?? [];
+        appointments = Array.isArray(lista) ? lista : [];
     }
 
-    if (!carregou) {
+    try {
+        await loadAppointments();
+    } catch (error) {
+        console.error('Erro ao carregar agendamentos:', error);
         tbody.innerHTML = `
-            <tr>
-                <td colspan="7">
-                    Não foi possível carregar os agendamentos.
-                </td>
-            </tr>
-        `;
+        <tr><td colspan="7">Não foi possível carregar os agendamentos.</td></tr>
+    `;
         return;
+    }
+
+    function filtrar(filter) {
+        if (filter === 'all') return appointments;
+        if (filter === 'canceled') return appointments.filter(a => CANCELADO.includes(a.status));
+        if (filter === 'completed') return appointments.filter(a => CONCLUIDO.includes(a.status));
+        return appointments.filter(a => a.status === filter);
     }
 
     function renderRows(filter) {
         currentFilter = filter;
         tbody.innerHTML = '';
 
-        const filtered = filter === 'all'
-            ? appointments
-            : appointments.filter(a => a.status === filter);
+        const filtered = filtrar(filter);
 
         if (filtered.length === 0) {
             tbody.innerHTML = `
@@ -166,21 +143,10 @@ export async function renderAgendamentos(c) {
                     </div>
                 </td>
 
-                <td style="font-size:12px;color:var(--text-muted);">
-                    ${esc(servico)}
-                </td>
-
-                <td style="font-size:12px;color:var(--text-muted);">
-                    ${esc(profissional)}
-                </td>
-
-                <td style="font-size:12px;">
-                    ${esc(data)}
-                </td>
-
-                <td style="font-size:12px;color:var(--gold);font-weight:500;">
-                    ${esc(hora)}
-                </td>
+                <td style="font-size:12px;color:var(--text-muted);">${esc(servico)}</td>
+                <td style="font-size:12px;color:var(--text-muted);">${esc(profissional)}</td>
+                <td style="font-size:12px;">${esc(data)}</td>
+                <td style="font-size:12px;color:var(--gold);font-weight:500;">${esc(hora)}</td>
 
                 <td>
                     <span class="pill ${esc(a.status)}">
@@ -229,37 +195,52 @@ export async function renderAgendamentos(c) {
     }
 
     // Um único evento para confirmar ou cancelar.
-    tbody.addEventListener('click', async e => {
-        const btn = e.target.closest('[data-action]');
+    tbody.addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
 
-        if (!btn) return;
+    const id = Number(btn.dataset.id);
+    const appointment = appointments.find(a => Number(a.id) === id);
+    if (!appointment) return;
 
-        const id = Number(btn.dataset.id);
-        const appointment = appointments.find(a => Number(a.id) === id);
+    if (btn.dataset.action === 'confirmar') {
+        if (appointment.status !== 'pending') return;
 
-        if (!appointment) return;
+        // ainda só em memória
+        appointment.status = 'confirmed';
+        mostrarFeedback('Agendamento confirmado!', 'success');
+        renderRows(currentFilter);
+        return;
+    }
 
-        if (btn.dataset.action === 'confirmar') {
-            if (appointment.status !== 'pending') return;
+    if (btn.dataset.action === 'cancelar') {
+        if (!confirm('Cancelar este agendamento?')) return;
 
-            // Atualiza apenas a interface e os dados em memória.
-            appointment.status = 'confirmed';
+        btn.disabled = true;
 
-            toast('Agendamento confirmado!', 'ti-check');
-            updateBadge();
+        try {
+            const resposta = await api.softDelete(id);
+            console.log('Resposta cancelar agendamento:', resposta);
+
+            if (resposta?.code === 200 || resposta?.code === 201) {
+                mostrarFeedback('Agendamento cancelado com sucesso.', 'success');
+            } else if (resposta?.code === 404) {
+                mostrarFeedback('Esse agendamento já foi cancelado.', 'warning');
+            } else {
+                mostrarRespostaAPI(resposta);
+                btn.disabled = false;
+                return;
+            }
+
+            await loadAppointments();
             renderRows(currentFilter);
+        } catch (error) {
+            console.error('Erro ao cancelar agendamento:', error);
+            mostrarFeedback('Não foi possível cancelar o agendamento.', 'error');
+            btn.disabled = false;
         }
-
-        if (btn.dataset.action === 'cancelar') {
-            if (!confirm('Cancelar este agendamento?')) return;
-
-            appointment.status = 'cancelled';
-
-            toast('Agendamento cancelado.', 'ti-x');
-            updateBadge();
-            renderRows(currentFilter);
-        }
-    });
+    }
+});
 
     // Filtros.
     filterButtons.forEach(btn => {
@@ -276,11 +257,6 @@ export async function renderAgendamentos(c) {
 
             renderRows(btn.dataset.filter);
         });
-    });
-
-    // Novo agendamento.
-    c.querySelector('#btn-novo-apt')?.addEventListener('click', () => {
-        openModal('modalAgendar');
     });
 
     renderRows('all');

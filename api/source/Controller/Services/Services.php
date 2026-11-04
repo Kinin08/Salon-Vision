@@ -17,7 +17,7 @@ class Services extends Api
             "success",
             "Lista de service",
             "success"
-        )->back($service->selectAll());
+        )->back($service->list());
     }
 
     public function listById(array $data): void
