@@ -21,7 +21,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet">
-    <script type="module" src="./script/main.js" defer></script>
 
 </head>
 
@@ -103,10 +102,12 @@
 
             <div class="sidebar-bottom">
                 <div class="user-card">
-                    <img src="https://i.pravatar.cc/80?img=47" class="user-avatar" alt="Admin" />
+                    <img id="user-photo" src=""
+                        style="width:34px;height:34px;border-radius:9px;object-fit:cover;border:1px solid var(--border-strong);cursor:pointer;"
+                        alt="Admin" />
                     <div class="user-info">
-                        <p>Ana Costa</p>
-                        <span>Gerente geral</span>
+                        <p id="user-name"></p>
+                        <span id="user-role">Administrador</span>
                     </div>
                     <i class="ti ti-dots-vertical"
                         style="margin-left: auto; color: var(--text-dim); font-size: 14px;"></i>
@@ -139,5 +140,6 @@
         </div>
     </div>
 </body>
+    <script type="module" src="./script/main.js" defer></script>
 
 </html>

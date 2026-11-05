@@ -314,4 +314,18 @@ class User extends Model
 
         return $stmt->rowCount() > 0;
     }
+    public function passwordVerify(int $userId, string $password): bool
+    {
+        $query = "SELECT password FROM {$this->table} WHERE id = :id";
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            return false;
+        }
+
+        return password_verify($password, $user['password']);
+    }
 }

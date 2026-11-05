@@ -230,6 +230,9 @@ export default class Users extends HttpClientBase {
     async updateAdmin(data) {
         return this.putForm("/users/update/admin", data);
     }
+    async updateRole(userId, role) {
+        return this.put(`/users/update/role/${userId}/${role}`);
+    }
 
     async listAll() {
         return this.get("/users/list");
@@ -249,6 +252,11 @@ export default class Users extends HttpClientBase {
 
     async listAdmins() {
         return this.get("/users/list/admin");
+    }
+    async verifyPassword(password) {
+        const form = new FormData();
+        form.append("password", password);
+        return this.postForm("/users/verify-password", form);
     }
 
     async softDelete(userId) {

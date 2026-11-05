@@ -72,8 +72,9 @@ $route->post("/login/employee", "Users\\Users:loginEmployee");
 $route->put("/update/cliente", "Users\\Users:update");
 $route->put("/update/admin", "Users\\Users:updateAdmin");
 $route->put("/update/employee", "Users\\Users:updateEmployee");
-$route->put("/update/role/{userId}", "Users\\Users:updateRole");
+$route->put("/update/role/{userId}/{roleId}", "Users\\Users:updateRole");
 $route->delete("/delete/{userId}", "Users\\Users:softDelete");
+$route->post("/verify-password", "Users\\Users:checkPassword");
 $route->group(null);
 
 $route->group("/appointments");

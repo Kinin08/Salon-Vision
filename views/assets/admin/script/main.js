@@ -1,5 +1,7 @@
 import { setActive, nav } from './helpers.js';
 import { initModals } from './modals.js';
+import { userMe } from '../../_common/Api/user.js';
+import { FOTO_PADRAO } from '../../_common/script/Default.js';
 
 import { renderDashboard } from './renders/dashboard.js';
 import { renderAgendamentos } from './renders/agendamento.js';
@@ -9,7 +11,6 @@ import { renderServicos } from './renders/servicos.js';
 import { renderAvaliacoes } from './renders/avaliacoes.js';
 import { renderFaqs } from './renders/faqs.js';
 import { renderPerfil } from './renders/perfil.js';
-
 
 /* ==================== ROTAS ==================== */
 
@@ -133,3 +134,33 @@ if (document.readyState === 'loading') {
     init();
 
 }
+async function carregarUsuarioLogado() {
+    const me = await userMe();
+    console.log('me:', me);
+    console.log('foto:', me?.photo, '| padrão:', FOTO_PADRAO);
+    console.log('ids:', {
+        nome: !!document.getElementById('user-name'),
+        avatar: !!document.getElementById('user-avatar'),
+        topFoto: !!document.getElementById('user-photo')
+    });
+    if (!me || !me.id) return;
+
+    const foto = me.photo || FOTO_PADRAO;
+
+    const nome = document.getElementById('user-name');
+    const avatar = document.getElementById('user-avatar');
+    const topFoto = document.getElementById('user-photo');
+
+    if (nome) nome.textContent = me.name;
+
+    [avatar, topFoto].forEach(img => {
+        if (!img) return;
+        img.src = foto;
+        img.onerror = () => {
+            img.onerror = null;
+            img.src = FOTO_PADRAO;
+        };
+    });
+}
+
+carregarUsuarioLogado();

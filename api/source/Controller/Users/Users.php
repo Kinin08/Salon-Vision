@@ -12,7 +12,7 @@ class Users extends Api
     {
         $user = new User();
 
-        $filters = [];
+        $filters = ["active = 1"];
 
         if ($roleId !== null) {
             $filters[] = "user_type_id = {$roleId}";
@@ -559,14 +559,17 @@ class Users extends Api
             return;
         }
 
-        if (empty($data["name"]) || empty($data["email"])) {
+        if (
+            empty($data["name"]) ||
+            empty($data["email"]) ||
+            !filter_var($data["email"], FILTER_VALIDATE_EMAIL)
+        ) {
             $this->call(
                 400,
                 "bad_request",
-                "Os campos name e email são obrigatórios",
+                "Nome e e-mail são obrigatórios. O e-mail deve ser válido.",
                 "error"
             )->back();
-
             return;
         }
 
@@ -583,12 +586,37 @@ class Users extends Api
             return;
         }
 
+        $currentPassword = $data["currentPassword"] ?? null;
+        $newPassword = $data["password"] ?? null;
+
+        if ($newPassword !== null && !empty($newPassword)) {
+            if (empty($currentPassword)) {
+                $this->call(
+                    400,
+                    "bad_request",
+                    "Digite sua senha atual.",
+                    "error"
+                )->back();
+                return;
+            }
+
+            if (!$user->verifyPassword($userId, $currentPassword)) {
+                $this->call(
+                    400,
+                    "invalid_password",
+                    "A senha atual está incorreta.",
+                    "error"
+                )->back();
+                return;
+            }
+
+            $user->setPassword(
+                password_hash($newPassword, PASSWORD_DEFAULT)
+            );
+        }
+
         $user->setName($data["name"]);
         $user->setEmail($data["email"]);
-
-        if (isset($data["password"]) && !empty($data["password"])) {
-            $user->setPassword($data["password"]);
-        }
 
         if (isset($data["telephone"])) {
             $user->setTelephone($data["telephone"]);
@@ -597,12 +625,40 @@ class Users extends Api
         if (isset($data["photo"])) {
             $user->setPhoto($data["photo"]);
         }
+        $telephone = $data["telephone"] ?? null;
+
+        if ($telephone !== null && !preg_match('/^\d{10,11}$/', $telephone)) {
+            $this->call(
+                400,
+                "bad_request",
+                "O telefone deve conter apenas números e ter 10 ou 11 dígitos.",
+                "error"
+            )->back();
+            return;
+        }
 
         if (!$user->updateById($userId)) {
+            $errorMessage = $user->getErrorMessage();
+
+            if (
+                str_contains($errorMessage, "Duplicate entry") &&
+                str_contains($errorMessage, "users.email")
+            ) {
+
+                $this->call(
+                    400,
+                    "email_already_exists",
+                    "Este e-mail já está cadastrado.",
+                    "error"
+                )->back();
+
+                return;
+            }
+
             $this->call(
                 500,
                 "internal_server_error",
-                $user->getErrorMessage(),
+                "Não foi possível atualizar o usuário.",
                 "error"
             )->back();
 
@@ -639,7 +695,7 @@ class Users extends Api
     }
     public function updateEmployee(array $data): void
     {
-        $userId = $this->authToken(5);
+        $userId = $this->authToken(4);
 
         if (!$userId) {
             $this->call(
@@ -652,14 +708,17 @@ class Users extends Api
             return;
         }
 
-        if (empty($data["name"]) || empty($data["email"])) {
+        if (
+            empty($data["name"]) ||
+            empty($data["email"]) ||
+            !filter_var($data["email"], FILTER_VALIDATE_EMAIL)
+        ) {
             $this->call(
                 400,
                 "bad_request",
-                "Os campos name e email são obrigatórios",
+                "Nome e e-mail são obrigatórios. O e-mail deve ser válido.",
                 "error"
             )->back();
-
             return;
         }
 
@@ -676,12 +735,37 @@ class Users extends Api
             return;
         }
 
+        $currentPassword = $data["currentPassword"] ?? null;
+        $newPassword = $data["password"] ?? null;
+
+        if ($newPassword !== null && !empty($newPassword)) {
+            if (empty($currentPassword)) {
+                $this->call(
+                    400,
+                    "bad_request",
+                    "Digite sua senha atual.",
+                    "error"
+                )->back();
+                return;
+            }
+
+            if (!$user->verifyPassword($userId, $currentPassword)) {
+                $this->call(
+                    400,
+                    "invalid_password",
+                    "A senha atual está incorreta.",
+                    "error"
+                )->back();
+                return;
+            }
+
+            $user->setPassword(
+                password_hash($newPassword, PASSWORD_DEFAULT)
+            );
+        }
+
         $user->setName($data["name"]);
         $user->setEmail($data["email"]);
-
-        if (isset($data["password"]) && !empty($data["password"])) {
-            $user->setPassword($data["password"]);
-        }
 
         if (isset($data["telephone"])) {
             $user->setTelephone($data["telephone"]);
@@ -690,12 +774,40 @@ class Users extends Api
         if (isset($data["photo"])) {
             $user->setPhoto($data["photo"]);
         }
+        $telephone = $data["telephone"] ?? null;
+
+        if ($telephone !== null && !preg_match('/^\d{10,11}$/', $telephone)) {
+            $this->call(
+                400,
+                "bad_request",
+                "O telefone deve conter apenas números e ter 10 ou 11 dígitos.",
+                "error"
+            )->back();
+            return;
+        }
 
         if (!$user->updateById($userId)) {
+            $errorMessage = $user->getErrorMessage();
+
+            if (
+                str_contains($errorMessage, "Duplicate entry") &&
+                str_contains($errorMessage, "users.email")
+            ) {
+
+                $this->call(
+                    400,
+                    "email_already_exists",
+                    "Este e-mail já está cadastrado.",
+                    "error"
+                )->back();
+
+                return;
+            }
+
             $this->call(
                 500,
                 "internal_server_error",
-                $user->getErrorMessage(),
+                "Não foi possível atualizar o usuário.",
                 "error"
             )->back();
 
@@ -732,135 +844,135 @@ class Users extends Api
     }
     public function updateRole(array $data): void
     {
-        $userId = (int) ($data["userId"] ?? 0);
-
-        if (!$userId) {
-            $this->call(
-                400,
-                "bad_request",
-                "Informe o usuário.",
-                "error"
-            )->back();
-
-            return;
-        }
-
         $adminId = $this->authToken(3);
 
         if (!$adminId) {
-            $this->call(
-                401,
-                "unauthorized",
-                "Usuário não está autenticado.",
-                "error"
-            )->back();
-
+            $this->call(401, "unauthorized", "Usuário não está autenticado.", "error")->back();
             return;
         }
 
-        if (!isset($data["roleId"])) {
-            $this->call(
-                400,
-                "bad_request",
-                "Informe a role.",
-                "error"
-            )->back();
+        $userId = (int) ($data["userId"] ?? 0);
 
+        if (!$userId) {
+            $this->call(400, "bad_request", "Informe o usuário.", "error")->back();
             return;
         }
 
-        $roleId = (int) $data["roleId"];
+        // Admin não pode alterar a própria role
+        if ($userId === $adminId) {
+            $this->call(403, "forbidden", "Você não pode alterar a sua própria role.", "error")->back();
+            return;
+        }
 
-        // Ajuste os IDs válidos conforme suas roles reais
-        $validRoles = [3, 4, 5];
+        $roleMap = [
+            "admin" => 3,
+            "cliente" => 4,
+            "employee" => 5,
+        ];
 
-        if (!in_array($roleId, $validRoles, true)) {
-            $this->call(
-                400,
-                "bad_request",
-                "Role inválida.",
-                "error"
-            )->back();
+        // aceita "role" ou "roleId", em texto ou número
+        $rawRole = $data["role"] ?? $data["roleId"] ?? null;
 
+        if ($rawRole === null || $rawRole === "") {
+            $this->call(400, "bad_request", "Informe a role.", "error")->back();
+            return;
+        }
+
+        $roleId = is_numeric($rawRole)
+            ? (int) $rawRole
+            : ($roleMap[strtolower((string) $rawRole)] ?? 0);
+
+        if (!in_array($roleId, [3, 4, 5], true)) {
+            $this->call(400, "bad_request", "Role inválida.", "error")->back();
             return;
         }
 
         $user = new User();
 
         if (!$user->selectById($userId)) {
-            $this->call(
-                404,
-                "not_found",
-                "Usuário não encontrado.",
-                "error"
-            )->back();
-
+            $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
             return;
         }
 
         if (!$user->updateRole($userId, $roleId)) {
-            $this->call(
-                500,
-                "internal_server_error",
-                $user->getErrorMessage(),
-                "error"
-            )->back();
-
+            $this->call(500, "internal_server_error", $user->getErrorMessage(), "error")->back();
             return;
         }
 
-        $this->call(
-            200,
-            "success",
-            "Role atualizada com sucesso.",
-            "success"
-        )->back();
+        $this->call(200, "success", "Role atualizada com sucesso.", "success")->back();
     }
-    public function softDelete(array $data): void
+    public function checkPassword(array $data): void
     {
-        $userId = (int) ($data["userId"] ?? 0);
+        $userId = $this->authToken();
 
         if (!$userId) {
-            $this->call(
-                400,
-                "bad_request",
-                "Informe o usuário.",
-                "error"
-            )->back();
+            $this->call(401, "unauthorized", "Usuário não está autenticado.", "error")->back();
+            return;
+        }
 
+        $password = $data["password"] ?? "";
+
+        if (empty($password)) {
+            $this->call(400, "bad_request", "Informe a senha para verificação.", "error")->back();
             return;
         }
 
         $user = new User();
 
         if (!$user->selectById($userId)) {
-            $this->call(
-                404,
-                "not_found",
-                "Usuário não encontrado.",
-                "error"
-            )->back();
-
+            $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
             return;
         }
 
-        if (!$user->softDeleteById($userId)) {
-            $this->call(
-                500,
-                "internal_server_error",
-                $user->getErrorMessage(),
-                "error"
-            )->back();
-
+        if (!$user->verifyPassword($userId, $password)) {
+            $this->call(400, "invalid_password", "Senha incorreta.", "error")->back();
             return;
         }
 
-        $this->call(
-            200,
-            "success",
-            "Usuário removido com sucesso.",
-            "success"
-        )->back();
+        $this->call(200, "success", "Senha verificada com sucesso.", "success")->back();
+    }
+    public function softDelete(array $data): void
+    {
+        $authId = $this->authToken();
+
+        if (!$authId) {
+            $this->call(401, "unauthorized", "Usuário não está autenticado.", "error")->back();
+            return;
+        }
+
+        $targetId = (int) ($data["userId"] ?? 0);
+
+        if (!$targetId) {
+            $this->call(400, "bad_request", "Informe o usuário.", "error")->back();
+            return;
+        }
+
+        $auth = new User();
+
+        if (!$auth->selectById($authId)) {
+            $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
+            return;
+        }
+
+        // Qualquer usuário exclui a própria conta; só admin (tipo 3) exclui a de outros
+        if ($targetId !== $authId && $auth->getUserTypeId() !== 3) {
+            $this->call(403, "forbidden", "Você não tem permissão para remover este usuário.", "error")->back();
+            return;
+        }
+
+        $user = new User();
+
+        if (!$user->selectById($targetId)) {
+            $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
+            return;
+        }
+
+        if (!$user->softDeleteById($targetId)) {
+            $this->call(500, "internal_server_error", $user->getErrorMessage(), "error")->back();
+            return;
+        }
+
+        $this->call(200, "success", "Usuário removido com sucesso.", "success")->back();
     }
     private function validateNameEmail(array $data): bool
     {

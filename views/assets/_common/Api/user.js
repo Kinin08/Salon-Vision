@@ -33,7 +33,22 @@ export async function update(userData) {
         return [];
     }
 }
+export async function updateAdmin(userData) {
+    try {
 
+        const users = new Users();
+
+        const responseData = await users.updateAdmin(userData);
+
+        return responseData;
+
+    } catch (error) {
+
+        console.error("Erro ao atualizar Usuário:", error);
+
+        return [];
+    }
+}
 export async function listEmployees() {
     try {
 
@@ -84,6 +99,22 @@ export async function listAdmins() {
         return [];
     }
 }
+export async function updateRole(userId, role) {
+    try {
+
+        const users = new Users();
+
+        const responseData = await users.updateRole(userId, role);
+
+        return responseData.data ?? [];
+
+    } catch (error) {
+
+        console.error("Erro ao atualizar cargo do usuário:", error);
+
+        return [];
+    }
+}
 export async function deletarUsuario(userId) {
     try {
         const user = new Users();
@@ -94,6 +125,15 @@ export async function deletarUsuario(userId) {
 
     } catch (error) {
         console.error("Erro ao deletar usuário:", error);
+        return null;
+    }
+}
+export async function verificarSenha(password) {
+    try {
+        const users = new Users();
+        return await users.verifyPassword(password);
+    } catch (error) {
+        console.error("Erro ao verificar senha:", error);
         return null;
     }
 }
