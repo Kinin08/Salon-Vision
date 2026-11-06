@@ -89,6 +89,7 @@ $route->get("/list/{appointmentId}", "Appointments\\Appointments:listById");
 $route->post("/create", "Appointments\\Appointments:create");
 $route->put("/update/{appointmentId}", "Appointments\\Appointments:update");
 $route->delete("/delete/{appointmentId}", "Appointments\\Appointments:softDelete");
+$route->get("/me/{period}", "Appointments\\Appointments:myAppointments");
 $route->group(null);
 
 $route->group("/services");

@@ -1,4 +1,4 @@
-import { listClients, deletarUsuario } from '../../../_common/Api/user.js';
+import { listClients, deletarUsuario, updateRole } from '../../../_common/Api/user.js';
 import { FOTO_PADRAO } from '../../../_common/script/Default.js';
 import Users from '../../../_common/classes/Users.js';
 
@@ -65,19 +65,25 @@ export async function renderClientes(c, navigate) {
     }
 
     async function promote(id, btn) {
-        const cl = clientes.find(x => x.id === id);
+        const cl = clientes.find(x => Number(x.id) === Number(id));
         if (!cl) return;
+
         if (!confirm(`Promover ${cl.name ?? cl.nome} a profissional?`)) return;
 
         btn.disabled = true;
+
         try {
-            await users.updateRole(id, ROLES.employee);
-            toast(`${cl.name ?? cl.nome} agora é profissional.`, 'ti-check');
-            goToProfissionais();
-        } catch (e) {
-            console.error(e);
-            btn.disabled = false;
+            const res = await updateRole(id, ROLES.employee);
+
+            console.log('Resultado da promoção:', res);
+
+            toast('Solicitação enviada. Verifique o resultado.', 'ti-check');
+
+        } catch (error) {
+            console.error(error);
             toast('Erro ao promover cliente.', 'ti-alert-circle');
+        } finally {
+            btn.disabled = false;
         }
     }
 

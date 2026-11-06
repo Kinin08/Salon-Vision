@@ -100,3 +100,19 @@ export async function listIncomplete() {
         return [];
     }
 }
+export async function myAppointmentsByPeriod(period = "week") {
+    try {
+        const appointments = new Appointmants();
+
+        const responseData = await appointments.myAppointments(period);
+
+        return Array.isArray(responseData?.data)
+            ? responseData.data
+            : [];
+
+    } catch (error) {
+        console.error("Erro ao carregar meus agendamentos:", error);
+
+        return [];
+    }
+}

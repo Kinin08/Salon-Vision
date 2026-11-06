@@ -258,10 +258,15 @@ export default class Appointmants extends HttpClientBase {
             data
         );
     }
+    
 
     async softDelete(appointmentId) {
         return this.delete(
             `/appointments/delete/${appointmentId}`
         );
     }
+    async myAppointments(period = "week") {
+    return this.get(`/appointments/me/${period}`);
+}
+    
 }

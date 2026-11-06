@@ -335,6 +335,19 @@ class ServicesEmployees extends Api
             "success"
         )->back(null);
     }
+    public function myAppointments(array $data): void
+{
+    $period = in_array($data["period"] ?? 'week', ['week', 'month'], true)
+        ? $data["period"]
+        : 'week';
+
+    $employeeId = (int) $this->userAuth->id; // ajuste para o seu Api
+
+    $appointment = new Appointment();
+
+    $this->call(200, "success", "Agendamentos do funcionário", "success")
+        ->back($appointment->listByEmployee($employeeId, $period));
+}
 
     public function validate(array $data): bool
     {

@@ -255,6 +255,42 @@ class Appointment extends Model
 
         return $stmt->rowCount() > 0;
     }
+
+    public function listEmployeeAppointments(int $employeeId, string $period = 'week'): array
+    {
+        $where = match ($period) {
+            'month' => "MONTH(a.date_time) = MONTH(CURDATE())
+                AND YEAR(a.date_time) = YEAR(CURDATE())",
+            'all' => "1 = 1",
+            default => "YEARWEEK(a.date_time, 1) = YEARWEEK(CURDATE(), 1)",
+        };
+
+        $order = $period === 'all' ? 'DESC' : 'ASC';
+
+        $query = "
+    SELECT
+        a.id,
+        a.client_id,
+        a.date_time,
+        a.status,
+        c.name  AS client_name,
+        c.photo AS client_photo,
+        s.name  AS service_name
+    FROM appointments a
+    INNER JOIN services s ON s.id = a.service_id
+    INNER JOIN users    c ON c.id = a.client_id
+    WHERE a.employee_id = :employeeId
+      AND a.active = 1
+      AND {$where}
+    ORDER BY a.date_time {$order}
+";
+
+        $stmt = Connect::getInstance()->prepare($query);
+        $stmt->bindValue(':employeeId', $employeeId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function nextAppointment(int $clientId): ?array
     {
         $query = "

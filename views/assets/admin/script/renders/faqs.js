@@ -447,9 +447,6 @@ export async function renderFaqs(c) {
                 ? await faqs.update(editingFaq.id, formData)
                 : await faqs.create(formData);
 
-            console.log('Resposta salvar FAQ:', resposta);
-            console.log('Enviando:', data);
-
             if (!respostaOk(resposta)) {
                 showError(formError, resposta?.message || 'Não foi possível salvar a pergunta.');
                 formSave.disabled = false;
@@ -505,7 +502,6 @@ export async function renderFaqs(c) {
         try {
             const faqs = new Faqs();
             const resposta = await faqs.softDelete(deletingFaq.id);
-            console.log('Resposta softDelete FAQ:', resposta);
 
             if (!respostaOk(resposta)) {
                 showError(deleteError, resposta?.message || 'Não foi possível excluir a pergunta.');
@@ -762,7 +758,6 @@ export async function renderFaqs(c) {
                 <div class="faq-cat-row">
                     <div>
                         <div>${escapeHTML(cat.name)}</div>
-                        <div class="faq-cat-count">${total} pergunta(s)</div>
                     </div>
                     <button type="button" data-cat-delete="${escapeHTML(cat.id)}" title="Excluir categoria"
                         style="width:34px;height:34px;border-radius:9px;cursor:pointer;

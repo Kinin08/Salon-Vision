@@ -106,4 +106,36 @@ class ServiceEmployee extends Model
 
         return $stmt->fetchAll();
     }
+    public function listEmployeeAppointments(int $employeeId, string $period = 'week'): array
+{
+    $where = match ($period) {
+        'month' => "YEARWEEK(a.date_time, 1) IS NOT NULL
+                    AND MONTH(a.date_time) = MONTH(CURDATE())
+                    AND YEAR(a.date_time) = YEAR(CURDATE())",
+        default => "YEARWEEK(a.date_time, 1) = YEARWEEK(CURDATE(), 1)",
+    };
+
+    $query = "
+        SELECT
+            a.id,
+            a.date_time,
+            a.status,
+            c.name  AS client_name,
+            c.photo AS client_photo,
+            s.name  AS service_name
+        FROM appointments a
+        INNER JOIN service_employees se ON a.service_employee_id = se.id
+        INNER JOIN services s           ON se.service_id = s.id
+        INNER JOIN users c              ON a.client_id = c.id
+        WHERE se.employee_id = :employeeId
+          AND {$where}
+        ORDER BY a.date_time ASC
+    ";
+
+    $stmt = Connect::getInstance()->prepare($query);
+    $stmt->bindValue(':employeeId', $employeeId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetchAll();
+}
 }

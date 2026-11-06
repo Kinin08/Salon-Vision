@@ -498,7 +498,7 @@ class Appointments extends Api
     }
     public function getAppointments(array $data): void
     {
-        $period = $data["period"] ?? "today";
+        $period = $data["period"] ?? "week";
 
         if (!in_array($period, ["today", "week", "month"], true)) {
             $this->call(
@@ -519,7 +519,7 @@ class Appointments extends Api
 
         if (empty($appointments)) {
             $this->call(
-                404,
+                200,
                 "not_found",
                 "Nenhum agendamento encontrado",
                 "warning"
@@ -534,5 +534,24 @@ class Appointments extends Api
             "Lista de agendamentos",
             "success"
         )->back($appointments);
+    }
+    public function myAppointments(array $data): void
+    {
+        $employeeId = $this->authToken(5);
+
+        if (!$employeeId) {
+            $this->call(401, "unauthorized", "Usuário não autenticado", "error")->back();
+            return;
+        }
+
+        $period = in_array($data["period"] ?? 'week', ['week', 'month'], true)
+            ? $data["period"]
+            : 'week';
+
+        $appointment = new Appointment();
+        $appointment->updateStatuses();
+
+        $this->call(200, "success", "Agendamentos do funcionário", "success")
+            ->back($appointment->listEmployeeAppointments($employeeId, $period));
     }
 }

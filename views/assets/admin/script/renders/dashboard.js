@@ -26,6 +26,8 @@ export async function renderDashboard(c) {
     const clients = await listClients();
 
     const servicesPorcentage = await porcentageOfServices();
+    console.log('Serviços retornados:', servicesPorcentage);
+    console.log('É um array?', Array.isArray(servicesPorcentage));
 
     const listEmployee = await listEmployees();
 
@@ -402,7 +404,6 @@ export async function renderDashboard(c) {
     }
 
     document.getElementById('btn-ver-client')?.addEventListener('click', () => {
-        console.log('agendamentos do painel:', agendamentosDoMes);
         abrirPainelPessoas({
             agendamentos: agendamentosDoMes,
             profissionais: listEmployee,

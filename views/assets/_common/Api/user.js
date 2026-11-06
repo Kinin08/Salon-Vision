@@ -101,18 +101,17 @@ export async function listAdmins() {
 }
 export async function updateRole(userId, role) {
     try {
-
         const users = new Users();
 
-        const responseData = await users.updateRole(userId, role);
+        const response = await users.updateRole(userId, role);
 
-        return responseData.data ?? [];
+        console.log('Resposta updateRole:', response);
+
+        return response;
 
     } catch (error) {
-
         console.error("Erro ao atualizar cargo do usuário:", error);
-
-        return [];
+        throw error;
     }
 }
 export async function deletarUsuario(userId) {
