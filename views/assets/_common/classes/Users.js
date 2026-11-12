@@ -262,4 +262,16 @@ export default class Users extends HttpClientBase {
     async softDelete(userId) {
         return this.delete(`/users/delete/${userId}`);
     }
+
+    async uploadPhoto(file) {
+        if (!(file instanceof File)) {
+            throw new Error("Arquivo de imagem inválido.");
+        }
+
+        const formData = new FormData();
+        formData.append("photo", file);
+
+        return this.postForm("/users/photo", formData);
+    }
+
 }

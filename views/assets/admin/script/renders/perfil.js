@@ -1,6 +1,6 @@
 import { mostrarFeedback } from '../../../_common/script/Feedback.js';
 import { FOTO_PADRAO } from '../../../_common/script/Default.js';
-import { userMe, updateAdmin, deletarUsuario, listAdmins, listClients, listEmployees, verificarSenha } from './../../../_common/Api/user.js';
+import { userMe, updateAdmin, uploadPhoto, deletarUsuario, listAdmins, listClients, listEmployees, verificarSenha } from './../../../_common/Api/user.js';
 
 export async function renderPerfil(c) {
 
@@ -522,8 +522,8 @@ export async function renderPerfil(c) {
             return;
         }
 
-        if (arquivo.size > 2 * 1024 * 1024) {
-            mostrarFeedback('A imagem deve ter no máximo 2 MB.', 'error');
+        if (arquivo.size > 5 * 1024 * 1024) {
+            mostrarFeedback('A imagem deve ter no máximo 5 MB.', 'error');
             inputFoto.value = '';
             return;
         }
@@ -532,29 +532,29 @@ export async function renderPerfil(c) {
         imagemPerfil.src = URL.createObjectURL(arquivo); // preview
     });
 
+
     async function enviarFoto(arquivo) {
-        const dados = new FormData();
-        dados.append('arquivo', arquivo);
-
-        const resposta = await fetch(
-            'http://localhost/Salon-Vision/Api/source/controller/uploader-main/upload.php',
-            { method: 'POST', body: dados }
-        );
-        const texto = await resposta.text();
-        let resultado;
-
         try {
-            resultado = JSON.parse(texto);
-        } catch {
-            console.error('Resposta do upload.php (HTTP ' + resposta.status + '):', texto);
-            throw new Error('O servidor não devolveu JSON (HTTP ' + resposta.status + '). Veja o console (F12).');
-        }
+            const resultado = await uploadPhoto(arquivo);
 
-        if (!resposta.ok || !resultado.success) {
-            throw new Error(resultado.error || 'Erro no upload da foto.');
-        }
+            console.log("Resposta completa:", resultado);
 
-        return resultado.url;
+            if (!resultado) {
+                throw new Error("A API não retornou nenhuma resposta.");
+            }
+
+            if (resultado.code !== 200 || !resultado.data?.photo) {
+                throw new Error(
+                    resultado.message || "Erro ao atualizar a foto."
+                );
+            }
+
+            return resultado.data.photo;
+
+        } catch (erro) {
+            console.error("Erro detalhado no upload:", erro);
+            throw erro;
+        }
     }
 
 
@@ -565,70 +565,55 @@ export async function renderPerfil(c) {
 
     document.getElementById('btn-salvar')?.addEventListener('click', async () => {
         const btn = document.getElementById('btn-salvar');
-
-        const nome = document.getElementById('input-nome').value;
-        const email = document.getElementById('input-email').value;
-        const telephone = document
-            .getElementById('input-tel')
-            .value
-            .replace(/\D/g, '');
-
+        const nome = document.getElementById('input-nome').value.trim();
+        const email = document.getElementById('input-email').value.trim();
+        const telephone = document.getElementById('input-tel').value.replace(/\D/g, '');
         const currentPassword = document.getElementById('senha-atual').value;
         const newPassword = document.getElementById('nova-senha').value;
 
         btn.disabled = true;
         btn.innerHTML = `<i class="ti ti-loader-2"></i> Salvando...`;
 
-        const restaurarBotao = () => {
-            btn.disabled = false;
-            btn.innerHTML = `<i class="ti ti-device-floppy"></i> Salvar Alterações`;
-        };
+        try {
 
-        // Se escolheu foto nova, envia primeiro; senão mantém a atual
-        let photo = me.photo;
-
-        if (fotoSelecionada) {
-            try {
-                photo = await enviarFoto(fotoSelecionada);
-            } catch (erro) {
-                mostrarFeedback(erro.message || 'Não foi possível enviar a foto.', 'error');
-                imagemPerfil.src = me.photo; // volta para a foto anterior
-                fotoSelecionada = null;
-                inputFoto.value = '';
-                restaurarBotao();
-                return;
-            }
-        }
-
-        const updated = await updateAdmin({
-            name: nome,
-            email: email,
-            telephone: telephone,
-            photo: photo,
-            currentPassword: currentPassword,
-            password: newPassword
-        });
-
-        restaurarBotao();
-
-        if (updated.code === 200) {
             const nomeSidebar = document.getElementById('user-name');
             if (nomeSidebar) nomeSidebar.textContent = nome;
-            // Atualiza a foto em todos os lugares da tela (?t= evita cache)
-            if (fotoSelecionada) {
-                const novaSrc = photo + '?t=' + Date.now();
-                me.photo = photo;
-                imagemPerfil.src = novaSrc;
-                document.getElementById('user-photo')?.setAttribute('src', novaSrc);
-                document.getElementById('user-avatar')?.setAttribute('src', novaSrc);
 
-                fotoSelecionada = null;
-                inputFoto.value = '';
+            if (fotoSelecionada) {
+                try {
+                    const photoUrl = await enviarFoto(fotoSelecionada);
+                    const novaSrc = photoUrl + '?t=' + Date.now();
+                    me.photo = photoUrl;
+                    imagemPerfil.src = novaSrc;
+                    document.getElementById('user-photo')?.setAttribute('src', novaSrc);
+                    document.getElementById('user-avatar')?.setAttribute('src', novaSrc);
+                    fotoSelecionada = null;
+                    inputFoto.value = '';
+                } catch (erroFoto) {
+                    mostrarFeedback(erroFoto.message || 'Os dados foram salvos, mas a foto não foi atualizada.', 'error');
+                    return;
+                }
             }
 
-            mostrarFeedback(updated.message, 'success');
-        } else {
-            mostrarFeedback(updated.message ?? 'Erro ao atualizar perfil.', 'error');
+            const updated = await updateAdmin({
+                name: nome,
+                email: email,
+                telephone: telephone,
+                currentPassword: currentPassword,
+                password: newPassword
+            });
+
+            if (updated?.code !== 200) {
+                mostrarFeedback(updated?.message ?? 'Erro ao atualizar perfil.', 'error');
+                return;
+            }
+            mostrarFeedback(updated.message || 'Perfil atualizado com sucesso.', 'success');
+        } catch (error) {
+            console.error('Erro ao atualizar perfil:', error);
+            mostrarFeedback('Não foi possível atualizar o perfil.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="ti ti-device-floppy"></i> Salvar Alterações`;
         }
     });
 

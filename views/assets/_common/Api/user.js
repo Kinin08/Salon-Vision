@@ -136,3 +136,18 @@ export async function verificarSenha(password) {
         return null;
     }
 }
+
+export async function uploadPhoto(file) {
+    const users = new Users();
+    return users.uploadPhoto(file);
+}
+
+export async function updateEmployee(userData) {
+    try {
+        const users = new Users();
+        return await users.updateEmployee(userData);
+    } catch (error) {
+        console.error("Erro ao atualizar funcionário:", error);
+        return null;
+    }
+}
