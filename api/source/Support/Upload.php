@@ -121,6 +121,8 @@ class Upload
             return null;
         }
 
-        return rtrim(CONF_URL_BASE, '/') . '/' . ltrim($relativePath, '/');
+        $base = defined('CONF_URL_PUBLIC') ? CONF_URL_PUBLIC : CONF_URL_BASE;
+
+        return rtrim($base, '/') . '/' . ltrim($relativePath, '/');
     }
 }
