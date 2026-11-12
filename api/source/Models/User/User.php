@@ -328,4 +328,27 @@ class User extends Model
 
         return password_verify($password, $user['password']);
     }
+
+
+    public function updatePhoto(int $userId, string $photoPath): bool
+    {
+        try {
+            $sql = "UPDATE users SET photo = :photo WHERE id = :id AND active = 1";
+            $stmt = Connect::getInstance()->prepare($sql);
+            $stmt->bindValue(':photo', $photoPath, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $stmt->rowCount() > 0;
+        } catch (\Throwable $error) {
+            $this->errorMessage = $error->getMessage();
+
+            error_log(
+                "Erro ao atualizar usuário: " . $error->getMessage()
+            );
+
+            return false;
+        }
+    }
+
 }

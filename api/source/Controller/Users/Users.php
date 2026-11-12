@@ -4,7 +4,7 @@ namespace Source\Controller\Users;
 
 use Source\Controller\Api;
 use Source\Models\User\User;
-use Source\Core\JWTToken;
+use Source\Support\Upload;
 
 class Users extends Api
 {
@@ -119,6 +119,10 @@ class Users extends Api
             )->back();
 
             return;
+        }
+
+        if (!empty($userData['photo']) && str_starts_with($userData['photo'], '/views/')) {
+            $userData['photo'] = Upload::publicUrl($userData['photo']);
         }
 
         $this->call(
@@ -469,14 +473,10 @@ class Users extends Api
         $user->setName($data["name"]);
         $user->setEmail($data["email"]);
 
-        if (isset($data["telephone"])) {
-            $user->setTelephone($data["telephone"]);
-        }
-
-        if (isset($data["photo"])) {
-            $user->setPhoto($data["photo"]);
-        }
-        $telephone = $data["telephone"] ?? null;
+        // Aceita telefone com ou sem máscara, mas persiste somente números.
+        $telephone = isset($data["telephone"])
+            ? preg_replace('/\D/', '', (string) $data["telephone"])
+            : null;
 
         if ($telephone !== null && !preg_match('/^\d{10,11}$/', $telephone)) {
             $this->call(
@@ -488,14 +488,25 @@ class Users extends Api
             return;
         }
 
+        if ($telephone !== null) {
+            $user->setTelephone($telephone);
+        }
+
+        if (isset($data["photo"])) {
+            $user->setPhoto($data["photo"]);
+        }
+
         if (!$user->updateById($userId)) {
-            $errorMessage = $user->getErrorMessage();
+
+            $errorMessage = $user->getErrorMessage()
+                ?? 'Erro desconhecido ao atualizar usuário.';
+
+            error_log("ERRO UPDATE USER: " . $errorMessage);
 
             if (
                 str_contains($errorMessage, "Duplicate entry") &&
                 str_contains($errorMessage, "users.email")
             ) {
-
                 $this->call(
                     400,
                     "email_already_exists",
@@ -618,14 +629,10 @@ class Users extends Api
         $user->setName($data["name"]);
         $user->setEmail($data["email"]);
 
-        if (isset($data["telephone"])) {
-            $user->setTelephone($data["telephone"]);
-        }
-
-        if (isset($data["photo"])) {
-            $user->setPhoto($data["photo"]);
-        }
-        $telephone = $data["telephone"] ?? null;
+        // Aceita telefone com ou sem máscara, mas persiste somente números.
+        $telephone = isset($data["telephone"])
+            ? preg_replace('/\D/', '', (string) $data["telephone"])
+            : null;
 
         if ($telephone !== null && !preg_match('/^\d{10,11}$/', $telephone)) {
             $this->call(
@@ -635,6 +642,14 @@ class Users extends Api
                 "error"
             )->back();
             return;
+        }
+
+        if ($telephone !== null) {
+            $user->setTelephone($telephone);
+        }
+
+        if (isset($data["photo"])) {
+            $user->setPhoto($data["photo"]);
         }
 
         if (!$user->updateById($userId)) {
@@ -695,7 +710,7 @@ class Users extends Api
     }
     public function updateEmployee(array $data): void
     {
-        $userId = $this->authToken(4);
+        $userId = $this->authToken(5);
 
         if (!$userId) {
             $this->call(
@@ -767,14 +782,10 @@ class Users extends Api
         $user->setName($data["name"]);
         $user->setEmail($data["email"]);
 
-        if (isset($data["telephone"])) {
-            $user->setTelephone($data["telephone"]);
-        }
-
-        if (isset($data["photo"])) {
-            $user->setPhoto($data["photo"]);
-        }
-        $telephone = $data["telephone"] ?? null;
+        // Aceita telefone com ou sem máscara, mas persiste somente números.
+        $telephone = isset($data["telephone"])
+            ? preg_replace('/\D/', '', (string) $data["telephone"])
+            : null;
 
         if ($telephone !== null && !preg_match('/^\d{10,11}$/', $telephone)) {
             $this->call(
@@ -784,6 +795,14 @@ class Users extends Api
                 "error"
             )->back();
             return;
+        }
+
+        if ($telephone !== null) {
+            $user->setTelephone($telephone);
+        }
+
+        if (isset($data["photo"])) {
+            $user->setPhoto($data["photo"]);
         }
 
         if (!$user->updateById($userId)) {
@@ -984,5 +1003,64 @@ class Users extends Api
             return false;
         }
         return true;
+    }
+    public function uploadPhoto(): void
+    {
+        
+        $userId = $this->authToken();
+
+        if (!$userId) {
+            $this->call(401, "unauthorized", "Usuário não autenticado.", "error")->back();
+            return;
+        }
+
+        if (
+            !isset($_FILES['photo']) ||
+            $_FILES['photo']['error'] !== UPLOAD_ERR_OK
+        ) {
+            $this->call(400, "bad_request", "Selecione uma imagem para enviar.", "error")->back();
+            return;
+        }
+
+        $user = new User();
+
+        if (!$user->selectById($userId)) {
+            $this->call(404, "not_found", "Usuário não encontrado.", "error")->back();
+            return;
+        }
+
+        $oldPhoto = $user->getPhoto();
+
+        $newPath = Upload::image($_FILES['photo']);
+
+        if ($newPath === false) {
+            $this->call(
+                400,
+                "bad_request",
+                Upload::error() ?? "Não foi possível enviar a imagem.",
+                "error"
+            )->back();
+            return;
+        }
+
+        $user->setPhoto($newPath);
+
+        if (!$user->updateById($userId)) {
+            Upload::remove($newPath);
+            $this->call(
+                500,
+                "internal_server_error",
+                "Não foi possível atualizar a foto.",
+                "error"
+            )->back();
+            return;
+        }
+
+        if ($oldPhoto) {
+            Upload::remove($oldPhoto);
+        }
+
+        $this->call(200, "success", "Foto atualizada com sucesso.", "success")
+            ->back(["photo" => Upload::publicUrl($newPath)]);
     }
 }

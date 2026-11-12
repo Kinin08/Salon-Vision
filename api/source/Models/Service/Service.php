@@ -12,15 +12,17 @@ class Service extends Model
     private ?int $id = null;
     private ?string $name = null;
     private ?string $description = null;
+    private ?string $photo = null;
     private ?float $price = null;
     private ?int $durationMinutes = null;
     private ?int $active = null;
 
-    public function __construct(?int $id = null, ?string $name = null, ?string $description = null, ?float $price = null, ?int $durationMinutes = null, ?int $active = 1)
+    public function __construct(?int $id = null, ?string $name = null, ?string $description = null, ?float $price = null, ?int $durationMinutes = null, ?string $photo = null, ?int $active = 1)
     {
         $this->id = $id;
         $this->name = $name;
         $this->description = $description;
+        $this->photo = $photo;
         $this->price = $price;
         $this->durationMinutes = $durationMinutes;
         $this->active = $active;
@@ -71,6 +73,14 @@ class Service extends Model
     public function setPrice(?float $price): void
     {
         $this->price = $price;
+    }
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+    public function setPhoto(?string $photo): void
+    {
+        $this->photo = $photo;
     }
     public function getDurationMinutes(): ?int
     {

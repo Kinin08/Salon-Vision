@@ -157,7 +157,7 @@ abstract class Model
             }
 
             // Atualiza id no objeto (se houver setter)
-            $newId = (int)Connect::getInstance()->lastInsertId();
+            $newId = (int) Connect::getInstance()->lastInsertId();
             if (method_exists($this, 'setId')) {
                 $this->setId($newId);
             } elseif (property_exists($this, 'id')) {
@@ -182,6 +182,7 @@ abstract class Model
             }
 
             $setParts = [];
+
             foreach (array_keys($payload) as $column) {
                 $setParts[] = "{$column} = :{$column}";
             }
@@ -198,16 +199,32 @@ abstract class Model
             foreach ($payload as $column => $value) {
                 $stmt->bindValue(':' . $column, $value);
             }
-            $stmt->bindValue(':_id', $id);
+
+            $stmt->bindValue(':_id', $id, PDO::PARAM_INT);
 
             $stmt->execute();
 
+            // rowCount() pode retornar 0 quando os dados são iguais
             if ($stmt->rowCount() < 1) {
-                $this->errorMessage = 'Registro não encontrado ou sem alterações.';
-                return false;
+
+                $check = Connect::getInstance()->prepare(
+                    "SELECT {$this->primaryKey}
+                 FROM {$this->table}
+                 WHERE {$this->primaryKey} = :id
+                 LIMIT 1"
+                );
+
+                $check->bindValue(':id', $id, PDO::PARAM_INT);
+                $check->execute();
+
+                if (!$check->fetch()) {
+                    $this->errorMessage = 'Registro não encontrado.';
+                    return false;
+                }
             }
 
             return true;
+
         } catch (PDOException $e) {
             $this->errorMessage = $e->getMessage();
             return false;
@@ -278,7 +295,7 @@ abstract class Model
 
     protected function camelToSnake(string $field): string
     {
-        return strtolower((string)preg_replace('/[A-Z]/', '_$0', $field));
+        return strtolower((string) preg_replace('/[A-Z]/', '_$0', $field));
     }
 
     protected function snakeToCamel(string $field): string

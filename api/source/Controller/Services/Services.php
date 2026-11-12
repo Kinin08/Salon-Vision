@@ -48,6 +48,7 @@ class Services extends Api
             "name" => $service->getName(),
             "description" => $service->getDescription(),
             "durationMinutes" => $service->getDurationMinutes(),
+            "photo" => $service->getPhoto(),
             "active" => $service->getActive()
         ];
 
@@ -85,7 +86,8 @@ class Services extends Api
             $data['name'],
             $data['description'],
             $data['price'],
-            $data['durationMinutes']
+            $data['durationMinutes'],
+            $service['photo'] ?? null
         );
         if (!$service->insert()) {
             $this->call(500, "internal_server_error", $service->getErrorMessage(), "error")->back();
@@ -98,6 +100,7 @@ class Services extends Api
             "name" => $service->getName(),
             "description" => $service->getDescription(),
             "price" => $service->getPrice(),
+            "photo" => $service->getPhoto(),
             "durationMinutes" => $service->getDurationMinutes()
         ];
 
@@ -145,7 +148,8 @@ class Services extends Api
             $data['name'] ?? $serviceAtual->getName(),
             $data['description'] ?? $serviceAtual->getDescription(),
             $data['price'] ?? $serviceAtual->getPrice(),
-            $data['durationMinutes'] ?? $serviceAtual->getDurationMinutes()
+            $data['durationMinutes'] ?? $serviceAtual->getDurationMinutes(),
+            $data['photo'] ?? $serviceAtual->getPhoto()
         );
 
         if (!$service->updateById($data["serviceId"])) {
@@ -165,7 +169,8 @@ class Services extends Api
             "name" => $updated->getName(),
             "description" => $updated->getDescription(),
             "price" => $updated->getPrice(),
-            "durationMinutes" => $updated->getDurationMinutes()
+            "durationMinutes" => $updated->getDurationMinutes(),
+            "photo" => $updated->getPhoto(),
         ];
 
         $this->call(200, "success", "Service atualizado com sucesso", "success")->back($response);
