@@ -1,10 +1,5 @@
 import { listClients, deletarUsuario } from '../../../_common/Api/user.js';
 import { FOTO_PADRAO } from '../../../_common/script/Default.js';
-import Users from '../../../_common/classes/Users.js';
-
-// IDs de user_type_id usados no backend
-const ROLES = { admin: 3, cliente: 4, employee: 5 };
-const users = new Users();
 
 function toast(message, icon = 'ti-check') {
     const el = document.createElement('div');
@@ -28,10 +23,9 @@ function esc(value) {
 }
 
 /**
- * @param {HTMLElement} c         container da página
- * @param {(page: string) => void} [navigate]  função do seu app que troca de seção
+ * @param {HTMLElement} c  container da página
  */
-export async function renderClientes(c, navigate) {
+export async function renderClientes(c) {
     let clientes = await listClients();
     let busca = '';
 
@@ -52,34 +46,6 @@ export async function renderClientes(c, navigate) {
             <tbody id="tbody-clientes"></tbody>
         </table>
     </div>`;
-
-    function goToProfissionais() {
-        if (typeof navigate === 'function') {
-            navigate('profissionais');
-            return;
-        }
-        // Fallback: clica no item do menu lateral, se existir
-        document
-            .querySelector('[data-page="profissionais"], [data-section="profissionais"], [data-nav="profissionais"]')
-            ?.click();
-    }
-
-    async function promote(id, btn) {
-        const cl = clientes.find(x => x.id === id);
-        if (!cl) return;
-        if (!confirm(`Promover ${cl.name ?? cl.nome} a profissional?`)) return;
-
-        btn.disabled = true;
-        try {
-            await users.updateRole(id, ROLES.employee);
-            toast(`${cl.name ?? cl.nome} agora é profissional.`, 'ti-check');
-            goToProfissionais();
-        } catch (e) {
-            console.error(e);
-            btn.disabled = false;
-            toast('Erro ao promover cliente.', 'ti-alert-circle');
-        }
-    }
 
     async function remove(id, btn) {
         const cl = clientes.find(x => x.id === id);
@@ -128,18 +94,12 @@ export async function renderClientes(c, navigate) {
             <td style="font-size:12px;color:var(--text-muted);">${esc(cl.telephone ?? cl.tel)}</td>
             <td>
                 <div style="display:flex;gap:5px;">
-                    <button class="btn btn-gold btn-sm" data-promote="${cl.id}">
-                        <i class="ti ti-arrow-narrow-up"></i> Promover a profissional
-                    </button>
                     <button class="btn btn-danger btn-sm" data-del="${cl.id}"><i class="ti ti-trash"></i></button>
                 </div>
             </td>`;
             tbody.appendChild(tr);
         });
 
-        tbody.querySelectorAll('[data-promote]').forEach(btn => {
-            btn.addEventListener('click', () => promote(parseInt(btn.dataset.promote), btn));
-        });
         tbody.querySelectorAll('[data-del]').forEach(btn => {
             btn.addEventListener('click', () => remove(parseInt(btn.dataset.del), btn));
         });

@@ -22,7 +22,6 @@ function dataHora(a) {
 const FILTROS = [
     { label: 'Todos',        value: 'all' },
     { label: 'Agendados',    value: 'scheduled' },
-    { label: 'Confirmados',  value: 'confirmed' },
     { label: 'Em andamento', value: 'in_progress' },
     { label: 'Concluídos',   value: 'completed' }
 ];
@@ -107,7 +106,6 @@ export async function renderAgendamentos(c) {
             const tr = document.createElement('tr');
             const { data, hora } = dataHora(a);
 
-            const podeConfirmar = a.status === 'scheduled';
             const podeCancelar = ['scheduled', 'confirmed'].includes(a.status);
 
             tr.innerHTML = `
@@ -137,11 +135,6 @@ export async function renderAgendamentos(c) {
 
                 <td>
                     <div style="display:flex;gap:5px;">
-                        ${podeConfirmar ? `
-                            <button class="btn btn-green btn-sm"
-                                    data-id="${esc(a.id)}" data-action="confirmar">
-                                <i class="ti ti-check"></i> Confirmar
-                            </button>` : ''}
 
                         ${podeCancelar ? `
                             <button class="btn btn-danger btn-sm"
@@ -174,9 +167,7 @@ export async function renderAgendamentos(c) {
         btn.disabled = true;
 
         try {
-            const resposta = acao === 'confirmar'
-                ? await api.update(id, { status: 'confirmed' })
-                : await api.softDelete(id);
+            const resposta = await api.softDelete(id);
 
             mostrarRespostaAPI(resposta);
 

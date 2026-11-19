@@ -3,14 +3,98 @@ import { FOTO_PADRAO } from '../../../_common/script/Default.js';
 import { meusAgendamentos, nextAgendamentos } from '../../../_common/Api/appointmants.js';
 import { userMe, update, uploadPhoto, deletarUsuario } from './../../../_common/Api/user.js';
 
+function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    })[char]);
+}
+
+// Segunda 00:00 até domingo 23:59:59 da semana atual
+function intervaloDaSemana() {
+    const hoje = new Date();
+    const inicio = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+    inicio.setDate(inicio.getDate() - ((inicio.getDay() + 6) % 7));
+
+    const fim = new Date(inicio);
+    fim.setDate(fim.getDate() + 7);
+    fim.setMilliseconds(-1);
+
+    return { inicio, fim };
+}
+
+function filtrarSemana(lista) {
+    const { inicio, fim } = intervaloDaSemana();
+
+    return (Array.isArray(lista) ? lista : [])
+        .map(a => ({ ...a, _data: new Date(String(a.date_time).replace(' ', 'T')) }))
+        .filter(a => !Number.isNaN(a._data.getTime()))
+        .filter(a => a._data >= inicio && a._data <= fim)
+        .filter(a => a.status !== 'canceled')
+        .sort((a, b) => a._data - b._data);
+}
+
+function renderListaAgendamentos(agendamentos) {
+    if (!agendamentos.length) {
+        return `<p style="font-size:12px;color:var(--text-dim);text-align:center;padding:12px 0;">
+                    Nenhum agendamento esta semana.
+                </p>`;
+    }
+
+    return agendamentos.map(a => {
+        const dia = a._data.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' });
+        const hora = a._data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+        return `
+        <div class="agenda-item">
+            <div class="agenda-quando">
+                <span class="agenda-dia">${escapeHTML(dia)}</span>
+                <span class="agenda-hora">${escapeHTML(hora)}</span>
+            </div>
+            <div class="agenda-info">
+                <span class="agenda-cliente">${escapeHTML(a.service_name)}</span>
+                <span class="agenda-servico">${escapeHTML(a.employee_name ?? '')}</span>
+            </div>
+        </div>`;
+    }).join('');
+}
+
 export async function renderPerfil(c) {
 
     const me = await userMe();
     const proximo = await nextAgendamentos();
     const agendamentos = await meusAgendamentos();
+    const agendamentosSemana = filtrarSemana(agendamentos);
 
     c.innerHTML = `
         <style>
+        .agenda-total {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .agenda-total-num { font-size: 34px; font-weight: 600; color: var(--gold); line-height: 1; }
+        .agenda-total-label { font-size: 12px; color: var(--text-dim); }
+        .agenda-lista { display: flex; flex-direction: column; gap: 8px; max-height: 380px; overflow-y: auto; }
+        .agenda-item {
+            display: flex; gap: 12px; align-items: center;
+            padding: 8px 10px; border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .agenda-quando { display: flex; flex-direction: column; min-width: 64px; font-size: 11px; }
+        .agenda-dia { color: var(--text-dim); text-transform: capitalize; }
+        .agenda-hora { color: var(--gold); font-weight: 600; font-size: 13px; }
+        .agenda-info { display: flex; flex-direction: column; min-width: 0; }
+        .agenda-cliente {
+            font-size: 13px; font-weight: 500; color: var(--text);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .agenda-servico {
+            font-size: 11px; color: var(--text-dim);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
         .modal-overlay {
             position: fixed !important;
             inset: 0 !important;
@@ -56,6 +140,42 @@ export async function renderPerfil(c) {
         .modal-actions {
             display: flex;
             gap: 10px;
+        }
+
+        /* Botão alterar senha */
+        .modal-actions .btn-senha,
+        #btn-alterar-senha,
+        #btn-cancelar-delete-senha {
+            background: var(--gold);
+            color: #000;
+            border: 1px solid var(--gold);
+        }
+        
+        /* Botão excluir conta */
+        .modal-actions .btn-delet,
+        #btn-deletar-conta,
+        #btn-excluir-conta {
+            background: #e5484d;
+            color: #fff;
+            border: 1px solid #e5484d;
+        }
+        
+        /* Efeito ao passar o mouse */
+        #btn-alterar-senha:hover,
+        #btn-cancelar-delete-senha:hover {
+            background: var(--gold-dark);
+        }
+        
+        #btn-deletar-conta:hover,
+        #btn-excluir-conta:hover {
+            background: #c9363b;
+        }
+        
+        /* Transição */
+        #btn-alterar-senha,
+        #btn-deletar-conta,
+        .modal-actions .btn {
+            transition: all 0.2s ease;
         }
 
         .modal-actions .btn {
@@ -406,29 +526,31 @@ export async function renderPerfil(c) {
                     <i class="ti ti-device-floppy"></i> Salvar Alterações
                 </button>
             </div>
+<div class="gap-y perfil-resumo">
+    <div class="panel fade-in delay-1">
+        <div class="panel-header" style="margin-bottom:12px;">
+            <h1 class="panel-title">Agendamentos <em>da semana</em></h1>
+        </div>
 
-            <div class="gap-y perfil-resumo">
-                <div class="panel fade-in delay-1">
-                    <div class="panel-header" style="margin-bottom:12px;">
-                        <h1 class="panel-title">Resumo <em>da conta</em></h1>
-                    </div>
-                    <div style="display:flex;flex-direction:column;gap:12px;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <span style="font-size:12px;color:var(--text-dim);">Agendamentos</span>
-                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${agendamentos.length}</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <span style="font-size:12px;color:var(--text-dim);">Data do Próximo agendamento</span>
-                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${proximo && !Array.isArray(proximo)
-            ? new Date(proximo.date_time).toLocaleString('pt-BR', {
-                dateStyle: 'short',
-                timeStyle: 'short'
-            })
+        <div class="agenda-total">
+            <span class="agenda-total-num">${agendamentosSemana.length}</span>
+            <span class="agenda-total-label">
+                ${agendamentosSemana.length === 1 ? 'agendamento' : 'agendamentos'} esta semana
+            </span>
+        </div>
+
+        <div class="agenda-lista">
+            ${renderListaAgendamentos(agendamentosSemana)}
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
+            <span style="font-size:12px;color:var(--text-dim);">Próximo agendamento</span>
+            <span style="font-size:13px;font-weight:600;color:var(--gold);">${proximo && !Array.isArray(proximo)
+            ? new Date(proximo.date_time).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })
             : 'Nenhum'}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        </div>
+    </div>
+</div>
 
         </div>
         `;

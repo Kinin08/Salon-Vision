@@ -1,4 +1,4 @@
-import { mostrarFeedback, mostrarRespostaAPI } from "../../../_common/script/Feedback.js";
+import { mostrarFeedback } from "../../../_common/script/Feedback.js";
 import Services from '../../../_common/classes/Services.js';
 
 function escapeHTML(value) {
@@ -21,8 +21,6 @@ function formatPrice(value) {
 export async function renderServicos(c) {
     const servicos = new Services();
     let listOfServices = [];
-    let editingService = null;
-
     c.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;" class="fade-in">
         <div>
@@ -46,7 +44,6 @@ export async function renderServicos(c) {
             border: 1px solid #444; border-radius: 12px;
         }
         .serv-modal-title { margin: 0 0 16px; font-size: 16px; font-weight: 600; color: var(--text); }
-        .serv-modal-text { font-size: 13px; color: var(--text-dim); line-height: 1.5; margin-bottom: 18px; }
         .serv-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
         .serv-field label { font-size: 12px; color: var(--text-dim); }
         .serv-field input, .serv-field textarea {
@@ -67,14 +64,13 @@ export async function renderServicos(c) {
         }
         .serv-actions .serv-btn-cancel:hover { border-color: var(--gold); color: var(--gold); }
         .serv-actions .serv-btn-save { background: var(--gold); color: #171717; border-color: var(--gold); }
-        .serv-actions .serv-btn-danger { background: #e5484d; color: #fff; border-color: #e5484d; }
         .serv-actions button:disabled { opacity: 0.6; cursor: not-allowed; }
     </style>
 
-    <!-- Modal: criar / editar -->
+    <!-- Modal: criar -->
     <div class="serv-overlay" id="serv-form-overlay">
         <form class="serv-modal" id="serv-form" novalidate>
-            <h2 class="serv-modal-title" id="serv-form-title">Novo serviço</h2>
+            <h2 class="serv-modal-title">Novo serviço</h2>
 
             <div class="serv-field">
                 <label for="serv-name">Nome</label>
@@ -104,19 +100,6 @@ export async function renderServicos(c) {
                 <button type="submit" class="serv-btn-save" id="serv-form-save">Salvar</button>
             </div>
         </form>
-    </div>
-
-    <!-- Modal: confirmar exclusão -->
-    <div class="serv-overlay" id="serv-delete-overlay">
-        <div class="serv-modal">
-            <h2 class="serv-modal-title">Excluir serviço</h2>
-            <p class="serv-modal-text" id="serv-delete-text"></p>
-            <div class="serv-error" id="serv-delete-error"></div>
-            <div class="serv-actions">
-                <button type="button" class="serv-btn-cancel" id="serv-delete-cancel">Cancelar</button>
-                <button type="button" class="serv-btn-danger" id="serv-delete-confirm">Sim, excluir</button>
-            </div>
-        </div>
     </div>`;
 
     const grid = c.querySelector('#service-grid');
@@ -124,19 +107,12 @@ export async function renderServicos(c) {
 
     const formOverlay = c.querySelector('#serv-form-overlay');
     const form = c.querySelector('#serv-form');
-    const formTitle = c.querySelector('#serv-form-title');
     const formError = c.querySelector('#serv-form-error');
     const formSave = c.querySelector('#serv-form-save');
     const nameInput = c.querySelector('#serv-name');
     const descInput = c.querySelector('#serv-description');
     const priceInput = c.querySelector('#serv-price');
     const durationInput = c.querySelector('#serv-duration');
-
-    const deleteOverlay = c.querySelector('#serv-delete-overlay');
-    const deleteText = c.querySelector('#serv-delete-text');
-    const deleteError = c.querySelector('#serv-delete-error');
-    const deleteConfirm = c.querySelector('#serv-delete-confirm');
-    let deletingService = null;
 
     function showError(el, message) {
         el.textContent = message;
@@ -181,35 +157,23 @@ export async function renderServicos(c) {
             <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
                 <span style="font-size:13px;color:var(--text-dim);"><i class="ti ti-clock"></i> ${escapeHTML(s.duration_minutes)} min</span>
                 <span class="service-price">${escapeHTML(formatPrice(s.price))}</span>
-            </div>
-            <div style="display:flex;gap:6px;margin-top:10px;">
-                <button class="btn btn-ghost btn-sm" style="flex:1;" data-edit-serv="${escapeHTML(s.id)}"><i class="ti ti-edit"></i> Editar</button>
-                <button class="btn btn-danger btn-sm" data-del-serv="${escapeHTML(s.id)}"><i class="ti ti-trash"></i></button>
             </div>`;
             grid.appendChild(div);
         });
     }
 
     // -------------------------
-    // MODAL CRIAR / EDITAR
+    // MODAL CRIAR
     // -------------------------
-    function openFormModal(service = null) {
-        editingService = service;
+    function openFormModal() {
         hideError(formError);
-
-        formTitle.textContent = service ? 'Editar serviço' : 'Novo serviço';
-        nameInput.value = service?.name ?? '';
-        descInput.value = service?.description ?? '';
-        priceInput.value = service?.price ?? '';
-        durationInput.value = service?.duration_minutes ?? '';
-
+        form.reset();
         formOverlay.classList.add('is-open');
         nameInput.focus();
     }
 
     function closeFormModal() {
         formOverlay.classList.remove('is-open');
-        editingService = null;
         formSave.disabled = false;
         formSave.textContent = 'Salvar';
     }
@@ -254,16 +218,8 @@ export async function renderServicos(c) {
         formSave.disabled = true;
         formSave.textContent = 'Salvando...';
 
-        // guarda antes de fechar o modal (closeFormModal zera editingService)
-        const isEditing = Boolean(editingService);
-        const serviceId = editingService?.id;
-
         try {
-            const resposta = isEditing
-                ? await servicos.update(serviceId, formData)
-                : await servicos.create(formData);
-
-            console.log('Resposta salvar serviço:', resposta);
+            const resposta = await servicos.create(formData);
 
             if (!respostaOk(resposta)) {
                 showError(formError, resposta?.message || 'Não foi possível salvar o serviço.');
@@ -273,7 +229,7 @@ export async function renderServicos(c) {
             }
 
             closeFormModal();
-            mostrarFeedback(isEditing ? 'Serviço atualizado com sucesso.' : 'Serviço criado com sucesso.', 'success');
+            mostrarFeedback('Serviço criado com sucesso.', 'success');
             await loadServices();
         } catch (error) {
             console.error('Erro ao salvar serviço:', error);
@@ -285,85 +241,13 @@ export async function renderServicos(c) {
 
     c.querySelector('#serv-form-cancel').addEventListener('click', closeFormModal);
 
-    // -------------------------
-    // MODAL EXCLUIR
-    // -------------------------
-    function openDeleteModal(service) {
-        deletingService = service;
-        hideError(deleteError);
-        deleteText.textContent = `Tem certeza que deseja excluir o serviço "${service.name}"?`;
-        deleteOverlay.classList.add('is-open');
-    }
-
-    function closeDeleteModal() {
-        deleteOverlay.classList.remove('is-open');
-        deletingService = null;
-        deleteConfirm.disabled = false;
-        deleteConfirm.textContent = 'Sim, excluir';
-    }
-
-    deleteConfirm.addEventListener('click', async () => {
-        if (!deletingService) return;
-
-        hideError(deleteError);
-        deleteConfirm.disabled = true;
-        deleteConfirm.textContent = 'Excluindo...';
-
-        try {
-            const resposta = await servicos.softDelete(deletingService.id);
-            console.log('Resposta softDelete serviço:', resposta);
-
-            if (respostaOk(resposta)) {
-                closeDeleteModal();
-                mostrarFeedback('Serviço excluído com sucesso.', 'success');
-                await loadServices();
-                return;
-            }
-
-            if (resposta?.code === 404) {
-                // não existe mais no backend: já estava excluído
-                closeDeleteModal();
-                mostrarFeedback('Esse serviço já foi excluído.', 'warning');
-                await loadServices();
-                return;
-            }
-
-            mostrarRespostaAPI(resposta);
-            deleteConfirm.disabled = false;
-            deleteConfirm.textContent = 'Sim, excluir';
-        } catch (error) {
-            console.error('Erro ao excluir serviço:', error);
-            showError(deleteError, 'Não foi possível excluir o serviço.');
-            deleteConfirm.disabled = false;
-            deleteConfirm.textContent = 'Sim, excluir';
-        }
-    });
-
-    c.querySelector('#serv-delete-cancel').addEventListener('click', closeDeleteModal);
-
     // Fechar clicando fora
     formOverlay.addEventListener('click', (e) => { if (e.target === formOverlay) closeFormModal(); });
-    deleteOverlay.addEventListener('click', (e) => { if (e.target === deleteOverlay) closeDeleteModal(); });
 
     // -------------------------
     // EVENTOS
     // -------------------------
-    grid.addEventListener('click', (e) => {
-        const editBtn = e.target.closest('[data-edit-serv]');
-        const delBtn = e.target.closest('[data-del-serv]');
-
-        if (editBtn) {
-            const sv = listOfServices.find(x => Number(x.id) === Number(editBtn.dataset.editServ));
-            if (sv) openFormModal(sv);
-        }
-
-        if (delBtn) {
-            const sv = listOfServices.find(x => Number(x.id) === Number(delBtn.dataset.delServ));
-            if (sv) openDeleteModal(sv);
-        }
-    });
-
-    c.querySelector('#btn-novo-serv').addEventListener('click', () => openFormModal());
+    c.querySelector('#btn-novo-serv').addEventListener('click', openFormModal);
 
     await loadServices();
 }

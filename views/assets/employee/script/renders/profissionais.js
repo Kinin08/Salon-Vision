@@ -26,34 +26,9 @@ export async function renderProfissionais(c) {
             div.innerHTML = `
             <img src="${p.photo || FOTO_PADRAO}" class="prof-avatar" />
             <p class="prof-name">${p.name}</p>
-            <p class="prof-role">${p.role ?? 'Profissional'}</p>
-            <div style="display:flex;gap:6px;margin-top:4px;">
-                <button class="btn btn-ghost btn-sm" style="flex:1;" data-to-client="${p.id}"><i class="ti ti-arrow-narrow-down"></i> cliente</button>
-                <button class="btn btn-ghost btn-sm" data-to-admin="${p.id}"><i class="ti ti-arrow-narrow-up"></i> admin</button>
-            </div>`;
+            <p class="prof-role">${p.role ?? 'Profissional'}</p>`;
             grid.appendChild(div);
         });
-
-        grid.querySelectorAll('[data-to-client]').forEach(btn => {
-            btn.addEventListener('click', () => changeRole(parseInt(btn.dataset.toClient), 'cliente'));
-        });
-        grid.querySelectorAll('[data-to-admin]').forEach(btn => {
-            btn.addEventListener('click', () => changeRole(parseInt(btn.dataset.toAdmin), 'admin'));
-        });
-    }
-
-    async function changeRole(id, role) {
-        const pr = list.find(x => x.id === id);
-        if (!pr || !confirm(`Alterar ${pr.name} para ${role}?`)) return;
-        try {
-            await updateRole(id, role);
-            list = list.filter(x => x.id !== id);
-            mostrarFeedback(`${pr.name} agora é ${role}.`, 'success');
-            renderGrid();
-        } catch (e) {
-            console.error(e);
-            mostrarFeedback('Erro ao alterar o cargo.', 'error');
-        }
     }
 
     // ---------- Modal: clientes -> profissionais ----------

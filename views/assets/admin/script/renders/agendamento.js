@@ -157,18 +157,6 @@ export async function renderAgendamentos(c) {
 
                 <td>
                     <div style="display:flex;gap:5px;">
-                        ${a.status === 'pending'
-                    ? `
-                                <button
-                                    class="btn btn-green btn-sm"
-                                    data-id="${esc(a.id)}"
-                                    data-action="confirmar"
-                                >
-                                    <i class="ti ti-check"></i>
-                                    Confirmar
-                                </button>
-                            `
-                    : ''}
 
                         ${!cancelado && !concluido
                     ? `
@@ -202,16 +190,6 @@ export async function renderAgendamentos(c) {
     const id = Number(btn.dataset.id);
     const appointment = appointments.find(a => Number(a.id) === id);
     if (!appointment) return;
-
-    if (btn.dataset.action === 'confirmar') {
-        if (appointment.status !== 'pending') return;
-
-        // ainda só em memória
-        appointment.status = 'confirmed';
-        mostrarFeedback('Agendamento confirmado!', 'success');
-        renderRows(currentFilter);
-        return;
-    }
 
     if (btn.dataset.action === 'cancelar') {
         if (!confirm('Cancelar este agendamento?')) return;

@@ -13,9 +13,10 @@ export async function renderDashboard(c) {
     [...semana, ...doMes].forEach(a => unicos.set(a.id, a));
     const agendamentosDoMes = [...unicos.values()];
 
-    // clientes únicos atendidos por este funcionário no mês
     const totalClientes = new Set(
-        agendamentosDoMes.map(a => a.client_id ?? a.client_name)
+        agendamentosDoMes
+            .filter(a => a.status === 'completed')
+            .map(a => a.client_id ?? a.client_name)
     ).size;
 
     c.innerHTML = `

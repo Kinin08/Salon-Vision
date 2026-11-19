@@ -21,8 +21,6 @@ function formatPrice(value) {
 export async function renderServicos(c) {
     const servicos = new Services();
     let listOfServices = [];
-    let editingService = null;
-
     c.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;" class="fade-in">
         <div>
@@ -181,10 +179,6 @@ export async function renderServicos(c) {
             <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
                 <span style="font-size:13px;color:var(--text-dim);"><i class="ti ti-clock"></i> ${escapeHTML(s.duration_minutes)} min</span>
                 <span class="service-price">${escapeHTML(formatPrice(s.price))}</span>
-            </div>
-            <div style="display:flex;gap:6px;margin-top:10px;">
-                <button class="btn btn-ghost btn-sm" style="flex:1;" data-edit-serv="${escapeHTML(s.id)}"><i class="ti ti-edit"></i> Editar</button>
-                <button class="btn btn-danger btn-sm" data-del-serv="${escapeHTML(s.id)}"><i class="ti ti-trash"></i></button>
             </div>`;
             grid.appendChild(div);
         });
@@ -197,7 +191,6 @@ export async function renderServicos(c) {
         editingService = service;
         hideError(formError);
 
-        formTitle.textContent = service ? 'Editar serviço' : 'Novo serviço';
         nameInput.value = service?.name ?? '';
         descInput.value = service?.description ?? '';
         priceInput.value = service?.price ?? '';

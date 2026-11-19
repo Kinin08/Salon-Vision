@@ -1,6 +1,50 @@
 import { mostrarFeedback } from '../../../_common/script/Feedback.js';
 import { FOTO_PADRAO } from '../../../_common/script/Default.js';
 import { userMe, updateAdmin, uploadPhoto, deletarUsuario, listAdmins, listClients, listEmployees, verificarSenha } from './../../../_common/Api/user.js';
+import { appointmentsByPeriod } from '../../../_common/Api/appointmants.js';
+
+function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    })[char]);
+}
+
+async function carregarAgendamentosDaSemana() {
+    const resposta = await appointmentsByPeriod('week');
+    const lista = Array.isArray(resposta) ? resposta : (resposta?.data ?? []);
+
+    return lista
+        .map(a => ({ ...a, _data: new Date(String(a.date_time).replace(' ', 'T')) }))
+        .filter(a => !Number.isNaN(a._data.getTime()))
+        .filter(a => a.status !== 'canceled')
+        .sort((a, b) => a._data - b._data);
+}
+
+function renderListaAgendamentos(agendamentos) {
+    if (!agendamentos.length) {
+        return `<p style="font-size:12px;color:var(--text-dim);text-align:center;padding:12px 0;">
+                    Nenhum agendamento esta semana.
+                </p>`;
+    }
+
+    return agendamentos.map(a => {
+        const dia = a._data.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' });
+        const hora = a._data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        const detalhe = [a.service_name, a.employee_name].filter(Boolean).join(' · ');
+
+        return `
+        <div class="agenda-item">
+            <div class="agenda-quando">
+                <span class="agenda-dia">${escapeHTML(dia)}</span>
+                <span class="agenda-hora">${escapeHTML(hora)}</span>
+            </div>
+            <div class="agenda-info">
+                <span class="agenda-cliente">${escapeHTML(a.client_name)}</span>
+                <span class="agenda-servico">${escapeHTML(detalhe)}</span>
+            </div>
+        </div>`;
+    }).join('');
+}
 
 export async function renderPerfil(c) {
 
@@ -9,8 +53,41 @@ export async function renderPerfil(c) {
     const clientes = await listClients();
     const employees = await listEmployees();
 
+    let agendamentosSemana = [];
+    try {
+        agendamentosSemana = await carregarAgendamentosDaSemana();
+    } catch (erro) {
+        console.error('Erro ao carregar agendamentos:', erro);
+        mostrarFeedback('Não foi possível carregar os agendamentos da semana.', 'error');
+    }
+
     c.innerHTML = `
         <style>
+        .agenda-total {
+            display: flex; align-items: baseline; gap: 8px;
+            margin-bottom: 14px; padding-bottom: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .agenda-total-num { font-size: 34px; font-weight: 600; color: var(--gold); line-height: 1; }
+        .agenda-total-label { font-size: 12px; color: var(--text-dim); }
+        .agenda-lista { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; }
+        .agenda-item {
+            display: flex; gap: 12px; align-items: center;
+            padding: 8px 10px; border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .agenda-quando { display: flex; flex-direction: column; min-width: 64px; font-size: 11px; }
+        .agenda-dia { color: var(--text-dim); text-transform: capitalize; }
+        .agenda-hora { color: var(--gold); font-weight: 600; font-size: 13px; }
+        .agenda-info { display: flex; flex-direction: column; min-width: 0; }
+        .agenda-cliente {
+            font-size: 13px; font-weight: 500; color: var(--text);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .agenda-servico {
+            font-size: 11px; color: var(--text-dim);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
         /* Base comum dos botões */
         .btn.btn-senha,
         .btn.btn-delet {
@@ -63,6 +140,43 @@ export async function renderPerfil(c) {
             color: #fff;
             border-color: #e5484d;
         }
+
+        /* Botão alterar senha */
+        .modal-actions .btn-senha,
+        #btn-alterar-senha,
+        #btn-cancelar-delete-senha {
+            background: var(--gold);
+            color: #000;
+            border: 1px solid var(--gold);
+        }
+        
+        /* Botão excluir conta */
+        .modal-actions .btn-delet,
+        #btn-deletar-conta,
+        #btn-excluir-conta {
+            background: #e5484d;
+            color: #fff;
+            border: 1px solid #e5484d;
+        }
+        
+        /* Efeito ao passar o mouse */
+        #btn-alterar-senha:hover,
+        #btn-cancelar-delete-senha:hover {
+            background: var(--gold-dark);
+        }
+        
+        #btn-deletar-conta:hover,
+        #btn-excluir-conta:hover {
+            background: #c9363b;
+        }
+        
+        /* Transição */
+        #btn-alterar-senha,
+        #btn-deletar-conta,
+        .modal-actions .btn {
+            transition: all 0.2s ease;
+        }
+
 
         /* Botões do modal ocupam metade cada */
         .modal-actions .btn {
@@ -477,7 +591,8 @@ export async function renderPerfil(c) {
             </div>
 
             <div class="gap-y perfil-resumo">
-                <div class="panel fade-in delay-1">
+            
+                <div class="panel fade-in delay-2" style="margin-top:20px;">
                     <div class="panel-header" style="margin-bottom:12px;">
                         <h1 class="panel-title">Resumo <em>do site</em></h1>
                     </div>
@@ -496,6 +611,23 @@ export async function renderPerfil(c) {
                         </div>
                     </div>
                 </div>
+                <div class="panel fade-in delay-1">
+                    <div class="panel-header" style="margin-bottom:12px;">
+                        <h1 class="panel-title">Agendamentos <em>da semana</em></h1>
+                    </div>
+            
+                    <div class="agenda-total">
+                        <span class="agenda-total-num">${agendamentosSemana.length}</span>
+                        <span class="agenda-total-label">
+                            ${agendamentosSemana.length === 1 ? 'agendamento' : 'agendamentos'} esta semana
+                        </span>
+                    </div>
+            
+                    <div class="agenda-lista">
+                        ${renderListaAgendamentos(agendamentosSemana)}
+                    </div>
+                </div>
+            
             </div>
 
         </div>

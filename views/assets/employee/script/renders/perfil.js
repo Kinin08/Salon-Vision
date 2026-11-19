@@ -1,89 +1,104 @@
 import { mostrarFeedback } from '../../../_common/script/Feedback.js';
 import { FOTO_PADRAO } from '../../../_common/script/Default.js';
-import { userMe, updateAdmin, deletarUsuario, listAdmins, listClients, listEmployees, verificarSenha } from './../../../_common/Api/user.js';
+import { meusAgendamentos, nextAgendamentos } from '../../../_common/Api/appointmants.js';
+import { userMe, updateEmployee, uploadPhoto, deletarUsuario } from './../../../_common/Api/user.js';
+
+function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    })[char]);
+}
+
+// Segunda 00:00 até domingo 23:59:59 da semana atual
+function intervaloDaSemana() {
+    const hoje = new Date();
+    const inicio = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+    inicio.setDate(inicio.getDate() - ((inicio.getDay() + 6) % 7));
+
+    const fim = new Date(inicio);
+    fim.setDate(fim.getDate() + 7);
+    fim.setMilliseconds(-1);
+
+    return { inicio, fim };
+}
+
+function filtrarSemana(lista) {
+    const { inicio, fim } = intervaloDaSemana();
+
+    return (Array.isArray(lista) ? lista : [])
+        .map(a => ({ ...a, _data: new Date(String(a.date_time).replace(' ', 'T')) }))
+        .filter(a => !Number.isNaN(a._data.getTime()))
+        .filter(a => a._data >= inicio && a._data <= fim)
+        .filter(a => a.status !== 'canceled')
+        .sort((a, b) => a._data - b._data);
+}
+
+function renderListaAgendamentos(agendamentos) {
+    if (!agendamentos.length) {
+        return `<p style="font-size:12px;color:var(--text-dim);text-align:center;padding:12px 0;">
+                    Nenhum agendamento esta semana.
+                </p>`;
+    }
+
+    return agendamentos.map(a => {
+        const dia = a._data.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' });
+        const hora = a._data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+        return `
+        <div class="agenda-item">
+            <div class="agenda-quando">
+                <span class="agenda-dia">${escapeHTML(dia)}</span>
+                <span class="agenda-hora">${escapeHTML(hora)}</span>
+            </div>
+            <div class="agenda-info">
+                <span class="agenda-cliente">${escapeHTML(a.service_name)}</span>
+                <span class="agenda-servico">${escapeHTML(a.employee_name ?? '')}</span>
+            </div>
+        </div>`;
+    }).join('');
+}
 
 export async function renderPerfil(c) {
 
     const me = await userMe();
-    const admins = await listAdmins();
-    const clientes = await listClients();
-    const employees = await listEmployees();
+    const proximo = await nextAgendamentos();
+    const agendamentos = await meusAgendamentos();
+    const agendamentosSemana = filtrarSemana(agendamentos);
 
     c.innerHTML = `
         <style>
-        /* Base comum dos botões */
-        .btn.btn-senha,
-        .btn.btn-delet {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 10px 16px;
-            font-size: 12px;
-            font-weight: 500;
-            border-radius: 8px;
-            border: 1px solid transparent;
-            cursor: pointer;
-            transition: background 0.2s ease, color 0.2s ease,
-                        border-color 0.2s ease, transform 0.1s ease;
+        .agenda-total {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border);
         }
-
-        .btn.btn-senha:active,
-        .btn.btn-delet:active {
-            transform: scale(0.97);
+        .agenda-total-num { font-size: 34px; font-weight: 600; color: var(--gold); line-height: 1; }
+        .agenda-total-label { font-size: 12px; color: var(--text-dim); }
+        .agenda-lista { display: flex; flex-direction: column; gap: 8px; max-height: 380px; overflow-y: auto; }
+        .agenda-item {
+            display: flex; gap: 12px; align-items: center;
+            padding: 8px 10px; border-radius: 8px;
+            background: rgba(255, 255, 255, 0.04);
         }
-
-        .btn.btn-senha:disabled,
-        .btn.btn-delet:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .agenda-quando { display: flex; flex-direction: column; min-width: 64px; font-size: 11px; }
+        .agenda-dia { color: var(--text-dim); text-transform: capitalize; }
+        .agenda-hora { color: var(--gold); font-weight: 600; font-size: 13px; }
+        .agenda-info { display: flex; flex-direction: column; min-width: 0; }
+        .agenda-cliente {
+            font-size: 13px; font-weight: 500; color: var(--text);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-
-        /* Alterar senha / Cancelar: contorno dourado */
-        .btn.btn-senha {
-            background: transparent;
-            color: var(--gold);
-            border-color: var(--gold);
-        }
-
-        .btn.btn-senha:hover {
-            background: var(--gold);
-            color: #000;
-        }
-
-        /* Deletar: vermelho */
-        .btn.btn-delet {
-            background: rgba(229, 72, 77, 0.12);
-            color: #ff6b70;
-            border-color: #e5484d;
-        }
-
-        .btn.btn-delet:hover {
-            background: #e5484d;
-            color: #fff;
-            border-color: #e5484d;
-        }
-
-        /* Botões do modal ocupam metade cada */
-        .modal-actions .btn {
-            flex: 1;
-        }
-
-        /* "Excluir conta" (confirmação final) sólido, para dar peso à ação */
-        #btn-excluir-conta {
-            background: #e5484d;
-            color: #fff;
-            border-color: #e5484d;
-        }
-
-        #btn-excluir-conta:hover {
-            background: #ff5a5f;
-            border-color: #ff5a5f;
+        .agenda-servico {
+            font-size: 11px; color: var(--text-dim);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .modal-overlay {
             position: fixed !important;
             inset: 0 !important;
-            width: 100vw !important;    
+            width: 100vw !important;
             height: 100vh !important;
 
             z-index: 999999 !important;
@@ -125,6 +140,42 @@ export async function renderPerfil(c) {
         .modal-actions {
             display: flex;
             gap: 10px;
+        }
+
+        /* Botão alterar senha */
+        .modal-actions .btn-senha,
+        #btn-alterar-senha,
+        #btn-cancelar-delete-senha {
+            background: var(--gold);
+            color: #000;
+            border: 1px solid var(--gold);
+        }
+
+        /* Botão excluir conta */
+        .modal-actions .btn-delet,
+        #btn-deletar-conta,
+        #btn-excluir-conta {
+            background: #e5484d;
+            color: #fff;
+            border: 1px solid #e5484d;
+        }
+
+        /* Efeito ao passar o mouse */
+        #btn-alterar-senha:hover,
+        #btn-cancelar-delete-senha:hover {
+            background: var(--gold-dark);
+        }
+
+        #btn-deletar-conta:hover,
+        #btn-excluir-conta:hover {
+            background: #c9363b;
+        }
+
+        /* Transição */
+        #btn-alterar-senha,
+        #btn-deletar-conta,
+        .modal-actions .btn {
+            transition: all 0.2s ease;
         }
 
         .modal-actions .btn {
@@ -475,28 +526,31 @@ export async function renderPerfil(c) {
                     <i class="ti ti-device-floppy"></i> Salvar Alterações
                 </button>
             </div>
+<div class="gap-y perfil-resumo">
+    <div class="panel fade-in delay-1">
+        <div class="panel-header" style="margin-bottom:12px;">
+            <h1 class="panel-title">Agendamentos <em>da semana</em></h1>
+        </div>
 
-            <div class="gap-y perfil-resumo">
-                <div class="panel fade-in delay-1">
-                    <div class="panel-header" style="margin-bottom:12px;">
-                        <h1 class="panel-title">Resumo <em>do site</em></h1>
-                    </div>
-                    <div style="display:flex;flex-direction:column;gap:12px;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <span style="font-size:12px;color:var(--text-dim);">Clientes</span>
-                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${clientes.length}</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <span style="font-size:12px;color:var(--text-dim);">Funcionários</span>
-                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${employees.length}</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <span style="font-size:12px;color:var(--text-dim);">Administradores</span>
-                            <span style="font-size:14px;font-weight:600;color:var(--gold);">${admins.length}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="agenda-total">
+            <span class="agenda-total-num">${agendamentosSemana.length}</span>
+            <span class="agenda-total-label">
+                ${agendamentosSemana.length === 1 ? 'agendamento' : 'agendamentos'} esta semana
+            </span>
+        </div>
+
+        <div class="agenda-lista">
+            ${renderListaAgendamentos(agendamentosSemana)}
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
+            <span style="font-size:12px;color:var(--text-dim);">Próximo agendamento</span>
+            <span style="font-size:13px;font-weight:600;color:var(--gold);">${proximo && !Array.isArray(proximo)
+            ? new Date(proximo.date_time).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })
+            : 'Nenhum'}</span>
+        </div>
+    </div>
+</div>
 
         </div>
         `;
@@ -522,8 +576,8 @@ export async function renderPerfil(c) {
             return;
         }
 
-        if (arquivo.size > 2 * 1024 * 1024) {
-            mostrarFeedback('A imagem deve ter no máximo 2 MB.', 'error');
+        if (arquivo.size > 5 * 1024 * 1024) {
+            mostrarFeedback('A imagem deve ter no máximo 5 MB.', 'error');
             inputFoto.value = '';
             return;
         }
@@ -531,30 +585,28 @@ export async function renderPerfil(c) {
         fotoSelecionada = arquivo;
         imagemPerfil.src = URL.createObjectURL(arquivo); // preview
     });
-
     async function enviarFoto(arquivo) {
-        const dados = new FormData();
-        dados.append('arquivo', arquivo);
-
-        const resposta = await fetch(
-            'http://localhost/Salon-Vision/Api/source/controller/uploader-main/upload.php',
-            { method: 'POST', body: dados }
-        );
-        const texto = await resposta.text();
-        let resultado;
-
         try {
-            resultado = JSON.parse(texto);
-        } catch {
-            console.error('Resposta do upload.php (HTTP ' + resposta.status + '):', texto);
-            throw new Error('O servidor não devolveu JSON (HTTP ' + resposta.status + '). Veja o console (F12).');
-        }
+            const resultado = await uploadPhoto(arquivo);
 
-        if (!resposta.ok || !resultado.success) {
-            throw new Error(resultado.error || 'Erro no upload da foto.');
-        }
+            console.log("Resposta completa:", resultado);
 
-        return resultado.url;
+            if (!resultado) {
+                throw new Error("A API não retornou nenhuma resposta.");
+            }
+
+            if (resultado.code !== 200 || !resultado.data?.photo) {
+                throw new Error(
+                    resultado.message || "Erro ao atualizar a foto."
+                );
+            }
+
+            return resultado.data.photo;
+
+        } catch (erro) {
+            console.error("Erro detalhado no upload:", erro);
+            throw erro;
+        }
     }
 
 
@@ -565,70 +617,52 @@ export async function renderPerfil(c) {
 
     document.getElementById('btn-salvar')?.addEventListener('click', async () => {
         const btn = document.getElementById('btn-salvar');
-
-        const nome = document.getElementById('input-nome').value;
-        const email = document.getElementById('input-email').value;
-        const telephone = document
-            .getElementById('input-tel')
-            .value
-            .replace(/\D/g, '');
-
+        const nome = document.getElementById('input-nome').value.trim();
+        const email = document.getElementById('input-email').value.trim();
+        const telephone = document.getElementById('input-tel').value.replace(/\D/g, '');
         const currentPassword = document.getElementById('senha-atual').value;
         const newPassword = document.getElementById('nova-senha').value;
 
         btn.disabled = true;
         btn.innerHTML = `<i class="ti ti-loader-2"></i> Salvando...`;
 
-        const restaurarBotao = () => {
-            btn.disabled = false;
-            btn.innerHTML = `<i class="ti ti-device-floppy"></i> Salvar Alterações`;
-        };
+        try {
+            const updated = await updateEmployee({
+                name: nome,
+                email: email,
+                telephone: telephone,
+                currentPassword: currentPassword,
+                password: newPassword
+            });
 
-        // Se escolheu foto nova, envia primeiro; senão mantém a atual
-        let photo = me.photo;
-
-        if (fotoSelecionada) {
-            try {
-                photo = await enviarFoto(fotoSelecionada);
-            } catch (erro) {
-                mostrarFeedback(erro.message || 'Não foi possível enviar a foto.', 'error');
-                imagemPerfil.src = me.photo; // volta para a foto anterior
-                fotoSelecionada = null;
-                inputFoto.value = '';
-                restaurarBotao();
+            if (updated?.code !== 200) {
+                mostrarFeedback(updated?.message ?? 'Erro ao atualizar perfil.', 'error');
                 return;
             }
-        }
 
-        const updated = await updateAdmin({
-            name: nome,
-            email: email,
-            telephone: telephone,
-            photo: photo,
-            currentPassword: currentPassword,
-            password: newPassword
-        });
-
-        restaurarBotao();
-
-        if (updated.code === 200) {
-            const nomeSidebar = document.getElementById('user-name');
-            if (nomeSidebar) nomeSidebar.textContent = nome;
-            // Atualiza a foto em todos os lugares da tela (?t= evita cache)
             if (fotoSelecionada) {
-                const novaSrc = photo + '?t=' + Date.now();
-                me.photo = photo;
-                imagemPerfil.src = novaSrc;
-                document.getElementById('user-photo')?.setAttribute('src', novaSrc);
-                document.getElementById('user-avatar')?.setAttribute('src', novaSrc);
-
-                fotoSelecionada = null;
-                inputFoto.value = '';
+                try {
+                    const photoUrl = await enviarFoto(fotoSelecionada);
+                    const novaSrc = photoUrl + '?t=' + Date.now();
+                    me.photo = photoUrl;
+                    imagemPerfil.src = novaSrc;
+                    document.getElementById('user-photo')?.setAttribute('src', novaSrc);
+                    document.getElementById('user-avatar')?.setAttribute('src', novaSrc);
+                    fotoSelecionada = null;
+                    inputFoto.value = '';
+                } catch (erroFoto) {
+                    mostrarFeedback(erroFoto.message || 'Os dados foram salvos, mas a foto não foi atualizada.', 'error');
+                    return;
+                }
             }
 
-            mostrarFeedback(updated.message, 'success');
-        } else {
-            mostrarFeedback(updated.message ?? 'Erro ao atualizar perfil.', 'error');
+            mostrarFeedback(updated.message || 'Perfil atualizado com sucesso.', 'success');
+        } catch (error) {
+            console.error('Erro ao atualizar perfil:', error);
+            mostrarFeedback('Não foi possível atualizar o perfil.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="ti ti-device-floppy"></i> Salvar Alterações`;
         }
     });
 
@@ -780,16 +814,8 @@ export async function renderPerfil(c) {
             botao.disabled = true;
 
             try {
-                // 1) Confere a senha no servidor
-                const verificacao = await verificarSenha(senha);
 
-                if (verificacao?.code !== 200) {
-                    mostrarFeedback(verificacao?.message || 'Senha incorreta.', 'error');
-                    return; // o finally reabilita o botão
-                }
-
-                // 2) Senha ok: deleta
-                const resultado = await deletarUsuario(me.id);
+                const resultado = await deletarUsuario(me.id, senha);
 
                 if (resultado?.code === 200) {
                     localStorage.removeItem('token');
